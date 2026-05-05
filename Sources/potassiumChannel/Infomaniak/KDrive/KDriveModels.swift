@@ -1316,6 +1316,21 @@ public struct SearchKDriveSharedWithMeOptions: Equatable, Sendable {
     }
 }
 
+/// JSON body accepted by the kDrive create default file endpoint.
+public struct CreateKDriveDefaultFileOptions: Encodable, Equatable, Sendable {
+    /// Name of the default file to create.
+    public let name: String
+
+    /// Extension/type of file to create, such as `docx`, `drawio`, `pptx`, `txt`, or `xlsx`.
+    public let type: String
+
+    /// Creates options for creating a default kDrive file.
+    public init(name: String, type: String) {
+        self.name = name
+        self.type = type
+    }
+}
+
 /// JSON body accepted by the kDrive create directory endpoint.
 public struct CreateKDriveDirectoryOptions: Encodable, Equatable, Sendable {
     /// Name of the directory to create.
