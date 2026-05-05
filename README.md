@@ -26,7 +26,12 @@ other Swift clients that need the same Infomaniak-oriented HTTP primitives.
 
 - Swift Package Manager library package
 - Swift 6.2 minimum tools version
-- macOS 14+ platform target
+- Apple platform minimums aligned with async/await availability:
+  - macOS 12+
+  - iOS 15+
+  - tvOS 15+
+  - watchOS 8+
+  - visionOS 1+
 - Modern Swift concurrency and `Sendable`-friendly model types
 - Swift Testing for tests (`import Testing`), not XCTest
 
