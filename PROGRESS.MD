@@ -53,6 +53,7 @@ kDrive request factories, and `KDriveService` wrappers moved from Potassium.
 | GET | `/2/drive/preferences` | `KDriveRequests.getUserPreferences` |
 | GET | `/2/drive/users` | `KDriveRequests.listKDriveUsers` |
 | GET | `/2/drive/{drive_id}/files/archives/{archive_uuid}` | `KDriveRequests.downloadArchive` |
+| POST | `/3/drive/{drive_id}/files/{file_id}/file` | `KDriveRequests.createDefaultFileV3` |
 | POST | `/3/drive/{drive_id}/files/{file_id}/copy/{destination_directory_id}` | `KDriveRequests.copyFileToDirectoryV3` |
 | DELETE | `/2/drive/{drive_id}/files/{file_id}` | `KDriveRequests.trashFileV2` |
 
@@ -73,4 +74,12 @@ kDrive request factories, and `KDriveService` wrappers moved from Potassium.
 - Added `CreateKDriveDirectoryOptions` with required `name` and optional `color`, `only_for_me`, and `relative_path` JSON fields.
 - Added `KDriveService.createDirectory(...)` convenience API.
 - Added unit tests covering the OpenAPI path/query/body shape and snake-case body encoding.
+- Verified with `swift test` in `potassiumChannel`.
+
+## 2026-05-05 — create default file route
+
+- Added `POST /3/drive/{drive_id}/files/{file_id}/file` request support via `KDriveRequests.createDefaultFileV3`.
+- Added `CreateKDriveDefaultFileOptions` with required `name` and `type` JSON fields.
+- Added `KDriveService.createDefaultFile(...)` convenience API.
+- Added unit tests covering the OpenAPI path/query/body shape and required body encoding.
 - Verified with `swift test` in `potassiumChannel`.
