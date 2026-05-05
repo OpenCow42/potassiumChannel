@@ -57,6 +57,7 @@ kDrive request factories, and `KDriveService` wrappers moved from Potassium.
 | POST | `/2/drive/{drive_id}/files/{file_id}/rename` | `KDriveRequests.renameFileV2` |
 | POST | `/3/drive/{drive_id}/files/{file_id}/copy/{destination_directory_id}` | `KDriveRequests.copyFileToDirectoryV3` |
 | DELETE | `/2/drive/{drive_id}/files/{file_id}` | `KDriveRequests.trashFileV2` |
+| GET | `/api/v4/config/client` | `KChatRequests.getClientConfig` |
 
 ### Implemented DTO and service scope
 
@@ -91,4 +92,12 @@ kDrive request factories, and `KDriveService` wrappers moved from Potassium.
 - Added `RenameKDriveFileOptions` with required `name` JSON field.
 - Added `KDriveService.renameFile(...)` convenience API.
 - Added unit tests covering the OpenAPI v2 path/body shape and required body encoding.
+- Verified with `swift test` in `potassiumChannel`.
+
+## 2026-05-05 — kChat client config route
+
+- Added `GET /api/v4/config/client?format=old` request support via `KChatRequests.getClientConfig(format:)`.
+- Added `KChatStatusOK` for the OpenAPI `StatusOK` response body.
+- Added `KChatService.getClientConfig(format:)` convenience API.
+- Added unit tests covering the OpenAPI path, required `format` query parameter, auth header, and response decoding.
 - Verified with `swift test` in `potassiumChannel`.
