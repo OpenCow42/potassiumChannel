@@ -186,3 +186,11 @@ not started
 - Added `KChatFileUploadResponse` and `KChatFileInfo` models for the Mattermost-compatible upload response.
 - The request sends a `multipart/form-data` body with the required `files` field and supports optional `channel_id` and `filename` query parameters from the OpenAPI spec.
 - Added unit tests covering method/path/query/header/body request shape and snake-case upload response decoding.
+
+## 2026-05-06 — kChat get file route
+
+- Target app: kChat.
+- Branch: `feat/kchat-file-get`.
+- Added `GET /api/v4/files/{file_id}` request support via `KChatRequests.getFile(fileId:)`.
+- Added `KChatService.getFile(fileId:)` returning raw `Data` through `InfomaniakAPIClient.sendData`, matching the file download response body.
+- Added unit coverage for method, OpenAPI path, auth/accept headers, absent content type, and empty body.
