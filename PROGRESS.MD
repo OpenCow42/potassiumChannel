@@ -129,3 +129,14 @@ not started
 - Added `KChatService.baseURL(teamName:)` and team-token initializer for `https://<team>.kchat.infomaniak.com`.
 - Added unit tests covering the OpenAPI path, required `format` query parameter, auth header, kChat team base URL, and response value decoding.
 - Verified with `swift test` in `potassiumChannel`.
+
+## 2026-05-05 — kChat user search route
+
+- Target app: kChat.
+- Branch: `feat/kchat-user-search`.
+- Added `POST /api/v4/users/search` request support via `KChatRequests.searchUsers(body:)` using the Mattermost-compatible kChat team host.
+- Added `KChatUserSearchOptions` with OpenAPI search criteria fields (`term`, team/channel/group filters, `allow_inactive`, `without_team`, and `limit`).
+- Added `KChatUser` response model for the user array returned by the endpoint.
+- Added `KChatService.searchUsers(options:)` convenience API.
+- Added unit tests covering the OpenAPI path, POST method, JSON body, auth/content headers, snake-case body encoding, and snake-case response decoding.
+- Verified with `swift test` in `potassiumChannel`.
