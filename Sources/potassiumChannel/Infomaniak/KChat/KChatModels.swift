@@ -209,3 +209,65 @@ public struct KChatTeam: Codable, Equatable, Sendable {
         self.policyId = policyId
     }
 }
+
+/// Query parameters accepted by the kChat user team channels endpoint.
+public struct KChatUserTeamChannelsOptions: Equatable, Sendable {
+    /// Whether deleted channels should be included.
+    public let includeDeleted: Bool?
+
+    /// Filters deleted channels by deletion timestamp when `includeDeleted` is true.
+    public let lastDeleteAt: Int?
+
+    /// Creates kChat user team channel listing options.
+    public init(includeDeleted: Bool? = nil, lastDeleteAt: Int? = nil) {
+        self.includeDeleted = includeDeleted
+        self.lastDeleteAt = lastDeleteAt
+    }
+}
+
+/// A Mattermost-compatible kChat channel returned by user team channel endpoints.
+public struct KChatChannel: Codable, Equatable, Sendable {
+    public let id: String?
+    public let createAt: Int64?
+    public let updateAt: Int64?
+    public let deleteAt: Int64?
+    public let teamId: String?
+    public let type: String?
+    public let displayName: String?
+    public let name: String?
+    public let header: String?
+    public let purpose: String?
+    public let lastPostAt: Int?
+    public let totalMsgCount: Int?
+    public let creatorId: String?
+
+    public init(
+        id: String? = nil,
+        createAt: Int64? = nil,
+        updateAt: Int64? = nil,
+        deleteAt: Int64? = nil,
+        teamId: String? = nil,
+        type: String? = nil,
+        displayName: String? = nil,
+        name: String? = nil,
+        header: String? = nil,
+        purpose: String? = nil,
+        lastPostAt: Int? = nil,
+        totalMsgCount: Int? = nil,
+        creatorId: String? = nil
+    ) {
+        self.id = id
+        self.createAt = createAt
+        self.updateAt = updateAt
+        self.deleteAt = deleteAt
+        self.teamId = teamId
+        self.type = type
+        self.displayName = displayName
+        self.name = name
+        self.header = header
+        self.purpose = purpose
+        self.lastPostAt = lastPostAt
+        self.totalMsgCount = totalMsgCount
+        self.creatorId = creatorId
+    }
+}
