@@ -149,3 +149,12 @@ not started
 - Reused the existing Mattermost-compatible `KChatUser` response model.
 - Added `KChatService.getUser(userId:)` convenience API.
 - Added unit tests covering the OpenAPI path, GET method, auth/accept headers, absence of a JSON body, and the special `me` path.
+
+## 2026-05-05 — kChat get user teams route
+
+- Target app: kChat.
+- Branch: `feat/kchat-user-teams-get`.
+- Added `GET /api/v4/users/{user_id}/teams` request support via `KChatRequests.getUserTeams(userId:)`.
+- Added `KChatTeam` response model for the Mattermost-compatible team array returned by the endpoint.
+- Added `KChatService.getUserTeams(userId:)` convenience API.
+- Added unit tests covering the OpenAPI path, GET method, auth/accept headers, absence of a JSON body, and snake-case team response decoding.

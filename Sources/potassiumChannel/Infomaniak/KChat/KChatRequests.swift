@@ -31,4 +31,12 @@ public enum KChatRequests {
             path: "/api/v4/users/\(userId)"
         )
     }
+
+    /// Creates a request that lists kChat teams for a user.
+    public static func getUserTeams(userId: String) -> APIRequest<[KChatTeam]> {
+        APIRequest(
+            method: .get,
+            path: "/api/v4/users/\(userId)/teams"
+        )
+    }
 }

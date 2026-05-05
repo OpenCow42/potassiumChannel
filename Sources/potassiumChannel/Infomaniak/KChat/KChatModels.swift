@@ -162,3 +162,50 @@ public struct KChatUser: Codable, Equatable, Sendable {
         self.termsOfServiceCreateAt = termsOfServiceCreateAt
     }
 }
+
+/// A Mattermost-compatible kChat team returned by user team endpoints.
+public struct KChatTeam: Codable, Equatable, Sendable {
+    public let id: String?
+    public let createAt: Int64?
+    public let updateAt: Int64?
+    public let deleteAt: Int64?
+    public let displayName: String?
+    public let name: String?
+    public let description: String?
+    public let email: String?
+    public let type: String?
+    public let allowedDomains: String?
+    public let inviteId: String?
+    public let allowOpenInvite: Bool?
+    public let policyId: String?
+
+    public init(
+        id: String? = nil,
+        createAt: Int64? = nil,
+        updateAt: Int64? = nil,
+        deleteAt: Int64? = nil,
+        displayName: String? = nil,
+        name: String? = nil,
+        description: String? = nil,
+        email: String? = nil,
+        type: String? = nil,
+        allowedDomains: String? = nil,
+        inviteId: String? = nil,
+        allowOpenInvite: Bool? = nil,
+        policyId: String? = nil
+    ) {
+        self.id = id
+        self.createAt = createAt
+        self.updateAt = updateAt
+        self.deleteAt = deleteAt
+        self.displayName = displayName
+        self.name = name
+        self.description = description
+        self.email = email
+        self.type = type
+        self.allowedDomains = allowedDomains
+        self.inviteId = inviteId
+        self.allowOpenInvite = allowOpenInvite
+        self.policyId = policyId
+    }
+}
