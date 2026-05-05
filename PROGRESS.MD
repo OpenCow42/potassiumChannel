@@ -177,3 +177,12 @@ not started
 - Added `KChatPostCreateRequest` and `KChatPost` models for creating and decoding Mattermost-compatible posts.
 - Added `DELETE /api/v4/posts/{post_id}` support via `KChatRequests.deletePost(postId:)` and `KChatService.deletePost(postId:)` so live tests and callers can clean up created posts.
 - Added unit tests covering POST request shape/body encoding, cleanup DELETE request shape, and snake-case post response decoding.
+
+## 2026-05-05 — kChat upload file route
+
+- Target app: kChat.
+- Branch: `feat/kchat-file-upload`.
+- Added `POST /api/v4/files` request support via `KChatRequests.uploadFile(channelId:filename:body:)` and `KChatService.uploadFile(channelId:filename:data:)`.
+- Added `KChatFileUploadResponse` and `KChatFileInfo` models for the Mattermost-compatible upload response.
+- The request sends `application/octet-stream` body data and supports optional `channel_id` and `filename` query parameters from the OpenAPI spec.
+- Added unit tests covering method/path/query/header/body request shape and snake-case upload response decoding.
