@@ -1582,6 +1582,27 @@ public enum KDriveRequests {
         )
     }
 
+    /// Creates a request that creates a kDrive directory in the specified parent directory.
+    public static func createDirectoryV3(
+        driveId: Int,
+        fileId: Int,
+        with includedResources: String? = nil,
+        body: Data
+    ) -> APIRequest<InfomaniakResponse<KDriveFileItem>> {
+        var queryParameters: [QueryParameter] = []
+
+        if let includedResources {
+            queryParameters.append(QueryParameter(name: "with", value: .string(includedResources)))
+        }
+
+        return APIRequest(
+            method: .post,
+            path: "/3/drive/\(driveId)/files/\(fileId)/directory",
+            queryParameters: queryParameters,
+            body: body
+        )
+    }
+
     /// Creates a request that copies a kDrive file to a directory.
     public static func copyFileToDirectoryV3(
         driveId: Int,
