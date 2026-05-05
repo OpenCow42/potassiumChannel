@@ -64,4 +64,9 @@ public struct KChatService: Sendable {
     public func deletePost(postId: String) async throws -> KChatStatusOK {
         try await client.send(KChatRequests.deletePost(postId: postId))
     }
+
+    /// Uploads a file to kChat.
+    public func uploadFile(channelId: String? = nil, filename: String? = nil, data: Data) async throws -> KChatFileUploadResponse {
+        try await client.send(KChatRequests.uploadFile(channelId: channelId, filename: filename, body: data))
+    }
 }
