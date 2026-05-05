@@ -24,12 +24,18 @@ struct KChatClientConfigRequestTests {
         #expect(components.queryItems == [URLQueryItem(name: "format", value: "old")])
     }
 
-    @Test("kChat client config response decodes status")
+    @Test("kChat service builds the team base URL")
+    func kChatServiceBuildsTeamBaseURL() {
+        #expect(KChatService.baseURL(teamName: "example-team").absoluteString == "https://example-team.kchat.infomaniak.com")
+    }
+
+    @Test("kChat client config response decodes values")
     func kChatClientConfigResponseDecodesStatus() throws {
-        let json = #"{"status":"ok"}"#.data(using: .utf8)!
+        let json = #"{"AboutLink":"https://www.infomaniak.com","AllowPolls":"true"}"#.data(using: .utf8)!
 
-        let response = try JSONDecoder().decode(KChatStatusOK.self, from: json)
+        let response = try JSONDecoder().decode(KChatClientConfig.self, from: json)
 
-        #expect(response.status == "ok")
+        #expect(response["AboutLink"] == "https://www.infomaniak.com")
+        #expect(response["AllowPolls"] == "true")
     }
 }
