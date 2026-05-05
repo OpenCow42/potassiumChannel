@@ -2,6 +2,10 @@
 
 ### Implemented API route inventory
 
+`potassiumChannel` owns shared typed routes and DTOs segmented by target app.
+
+#### kDrive
+
 `potassiumChannel` owns the shared Infomaniak response envelopes, kDrive DTOs,
 kDrive request factories, and `KDriveService` wrappers moved from Potassium.
 
@@ -57,20 +61,41 @@ kDrive request factories, and `KDriveService` wrappers moved from Potassium.
 | POST | `/2/drive/{drive_id}/files/{file_id}/rename` | `KDriveRequests.renameFileV2` |
 | POST | `/3/drive/{drive_id}/files/{file_id}/copy/{destination_directory_id}` | `KDriveRequests.copyFileToDirectoryV3` |
 | DELETE | `/2/drive/{drive_id}/files/{file_id}` | `KDriveRequests.trashFileV2` |
+
+#### Mail
+
+not started
+
+#### kChat
+
+| Method | Route | Request factory |
+| --- | --- | --- |
 | GET | `/api/v4/config/client` | `KChatRequests.getClientConfig` |
 
 ### Implemented DTO and service scope
 
+#### kDrive
+
 - Infomaniak response envelopes: `InfomaniakResponse`, `PaginatedInfomaniakResponse`, `CursorPaginatedInfomaniakResponse`.
 - kDrive response DTOs and option/body DTOs required by the routes above.
 - `KDriveService`, which sends the route factories through `InfomaniakAPIClient`.
+
+#### Mail
+
+not started
+
+#### kChat
+
+- `KChatStatusOK` response DTO for Mattermost-compatible status responses.
+- `KChatRequests.getClientConfig(format:)` request factory.
+- `KChatService`, which sends kChat route factories through `InfomaniakAPIClient`.
 
 ### Validation
 
 - `swift test` passes with route/DTO/channel coverage.
 
 
-## 2026-05-05
+## 2026-05-05 — kDrive create directory route
 
 - Added `POST /3/drive/{drive_id}/files/{file_id}/directory` request support via `KDriveRequests.createDirectoryV3`.
 - Added `CreateKDriveDirectoryOptions` with required `name` and optional `color`, `only_for_me`, and `relative_path` JSON fields.
@@ -78,7 +103,7 @@ kDrive request factories, and `KDriveService` wrappers moved from Potassium.
 - Added unit tests covering the OpenAPI path/query/body shape and snake-case body encoding.
 - Verified with `swift test` in `potassiumChannel`.
 
-## 2026-05-05 — create default file route
+## 2026-05-05 — kDrive create default file route
 
 - Added `POST /3/drive/{drive_id}/files/{file_id}/file` request support via `KDriveRequests.createDefaultFileV3`.
 - Added `CreateKDriveDefaultFileOptions` with required `name` and `type` JSON fields.
@@ -86,7 +111,7 @@ kDrive request factories, and `KDriveService` wrappers moved from Potassium.
 - Added unit tests covering the OpenAPI path/query/body shape and required body encoding.
 - Verified with `swift test` in `potassiumChannel`.
 
-## 2026-05-05 — rename file route
+## 2026-05-05 — kDrive rename file route
 
 - Added `POST /2/drive/{drive_id}/files/{file_id}/rename` request support via `KDriveRequests.renameFileV2`.
 - Added `RenameKDriveFileOptions` with required `name` JSON field.
@@ -94,8 +119,10 @@ kDrive request factories, and `KDriveService` wrappers moved from Potassium.
 - Added unit tests covering the OpenAPI v2 path/body shape and required body encoding.
 - Verified with `swift test` in `potassiumChannel`.
 
-## 2026-05-05 — kChat client config route
+## 2026-05-05 — kChat client config route (PR #11)
 
+- Target app: kChat.
+- PR: #11 (`feat/kchat-client-config-route`).
 - Added `GET /api/v4/config/client?format=old` request support via `KChatRequests.getClientConfig(format:)`.
 - Added `KChatStatusOK` for the OpenAPI `StatusOK` response body.
 - Added `KChatService.getClientConfig(format:)` convenience API.
