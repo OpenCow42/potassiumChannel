@@ -65,3 +65,12 @@ kDrive request factories, and `KDriveService` wrappers moved from Potassium.
 ### Validation
 
 - `swift test` passes with route/DTO/channel coverage.
+
+
+## 2026-05-05
+
+- Added `POST /3/drive/{drive_id}/files/{file_id}/directory` request support via `KDriveRequests.createDirectoryV3`.
+- Added `CreateKDriveDirectoryOptions` with required `name` and optional `color`, `only_for_me`, and `relative_path` JSON fields.
+- Added `KDriveService.createDirectory(...)` convenience API.
+- Added unit tests covering the OpenAPI path/query/body shape and snake-case body encoding.
+- Verified with `swift test` in `potassiumChannel`.
