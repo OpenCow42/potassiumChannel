@@ -168,3 +168,12 @@ not started
 - Added `KChatChannel` response model for the Mattermost-compatible channel array returned by the endpoint.
 - Added `KChatService.getUserTeamChannels(userId:teamId:options:)` convenience API.
 - Added unit tests covering the OpenAPI path, GET method, auth/accept headers, query parameters, absence of a JSON body, and snake-case channel response decoding. The user id test fixture is read from local `Tests/Env.swift` and not hard-coded.
+
+## 2026-05-05 — kChat create post route
+
+- Target app: kChat.
+- Branch: `feat/kchat-post-create`.
+- Added `POST /api/v4/posts` request support via `KChatRequests.createPost(body:)` and `KChatService.createPost(_:)`.
+- Added `KChatPostCreateRequest` and `KChatPost` models for creating and decoding Mattermost-compatible posts.
+- Added `DELETE /api/v4/posts/{post_id}` support via `KChatRequests.deletePost(postId:)` and `KChatService.deletePost(postId:)` so live tests and callers can clean up created posts.
+- Added unit tests covering POST request shape/body encoding, cleanup DELETE request shape, and snake-case post response decoding.

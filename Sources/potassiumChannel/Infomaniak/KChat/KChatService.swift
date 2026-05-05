@@ -53,4 +53,15 @@ public struct KChatService: Sendable {
     ) async throws -> [KChatChannel] {
         try await client.send(KChatRequests.getUserTeamChannels(userId: userId, teamId: teamId, options: options))
     }
+
+    /// Creates a kChat post.
+    public func createPost(_ request: KChatPostCreateRequest) async throws -> KChatPost {
+        let body = try JSONEncoder().encode(request)
+        return try await client.send(KChatRequests.createPost(body: body))
+    }
+
+    /// Deletes a kChat post.
+    public func deletePost(postId: String) async throws -> KChatStatusOK {
+        try await client.send(KChatRequests.deletePost(postId: postId))
+    }
 }
