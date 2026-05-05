@@ -1443,7 +1443,7 @@ public enum KDriveRequests {
     /// Creates a request that lists v3 drive-scoped activity totals.
     public static func listDriveActivityTotals(
         driveId: Int
-    ) -> APIRequest<InfomaniakResponse<[KDriveDriveActivity]>> {
+    ) -> APIRequest<InfomaniakResponse<Int>> {
         APIRequest(
             method: .get,
             path: "/3/drive/\(driveId)/activities/total"
@@ -1570,16 +1570,49 @@ public enum KDriveRequests {
         )
     }
 
-    /// Creates a request that copies a source kDrive file into a destination drive folder.
-    public static func copyFileToDriveV2(
+    /// Creates a request that downloads a built kDrive archive.
+    public static func downloadArchive(
         driveId: Int,
-        fileId: Int,
-        body: CopyKDriveFileToDriveBody
-    ) -> APIRequest<InfomaniakResponse<[KDriveExternalImport]>> {
+        archiveUUID: String
+    ) -> APIRequest<KDriveBinaryResponse> {
         APIRequest(
-            method: .post,
-            path: "/2/drive/\(driveId)/files/\(fileId)/copy-to-drive",
-            body: body.jsonData
+            method: .get,
+            path: "/2/drive/\(driveId)/files/archives/\(archiveUUID)",
+            headers: [HTTPHeader(name: "Accept", value: "application/zip")]
         )
     }
+
+    /// Creates a request that copies a kDrive file to a directory.
+    public static func copyFileToDirectoryV3(
+        driveId: Int,
+        fileId: Int,
+        destinationDirectoryId: Int,
+        with includedResources: String? = nil,
+        body: Data
+    ) -> APIRequest<InfomaniakResponse<KDriveFileItem>> {
+        var queryParameters: [QueryParameter] = []
+
+        if let includedResources {
+            queryParameters.append(QueryParameter(name: "with", value: .string(includedResources)))
+        }
+
+        return APIRequest(
+            method: .post,
+            path: "/3/drive/\(driveId)/files/\(fileId)/copy/\(destinationDirectoryId)",
+            queryParameters: queryParameters,
+            body: body
+        )
+    }
+
+    /// Creates a request that moves a kDrive file to trash using the v2 endpoint.
+    public static func trashFileV2(
+        driveId: Int,
+        fileId: Int
+    ) -> APIRequest<InfomaniakResponse<KDriveCancelResource>> {
+        APIRequest(
+            method: .delete,
+            path: "/2/drive/\(driveId)/files/\(fileId)"
+        )
+    }
+
 }
