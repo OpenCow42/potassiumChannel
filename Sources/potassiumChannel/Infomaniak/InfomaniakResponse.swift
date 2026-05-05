@@ -1,7 +1,7 @@
 import Foundation
 
 /// A generic Infomaniak API response envelope.
-public struct InfomaniakResponse<Payload: Codable & Sendable>: Codable, Sendable {
+public struct InfomaniakResponse<Payload: Decodable & Sendable>: Decodable, Sendable {
     /// The server-side result marker.
     public let result: String
 
@@ -16,7 +16,7 @@ public struct InfomaniakResponse<Payload: Codable & Sendable>: Codable, Sendable
 }
 
 /// A cursor-paginated Infomaniak API response envelope.
-public struct CursorPaginatedInfomaniakResponse<Payload: Codable & Sendable>: Codable, Sendable {
+public struct CursorPaginatedInfomaniakResponse<Payload: Decodable & Sendable>: Decodable, Sendable {
     /// The server-side result marker.
     public let result: String
 
@@ -43,7 +43,7 @@ public struct CursorPaginatedInfomaniakResponse<Payload: Codable & Sendable>: Co
 }
 
 /// A paginated Infomaniak API response envelope.
-public struct PaginatedInfomaniakResponse<Payload: Codable & Sendable>: Codable, Sendable {
+public struct PaginatedInfomaniakResponse<Payload: Decodable & Sendable>: Decodable, Sendable {
     /// The server-side result marker.
     public let result: String
 
@@ -72,3 +72,9 @@ public struct PaginatedInfomaniakResponse<Payload: Codable & Sendable>: Codable,
         self.itemsPerPage = itemsPerPage
     }
 }
+
+extension InfomaniakResponse: Encodable where Payload: Encodable {}
+
+extension CursorPaginatedInfomaniakResponse: Encodable where Payload: Encodable {}
+
+extension PaginatedInfomaniakResponse: Encodable where Payload: Encodable {}

@@ -1,9 +1,23 @@
 import Foundation
 
-
 /// Placeholder response type for kDrive endpoints that return binary data.
 public struct KDriveBinaryResponse: Decodable, Sendable {
     public init() {}
+}
+
+/// A cancellation token returned after a file is moved to kDrive trash.
+public struct KDriveCancelResource: Codable, Equatable, Sendable {
+    /// Identifier that can be used by Infomaniak APIs to cancel the action while it remains valid.
+    public let cancelId: String
+
+    /// Unix timestamp until which the cancellation identifier remains valid.
+    public let validUntil: Int
+
+    /// Creates a cancellation resource value.
+    public init(cancelId: String, validUntil: Int) {
+        self.cancelId = cancelId
+        self.validUntil = validUntil
+    }
 }
 
 /// Query parameters and headers accepted by the kDrive file download endpoint.
@@ -86,30 +100,6 @@ public struct UploadKDriveFileOptions: Equatable, Sendable {
         self.lastModifiedAt = lastModifiedAt
         self.symbolicLink = symbolicLink
         self.totalChunkHash = totalChunkHash
-    }
-}
-
-/// JSON body used to copy a kDrive file from another drive into a destination folder.
-public struct CopyKDriveFileToDriveBody: Codable, Equatable, Sendable {
-    /// Source drive identifier containing the file to copy.
-    public let sourceDriveId: Int
-
-    /// Source file identifier to copy.
-    public let sourceFileId: Int
-
-    /// Creates a copy-to-drive request body.
-    public init(sourceDriveId: Int, sourceFileId: Int) {
-        self.sourceDriveId = sourceDriveId
-        self.sourceFileId = sourceFileId
-    }
-
-    enum CodingKeys: String, CodingKey {
-        case sourceDriveId = "source_drive_id"
-        case sourceFileId = "source_file_id"
-    }
-
-    var jsonData: Data {
-        Data(#"{"source_drive_id":\#(sourceDriveId),"source_file_id":\#(sourceFileId)}"#.utf8)
     }
 }
 
@@ -681,7 +671,6 @@ public struct KDriveExternalImport: Codable, Equatable, Sendable {
     }
 }
 
-
 /// A user invitation created for a kDrive.
 public struct KDriveUserInvitation: Codable, Equatable, Sendable {
     /// The unique invitation identifier.
@@ -802,7 +791,6 @@ public struct KDriveUserPreferences: Codable, Equatable, Sendable {
         self.connectedApp = connectedApp
     }
 }
-
 
 /// Settings for a kDrive.
 public struct KDriveSettings: Codable, Equatable, Sendable {
@@ -1325,6 +1313,21 @@ public struct SearchKDriveSharedWithMeOptions: Equatable, Sendable {
         self.query = query
         self.queryScope = queryScope
         self.types = types
+    }
+}
+
+/// JSON body accepted by the kDrive file copy endpoint.
+public struct CopyKDriveFileOptions: Encodable, Equatable, Sendable {
+    /// Conflict behavior: `error`, `rename`, or `version`.
+    public let conflict: String?
+
+    /// Optional name for the copied file or directory.
+    public let name: String?
+
+    /// Creates options for copying a kDrive file or directory.
+    public init(conflict: String? = nil, name: String? = nil) {
+        self.conflict = conflict
+        self.name = name
     }
 }
 
