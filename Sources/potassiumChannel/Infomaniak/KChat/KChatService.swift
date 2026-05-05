@@ -28,4 +28,10 @@ public struct KChatService: Sendable {
     public func getClientConfig(format: String) async throws -> KChatClientConfig {
         try await client.send(KChatRequests.getClientConfig(format: format))
     }
+
+    /// Searches users in kChat.
+    public func searchUsers(options: KChatUserSearchOptions) async throws -> [KChatUser] {
+        let body = try JSONEncoder().encode(options)
+        return try await client.send(KChatRequests.searchUsers(body: body))
+    }
 }
