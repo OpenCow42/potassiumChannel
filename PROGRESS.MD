@@ -158,3 +158,13 @@ not started
 - Added `KChatTeam` response model for the Mattermost-compatible team array returned by the endpoint.
 - Added `KChatService.getUserTeams(userId:)` convenience API.
 - Added unit tests covering the OpenAPI path, GET method, auth/accept headers, absence of a JSON body, and snake-case team response decoding.
+
+## 2026-05-05 — kChat get user team channels route
+
+- Target app: kChat.
+- Branch: `feat/kchat-user-team-channels-get`.
+- Added `GET /api/v4/users/{user_id}/teams/{team_id}/channels` request support via `KChatRequests.getUserTeamChannels(userId:teamId:options:)`.
+- Added `KChatUserTeamChannelsOptions` for `include_deleted` and `last_delete_at` query parameters.
+- Added `KChatChannel` response model for the Mattermost-compatible channel array returned by the endpoint.
+- Added `KChatService.getUserTeamChannels(userId:teamId:options:)` convenience API.
+- Added unit tests covering the OpenAPI path, GET method, auth/accept headers, query parameters, absence of a JSON body, and snake-case channel response decoding. The user id test fixture is read from local `Tests/Env.swift` and not hard-coded.
