@@ -319,6 +319,22 @@ public struct KDriveService: Sendable {
         try await client.send(KDriveRequests.uploadFile(driveId: driveId, data: data, options: options))
     }
 
+    /// Renames a kDrive file or directory.
+    public func renameFile(
+        driveId: Int,
+        fileId: Int,
+        options: RenameKDriveFileOptions
+    ) async throws -> InfomaniakResponse<KDriveCancelResource> {
+        let body = try JSONEncoder().encode(options)
+        return try await client.send(
+            KDriveRequests.renameFileV2(
+                driveId: driveId,
+                fileId: fileId,
+                body: body
+            )
+        )
+    }
+
     /// Creates an empty default kDrive file inside the specified parent directory.
     public func createDefaultFile(
         driveId: Int,
