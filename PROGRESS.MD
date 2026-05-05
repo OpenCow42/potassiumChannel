@@ -140,3 +140,12 @@ not started
 - Added `KChatService.searchUsers(options:)` convenience API.
 - Added unit tests covering the OpenAPI path, POST method, JSON body, auth/content headers, snake-case body encoding, and snake-case response decoding.
 - Verified with `swift test` in `potassiumChannel`.
+
+## 2026-05-05 — kChat get user route
+
+- Target app: kChat.
+- Branch: `feat/kchat-user-get`.
+- Added `GET /api/v4/users/{user_id}` request support via `KChatRequests.getUser(userId:)`, including the API's special `me` user id.
+- Reused the existing Mattermost-compatible `KChatUser` response model.
+- Added `KChatService.getUser(userId:)` convenience API.
+- Added unit tests covering the OpenAPI path, GET method, auth/accept headers, absence of a JSON body, and the special `me` path.
