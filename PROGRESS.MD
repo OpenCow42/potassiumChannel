@@ -1,52 +1,29 @@
 ### Progress of the project
 
-### Package foundation
+### Implemented API route inventory
 
-- Branch: `main`
-- Status: merged
-- Implemented a Swift Package Manager library target named `potassiumChannel`.
-- Package scope: shared networking primitives for Potassium clients.
+`potassiumChannel` currently implements the shared HTTP channel layer only. It
+does not define concrete Infomaniak API endpoint wrappers in this repository.
+Concrete routes live in the main Potassium CLI project.
 
-### Network stack extraction
+Existing route coverage in this package:
 
-- Branch: `refactor/network-stack`
-- Status: pushed
-- Extracted the HTTP channel layer used by Potassium into this standalone
-  package:
-  - `APIClientConfiguration`
-  - `APIClientError`
-  - `APIRequest`
-  - `HTTPHeader`
-  - `HTTPMethod`
-  - `InfomaniakAPIClient`
-  - `QueryParameter`
-- Validation:
-  - run `swift build`
-  - run `swift test`
+| Route | Method | Status | Notes |
+| --- | --- | --- | --- |
+| _None_ | _N/A_ | _Not implemented here_ | `APIRequest` accepts arbitrary relative paths so Potassium can build typed requests in higher-level packages. |
 
-### Potassium integration support
+### Implemented channel primitives
 
-- Branch: `feat/kdrive-file-copy-to-drive-post-network`
-- Status: pushed, ready for PR
-- Purpose: support the Potassium copy-to-drive implementation by referencing the
-  reusable network stack extracted into `potassiumChannel`.
-- Related Potassium PR: https://github.com/OpenCow42/potassium/pull/53
+- `APIRequest<Response>` — typed request description with method, relative path,
+  query parameters, headers, and optional body.
+- `InfomaniakAPIClient` — builds and sends URL requests from `APIRequest` values.
+- `APIClientConfiguration` — base URL and token configuration for API clients.
+- `APIClientError` — shared transport/client error cases.
+- `HTTPMethod` — supported HTTP verbs.
+- `HTTPHeader` — request header representation.
+- `QueryParameter` — URL query parameter representation, including repeated
+  values.
 
-### Documentation and license replication
+### Validation
 
-- Branch: `feat/kdrive-file-copy-to-drive-post-network`
-- Status: in progress
-- Replicated and adapted the Potassium markdown project documents for this
-  sub-component project:
-  - `README.md`
-  - `MANIFESTO.MD`
-  - `PROGRESS.MD`
-  - `SWIFT.MD`
-- Duplicated Potassium's `LICENCE.MD`.
-
-### Next work
-
-- Keep future changes small and reviewable.
-- Add or update tests whenever network primitives change.
-- Keep API-domain behavior in Potassium unless it belongs in this reusable
-  transport layer.
+- `swift test` passes with request-building and query-encoding coverage.
