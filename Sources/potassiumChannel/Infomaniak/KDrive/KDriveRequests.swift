@@ -1582,6 +1582,19 @@ public enum KDriveRequests {
         )
     }
 
+    /// Creates a request that renames a kDrive file or directory.
+    public static func renameFileV2(
+        driveId: Int,
+        fileId: Int,
+        body: Data
+    ) -> APIRequest<InfomaniakResponse<KDriveCancelResource>> {
+        APIRequest(
+            method: .post,
+            path: "/2/drive/\(driveId)/files/\(fileId)/rename",
+            body: body
+        )
+    }
+
     /// Creates a request that creates an empty default kDrive file in the specified parent directory.
     public static func createDefaultFileV3(
         driveId: Int,
