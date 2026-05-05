@@ -12,7 +12,8 @@ struct KChatGetUserTeamsRequestTests {
                 bearerToken: "test-token"
             )
         )
-        let request = KChatRequests.getUserTeams(userId: "019dea2d-d615-713d-a516-0f634c4c7c5e")
+        let userId = try KChatTestEnvironment.requireKChatUserId()
+        let request = KChatRequests.getUserTeams(userId: userId)
 
         let urlRequest = try await client.makeURLRequest(for: request)
         let url = try #require(urlRequest.url)
@@ -21,7 +22,7 @@ struct KChatGetUserTeamsRequestTests {
         #expect(urlRequest.value(forHTTPHeaderField: "Authorization") == "Bearer test-token")
         #expect(urlRequest.value(forHTTPHeaderField: "Accept") == "application/json")
         #expect(urlRequest.value(forHTTPHeaderField: "Content-Type") == nil)
-        #expect(url.path == "/api/v4/users/019dea2d-d615-713d-a516-0f634c4c7c5e/teams")
+        #expect(url.path == "/api/v4/users/\(userId)/teams")
         #expect(urlRequest.httpBody == nil)
     }
 
