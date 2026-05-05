@@ -1,2 +1,1 @@
-// The Swift Programming Language
-// https://docs.swift.org/swift-book
+/// PotassiumChannel provides the shared networking stack used by Potassium clients.
