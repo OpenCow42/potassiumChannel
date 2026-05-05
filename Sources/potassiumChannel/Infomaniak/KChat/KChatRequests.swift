@@ -14,4 +14,13 @@ public enum KChatRequests {
             ]
         )
     }
+
+    /// Creates a request that searches kChat users.
+    public static func searchUsers(body: Data) -> APIRequest<[KChatUser]> {
+        APIRequest(
+            method: .post,
+            path: "/api/v4/users/search",
+            body: body
+        )
+    }
 }
