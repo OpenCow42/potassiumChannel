@@ -39,4 +39,27 @@ public enum KChatRequests {
             path: "/api/v4/users/\(userId)/teams"
         )
     }
+
+    /// Creates a request that lists kChat channels for a user in a team.
+    public static func getUserTeamChannels(
+        userId: String,
+        teamId: String,
+        options: KChatUserTeamChannelsOptions = KChatUserTeamChannelsOptions()
+    ) -> APIRequest<[KChatChannel]> {
+        var queryParameters: [QueryParameter] = []
+
+        if let includeDeleted = options.includeDeleted {
+            queryParameters.append(QueryParameter(name: "include_deleted", value: .bool(includeDeleted)))
+        }
+
+        if let lastDeleteAt = options.lastDeleteAt {
+            queryParameters.append(QueryParameter(name: "last_delete_at", value: .integer(lastDeleteAt)))
+        }
+
+        return APIRequest(
+            method: .get,
+            path: "/api/v4/users/\(userId)/teams/\(teamId)/channels",
+            queryParameters: queryParameters
+        )
+    }
 }
