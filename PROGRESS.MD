@@ -88,7 +88,7 @@ not started
 
 - `KChatStatusOK` response DTO for Mattermost-compatible status responses.
 - `KChatRequests.getClientConfig(format:)` request factory.
-- `KChatService`, which sends kChat route factories through `InfomaniakAPIClient`.
+- `KChatService`, which sends kChat route factories through `InfomaniakAPIClient` and can build `https://<team>.kchat.infomaniak.com` base URLs.
 
 ### Validation
 
@@ -126,5 +126,6 @@ not started
 - Added `GET /api/v4/config/client?format=old` request support via `KChatRequests.getClientConfig(format:)`.
 - Added `KChatStatusOK` for the OpenAPI `StatusOK` response body.
 - Added `KChatService.getClientConfig(format:)` convenience API.
-- Added unit tests covering the OpenAPI path, required `format` query parameter, auth header, and response decoding.
+- Added `KChatService.baseURL(teamName:)` and team-token initializer for `https://<team>.kchat.infomaniak.com`.
+- Added unit tests covering the OpenAPI path, required `format` query parameter, auth header, kChat team base URL, and response decoding.
 - Verified with `swift test` in `potassiumChannel`.
