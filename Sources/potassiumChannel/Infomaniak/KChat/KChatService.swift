@@ -25,7 +25,7 @@ public struct KChatService: Sendable {
     }
 
     /// Fetches the client configuration required by kChat clients.
-    public func getClientConfig(format: String) async throws -> KChatStatusOK {
+    public func getClientConfig(format: String) async throws -> KChatClientConfig {
         try await client.send(KChatRequests.getClientConfig(format: format))
     }
 }
