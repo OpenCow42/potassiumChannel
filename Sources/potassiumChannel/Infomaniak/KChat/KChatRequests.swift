@@ -80,6 +80,14 @@ public enum KChatRequests {
         )
     }
 
+    /// Creates a request that gets a previously uploaded kChat file.
+    public static func getFile(fileId: String) -> APIRequest<Data> {
+        APIRequest(
+            method: .get,
+            path: "/api/v4/files/\(fileId)"
+        )
+    }
+
     /// Creates a request that uploads a file to kChat.
     public static func uploadFile(channelId: String? = nil, filename: String? = nil, body: Data, contentType: String) -> APIRequest<KChatFileUploadResponse> {
         var queryParameters: [QueryParameter] = []
