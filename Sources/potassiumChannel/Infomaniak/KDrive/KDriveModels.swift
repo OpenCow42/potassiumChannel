@@ -1316,6 +1316,17 @@ public struct SearchKDriveSharedWithMeOptions: Equatable, Sendable {
     }
 }
 
+/// JSON body accepted by the kDrive rename endpoint.
+public struct RenameKDriveFileOptions: Encodable, Equatable, Sendable {
+    /// New name for the file or directory.
+    public let name: String
+
+    /// Creates options for renaming a kDrive file or directory.
+    public init(name: String) {
+        self.name = name
+    }
+}
+
 /// JSON body accepted by the kDrive create default file endpoint.
 public struct CreateKDriveDefaultFileOptions: Encodable, Equatable, Sendable {
     /// Name of the default file to create.

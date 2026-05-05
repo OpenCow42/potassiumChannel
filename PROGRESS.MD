@@ -54,6 +54,7 @@ kDrive request factories, and `KDriveService` wrappers moved from Potassium.
 | GET | `/2/drive/users` | `KDriveRequests.listKDriveUsers` |
 | GET | `/2/drive/{drive_id}/files/archives/{archive_uuid}` | `KDriveRequests.downloadArchive` |
 | POST | `/3/drive/{drive_id}/files/{file_id}/file` | `KDriveRequests.createDefaultFileV3` |
+| POST | `/2/drive/{drive_id}/files/{file_id}/rename` | `KDriveRequests.renameFileV2` |
 | POST | `/3/drive/{drive_id}/files/{file_id}/copy/{destination_directory_id}` | `KDriveRequests.copyFileToDirectoryV3` |
 | DELETE | `/2/drive/{drive_id}/files/{file_id}` | `KDriveRequests.trashFileV2` |
 
@@ -82,4 +83,12 @@ kDrive request factories, and `KDriveService` wrappers moved from Potassium.
 - Added `CreateKDriveDefaultFileOptions` with required `name` and `type` JSON fields.
 - Added `KDriveService.createDefaultFile(...)` convenience API.
 - Added unit tests covering the OpenAPI path/query/body shape and required body encoding.
+- Verified with `swift test` in `potassiumChannel`.
+
+## 2026-05-05 — rename file route
+
+- Added `POST /2/drive/{drive_id}/files/{file_id}/rename` request support via `KDriveRequests.renameFileV2`.
+- Added `RenameKDriveFileOptions` with required `name` JSON field.
+- Added `KDriveService.renameFile(...)` convenience API.
+- Added unit tests covering the OpenAPI v2 path/body shape and required body encoding.
 - Verified with `swift test` in `potassiumChannel`.
