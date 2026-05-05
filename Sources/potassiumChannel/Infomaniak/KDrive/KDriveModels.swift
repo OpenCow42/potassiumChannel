@@ -1316,6 +1316,41 @@ public struct SearchKDriveSharedWithMeOptions: Equatable, Sendable {
     }
 }
 
+/// JSON body accepted by the kDrive create directory endpoint.
+public struct CreateKDriveDirectoryOptions: Encodable, Equatable, Sendable {
+    /// Name of the directory to create.
+    public let name: String
+
+    /// Optional color of the directory for the user creating it, such as `#0098ff`.
+    public let color: String?
+
+    /// Whether to create the directory only for the authenticated user.
+    public let onlyForMe: Bool?
+
+    /// Optional relative path to create from the destination directory.
+    public let relativePath: String?
+
+    public enum CodingKeys: String, CodingKey {
+        case name
+        case color
+        case onlyForMe = "only_for_me"
+        case relativePath = "relative_path"
+    }
+
+    /// Creates options for creating a kDrive directory.
+    public init(
+        name: String,
+        color: String? = nil,
+        onlyForMe: Bool? = nil,
+        relativePath: String? = nil
+    ) {
+        self.name = name
+        self.color = color
+        self.onlyForMe = onlyForMe
+        self.relativePath = relativePath
+    }
+}
+
 /// JSON body accepted by the kDrive file copy endpoint.
 public struct CopyKDriveFileOptions: Encodable, Equatable, Sendable {
     /// Conflict behavior: `error`, `rename`, or `version`.
