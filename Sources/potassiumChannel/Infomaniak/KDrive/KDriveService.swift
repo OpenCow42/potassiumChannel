@@ -268,6 +268,16 @@ public struct KDriveService: Sendable {
         )
     }
 
+    /// Moves a kDrive file or directory to trash using the v2 endpoint.
+    public func trashFileV2(
+        driveId: Int,
+        fileId: Int
+    ) async throws -> InfomaniakResponse<KDriveCancelResource> {
+        try await client.send(
+            KDriveRequests.trashFileV2(driveId: driveId, fileId: fileId)
+        )
+    }
+
     /// Gets a single file or directory from kDrive trash.
     public func getTrashedFile(
         driveId: Int,
@@ -290,6 +300,16 @@ public struct KDriveService: Sendable {
         )
     }
 
+    /// Downloads a built kDrive archive as ZIP data.
+    public func downloadArchive(
+        driveId: Int,
+        archiveUUID: String
+    ) async throws -> Data {
+        try await client.sendData(
+            KDriveRequests.downloadArchive(driveId: driveId, archiveUUID: archiveUUID)
+        )
+    }
+
     /// Uploads raw file data to kDrive using the v3 single-request endpoint.
     public func uploadFile(
         driveId: Int,
@@ -299,18 +319,22 @@ public struct KDriveService: Sendable {
         try await client.send(KDriveRequests.uploadFile(driveId: driveId, data: data, options: options))
     }
 
-    /// Copies a source kDrive file into a destination drive folder.
-    public func copyFileToDriveV2(
+    /// Copies a kDrive file or directory into another directory.
+    public func copyFileToDirectory(
         driveId: Int,
         fileId: Int,
-        sourceDriveId: Int,
-        sourceFileId: Int
-    ) async throws -> InfomaniakResponse<[KDriveExternalImport]> {
-        try await client.send(
-            KDriveRequests.copyFileToDriveV2(
+        destinationDirectoryId: Int,
+        with includedResources: String? = nil,
+        options: CopyKDriveFileOptions = CopyKDriveFileOptions()
+    ) async throws -> InfomaniakResponse<KDriveFileItem> {
+        let body = try JSONEncoder().encode(options)
+        return try await client.send(
+            KDriveRequests.copyFileToDirectoryV3(
                 driveId: driveId,
                 fileId: fileId,
-                body: CopyKDriveFileToDriveBody(sourceDriveId: sourceDriveId, sourceFileId: sourceFileId)
+                destinationDirectoryId: destinationDirectoryId,
+                with: includedResources,
+                body: body
             )
         )
     }
@@ -483,7 +507,7 @@ public struct KDriveService: Sendable {
     /// Lists v3 drive-scoped activity totals.
     public func listDriveActivityTotals(
         driveId: Int
-    ) async throws -> InfomaniakResponse<[KDriveDriveActivity]> {
+    ) async throws -> InfomaniakResponse<Int> {
         try await client.send(
             KDriveRequests.listDriveActivityTotals(driveId: driveId)
         )
