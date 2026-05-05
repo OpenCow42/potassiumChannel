@@ -4,7 +4,7 @@ import Testing
 
 @Suite("kChat upload file requests")
 struct KChatUploadFileRequestTests {
-    @Test("kChat upload file request matches the OpenAPI path, query, headers, and octet-stream body")
+    @Test("kChat upload file request matches the OpenAPI path, query, headers, and multipart body")
     func kChatUploadFileRequestMatchesOpenAPIShape() async throws {
         let client = InfomaniakAPIClient(
             configuration: APIClientConfiguration(
@@ -12,8 +12,13 @@ struct KChatUploadFileRequestTests {
                 bearerToken: "test-token"
             )
         )
-        let body = Data("hello".utf8)
-        let request = KChatRequests.uploadFile(channelId: "channel-id", filename: "hello.txt", body: body)
+        let body = Data("--boundary\r\nContent-Disposition: form-data; name=\"files\"; filename=\"hello.txt\"\r\n\r\nhello\r\n--boundary--\r\n".utf8)
+        let request = KChatRequests.uploadFile(
+            channelId: "channel-id",
+            filename: "hello.txt",
+            body: body,
+            contentType: "multipart/form-data; boundary=boundary"
+        )
 
         let urlRequest = try await client.makeURLRequest(for: request)
         let url = try #require(urlRequest.url)
@@ -22,7 +27,7 @@ struct KChatUploadFileRequestTests {
         #expect(urlRequest.httpMethod == "POST")
         #expect(urlRequest.value(forHTTPHeaderField: "Authorization") == "Bearer test-token")
         #expect(urlRequest.value(forHTTPHeaderField: "Accept") == "application/json")
-        #expect(urlRequest.value(forHTTPHeaderField: "Content-Type") == "application/octet-stream")
+        #expect(urlRequest.value(forHTTPHeaderField: "Content-Type") == "multipart/form-data; boundary=boundary")
         #expect(url.path == "/api/v4/files")
         #expect(components.queryItems?.contains(URLQueryItem(name: "channel_id", value: "channel-id")) == true)
         #expect(components.queryItems?.contains(URLQueryItem(name: "filename", value: "hello.txt")) == true)
