@@ -62,4 +62,21 @@ public enum KChatRequests {
             queryParameters: queryParameters
         )
     }
+
+    /// Creates a request that posts a message to kChat.
+    public static func createPost(body: Data) -> APIRequest<KChatPost> {
+        APIRequest(
+            method: .post,
+            path: "/api/v4/posts",
+            body: body
+        )
+    }
+
+    /// Creates a request that deletes a kChat post.
+    public static func deletePost(postId: String) -> APIRequest<KChatStatusOK> {
+        APIRequest(
+            method: .delete,
+            path: "/api/v4/posts/\(postId)"
+        )
+    }
 }
