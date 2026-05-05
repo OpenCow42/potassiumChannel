@@ -35,6 +35,15 @@ related Swift clients:
 
 The technical stack should be standard Swift 6 code.
 
+Platform minimums are set to the first OS versions with native async/await
+support across Apple platforms:
+
+- macOS 12+
+- iOS 15+
+- tvOS 15+
+- watchOS 8+
+- visionOS 1+
+
 Use of SPM libraries is allowed but should be limited to a strict minimum. SPM
 libraries produced by Apple are allowed without restrictions.
 
