@@ -12,7 +12,8 @@ struct KChatGetUserRequestTests {
                 bearerToken: "test-token"
             )
         )
-        let request = KChatRequests.getUser(userId: "019dea2d-d615-713d-a516-0f634c4c7c5e")
+        let userId = try KChatTestEnvironment.requireKChatUserId()
+        let request = KChatRequests.getUser(userId: userId)
 
         let urlRequest = try await client.makeURLRequest(for: request)
         let url = try #require(urlRequest.url)
@@ -21,7 +22,7 @@ struct KChatGetUserRequestTests {
         #expect(urlRequest.value(forHTTPHeaderField: "Authorization") == "Bearer test-token")
         #expect(urlRequest.value(forHTTPHeaderField: "Accept") == "application/json")
         #expect(urlRequest.value(forHTTPHeaderField: "Content-Type") == nil)
-        #expect(url.path == "/api/v4/users/019dea2d-d615-713d-a516-0f634c4c7c5e")
+        #expect(url.path == "/api/v4/users/\(userId)")
         #expect(urlRequest.httpBody == nil)
     }
 
@@ -40,4 +41,30 @@ struct KChatGetUserRequestTests {
 
         #expect(url.path == "/api/v4/users/me")
     }
+}
+
+enum KChatTestEnvironment {
+    static func requireKChatUserId() throws -> String {
+        guard let content = try? String(contentsOfFile: "Tests/Env.swift", encoding: .utf8),
+              let range = content.range(of: #"kchatAdminId\s*=\s*\"([^\"]+)\""#, options: .regularExpression)
+        else {
+            throw KChatTestEnvironmentError.missingKChatAdminId
+        }
+
+        let assignment = String(content[range])
+        guard let firstQuote = assignment.firstIndex(of: "\"") else {
+            throw KChatTestEnvironmentError.missingKChatAdminId
+        }
+
+        let valueStart = assignment.index(after: firstQuote)
+        guard let lastQuote = assignment[valueStart...].firstIndex(of: "\"") else {
+            throw KChatTestEnvironmentError.missingKChatAdminId
+        }
+
+        return String(assignment[valueStart..<lastQuote])
+    }
+}
+
+enum KChatTestEnvironmentError: Error {
+    case missingKChatAdminId
 }
