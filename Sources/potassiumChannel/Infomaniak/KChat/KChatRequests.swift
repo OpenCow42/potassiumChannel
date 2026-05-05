@@ -79,4 +79,25 @@ public enum KChatRequests {
             path: "/api/v4/posts/\(postId)"
         )
     }
+
+    /// Creates a request that uploads a file to kChat.
+    public static func uploadFile(channelId: String? = nil, filename: String? = nil, body: Data, contentType: String) -> APIRequest<KChatFileUploadResponse> {
+        var queryParameters: [QueryParameter] = []
+
+        if let channelId {
+            queryParameters.append(QueryParameter(name: "channel_id", value: .string(channelId)))
+        }
+
+        if let filename {
+            queryParameters.append(QueryParameter(name: "filename", value: .string(filename)))
+        }
+
+        return APIRequest(
+            method: .post,
+            path: "/api/v4/files",
+            queryParameters: queryParameters,
+            headers: [HTTPHeader(name: "Content-Type", value: contentType)],
+            body: body
+        )
+    }
 }
