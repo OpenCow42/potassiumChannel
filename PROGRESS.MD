@@ -184,5 +184,5 @@ not started
 - Branch: `feat/kchat-file-upload`.
 - Added `POST /api/v4/files` request support via `KChatRequests.uploadFile(channelId:filename:body:)` and `KChatService.uploadFile(channelId:filename:data:)`.
 - Added `KChatFileUploadResponse` and `KChatFileInfo` models for the Mattermost-compatible upload response.
-- The request sends `application/octet-stream` body data and supports optional `channel_id` and `filename` query parameters from the OpenAPI spec.
+- The request sends a `multipart/form-data` body with the required `files` field and supports optional `channel_id` and `filename` query parameters from the OpenAPI spec.
 - Added unit tests covering method/path/query/header/body request shape and snake-case upload response decoding.

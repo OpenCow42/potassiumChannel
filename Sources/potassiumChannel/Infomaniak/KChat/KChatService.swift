@@ -67,6 +67,24 @@ public struct KChatService: Sendable {
 
     /// Uploads a file to kChat.
     public func uploadFile(channelId: String? = nil, filename: String? = nil, data: Data) async throws -> KChatFileUploadResponse {
-        try await client.send(KChatRequests.uploadFile(channelId: channelId, filename: filename, body: data))
+        let boundary = "potassium-\(UUID().uuidString)"
+        let uploadFilename = filename ?? "file"
+        let body = Self.multipartFileBody(data: data, fieldName: "files", filename: uploadFilename, boundary: boundary)
+        return try await client.send(KChatRequests.uploadFile(
+            channelId: channelId,
+            filename: filename,
+            body: body,
+            contentType: "multipart/form-data; boundary=\(boundary)"
+        ))
+    }
+
+    private static func multipartFileBody(data: Data, fieldName: String, filename: String, boundary: String) -> Data {
+        var body = Data()
+        body.append("--\(boundary)\r\n".data(using: .utf8)!)
+        body.append("Content-Disposition: form-data; name=\"\(fieldName)\"; filename=\"\(filename)\"\r\n".data(using: .utf8)!)
+        body.append("Content-Type: application/octet-stream\r\n\r\n".data(using: .utf8)!)
+        body.append(data)
+        body.append("\r\n--\(boundary)--\r\n".data(using: .utf8)!)
+        return body
     }
 }
