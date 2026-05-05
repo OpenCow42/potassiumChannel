@@ -319,6 +319,24 @@ public struct KDriveService: Sendable {
         try await client.send(KDriveRequests.uploadFile(driveId: driveId, data: data, options: options))
     }
 
+    /// Creates a kDrive directory inside the specified parent directory.
+    public func createDirectory(
+        driveId: Int,
+        fileId: Int,
+        with includedResources: String? = nil,
+        options: CreateKDriveDirectoryOptions
+    ) async throws -> InfomaniakResponse<KDriveFileItem> {
+        let body = try JSONEncoder().encode(options)
+        return try await client.send(
+            KDriveRequests.createDirectoryV3(
+                driveId: driveId,
+                fileId: fileId,
+                with: includedResources,
+                body: body
+            )
+        )
+    }
+
     /// Copies a kDrive file or directory into another directory.
     public func copyFileToDirectory(
         driveId: Int,
