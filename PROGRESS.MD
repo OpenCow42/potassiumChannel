@@ -72,6 +72,7 @@ not started
 | --- | --- | --- |
 | GET | `/api/v4/config/client` | `KChatRequests.getClientConfig` |
 | GET | `/api/v4/users/{user_id}/image` | `KChatRequests.getUserImage` |
+| GET | `/api/v4/users/{user_id}/image/default` | `KChatRequests.getUserDefaultImage` |
 | POST | `/api/v4/users/usernames` | `KChatRequests.getUsersByUsernames` |
 | GET | `/api/v4/channels/{channel_id}/posts` | `KChatRequests.getChannelPosts` |
 | GET | `/api/v4/posts/{post_id}` | `KChatRequests.getPost` |
@@ -97,10 +98,18 @@ not started
 - `KChatPost` and `KChatPostList` Mattermost-compatible post DTOs.
 - `KChatService`, which sends kChat route factories through `InfomaniakAPIClient`, includes `getPostThread(postId:)`, and can build `https://<team>.kchat.infomaniak.com` base URLs.
 - `KChatService.getUserImage(userId:)`, which returns profile image bytes through the raw-data send path.
+- `KChatService.getUserDefaultImage(userId:)`, which returns generated default profile image bytes through the raw-data send path.
 
 ### Validation
 
 - `swift test` passes with route/DTO/channel coverage.
+
+
+## 2026-05-06 — kChat get user default image route
+
+- Added `GET /api/v4/users/{user_id}/image/default` request support via `KChatRequests.getUserDefaultImage`.
+- Added `KChatService.getUserDefaultImage(userId:)` convenience API returning raw default profile image bytes through `InfomaniakAPIClient.sendData`.
+- Added unit tests covering GET method, OpenAPI path, auth/accept headers, no content type, no query, no body, and the special `me` user id path.
 
 ## 2026-05-06 — kChat get users by group channels route
 

@@ -167,6 +167,14 @@ public enum KChatRequests {
         )
     }
 
+    /// Creates a request that gets a kChat user's generated default profile image.
+    public static func getUserDefaultImage(userId: String) -> APIRequest<Data> {
+        APIRequest(
+            method: .get,
+            path: "/api/v4/users/\(userId)/image/default"
+        )
+    }
+
     /// Creates a request that gets a kChat user's status by id, or `me` for the authenticated user.
     public static func getUserStatus(userId: String) -> APIRequest<KChatUserStatus> {
         APIRequest(

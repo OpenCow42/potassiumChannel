@@ -73,6 +73,11 @@ public struct KChatService: Sendable {
         try await client.sendData(KChatRequests.getUserImage(userId: userId))
     }
 
+    /// Gets a kChat user's generated default profile image.
+    public func getUserDefaultImage(userId: String) async throws -> Data {
+        try await client.sendData(KChatRequests.getUserDefaultImage(userId: userId))
+    }
+
     /// Gets a kChat user's status by id, or `me` for the authenticated user.
     public func getUserStatus(userId: String) async throws -> KChatUserStatus {
         try await client.send(KChatRequests.getUserStatus(userId: userId))
