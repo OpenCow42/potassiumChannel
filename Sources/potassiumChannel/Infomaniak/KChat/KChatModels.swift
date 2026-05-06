@@ -163,6 +163,39 @@ public struct KChatUser: Codable, Equatable, Sendable {
     }
 }
 
+/// A Mattermost-compatible kChat user status response.
+public struct KChatUserStatus: Codable, Equatable, Sendable {
+    /// User identifier for this status value.
+    public let userId: String?
+
+    /// User presence status, for example `online`, `away`, `offline`, or `dnd`.
+    public let status: String?
+
+    /// Whether the status was set manually.
+    public let manual: Bool?
+
+    /// Last user activity timestamp in epoch milliseconds.
+    public let lastActivityAt: Int64?
+
+    /// Do-not-disturb end timestamp when supplied by Mattermost-compatible servers.
+    public let dndEndTime: Int64?
+
+    /// Creates a kChat user status response.
+    public init(
+        userId: String? = nil,
+        status: String? = nil,
+        manual: Bool? = nil,
+        lastActivityAt: Int64? = nil,
+        dndEndTime: Int64? = nil
+    ) {
+        self.userId = userId
+        self.status = status
+        self.manual = manual
+        self.lastActivityAt = lastActivityAt
+        self.dndEndTime = dndEndTime
+    }
+}
+
 /// A Mattermost-compatible kChat team returned by user team endpoints.
 public struct KChatTeam: Codable, Equatable, Sendable {
     public let id: String?

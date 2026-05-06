@@ -40,6 +40,14 @@ public enum KChatRequests {
         )
     }
 
+    /// Creates a request that gets a kChat user's status by id, or `me` for the authenticated user.
+    public static func getUserStatus(userId: String) -> APIRequest<KChatUserStatus> {
+        APIRequest(
+            method: .get,
+            path: "/api/v4/users/\(userId)/status"
+        )
+    }
+
     /// Creates a request that lists kChat teams for a user.
     public static func getUserTeams(userId: String) -> APIRequest<[KChatTeam]> {
         APIRequest(

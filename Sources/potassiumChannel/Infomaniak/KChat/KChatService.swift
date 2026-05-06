@@ -45,6 +45,11 @@ public struct KChatService: Sendable {
         try await client.sendData(KChatRequests.getUserImage(userId: userId))
     }
 
+    /// Gets a kChat user's status by id, or `me` for the authenticated user.
+    public func getUserStatus(userId: String) async throws -> KChatUserStatus {
+        try await client.send(KChatRequests.getUserStatus(userId: userId))
+    }
+
     /// Lists kChat teams for a user.
     public func getUserTeams(userId: String) async throws -> [KChatTeam] {
         try await client.send(KChatRequests.getUserTeams(userId: userId))
