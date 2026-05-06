@@ -341,3 +341,10 @@ not started
 - Added `KChatService.getUserByUsername(username:)` convenience API returning `KChatUser`.
 - Added request/decoding tests covering GET method, OpenAPI path, auth/accept headers, path encoding, no query/body, and response decoding.
 - Verified with `swift test` in `potassiumChannel`.
+
+## 2026-05-07 — kChat get user by email route
+
+- Added `GET /api/v4/users/email/{email}` request support via `KChatRequests.getUserByEmail(email:)`.
+- Added `KChatService.getUserByEmail(email:)` convenience API returning `KChatUser`.
+- Added request/decoding tests covering GET method, OpenAPI path, auth/accept headers, path encoding for email characters including `+`, `@`, and slash safety, no query/body, and response decoding.
+- Verified with `swift test` in `potassiumChannel`.
