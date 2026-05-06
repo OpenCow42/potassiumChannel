@@ -24,6 +24,31 @@ public enum KChatRequests {
         )
     }
 
+    /// Creates a request that autocompletes kChat users.
+    public static func autocompleteUsers(options: KChatUserAutocompleteOptions) -> APIRequest<KChatUserAutocomplete> {
+        var queryParameters: [QueryParameter] = [
+            QueryParameter(name: "name", value: .string(options.name)),
+        ]
+
+        if let teamId = options.teamId {
+            queryParameters.append(QueryParameter(name: "team_id", value: .string(teamId)))
+        }
+
+        if let channelId = options.channelId {
+            queryParameters.append(QueryParameter(name: "channel_id", value: .string(channelId)))
+        }
+
+        if let limit = options.limit {
+            queryParameters.append(QueryParameter(name: "limit", value: .integer(limit)))
+        }
+
+        return APIRequest(
+            method: .get,
+            path: "/api/v4/users/autocomplete",
+            queryParameters: queryParameters
+        )
+    }
+
     /// Creates a request that lists kChat users.
     public static func listUsers(options: KChatListUsersOptions = KChatListUsersOptions()) -> APIRequest<[KChatUser]> {
         var queryParameters: [QueryParameter] = []

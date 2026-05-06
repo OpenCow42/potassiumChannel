@@ -308,3 +308,13 @@ not started
 - Reused `KChatUser` for the returned Mattermost-compatible user array.
 - Added `KChatService.getUsersByIds(userIds:)` convenience API.
 - Added unit tests covering POST method, OpenAPI path, auth/accept/content-type headers, JSON array body, no query parameters, and response decoding.
+
+## 2026-05-06 — kChat users autocomplete route
+
+- Target app: kChat.
+- Branch: `feat/kchat`.
+- Added `GET /api/v4/users/autocomplete` request support via `KChatRequests.autocompleteUsers(options:)`.
+- Added `KChatUserAutocompleteOptions` for `name`, `team_id`, `channel_id`, and `limit` query parameters.
+- Added `KChatUserAutocomplete` for the OpenAPI response shape with separate `users` and `out_of_channel` user arrays, reusing `KChatUser`.
+- Added `KChatService.autocompleteUsers(options:)` convenience API.
+- Added unit tests covering method, OpenAPI path, auth/accept headers, query parameters, no body, omitted optional query parameters, and response decoding.
