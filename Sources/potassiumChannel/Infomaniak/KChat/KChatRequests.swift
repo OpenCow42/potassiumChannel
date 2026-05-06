@@ -246,6 +246,28 @@ public enum KChatRequests {
         )
     }
 
+    /// Creates a request that lists kChat channel memberships for a user, or `me` for the authenticated user.
+    public static func getUserChannelMembers(
+        userId: String,
+        options: KChatUserChannelMembersOptions = KChatUserChannelMembersOptions()
+    ) -> APIRequest<[KChatChannelMember]> {
+        var queryParameters: [QueryParameter] = []
+
+        if let page = options.page {
+            queryParameters.append(QueryParameter(name: "page", value: .integer(page)))
+        }
+
+        if let pageSize = options.pageSize {
+            queryParameters.append(QueryParameter(name: "pageSize", value: .integer(pageSize)))
+        }
+
+        return APIRequest(
+            method: .get,
+            path: "/api/v4/users/\(percentEncodePathSegment(userId))/channel_members",
+            queryParameters: queryParameters
+        )
+    }
+
     /// Creates a request that lists posts for a kChat channel.
     public static func getChannelPosts(
         channelId: String,
