@@ -225,6 +225,67 @@ public struct KChatUserTeamChannelsOptions: Equatable, Sendable {
     }
 }
 
+/// Query parameters accepted by the kChat channel posts endpoint.
+public struct KChatChannelPostsOptions: Equatable, Sendable {
+    /// The page to select.
+    public let page: Int?
+
+    /// The number of posts per page.
+    public let perPage: Int?
+
+    /// Selects posts modified after this Unix timestamp in milliseconds.
+    public let since: Int?
+
+    /// Selects posts before this post id.
+    public let before: String?
+
+    /// Selects posts after this post id.
+    public let after: String?
+
+    /// Whether deleted posts should be included.
+    public let includeDeleted: Bool?
+
+    /// Creates kChat channel posts listing options.
+    public init(
+        page: Int? = nil,
+        perPage: Int? = nil,
+        since: Int? = nil,
+        before: String? = nil,
+        after: String? = nil,
+        includeDeleted: Bool? = nil
+    ) {
+        self.page = page
+        self.perPage = perPage
+        self.since = since
+        self.before = before
+        self.after = after
+        self.includeDeleted = includeDeleted
+    }
+}
+
+/// A Mattermost-compatible kChat channel post list.
+public struct KChatPostList: Codable, Equatable, Sendable {
+    public let order: [String]?
+    public let posts: [String: KChatPost]?
+    public let nextPostId: String?
+    public let prevPostId: String?
+    public let hasNext: Bool?
+
+    public init(
+        order: [String]? = nil,
+        posts: [String: KChatPost]? = nil,
+        nextPostId: String? = nil,
+        prevPostId: String? = nil,
+        hasNext: Bool? = nil
+    ) {
+        self.order = order
+        self.posts = posts
+        self.nextPostId = nextPostId
+        self.prevPostId = prevPostId
+        self.hasNext = hasNext
+    }
+}
+
 /// A Mattermost-compatible kChat channel returned by user team channel endpoints.
 public struct KChatChannel: Codable, Equatable, Sendable {
     public let id: String?
