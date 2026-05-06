@@ -78,6 +78,14 @@ public struct KChatService: Sendable {
         try await client.send(KChatRequests.getPostThread(postId: postId))
     }
 
+    /// Gets file information for files attached to a kChat post.
+    public func getPostFilesInfo(
+        postId: String,
+        options: KChatPostFilesInfoOptions = KChatPostFilesInfoOptions()
+    ) async throws -> [KChatFileInfo] {
+        try await client.send(KChatRequests.getPostFilesInfo(postId: postId, options: options))
+    }
+
     /// Deletes a kChat post.
     public func deletePost(postId: String) async throws -> KChatStatusOK {
         try await client.send(KChatRequests.deletePost(postId: postId))
