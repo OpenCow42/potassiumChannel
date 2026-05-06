@@ -51,6 +51,12 @@ public struct KChatService: Sendable {
         return try await client.send(KChatRequests.getUsersByIds(body: body))
     }
 
+    /// Gets kChat users by usernames.
+    public func getUsersByUsernames(usernames: [String]) async throws -> [KChatUser] {
+        let body = try JSONEncoder().encode(usernames)
+        return try await client.send(KChatRequests.getUsersByUsernames(body: body))
+    }
+
     /// Gets a kChat user's profile image by id, or `me` for the authenticated user.
     public func getUserImage(userId: String) async throws -> Data {
         try await client.sendData(KChatRequests.getUserImage(userId: userId))
