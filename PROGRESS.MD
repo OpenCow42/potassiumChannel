@@ -229,3 +229,13 @@ not started
 - Added `KChatService.getPostThread(postId:)` convenience API.
 - Added unit tests covering method, OpenAPI path, auth/accept headers, absent content type/body, and snake-case post-list/thread decoding.
 - Verified with `swift test` in `potassiumChannel`.
+
+## 2026-05-06 — kChat post files info route
+
+- Target app: kChat.
+- Branch: `feat/kchat`.
+- Added `GET /api/v4/posts/{post_id}/files/info` request support via `KChatRequests.getPostFilesInfo(postId:options:)`.
+- Reused `KChatFileInfo` for the `[KChatFileInfo]` endpoint response and added `KChatPostFilesInfoOptions(includeDeleted:)` for the optional `include_deleted` query.
+- Added `KChatService.getPostFilesInfo(postId:options:)` convenience API.
+- Added unit tests covering method, OpenAPI path, auth/accept headers, no body, optional query, and snake-case response decoding.
+- Verified with `swift test` in `potassiumChannel`.

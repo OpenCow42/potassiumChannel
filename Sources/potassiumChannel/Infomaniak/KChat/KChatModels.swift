@@ -263,6 +263,17 @@ public struct KChatChannelPostsOptions: Equatable, Sendable {
     }
 }
 
+/// Query parameters accepted by the kChat post file info endpoint.
+public struct KChatPostFilesInfoOptions: Equatable, Sendable {
+    /// Whether deleted files should be included. Requires system management permission.
+    public let includeDeleted: Bool?
+
+    /// Creates kChat post file info options.
+    public init(includeDeleted: Bool? = nil) {
+        self.includeDeleted = includeDeleted
+    }
+}
+
 /// A Mattermost-compatible kChat channel post list.
 public struct KChatPostList: Codable, Equatable, Sendable {
     public let order: [String]?

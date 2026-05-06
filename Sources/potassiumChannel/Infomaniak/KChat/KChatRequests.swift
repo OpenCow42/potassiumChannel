@@ -126,6 +126,24 @@ public enum KChatRequests {
         )
     }
 
+    /// Creates a request that gets file information for files attached to a kChat post.
+    public static func getPostFilesInfo(
+        postId: String,
+        options: KChatPostFilesInfoOptions = KChatPostFilesInfoOptions()
+    ) -> APIRequest<[KChatFileInfo]> {
+        var queryParameters: [QueryParameter] = []
+
+        if let includeDeleted = options.includeDeleted {
+            queryParameters.append(QueryParameter(name: "include_deleted", value: .bool(includeDeleted)))
+        }
+
+        return APIRequest(
+            method: .get,
+            path: "/api/v4/posts/\(postId)/files/info",
+            queryParameters: queryParameters
+        )
+    }
+
     /// Creates a request that deletes a kChat post.
     public static func deletePost(postId: String) -> APIRequest<KChatStatusOK> {
         APIRequest(
