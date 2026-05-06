@@ -186,6 +186,43 @@ public struct KChatListUsersOptions: Equatable, Sendable {
     }
 }
 
+/// Query options accepted by the Mattermost-compatible kChat users autocomplete endpoint.
+public struct KChatUserAutocompleteOptions: Equatable, Sendable {
+    /// Team ID used to filter autocomplete results.
+    public let teamId: String?
+
+    /// Channel ID used to filter autocomplete results.
+    public let channelId: String?
+
+    /// Username, nickname, first name, or last name search term.
+    public let name: String
+
+    /// Maximum number of users to return in each subresult.
+    public let limit: Int?
+
+    /// Creates kChat users autocomplete query options.
+    public init(teamId: String? = nil, channelId: String? = nil, name: String, limit: Int? = nil) {
+        self.teamId = teamId
+        self.channelId = channelId
+        self.name = name
+        self.limit = limit
+    }
+}
+
+/// A Mattermost-compatible kChat user autocomplete response.
+public struct KChatUserAutocomplete: Codable, Equatable, Sendable {
+    /// Main user autocomplete results.
+    public let users: [KChatUser]?
+
+    /// Users outside the channel when autocompleting in a specific channel.
+    public let outOfChannel: [KChatUser]?
+
+    public init(users: [KChatUser]? = nil, outOfChannel: [KChatUser]? = nil) {
+        self.users = users
+        self.outOfChannel = outOfChannel
+    }
+}
+
 /// A Mattermost-compatible kChat user returned by user endpoints.
 public struct KChatUser: Codable, Equatable, Sendable {
     public let id: String?

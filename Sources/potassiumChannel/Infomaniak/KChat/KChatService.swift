@@ -40,6 +40,11 @@ public struct KChatService: Sendable {
         try await client.send(KChatRequests.listUsers(options: options))
     }
 
+    /// Autocompletes users in kChat.
+    public func autocompleteUsers(options: KChatUserAutocompleteOptions) async throws -> KChatUserAutocomplete {
+        try await client.send(KChatRequests.autocompleteUsers(options: options))
+    }
+
     /// Gets a kChat user by id, or `me` for the authenticated user.
     public func getUser(userId: String) async throws -> KChatUser {
         try await client.send(KChatRequests.getUser(userId: userId))
