@@ -55,6 +55,11 @@ public struct KChatService: Sendable {
         try await client.send(KChatRequests.getUserByUsername(username: username))
     }
 
+    /// Gets a kChat user by email.
+    public func getUserByEmail(email: String) async throws -> KChatUser {
+        try await client.send(KChatRequests.getUserByEmail(email: email))
+    }
+
     /// Gets kChat users by user ids.
     public func getUsersByIds(userIds: [String]) async throws -> [KChatUser] {
         let body = try JSONEncoder().encode(userIds)

@@ -147,6 +147,14 @@ public enum KChatRequests {
         )
     }
 
+    /// Creates a request that gets a kChat user by email.
+    public static func getUserByEmail(email: String) -> APIRequest<KChatUser> {
+        APIRequest(
+            method: .get,
+            path: "/api/v4/users/email/\(percentEncodePathSegment(email))"
+        )
+    }
+
     /// Creates a request that gets kChat users by user ids.
     public static func getUsersByIds(body: Data) -> APIRequest<[KChatUser]> {
         APIRequest(
