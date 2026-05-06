@@ -268,3 +268,10 @@ not started
 - Added `KChatService.getUserStatus(userId:)` convenience API.
 - Added unit tests covering method, OpenAPI path, auth/accept headers, no body, the special `me` id, and snake-case response decoding.
 - Verified with `swift test` in `potassiumChannel`.
+
+## 2026-05-06 — kChat batch user statuses route
+
+- Added `POST /api/v4/users/status/ids` request support via `KChatRequests.getUserStatusesByIds(body:)`.
+- Added `KChatService.getUserStatusesByIds(userIds:)`, encoding the OpenAPI raw JSON string-array request body.
+- Added Swift Testing coverage for method, OpenAPI path, auth/content/accept headers, JSON body, and response decoding.
+- Verified targeted coverage with `swift test --filter KChatGetUserStatusesByIdsRequestTests`.
