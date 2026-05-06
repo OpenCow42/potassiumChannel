@@ -348,3 +348,11 @@ not started
 - Added `KChatService.getUserByEmail(email:)` convenience API returning `KChatUser`.
 - Added request/decoding tests covering GET method, OpenAPI path, auth/accept headers, path encoding for email characters including `+`, `@`, and slash safety, no query/body, and response decoding.
 - Verified with `swift test` in `potassiumChannel`.
+
+## 2026-05-07 — kChat get user channel members route
+
+- Added `GET /api/v4/users/{user_id}/channel_members` request support via `KChatRequests.getUserChannelMembers(userId:options:)`.
+- Added `KChatUserChannelMembersOptions`, `KChatChannelMember`, and `KChatChannelNotifyProps` models for the Mattermost-compatible response.
+- Added `KChatService.getUserChannelMembers(userId:options:)` convenience API.
+- Added request/decoding tests covering GET method, OpenAPI path, auth/accept headers, path encoding, special `me`, pagination query, no body, and response decoding.
+- Verified with `swift test` in `potassiumChannel`.

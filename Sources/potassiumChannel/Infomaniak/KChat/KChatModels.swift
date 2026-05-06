@@ -398,6 +398,87 @@ public struct KChatUserTeamChannelsOptions: Equatable, Sendable {
     }
 }
 
+/// Query parameters accepted by the kChat user channel memberships endpoint.
+public struct KChatUserChannelMembersOptions: Equatable, Sendable {
+    /// The page to select.
+    public let page: Int?
+
+    /// The number of memberships per page.
+    public let pageSize: Int?
+
+    /// Creates kChat user channel membership listing options.
+    public init(page: Int? = nil, pageSize: Int? = nil) {
+        self.page = page
+        self.pageSize = pageSize
+    }
+}
+
+/// Mattermost-compatible channel notification settings for a kChat channel member.
+public struct KChatChannelNotifyProps: Codable, Equatable, Sendable {
+    public let desktop: String?
+    public let email: String?
+    public let markUnread: String?
+    public let push: String?
+    public let ignoreChannelMentions: String?
+
+    /// Creates kChat channel notification settings.
+    public init(
+        desktop: String? = nil,
+        email: String? = nil,
+        markUnread: String? = nil,
+        push: String? = nil,
+        ignoreChannelMentions: String? = nil
+    ) {
+        self.desktop = desktop
+        self.email = email
+        self.markUnread = markUnread
+        self.push = push
+        self.ignoreChannelMentions = ignoreChannelMentions
+    }
+}
+
+/// A Mattermost-compatible kChat channel membership with team metadata.
+public struct KChatChannelMember: Codable, Equatable, Sendable {
+    public let channelId: String?
+    public let userId: String?
+    public let roles: String?
+    public let lastViewedAt: Int64?
+    public let msgCount: Int?
+    public let mentionCount: Int?
+    public let notifyProps: KChatChannelNotifyProps?
+    public let lastUpdateAt: Int64?
+    public let teamDisplayName: String?
+    public let teamName: String?
+    public let teamUpdateAt: Int64?
+
+    /// Creates a kChat channel membership with optional team metadata.
+    public init(
+        channelId: String? = nil,
+        userId: String? = nil,
+        roles: String? = nil,
+        lastViewedAt: Int64? = nil,
+        msgCount: Int? = nil,
+        mentionCount: Int? = nil,
+        notifyProps: KChatChannelNotifyProps? = nil,
+        lastUpdateAt: Int64? = nil,
+        teamDisplayName: String? = nil,
+        teamName: String? = nil,
+        teamUpdateAt: Int64? = nil
+    ) {
+        self.channelId = channelId
+        self.userId = userId
+        self.roles = roles
+        self.lastViewedAt = lastViewedAt
+        self.msgCount = msgCount
+        self.mentionCount = mentionCount
+        self.notifyProps = notifyProps
+        self.lastUpdateAt = lastUpdateAt
+        self.teamDisplayName = teamDisplayName
+        self.teamName = teamName
+        self.teamUpdateAt = teamUpdateAt
+    }
+}
+
 /// Query parameters accepted by the kChat channel posts endpoint.
 public struct KChatChannelPostsOptions: Equatable, Sendable {
     /// The page to select.
