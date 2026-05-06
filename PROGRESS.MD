@@ -285,3 +285,12 @@ not started
 - Reused `KChatUser` for the Mattermost-compatible user array response.
 - Added `KChatService.listUsers(options:)` convenience API.
 - Added unit tests covering method, OpenAPI path, auth/accept headers, query parameters, absent body, omitted options, and snake-case response decoding.
+
+## 2026-05-06 — kChat users by ids route
+
+- Target app: kChat.
+- Branch: `feat/kchat`.
+- Added `POST /api/v4/users/ids` request support via `KChatRequests.getUsersByIds(body:)`.
+- Reused `KChatUser` for the returned Mattermost-compatible user array.
+- Added `KChatService.getUsersByIds(userIds:)` convenience API.
+- Added unit tests covering POST method, OpenAPI path, auth/accept/content-type headers, JSON array body, no query parameters, and response decoding.
