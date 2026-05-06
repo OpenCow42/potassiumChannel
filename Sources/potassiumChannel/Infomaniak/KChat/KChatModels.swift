@@ -194,6 +194,21 @@ public struct KChatUserStatus: Codable, Equatable, Sendable {
         self.lastActivityAt = lastActivityAt
         self.dndEndTime = dndEndTime
     }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        userId = try container.decodeIfPresent(String.self, forKey: .userId)
+        status = try container.decodeIfPresent(String.self, forKey: .status)
+        if let boolValue = try? container.decodeIfPresent(Bool.self, forKey: .manual) {
+            manual = boolValue
+        } else if let intValue = try? container.decodeIfPresent(Int.self, forKey: .manual) {
+            manual = intValue != 0
+        } else {
+            manual = nil
+        }
+        lastActivityAt = try container.decodeIfPresent(Int64.self, forKey: .lastActivityAt)
+        dndEndTime = try container.decodeIfPresent(Int64.self, forKey: .dndEndTime)
+    }
 }
 
 /// A Mattermost-compatible kChat team returned by user team endpoints.

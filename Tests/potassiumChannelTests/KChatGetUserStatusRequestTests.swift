@@ -54,6 +54,15 @@ struct KChatGetUserStatusRequestTests {
         #expect(status.lastActivityAt == 123456789)
         #expect(status.dndEndTime == 123456999)
     }
+
+    @Test("kChat user status tolerates numeric manual values from live servers")
+    func kChatUserStatusToleratesNumericManualValues() throws {
+        let json = #"{"user_id":"user-id","status":"offline","manual":0,"last_activity_at":123456789}"#.data(using: .utf8)!
+
+        let status = try JSONDecoder.kChat.decode(KChatUserStatus.self, from: json)
+
+        #expect(status.manual == false)
+    }
 }
 
 private extension JSONDecoder {
