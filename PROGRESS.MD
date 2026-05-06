@@ -72,6 +72,7 @@ not started
 | --- | --- | --- |
 | GET | `/api/v4/config/client` | `KChatRequests.getClientConfig` |
 | GET | `/api/v4/channels/{channel_id}/posts` | `KChatRequests.getChannelPosts` |
+| GET | `/api/v4/posts/{post_id}` | `KChatRequests.getPost` |
 
 ### Implemented DTO and service scope
 
@@ -88,7 +89,8 @@ not started
 #### kChat
 
 - `KChatClientConfig` response DTO for Mattermost-compatible client configuration values.
-- `KChatRequests.getClientConfig(format:)` request factory.
+- `KChatRequests.getClientConfig(format:)`, `getChannelPosts(channelId:options:)`, and `getPost(postId:)` request factories.
+- `KChatPost` and `KChatPostList` Mattermost-compatible post DTOs.
 - `KChatService`, which sends kChat route factories through `InfomaniakAPIClient` and can build `https://<team>.kchat.infomaniak.com` base URLs.
 
 ### Validation
@@ -206,4 +208,14 @@ not started
 - Added `KChatPostList` for the Mattermost-compatible post list response.
 - Added `KChatService.getChannelPosts(channelId:options:)` convenience API.
 - Added unit tests covering method, OpenAPI path, auth/accept headers, query parameters, absent body, omitted options, and snake-case post-list decoding.
+- Verified with `swift test` in `potassiumChannel`.
+
+## 2026-05-06 — kChat get post route
+
+- Target app: kChat.
+- Branch: `feat/kchat`.
+- Added `GET /api/v4/posts/{post_id}` request support via `KChatRequests.getPost(postId:)`.
+- Reused `KChatPost` for the Mattermost-compatible response body.
+- Added `KChatService.getPost(postId:)` convenience API.
+- Added unit tests covering method, OpenAPI path, auth/accept headers, absent content type/body, and snake-case response decoding.
 - Verified with `swift test` in `potassiumChannel`.
