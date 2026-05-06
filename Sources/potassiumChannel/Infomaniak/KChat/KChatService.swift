@@ -104,6 +104,11 @@ public struct KChatService: Sendable {
         try await client.send(KChatRequests.getUserTeams(userId: userId))
     }
 
+    /// Lists kChat team memberships for a user, or `me` for the authenticated user.
+    public func getUserTeamMembers(userId: String) async throws -> [KChatTeamMember] {
+        try await client.send(KChatRequests.getUserTeamMembers(userId: userId))
+    }
+
     /// Lists kChat channels for a user in a team.
     public func getUserTeamChannels(
         userId: String,
