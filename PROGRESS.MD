@@ -71,6 +71,7 @@ not started
 | Method | Route | Request factory |
 | --- | --- | --- |
 | GET | `/api/v4/config/client` | `KChatRequests.getClientConfig` |
+| GET | `/api/v4/channels/{channel_id}/posts` | `KChatRequests.getChannelPosts` |
 
 ### Implemented DTO and service scope
 
@@ -194,3 +195,15 @@ not started
 - Added `GET /api/v4/files/{file_id}` request support via `KChatRequests.getFile(fileId:)`.
 - Added `KChatService.getFile(fileId:)` returning raw `Data` through `InfomaniakAPIClient.sendData`, matching the file download response body.
 - Added unit coverage for method, OpenAPI path, auth/accept headers, absent content type, and empty body.
+
+
+## 2026-05-06 — kChat get channel posts route
+
+- Target app: kChat.
+- Branch: `feat/kchat-channel-posts-get`.
+- Added `GET /api/v4/channels/{channel_id}/posts` request support via `KChatRequests.getChannelPosts(channelId:options:)`.
+- Added `KChatChannelPostsOptions` for `page`, `per_page`, `since`, `before`, `after`, and `include_deleted` query parameters.
+- Added `KChatPostList` for the Mattermost-compatible post list response.
+- Added `KChatService.getChannelPosts(channelId:options:)` convenience API.
+- Added unit tests covering method, OpenAPI path, auth/accept headers, query parameters, absent body, omitted options, and snake-case post-list decoding.
+- Verified with `swift test` in `potassiumChannel`.
