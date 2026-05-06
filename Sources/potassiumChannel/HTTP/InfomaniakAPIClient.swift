@@ -28,7 +28,10 @@ public actor InfomaniakAPIClient {
 
         let basePath = components.path.trimmingCharacters(in: CharacterSet(charactersIn: "/"))
         let requestPath = request.path.trimmingCharacters(in: CharacterSet(charactersIn: "/"))
-        components.path = "/" + [basePath, requestPath].filter { !$0.isEmpty }.joined(separator: "/")
+        let pathSegments = [basePath, requestPath]
+            .filter { !$0.isEmpty }
+            .flatMap { $0.split(separator: "/", omittingEmptySubsequences: true).map(String.init) }
+        components.percentEncodedPath = "/" + pathSegments.map(Self.percentEncodePathSegment).joined(separator: "/")
         components.queryItems = request.queryParameters.flatMap { parameter in
             parameter.value.makeQueryItems(named: parameter.name)
         }
@@ -52,6 +55,35 @@ public actor InfomaniakAPIClient {
         }
 
         return urlRequest
+    }
+
+    private static func percentEncodePathSegment(_ segment: String) -> String {
+        var allowedCharacters = CharacterSet.urlPathAllowed
+        allowedCharacters.insert(charactersIn: "%")
+        allowedCharacters.remove(charactersIn: "/?#")
+
+        let characters = Array(segment)
+        var sanitized = ""
+        var index = 0
+        while index < characters.count {
+            if characters[index] == "%",
+               index + 2 < characters.count,
+               characters[index + 1].isHexDigit,
+               characters[index + 2].isHexDigit {
+                sanitized.append("%")
+                sanitized.append(characters[index + 1])
+                sanitized.append(characters[index + 2])
+                index += 3
+            } else if characters[index] == "%" {
+                sanitized.append("%25")
+                index += 1
+            } else {
+                sanitized.append(characters[index])
+                index += 1
+            }
+        }
+
+        return sanitized.addingPercentEncoding(withAllowedCharacters: allowedCharacters) ?? sanitized
     }
 
     /// Executes a request and decodes its response body.

@@ -2,6 +2,13 @@ import Foundation
 
 /// Factory methods for kChat API requests.
 public enum KChatRequests {
+    private static func percentEncodePathSegment(_ segment: String) -> String {
+        var allowedCharacters = CharacterSet.urlPathAllowed
+        allowedCharacters.remove(charactersIn: "/?#%")
+
+        return segment.addingPercentEncoding(withAllowedCharacters: allowedCharacters) ?? segment
+    }
+
     /// Creates a request that fetches the client configuration required by kChat clients.
     ///
     /// The current public API only implements the legacy `old` format.
@@ -129,6 +136,14 @@ public enum KChatRequests {
         APIRequest(
             method: .get,
             path: "/api/v4/users/\(userId)"
+        )
+    }
+
+    /// Creates a request that gets a kChat user by username.
+    public static func getUserByUsername(username: String) -> APIRequest<KChatUser> {
+        APIRequest(
+            method: .get,
+            path: "/api/v4/users/username/\(percentEncodePathSegment(username))"
         )
     }
 
