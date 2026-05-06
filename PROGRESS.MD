@@ -76,6 +76,7 @@ not started
 | GET | `/api/v4/channels/{channel_id}/posts` | `KChatRequests.getChannelPosts` |
 | GET | `/api/v4/posts/{post_id}` | `KChatRequests.getPost` |
 | GET | `/api/v4/posts/{post_id}/thread` | `KChatRequests.getPostThread` |
+| POST | `/api/v4/users/group_channels` | `KChatRequests.getUsersByGroupChannels` |
 
 ### Implemented DTO and service scope
 
@@ -92,7 +93,7 @@ not started
 #### kChat
 
 - `KChatClientConfig` response DTO for Mattermost-compatible client configuration values.
-- `KChatRequests.getClientConfig(format:)`, `getUsersByUsernames(body:)`, `getChannelPosts(channelId:options:)`, `getPost(postId:)`, and `getPostThread(postId:)` request factories.
+- `KChatRequests.getClientConfig(format:)`, `getUsersByUsernames(body:)`, `getUsersByGroupChannels(body:)`, `getChannelPosts(channelId:options:)`, `getPost(postId:)`, and `getPostThread(postId:)` request factories.
 - `KChatPost` and `KChatPostList` Mattermost-compatible post DTOs.
 - `KChatService`, which sends kChat route factories through `InfomaniakAPIClient`, includes `getPostThread(postId:)`, and can build `https://<team>.kchat.infomaniak.com` base URLs.
 - `KChatService.getUserImage(userId:)`, which returns profile image bytes through the raw-data send path.
@@ -100,6 +101,12 @@ not started
 ### Validation
 
 - `swift test` passes with route/DTO/channel coverage.
+
+## 2026-05-06 — kChat get users by group channels route
+
+- Added `POST /api/v4/users/group_channels` request support via `KChatRequests.getUsersByGroupChannels`.
+- Added `KChatService.getUsersByGroupChannels(channelIds:)` convenience API returning the OpenAPI response shape as `[String: [KChatUser]]` keyed by group-channel id.
+- Added unit tests covering POST method, OpenAPI path, auth/accept/content-type headers, JSON array body, no query parameters, and response decoding.
 
 ## 2026-05-06 — kChat get users by usernames route
 
