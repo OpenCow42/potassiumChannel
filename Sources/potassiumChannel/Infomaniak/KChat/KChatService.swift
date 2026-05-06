@@ -96,6 +96,11 @@ public struct KChatService: Sendable {
         try await client.sendData(KChatRequests.getFile(fileId: fileId))
     }
 
+    /// Gets metadata for a previously uploaded kChat file.
+    public func getFileInfo(fileId: String) async throws -> KChatFileInfo {
+        try await client.send(KChatRequests.getFileInfo(fileId: fileId))
+    }
+
     /// Uploads a file to kChat.
     public func uploadFile(channelId: String? = nil, filename: String? = nil, data: Data) async throws -> KChatFileUploadResponse {
         let boundary = "potassium-\(UUID().uuidString)"

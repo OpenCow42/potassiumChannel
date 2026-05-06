@@ -239,3 +239,12 @@ not started
 - Added `KChatService.getPostFilesInfo(postId:options:)` convenience API.
 - Added unit tests covering method, OpenAPI path, auth/accept headers, no body, optional query, and snake-case response decoding.
 - Verified with `swift test` in `potassiumChannel`.
+
+## 2026-05-06 — kChat file info route
+
+- Target app: kChat.
+- Branch: `feat/kchat`.
+- Added `GET /api/v4/files/{file_id}/info` request support via `KChatRequests.getFileInfo(fileId:)`.
+- Reused `KChatFileInfo` for the endpoint response; the local OpenAPI schema matches the existing Mattermost-compatible file info fields.
+- Added `KChatService.getFileInfo(fileId:)` convenience API.
+- Added unit tests covering method, OpenAPI path, auth/accept headers, no body, and snake-case response decoding.
