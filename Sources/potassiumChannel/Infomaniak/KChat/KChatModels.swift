@@ -383,6 +383,49 @@ public struct KChatTeam: Codable, Equatable, Sendable {
     }
 }
 
+/// A Mattermost-compatible kChat team membership returned by user team member endpoints.
+public struct KChatTeamMember: Codable, Equatable, Sendable {
+    /// Team identifier for this membership.
+    public let teamId: String?
+
+    /// User identifier for this membership.
+    public let userId: String?
+
+    /// Complete role list, including implicit scheme roles.
+    public let roles: String?
+
+    /// Deletion timestamp in epoch milliseconds.
+    public let deleteAt: Int64?
+
+    /// Whether this member receives the team's default user role from the permission scheme.
+    public let schemeUser: Bool?
+
+    /// Whether this member receives the team's default admin role from the permission scheme.
+    public let schemeAdmin: Bool?
+
+    /// Explicitly assigned roles, excluding implicit scheme roles.
+    public let explicitRoles: String?
+
+    /// Creates a kChat team membership.
+    public init(
+        teamId: String? = nil,
+        userId: String? = nil,
+        roles: String? = nil,
+        deleteAt: Int64? = nil,
+        schemeUser: Bool? = nil,
+        schemeAdmin: Bool? = nil,
+        explicitRoles: String? = nil
+    ) {
+        self.teamId = teamId
+        self.userId = userId
+        self.roles = roles
+        self.deleteAt = deleteAt
+        self.schemeUser = schemeUser
+        self.schemeAdmin = schemeAdmin
+        self.explicitRoles = explicitRoles
+    }
+}
+
 /// Query parameters accepted by the kChat user team channels endpoint.
 public struct KChatUserTeamChannelsOptions: Equatable, Sendable {
     /// Whether deleted channels should be included.
