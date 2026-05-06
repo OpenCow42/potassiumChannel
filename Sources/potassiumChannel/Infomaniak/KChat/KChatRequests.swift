@@ -63,6 +63,44 @@ public enum KChatRequests {
         )
     }
 
+    /// Creates a request that lists posts for a kChat channel.
+    public static func getChannelPosts(
+        channelId: String,
+        options: KChatChannelPostsOptions = KChatChannelPostsOptions()
+    ) -> APIRequest<KChatPostList> {
+        var queryParameters: [QueryParameter] = []
+
+        if let page = options.page {
+            queryParameters.append(QueryParameter(name: "page", value: .integer(page)))
+        }
+
+        if let perPage = options.perPage {
+            queryParameters.append(QueryParameter(name: "per_page", value: .integer(perPage)))
+        }
+
+        if let since = options.since {
+            queryParameters.append(QueryParameter(name: "since", value: .integer(since)))
+        }
+
+        if let before = options.before {
+            queryParameters.append(QueryParameter(name: "before", value: .string(before)))
+        }
+
+        if let after = options.after {
+            queryParameters.append(QueryParameter(name: "after", value: .string(after)))
+        }
+
+        if let includeDeleted = options.includeDeleted {
+            queryParameters.append(QueryParameter(name: "include_deleted", value: .bool(includeDeleted)))
+        }
+
+        return APIRequest(
+            method: .get,
+            path: "/api/v4/channels/\(channelId)/posts",
+            queryParameters: queryParameters
+        )
+    }
+
     /// Creates a request that posts a message to kChat.
     public static func createPost(body: Data) -> APIRequest<KChatPost> {
         APIRequest(
