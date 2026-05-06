@@ -71,6 +71,7 @@ not started
 | Method | Route | Request factory |
 | --- | --- | --- |
 | GET | `/api/v4/config/client` | `KChatRequests.getClientConfig` |
+| GET | `/api/v4/users/{user_id}/image` | `KChatRequests.getUserImage` |
 | GET | `/api/v4/channels/{channel_id}/posts` | `KChatRequests.getChannelPosts` |
 | GET | `/api/v4/posts/{post_id}` | `KChatRequests.getPost` |
 | GET | `/api/v4/posts/{post_id}/thread` | `KChatRequests.getPostThread` |
@@ -93,6 +94,7 @@ not started
 - `KChatRequests.getClientConfig(format:)`, `getChannelPosts(channelId:options:)`, `getPost(postId:)`, and `getPostThread(postId:)` request factories.
 - `KChatPost` and `KChatPostList` Mattermost-compatible post DTOs.
 - `KChatService`, which sends kChat route factories through `InfomaniakAPIClient`, includes `getPostThread(postId:)`, and can build `https://<team>.kchat.infomaniak.com` base URLs.
+- `KChatService.getUserImage(userId:)`, which returns profile image bytes through the raw-data send path.
 
 ### Validation
 
@@ -248,3 +250,11 @@ not started
 - Reused `KChatFileInfo` for the endpoint response; the local OpenAPI schema matches the existing Mattermost-compatible file info fields.
 - Added `KChatService.getFileInfo(fileId:)` convenience API.
 - Added unit tests covering method, OpenAPI path, auth/accept headers, no body, and snake-case response decoding.
+
+## 2026-05-06 — kChat get user image route
+
+- Target app: kChat.
+- Branch: `feat/kchat`.
+- Added `GET /api/v4/users/{user_id}/image` request support via `KChatRequests.getUserImage(userId:)`, including the API's special `me` user id.
+- Added `KChatService.getUserImage(userId:)` returning raw `Data` through `InfomaniakAPIClient.sendData`, matching the profile image response body.
+- Added unit tests covering method, OpenAPI path, auth/accept headers, absent content type, absent body, absent query, and the special `me` path.

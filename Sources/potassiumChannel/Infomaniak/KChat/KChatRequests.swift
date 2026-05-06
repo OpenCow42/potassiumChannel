@@ -32,6 +32,14 @@ public enum KChatRequests {
         )
     }
 
+    /// Creates a request that gets a kChat user's profile image by id, or `me` for the authenticated user.
+    public static func getUserImage(userId: String) -> APIRequest<Data> {
+        APIRequest(
+            method: .get,
+            path: "/api/v4/users/\(userId)/image"
+        )
+    }
+
     /// Creates a request that lists kChat teams for a user.
     public static func getUserTeams(userId: String) -> APIRequest<[KChatTeam]> {
         APIRequest(
