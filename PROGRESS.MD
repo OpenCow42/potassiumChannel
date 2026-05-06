@@ -327,3 +327,17 @@ not started
 - Added `KChatUserAutocomplete` for the OpenAPI response shape with separate `users` and `out_of_channel` user arrays, reusing `KChatUser`.
 - Added `KChatService.autocompleteUsers(options:)` convenience API.
 - Added unit tests covering method, OpenAPI path, auth/accept headers, query parameters, no body, omitted optional query parameters, and response decoding.
+
+## 2026-05-06 — kChat get user by username route
+
+- Added `GET /api/v4/users/username/{username}` request support via `KChatRequests.getUserByUsername(username:)`.
+- Added `KChatService.getUserByUsername(username:)` convenience API returning `KChatUser`.
+- Added unit tests covering GET method, OpenAPI path, auth/accept headers, encoded username path segment, no query/body, and response decoding.
+- Hardened request URL construction so path segments are percent-encoded without splitting encoded path parameters.
+
+## 2026-05-07 — kChat get user by username route
+
+- Added `GET /api/v4/users/username/{username}` request support via `KChatRequests.getUserByUsername(username:)`.
+- Added `KChatService.getUserByUsername(username:)` convenience API returning `KChatUser`.
+- Added request/decoding tests covering GET method, OpenAPI path, auth/accept headers, path encoding, no query/body, and response decoding.
+- Verified with `swift test` in `potassiumChannel`.
