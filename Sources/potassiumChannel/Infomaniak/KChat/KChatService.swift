@@ -73,6 +73,11 @@ public struct KChatService: Sendable {
         try await client.send(KChatRequests.getPost(postId: postId))
     }
 
+    /// Gets a kChat post thread.
+    public func getPostThread(postId: String) async throws -> KChatPostList {
+        try await client.send(KChatRequests.getPostThread(postId: postId))
+    }
+
     /// Deletes a kChat post.
     public func deletePost(postId: String) async throws -> KChatStatusOK {
         try await client.send(KChatRequests.deletePost(postId: postId))
