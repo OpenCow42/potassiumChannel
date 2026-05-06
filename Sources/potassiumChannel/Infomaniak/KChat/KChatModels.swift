@@ -426,6 +426,25 @@ public struct KChatTeamMember: Codable, Equatable, Sendable {
     }
 }
 
+/// A Mattermost-compatible kChat unread count for a team.
+public struct KChatTeamUnread: Codable, Equatable, Sendable {
+    /// Team identifier for these unread counters.
+    public let teamId: String?
+
+    /// Number of unread messages in the team.
+    public let msgCount: Int?
+
+    /// Number of unread mentions in the team.
+    public let mentionCount: Int?
+
+    /// Creates a kChat team unread count.
+    public init(teamId: String? = nil, msgCount: Int? = nil, mentionCount: Int? = nil) {
+        self.teamId = teamId
+        self.msgCount = msgCount
+        self.mentionCount = mentionCount
+    }
+}
+
 /// Query parameters accepted by the kChat user team channels endpoint.
 public struct KChatUserTeamChannelsOptions: Equatable, Sendable {
     /// Whether deleted channels should be included.
