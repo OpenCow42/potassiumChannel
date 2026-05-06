@@ -258,3 +258,13 @@ not started
 - Added `GET /api/v4/users/{user_id}/image` request support via `KChatRequests.getUserImage(userId:)`, including the API's special `me` user id.
 - Added `KChatService.getUserImage(userId:)` returning raw `Data` through `InfomaniakAPIClient.sendData`, matching the profile image response body.
 - Added unit tests covering method, OpenAPI path, auth/accept headers, absent content type, absent body, absent query, and the special `me` path.
+
+## 2026-05-06 — kChat get user status route
+
+- Target app: kChat.
+- Branch: `feat/kchat`.
+- Added `GET /api/v4/users/{user_id}/status` request support via `KChatRequests.getUserStatus(userId:)`, including the API's special `me` user id.
+- Added `KChatUserStatus` for the Mattermost-compatible status response (`user_id`, `status`, `manual`, `last_activity_at`, and tolerant `dnd_end_time`).
+- Added `KChatService.getUserStatus(userId:)` convenience API.
+- Added unit tests covering method, OpenAPI path, auth/accept headers, no body, the special `me` id, and snake-case response decoding.
+- Verified with `swift test` in `potassiumChannel`.
