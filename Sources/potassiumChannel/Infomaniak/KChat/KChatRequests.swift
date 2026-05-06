@@ -118,6 +118,14 @@ public enum KChatRequests {
         )
     }
 
+    /// Creates a request that gets a kChat post thread.
+    public static func getPostThread(postId: String) -> APIRequest<KChatPostList> {
+        APIRequest(
+            method: .get,
+            path: "/api/v4/posts/\(postId)/thread"
+        )
+    }
+
     /// Creates a request that deletes a kChat post.
     public static func deletePost(postId: String) -> APIRequest<KChatStatusOK> {
         APIRequest(
