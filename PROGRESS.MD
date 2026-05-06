@@ -275,3 +275,13 @@ not started
 - Added `KChatService.getUserStatusesByIds(userIds:)`, encoding the OpenAPI raw JSON string-array request body.
 - Added Swift Testing coverage for method, OpenAPI path, auth/content/accept headers, JSON body, and response decoding.
 - Verified targeted coverage with `swift test --filter KChatGetUserStatusesByIdsRequestTests`.
+
+## 2026-05-06 — kChat list users route
+
+- Target app: kChat.
+- Branch: `feat/kchat`.
+- Added `GET /api/v4/users` request support via `KChatRequests.listUsers(options:)`.
+- Added `KChatListUsersOptions` for pagination and common user list filters including team/channel/group, active/inactive, role, sort, and role-scope query parameters.
+- Reused `KChatUser` for the Mattermost-compatible user array response.
+- Added `KChatService.listUsers(options:)` convenience API.
+- Added unit tests covering method, OpenAPI path, auth/accept headers, query parameters, absent body, omitted options, and snake-case response decoding.

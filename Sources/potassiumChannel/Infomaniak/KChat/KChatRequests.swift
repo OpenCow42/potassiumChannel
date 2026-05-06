@@ -24,6 +24,81 @@ public enum KChatRequests {
         )
     }
 
+    /// Creates a request that lists kChat users.
+    public static func listUsers(options: KChatListUsersOptions = KChatListUsersOptions()) -> APIRequest<[KChatUser]> {
+        var queryParameters: [QueryParameter] = []
+
+        if let page = options.page {
+            queryParameters.append(QueryParameter(name: "page", value: .integer(page)))
+        }
+
+        if let perPage = options.perPage {
+            queryParameters.append(QueryParameter(name: "per_page", value: .integer(perPage)))
+        }
+
+        if let inTeam = options.inTeam {
+            queryParameters.append(QueryParameter(name: "in_team", value: .string(inTeam)))
+        }
+
+        if let notInTeam = options.notInTeam {
+            queryParameters.append(QueryParameter(name: "not_in_team", value: .string(notInTeam)))
+        }
+
+        if let inChannel = options.inChannel {
+            queryParameters.append(QueryParameter(name: "in_channel", value: .string(inChannel)))
+        }
+
+        if let notInChannel = options.notInChannel {
+            queryParameters.append(QueryParameter(name: "not_in_channel", value: .string(notInChannel)))
+        }
+
+        if let inGroup = options.inGroup {
+            queryParameters.append(QueryParameter(name: "in_group", value: .string(inGroup)))
+        }
+
+        if let groupConstrained = options.groupConstrained {
+            queryParameters.append(QueryParameter(name: "group_constrained", value: .bool(groupConstrained)))
+        }
+
+        if let withoutTeam = options.withoutTeam {
+            queryParameters.append(QueryParameter(name: "without_team", value: .bool(withoutTeam)))
+        }
+
+        if let active = options.active {
+            queryParameters.append(QueryParameter(name: "active", value: .bool(active)))
+        }
+
+        if let inactive = options.inactive {
+            queryParameters.append(QueryParameter(name: "inactive", value: .bool(inactive)))
+        }
+
+        if let role = options.role {
+            queryParameters.append(QueryParameter(name: "role", value: .string(role)))
+        }
+
+        if let sort = options.sort {
+            queryParameters.append(QueryParameter(name: "sort", value: .string(sort)))
+        }
+
+        if let roles = options.roles {
+            queryParameters.append(QueryParameter(name: "roles", value: .string(roles)))
+        }
+
+        if let channelRoles = options.channelRoles {
+            queryParameters.append(QueryParameter(name: "channel_roles", value: .string(channelRoles)))
+        }
+
+        if let teamRoles = options.teamRoles {
+            queryParameters.append(QueryParameter(name: "team_roles", value: .string(teamRoles)))
+        }
+
+        return APIRequest(
+            method: .get,
+            path: "/api/v4/users",
+            queryParameters: queryParameters
+        )
+    }
+
     /// Creates a request that gets a kChat user by id, or `me` for the authenticated user.
     public static func getUser(userId: String) -> APIRequest<KChatUser> {
         APIRequest(
