@@ -35,6 +35,11 @@ public struct KChatService: Sendable {
         return try await client.send(KChatRequests.searchUsers(body: body))
     }
 
+    /// Lists users in kChat.
+    public func listUsers(options: KChatListUsersOptions = KChatListUsersOptions()) async throws -> [KChatUser] {
+        try await client.send(KChatRequests.listUsers(options: options))
+    }
+
     /// Gets a kChat user by id, or `me` for the authenticated user.
     public func getUser(userId: String) async throws -> KChatUser {
         try await client.send(KChatRequests.getUser(userId: userId))

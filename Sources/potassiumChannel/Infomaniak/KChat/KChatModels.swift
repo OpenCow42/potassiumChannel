@@ -98,7 +98,95 @@ public struct KChatUserSearchOptions: Encodable, Equatable, Sendable {
     }
 }
 
-/// A Mattermost-compatible kChat user returned by the user search endpoint.
+/// Query options accepted by the Mattermost-compatible kChat users list endpoint.
+public struct KChatListUsersOptions: Equatable, Sendable {
+    /// The page to select.
+    public let page: Int?
+
+    /// The number of users per page.
+    public let perPage: Int?
+
+    /// Restricts the list to users in a team.
+    public let inTeam: String?
+
+    /// Excludes users in a team.
+    public let notInTeam: String?
+
+    /// Restricts the list to users in a channel.
+    public let inChannel: String?
+
+    /// Excludes users in a channel.
+    public let notInChannel: String?
+
+    /// Restricts the list to users in a group.
+    public let inGroup: String?
+
+    /// Applies group-constrained filtering.
+    public let groupConstrained: Bool?
+
+    /// Lists users that are not on any team.
+    public let withoutTeam: Bool?
+
+    /// Lists only active users.
+    public let active: Bool?
+
+    /// Lists only deactivated users.
+    public let inactive: Bool?
+
+    /// Returns users that have this role.
+    public let role: String?
+
+    /// Sort mode supported by the selected filter.
+    public let sort: String?
+
+    /// Comma-separated system roles filter.
+    public let roles: String?
+
+    /// Comma-separated channel roles filter.
+    public let channelRoles: String?
+
+    /// Comma-separated team roles filter.
+    public let teamRoles: String?
+
+    /// Creates kChat users list query options.
+    public init(
+        page: Int? = nil,
+        perPage: Int? = nil,
+        inTeam: String? = nil,
+        notInTeam: String? = nil,
+        inChannel: String? = nil,
+        notInChannel: String? = nil,
+        inGroup: String? = nil,
+        groupConstrained: Bool? = nil,
+        withoutTeam: Bool? = nil,
+        active: Bool? = nil,
+        inactive: Bool? = nil,
+        role: String? = nil,
+        sort: String? = nil,
+        roles: String? = nil,
+        channelRoles: String? = nil,
+        teamRoles: String? = nil
+    ) {
+        self.page = page
+        self.perPage = perPage
+        self.inTeam = inTeam
+        self.notInTeam = notInTeam
+        self.inChannel = inChannel
+        self.notInChannel = notInChannel
+        self.inGroup = inGroup
+        self.groupConstrained = groupConstrained
+        self.withoutTeam = withoutTeam
+        self.active = active
+        self.inactive = inactive
+        self.role = role
+        self.sort = sort
+        self.roles = roles
+        self.channelRoles = channelRoles
+        self.teamRoles = teamRoles
+    }
+}
+
+/// A Mattermost-compatible kChat user returned by user endpoints.
 public struct KChatUser: Codable, Equatable, Sendable {
     public let id: String?
     public let createAt: Int64?
