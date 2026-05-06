@@ -107,6 +107,15 @@ public enum KChatRequests {
         )
     }
 
+    /// Creates a request that gets kChat users by user ids.
+    public static func getUsersByIds(body: Data) -> APIRequest<[KChatUser]> {
+        APIRequest(
+            method: .post,
+            path: "/api/v4/users/ids",
+            body: body
+        )
+    }
+
     /// Creates a request that gets a kChat user's profile image by id, or `me` for the authenticated user.
     public static func getUserImage(userId: String) -> APIRequest<Data> {
         APIRequest(
