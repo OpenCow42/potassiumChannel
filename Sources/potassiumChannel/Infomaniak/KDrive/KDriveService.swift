@@ -752,6 +752,27 @@ public struct KDriveService: Sendable {
         )
     }
 
+    /// Lists files that could not be imported for an external import.
+    public func listErroredImportFiles(
+        driveId: Int,
+        importId: Int,
+        with includedResources: String? = nil,
+        page: Int? = nil,
+        perPage: Int? = nil,
+        total: Bool? = nil
+    ) async throws -> PaginatedInfomaniakResponse<[KDriveExternalImportFile]> {
+        try await client.send(
+            KDriveRequests.listErroredImportFiles(
+                driveId: driveId,
+                importId: importId,
+                with: includedResources,
+                page: page,
+                perPage: perPage,
+                total: total
+            )
+        )
+    }
+
     /// Lists third-party drives eligible for OAuth external import.
     public func listOAuthImportDrives(
         driveId: Int,

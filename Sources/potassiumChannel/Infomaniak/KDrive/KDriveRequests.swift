@@ -1813,6 +1813,40 @@ public enum KDriveRequests {
         )
     }
 
+    /// Creates a request that lists files that could not be imported for an external import.
+    public static func listErroredImportFiles(
+        driveId: Int,
+        importId: Int,
+        with includedResources: String? = nil,
+        page: Int? = nil,
+        perPage: Int? = nil,
+        total: Bool? = nil
+    ) -> APIRequest<PaginatedInfomaniakResponse<[KDriveExternalImportFile]>> {
+        var queryParameters: [QueryParameter] = []
+
+        if let includedResources {
+            queryParameters.append(QueryParameter(name: "with", value: .string(includedResources)))
+        }
+
+        if let page {
+            queryParameters.append(QueryParameter(name: "page", value: .integer(page)))
+        }
+
+        if let perPage {
+            queryParameters.append(QueryParameter(name: "per_page", value: .integer(perPage)))
+        }
+
+        if let total {
+            queryParameters.append(QueryParameter(name: "total", value: .bool(total)))
+        }
+
+        return APIRequest(
+            method: .get,
+            path: "/2/drive/\(driveId)/imports/\(importId)",
+            queryParameters: queryParameters
+        )
+    }
+
     /// Creates a request that lists third-party drives eligible for OAuth external import.
     public static func listOAuthImportDrives(
         driveId: Int,

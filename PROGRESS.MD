@@ -1,3 +1,9 @@
+## 2026-05-07 — kDrive import errored files route
+
+- Added shared support for `GET /2/drive/{drive_id}/imports/{import_id}` via `KDriveRequests.listErroredImportFiles`, `KDriveService.listErroredImportFiles`, and `KDriveExternalImportFile`.
+- Added request/decoding tests covering method, OpenAPI path with required `drive_id`/`import_id`, auth header, optional `with`/pagination/`total` query parameters, and response decoding.
+- Validation: `swift test` passes (292 tests).
+
 ## 2026-05-07 — kDrive OAuth import eligible drives route
 
 - Added shared support for `GET /2/drive/{drive_id}/imports/oauth/drives` via `KDriveRequests.listOAuthImportDrives`, `KDriveService.listOAuthImportDrives`, `KDriveThirdPartyDrivesList`, and `KDriveThirdPartyDrive`.
@@ -113,6 +119,7 @@ kDrive request factories, and `KDriveService` wrappers moved from Potassium.
 | GET | `/2/drive/{drive_id}/statistics/activities/links/export` | `KDriveRequests.exportActivityShareLinks` |
 | GET | `/2/drive/{drive_id}/activities/reports` | `KDriveRequests.listActivityReports` |
 | GET | `/2/drive/{drive_id}/imports` | `KDriveRequests.listImports` |
+| GET | `/2/drive/{drive_id}/imports/{import_id}` | `KDriveRequests.listErroredImportFiles` |
 | GET | `/2/drive/{drive_id}/imports/oauth/drives` | `KDriveRequests.listOAuthImportDrives` |
 | GET | `/2/drive/{drive_id}/users/invitation` | `KDriveRequests.listUserInvitations` |
 | GET | `/2/drive/preferences` | `KDriveRequests.getUserPreferences` |
