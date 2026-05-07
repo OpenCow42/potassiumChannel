@@ -468,3 +468,11 @@ not started
 - Reused `KChatPostList`/`KChatPost` for pinned post list decoding.
 - Added `KChatRequests.getPinnedPosts(channelId:)` and `KChatService.getPinnedPosts(channelId:)`.
 - Added unit tests covering GET method, OpenAPI path, auth/accept headers, no query/body, path-segment percent encoding, and snake-case post-list decoding.
+
+## 2026-05-07 — kChat get public channels for team route
+
+- Verified OpenAPI `GetPublicChannelsForTeam` for `GET /api/v4/teams/{team_id}/channels`; response is an array of Mattermost-compatible `Channel` objects.
+- Reused `KChatChannel` for response decoding.
+- Added `KChatPublicChannelsForTeamOptions` with `page` and `per_page` query parameters.
+- Added `KChatRequests.getPublicChannelsForTeam(teamId:options:)` and `KChatService.getPublicChannelsForTeam(teamId:options:)` returning `[KChatChannel]`.
+- Added unit tests covering GET method, OpenAPI path, auth/accept headers, percent-encoded `team_id`, query encoding, omitted empty options, no body, and snake-case channel decoding.
