@@ -49,6 +49,41 @@ public enum KChatRequests {
         )
     }
 
+    /// Creates a request that lists all kChat channels visible to the token.
+    public static func listChannels(options: KChatListChannelsOptions = KChatListChannelsOptions()) -> APIRequest<[KChatChannel]> {
+        var queryParameters: [QueryParameter] = []
+
+        if let page = options.page {
+            queryParameters.append(QueryParameter(name: "page", value: .integer(page)))
+        }
+
+        if let perPage = options.perPage {
+            queryParameters.append(QueryParameter(name: "per_page", value: .integer(perPage)))
+        }
+
+        if let excludeDefaultChannels = options.excludeDefaultChannels {
+            queryParameters.append(QueryParameter(name: "exclude_default_channels", value: .bool(excludeDefaultChannels)))
+        }
+
+        if let includeDeleted = options.includeDeleted {
+            queryParameters.append(QueryParameter(name: "include_deleted", value: .bool(includeDeleted)))
+        }
+
+        if let includeTotalCount = options.includeTotalCount {
+            queryParameters.append(QueryParameter(name: "include_total_count", value: .bool(includeTotalCount)))
+        }
+
+        if let excludePolicyConstrained = options.excludePolicyConstrained {
+            queryParameters.append(QueryParameter(name: "exclude_policy_constrained", value: .bool(excludePolicyConstrained)))
+        }
+
+        return APIRequest(
+            method: .get,
+            path: "/api/v4/channels",
+            queryParameters: queryParameters
+        )
+    }
+
     /// Creates a request that gets a kChat team by id.
     public static func getTeam(teamId: String) -> APIRequest<KChatTeam> {
         APIRequest(
