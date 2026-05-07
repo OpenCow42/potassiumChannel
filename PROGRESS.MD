@@ -1,3 +1,9 @@
+## 2026-05-07 — kDrive file size route
+
+- Added shared support for `GET /2/drive/{drive_id}/files/{file_id}/sizes` via `KDriveRequests.getFileSize`, `KDriveService.getFileSize`, and `KDriveFileSize`.
+- Added request/decoding tests covering method, OpenAPI path with required `drive_id`/`file_id`, auth header, optional `depth` query parameter, and `storage_size` decoding.
+- Validation: `swift test` passes (296 tests).
+
 ## 2026-05-07 — kDrive import errored files route
 
 - Added shared support for `GET /2/drive/{drive_id}/imports/{import_id}` via `KDriveRequests.listErroredImportFiles`, `KDriveService.listErroredImportFiles`, and `KDriveExternalImportFile`.
@@ -107,6 +113,7 @@ kDrive request factories, and `KDriveService` wrappers moved from Potassium.
 | GET | `/2/drive/{drive_id}/categories/rights` | `KDriveRequests.getCategoryRights` |
 | GET | `/2/drive/{drive_id}/trash/count` | `KDriveRequests.getTrashCount` |
 | GET | `/3/drive/{drive_id}/files/{file_id}/count` | `KDriveRequests.getDirectoryCount` |
+| GET | `/2/drive/{drive_id}/files/{file_id}/sizes` | `KDriveRequests.getFileSize` |
 | GET | `/3/drive/{drive_id}/files/{file_id}/versions` | `KDriveRequests.listFileVersions` |
 | GET | `/2/drive/{drive_id}/activities` | `KDriveRequests.listActivities` |
 | GET | `/3/drive/{drive_id}/activities` | `KDriveRequests.listDriveActivities` |

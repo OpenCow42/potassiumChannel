@@ -1441,6 +1441,25 @@ public enum KDriveRequests {
         )
     }
 
+    /// Creates a request that gets total file and storage size for a kDrive file or directory.
+    public static func getFileSize(
+        driveId: Int,
+        fileId: Int,
+        depth: String? = nil
+    ) -> APIRequest<InfomaniakResponse<KDriveFileSize>> {
+        var queryParameters: [QueryParameter] = []
+
+        if let depth {
+            queryParameters.append(QueryParameter(name: "depth", value: .string(depth)))
+        }
+
+        return APIRequest(
+            method: .get,
+            path: "/2/drive/\(driveId)/files/\(fileId)/sizes",
+            queryParameters: queryParameters
+        )
+    }
+
     /// Creates a request that lists versions for a kDrive file.
     public static func listFileVersions(
         driveId: Int,

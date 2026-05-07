@@ -435,6 +435,21 @@ public struct KDriveDirectoryCount: Codable, Equatable, Sendable {
     }
 }
 
+/// Total file and storage size for a kDrive file or directory.
+public struct KDriveFileSize: Codable, Equatable, Sendable {
+    /// Total size of files, in bytes.
+    public let size: Int
+
+    /// Total storage size including versions, in bytes.
+    public let storageSize: Int
+
+    /// Creates a kDrive file size value.
+    public init(size: Int, storageSize: Int) {
+        self.size = size
+        self.storageSize = storageSize
+    }
+}
+
 /// A version of a kDrive file.
 public struct KDriveFileVersion: Codable, Equatable, Sendable {
     /// The unique file version identifier.
