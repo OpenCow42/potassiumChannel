@@ -75,6 +75,7 @@ not started
 | GET | `/api/v4/channels/{channel_id}` | `KChatRequests.getChannel` |
 | GET | `/api/v4/channels/{channel_id}/stats` | `KChatRequests.getChannelStats` |
 | GET | `/api/v4/channels/{channel_id}/members/{user_id}` | `KChatRequests.getChannelMember` |
+| POST | `/api/v4/channels/{channel_id}/members/ids` | `KChatRequests.getChannelMembersByIds` |
 | GET | `/api/v4/teams` | `KChatRequests.listTeams` |
 | GET | `/api/v4/teams/{team_id}/stats` | `KChatRequests.getTeamStats` |
 | GET | `/api/v4/teams/{team_id}/members/{user_id}` | `KChatRequests.getTeamMember` |
@@ -115,6 +116,7 @@ not started
 - `KChatService.getChannelByName(teamId:channelName:)` convenience API returning `KChatChannel`.
 - `KChatService.getChannelStats(channelId:)` convenience API returning `KChatChannelStats`.
 - `KChatService.getChannelMember(channelId:userId:)` convenience API returning `KChatChannelMember`.
+- `KChatService.getChannelMembersByIds(channelId:userIds:)` convenience API returning `[KChatChannelMember]`.
 - `KChatService.getTeamStats(teamId:)` convenience API returning `KChatTeamStats`.
 - `KChatService.getTeamMember(teamId:userId:)` convenience API returning `KChatTeamMember`.
 - `KChatService.getUserTeamMembers(userId:)` convenience API returning `[KChatTeamMember]`.
@@ -550,3 +552,10 @@ not started
 - Added `KChatChannelMembersOptions` and `KChatRequests.getChannelMembers(channelId:options:)` for the channel members endpoint.
 - Reused `KChatChannelMember` for the response and hardened its `channel_id`/`user_id` decoding for numeric ids returned by live kChat.
 - Added `KChatService.getChannelMembers(channelId:options:)` and request/decoding tests covering headers, auth, path encoding, query omission, no body, and response decoding.
+
+## 2026-05-07 — kChat get channel members by ids route
+
+- Verified OpenAPI `GetChannelMembersByIds` uses `POST /api/v4/channels/{channel_id}/members/ids` with a required JSON array of user ids and returns an array of Mattermost-compatible `ChannelMember` rows.
+- Reused `KChatChannelMember` for responses.
+- Added `KChatRequests.getChannelMembersByIds(channelId:userIds:)` and `KChatService.getChannelMembersByIds(channelId:userIds:)` returning `[KChatChannelMember]`.
+- Added request/decoding tests covering method, path, auth/accept/content-type headers, percent-encoded `channel_id`, JSON body encoding, no query parameters, and member array decoding.

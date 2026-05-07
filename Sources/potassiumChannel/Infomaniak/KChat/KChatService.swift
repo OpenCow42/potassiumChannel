@@ -85,6 +85,11 @@ public struct KChatService: Sendable {
         try await client.send(KChatRequests.getChannelMember(channelId: channelId, userId: userId))
     }
 
+    /// Gets kChat channel members by user ids.
+    public func getChannelMembersByIds(channelId: String, userIds: [String]) async throws -> [KChatChannelMember] {
+        try await client.send(try KChatRequests.getChannelMembersByIds(channelId: channelId, userIds: userIds))
+    }
+
     /// Lists public channels in a kChat team.
     public func getPublicChannelsForTeam(
         teamId: String,
