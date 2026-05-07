@@ -403,3 +403,10 @@ not started
 - Added `KChatService.getTeam(teamId:)` convenience API returning `KChatTeam`.
 - Added request/decoding tests covering GET method, OpenAPI path, auth/accept headers, percent-encoded team id path segment, no query/body, and response decoding.
 - Verified with `swift test` in `potassiumChannel`.
+
+## 2026-05-07 — kChat get team by name route
+
+- Added `GET /api/v4/teams/name/{name}` request support via `KChatRequests.getTeamByName(name:)`.
+- Added `KChatService.getTeamByName(name:)` convenience API returning `KChatTeam`.
+- Added request/decoding tests covering GET method, OpenAPI path, auth/accept headers, percent-encoded team name path segment, no query/body, and response decoding.
+- Verified with `swift test` in `potassiumChannel`.
