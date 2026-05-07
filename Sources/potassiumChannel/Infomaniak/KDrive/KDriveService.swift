@@ -35,6 +35,23 @@ public struct KDriveService: Sendable {
         )
     }
 
+    /// Lists kDrives associated with a specific user.
+    public func listUserDrivesV2(
+        userId: Int,
+        accountId: Int,
+        with includedResources: String? = nil,
+        options: ListKDriveUserDrivesOptions = ListKDriveUserDrivesOptions()
+    ) async throws -> PaginatedInfomaniakResponse<[KDriveDriveUser]> {
+        try await client.send(
+            KDriveRequests.listUserDrivesV2(
+                userId: userId,
+                accountId: accountId,
+                with: includedResources,
+                options: options
+            )
+        )
+    }
+
     /// Lists recent files and directories on a kDrive.
     public func listRecentFiles(
         driveId: Int,
