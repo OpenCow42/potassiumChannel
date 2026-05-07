@@ -1,3 +1,9 @@
+## 2026-05-07 — kDrive file hash route
+
+- Added shared support for `GET /2/drive/{drive_id}/files/{file_id}/hash` via `KDriveRequests.getFileHash`, `KDriveService.getFileHash`, and `KDriveFileHash`.
+- Added request/decoding tests covering method, OpenAPI path with required `drive_id`/`file_id`, auth header, absent query parameters, explicit required path parameter substitution checks, and `hash` decoding.
+- Validation: `swift test` passes (299 tests).
+
 ## 2026-05-07 — kDrive file size route
 
 - Added shared support for `GET /2/drive/{drive_id}/files/{file_id}/sizes` via `KDriveRequests.getFileSize`, `KDriveService.getFileSize`, and `KDriveFileSize`.

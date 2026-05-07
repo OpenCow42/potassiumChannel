@@ -450,6 +450,17 @@ public struct KDriveFileSize: Codable, Equatable, Sendable {
     }
 }
 
+/// Content hash for a kDrive file.
+public struct KDriveFileHash: Codable, Equatable, Sendable {
+    /// Hash of the file content, including the algorithm prefix when returned by the API.
+    public let hash: String
+
+    /// Creates a kDrive file hash value.
+    public init(hash: String) {
+        self.hash = hash
+    }
+}
+
 /// A version of a kDrive file.
 public struct KDriveFileVersion: Codable, Equatable, Sendable {
     /// The unique file version identifier.

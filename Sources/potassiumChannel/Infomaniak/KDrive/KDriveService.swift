@@ -561,6 +561,16 @@ public struct KDriveService: Sendable {
         )
     }
 
+    /// Gets the content hash for a kDrive file.
+    public func getFileHash(
+        driveId: Int,
+        fileId: Int
+    ) async throws -> InfomaniakResponse<KDriveFileHash> {
+        try await client.send(
+            KDriveRequests.getFileHash(driveId: driveId, fileId: fileId)
+        )
+    }
+
     /// Lists versions for a kDrive file.
     public func listFileVersions(
         driveId: Int,
