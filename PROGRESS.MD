@@ -1,5 +1,11 @@
 ### Progress of the project
 
+## 2026-05-07 — kDrive activity users statistics route
+
+- Added shared support for `GET /2/drive/{drive_id}/statistics/activities/users` via `KDriveRequests.listActivityUsers`, `KDriveService.listActivityUsers`, and `KDriveActiveMember`.
+- Added request/decoding tests covering method, OpenAPI path, auth header, required `from` and `until` query parameters, and nullable user fields.
+- Validation: `swift test` passes (277 tests).
+
 ## 2026-05-07 — kDrive export file sizes route
 
 - Added shared support for `GET /2/drive/{drive_id}/statistics/sizes/export` via `KDriveRequests.exportFileSizes` and `KDriveService.exportFileSizes`, returning raw CSV `Data` with `Accept: text/csv`.
@@ -63,6 +69,7 @@ kDrive request factories, and `KDriveService` wrappers moved from Potassium.
 | GET | `/3/drive/{drive_id}/activities` | `KDriveRequests.listDriveActivities` |
 | GET | `/3/drive/{drive_id}/activities/total` | `KDriveRequests.listDriveActivityTotals` |
 | GET | `/2/drive/{drive_id}/statistics/sizes` | `KDriveRequests.chartFileSizes` |
+| GET | `/2/drive/{drive_id}/statistics/activities/users` | `KDriveRequests.listActivityUsers` |
 | GET | `/2/drive/{drive_id}/activities/reports` | `KDriveRequests.listActivityReports` |
 | GET | `/2/drive/{drive_id}/imports` | `KDriveRequests.listImports` |
 | GET | `/2/drive/{drive_id}/users/invitation` | `KDriveRequests.listUserInvitations` |

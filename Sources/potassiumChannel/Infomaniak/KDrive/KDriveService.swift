@@ -646,6 +646,17 @@ public struct KDriveService: Sendable {
         )
     }
 
+    /// Lists users active on a kDrive during a statistics period.
+    public func listActivityUsers(
+        driveId: Int,
+        from: Int,
+        until: Int
+    ) async throws -> InfomaniakResponse<[KDriveActiveMember]> {
+        try await client.send(
+            KDriveRequests.listActivityUsers(driveId: driveId, from: from, until: until)
+        )
+    }
+
     /// Lists generated kDrive activity reports.
     public func listActivityReports(
         driveId: Int,
