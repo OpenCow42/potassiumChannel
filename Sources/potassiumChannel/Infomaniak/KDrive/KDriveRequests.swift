@@ -981,6 +981,30 @@ public enum KDriveRequests {
         )
     }
 
+    /// Creates a request that gets a kDrive file thumbnail using the v2 endpoint.
+    public static func getFileThumbnail(
+        driveId: Int,
+        fileId: Int,
+        options: GetKDriveFileThumbnailOptions = GetKDriveFileThumbnailOptions()
+    ) -> APIRequest<KDriveBinaryResponse> {
+        var queryParameters: [QueryParameter] = []
+
+        if let height = options.height {
+            queryParameters.append(QueryParameter(name: "height", value: .integer(height)))
+        }
+
+        if let width = options.width {
+            queryParameters.append(QueryParameter(name: "width", value: .integer(width)))
+        }
+
+        return APIRequest(
+            method: .get,
+            path: "/2/drive/\(driveId)/files/\(fileId)/thumbnail",
+            queryParameters: queryParameters,
+            headers: [HTTPHeader(name: "Accept", value: "image/*")]
+        )
+    }
+
     /// Creates a request that uploads a file to kDrive using the v3 single-request endpoint.
     public static func uploadFile(
         driveId: Int,
