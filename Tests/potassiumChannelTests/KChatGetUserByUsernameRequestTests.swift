@@ -12,7 +12,7 @@ struct KChatGetUserByUsernameRequestTests {
                 bearerToken: "test-token"
             )
         )
-        let request = KChatRequests.getUserByUsername(username: "adrien")
+        let request = KChatRequests.getUserByUsername(username: "alice")
 
         let urlRequest = try await client.makeURLRequest(for: request)
         let url = try #require(urlRequest.url)
@@ -21,7 +21,7 @@ struct KChatGetUserByUsernameRequestTests {
         #expect(urlRequest.value(forHTTPHeaderField: "Authorization") == "Bearer test-token")
         #expect(urlRequest.value(forHTTPHeaderField: "Accept") == "application/json")
         #expect(urlRequest.value(forHTTPHeaderField: "Content-Type") == nil)
-        #expect(url.path == "/api/v4/users/username/adrien")
+        #expect(url.path == "/api/v4/users/username/alice")
         #expect(url.query?.isEmpty ?? true)
         #expect(urlRequest.httpBody == nil)
     }
@@ -34,28 +34,28 @@ struct KChatGetUserByUsernameRequestTests {
                 bearerToken: "test-token"
             )
         )
-        let request = KChatRequests.getUserByUsername(username: "adrien cow/slash")
+        let request = KChatRequests.getUserByUsername(username: "alice bob/slash")
 
         let urlRequest = try await client.makeURLRequest(for: request)
         let url = try #require(urlRequest.url)
 
         let components = try #require(URLComponents(url: url, resolvingAgainstBaseURL: false))
 
-        #expect(components.percentEncodedPath == "/api/v4/users/username/adrien%20cow%2Fslash")
+        #expect(components.percentEncodedPath == "/api/v4/users/username/alice%20bob%2Fslash")
         #expect(url.query?.isEmpty ?? true)
     }
 
     @Test("kChat get user by username response decodes a user row")
     func kChatGetUserByUsernameResponseDecodesUser() throws {
-        let json = #"{"id":"user-id","create_at":1,"update_at":2,"delete_at":0,"username":"adrien","first_name":"Adrien","last_name":"Example","email":"adrien@example.com","roles":"system_user"}"#.data(using: .utf8)!
+        let json = #"{"id":"user-id","create_at":1,"update_at":2,"delete_at":0,"username":"alice","first_name":"Alice","last_name":"Example","email":"alice@example.com","roles":"system_user"}"#.data(using: .utf8)!
         let decoder = JSONDecoder()
         decoder.keyDecodingStrategy = .convertFromSnakeCase
 
         let user = try decoder.decode(KChatUser.self, from: json)
 
         #expect(user.id == "user-id")
-        #expect(user.username == "adrien")
-        #expect(user.firstName == "Adrien")
-        #expect(user.email == "adrien@example.com")
+        #expect(user.username == "alice")
+        #expect(user.firstName == "Alice")
+        #expect(user.email == "alice@example.com")
     }
 }

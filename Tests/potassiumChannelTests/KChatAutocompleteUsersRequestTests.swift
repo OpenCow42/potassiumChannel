@@ -60,20 +60,20 @@ struct KChatAutocompleteUsersRequestTests {
 
     @Test("kChat autocomplete users response decodes users and out-of-channel users")
     func kChatAutocompleteUsersResponseDecodesSeparateUserArrays() throws {
-        let json = #"{"users":[{"id":"user-one","create_at":1,"username":"adrien","first_name":"Adrien","roles":"system_user"}],"out_of_channel":[{"id":"user-two","username":"cow","nickname":"Moo"}]}"#.data(using: .utf8)!
+        let json = #"{"users":[{"id":"user-one","create_at":1,"username":"alice","first_name":"Alice","roles":"system_user"}],"out_of_channel":[{"id":"user-two","username":"bob","nickname":"Bob"}]}"#.data(using: .utf8)!
 
         let autocomplete = try JSONDecoder.kChat.decode(KChatUserAutocomplete.self, from: json)
 
         #expect(autocomplete.users?.count == 1)
         #expect(autocomplete.users?.first?.id == "user-one")
         #expect(autocomplete.users?.first?.createAt == 1)
-        #expect(autocomplete.users?.first?.username == "adrien")
-        #expect(autocomplete.users?.first?.firstName == "Adrien")
+        #expect(autocomplete.users?.first?.username == "alice")
+        #expect(autocomplete.users?.first?.firstName == "Alice")
         #expect(autocomplete.users?.first?.roles == "system_user")
         #expect(autocomplete.outOfChannel?.count == 1)
         #expect(autocomplete.outOfChannel?.first?.id == "user-two")
-        #expect(autocomplete.outOfChannel?.first?.username == "cow")
-        #expect(autocomplete.outOfChannel?.first?.nickname == "Moo")
+        #expect(autocomplete.outOfChannel?.first?.username == "bob")
+        #expect(autocomplete.outOfChannel?.first?.nickname == "Bob")
     }
 }
 

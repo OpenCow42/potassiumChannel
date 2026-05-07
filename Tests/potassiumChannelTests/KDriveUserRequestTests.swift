@@ -13,7 +13,7 @@ struct KDriveUserRequestTests {
             )
         )
         let request = KDriveRequests.listKDriveUsers(
-            options: ListKDriveUsersOptions(search: "adrien", userIds: [10, 11], page: 1, perPage: 25)
+            options: ListKDriveUsersOptions(search: "alice", userIds: [10, 11], page: 1, perPage: 25)
         )
 
         let urlRequest = try await client.makeURLRequest(for: request)
@@ -25,7 +25,7 @@ struct KDriveUserRequestTests {
         let url = try #require(urlRequest.url)
         let components = try #require(URLComponents(url: url, resolvingAgainstBaseURL: false))
         let queryItems = components.queryItems ?? []
-        #expect(queryItems.contains(URLQueryItem(name: "search", value: "adrien")))
+        #expect(queryItems.contains(URLQueryItem(name: "search", value: "alice")))
         #expect(queryItems.contains(URLQueryItem(name: "user_ids", value: "10")))
         #expect(queryItems.contains(URLQueryItem(name: "user_ids", value: "11")))
         #expect(queryItems.contains(URLQueryItem(name: "page", value: "1")))
@@ -40,10 +40,10 @@ struct KDriveUserRequestTests {
           "data": [
             {
               "id": 10,
-              "display_name": "Adrien",
-              "first_name": "Adrien",
+              "display_name": "Alice",
+              "first_name": "Alice",
               "last_name": "Example",
-              "email": "adrien@example.com",
+              "email": "alice@example.com",
               "is_sso": false,
               "avatar": null,
               "deleted_at": null
@@ -63,10 +63,10 @@ struct KDriveUserRequestTests {
         #expect(response.data == [
             KDriveUser(
                 id: 10,
-                displayName: "Adrien",
-                firstName: "Adrien",
+                displayName: "Alice",
+                firstName: "Alice",
                 lastName: "Example",
-                email: "adrien@example.com",
+                email: "alice@example.com",
                 isSso: false
             ),
         ])

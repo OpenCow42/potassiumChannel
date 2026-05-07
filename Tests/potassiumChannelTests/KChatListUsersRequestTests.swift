@@ -82,15 +82,15 @@ struct KChatListUsersRequestTests {
 
     @Test("kChat list users decodes Mattermost-compatible user arrays")
     func kChatListUsersDecodesUserArray() throws {
-        let json = #"[{"id":"user-id","create_at":1,"update_at":2,"delete_at":0,"username":"adrien","first_name":"Adrien","last_name":"Example","email":"adrien@example.com","roles":"system_user"}]"#.data(using: .utf8)!
+        let json = #"[{"id":"user-id","create_at":1,"update_at":2,"delete_at":0,"username":"alice","first_name":"Alice","last_name":"Example","email":"alice@example.com","roles":"system_user"}]"#.data(using: .utf8)!
 
         let users = try JSONDecoder.kChat.decode([KChatUser].self, from: json)
 
         let user = try #require(users.first)
         #expect(user.id == "user-id")
         #expect(user.createAt == 1)
-        #expect(user.username == "adrien")
-        #expect(user.firstName == "Adrien")
+        #expect(user.username == "alice")
+        #expect(user.firstName == "Alice")
         #expect(user.roles == "system_user")
     }
 }

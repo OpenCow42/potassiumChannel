@@ -32,19 +32,19 @@ struct KChatGetUsersByIdsRequestTests {
 
     @Test("kChat get users by ids response decodes user rows")
     func kChatGetUsersByIdsResponseDecodesUsers() throws {
-        let json = #"[{"id":"user-one","create_at":1,"update_at":2,"delete_at":0,"username":"adrien","first_name":"Adrien","last_name":"Example","email":"adrien@example.com","roles":"system_user"},{"id":"user-two","username":"cow","nickname":"Moo"}]"#.data(using: .utf8)!
+        let json = #"[{"id":"user-one","create_at":1,"update_at":2,"delete_at":0,"username":"alice","first_name":"Alice","last_name":"Example","email":"alice@example.com","roles":"system_user"},{"id":"user-two","username":"bob","nickname":"Bob"}]"#.data(using: .utf8)!
 
         let users = try JSONDecoder.kChat.decode([KChatUser].self, from: json)
 
         #expect(users.count == 2)
         #expect(users[0].id == "user-one")
         #expect(users[0].createAt == 1)
-        #expect(users[0].username == "adrien")
-        #expect(users[0].firstName == "Adrien")
+        #expect(users[0].username == "alice")
+        #expect(users[0].firstName == "Alice")
         #expect(users[0].roles == "system_user")
         #expect(users[1].id == "user-two")
-        #expect(users[1].username == "cow")
-        #expect(users[1].nickname == "Moo")
+        #expect(users[1].username == "bob")
+        #expect(users[1].nickname == "Bob")
     }
 }
 
