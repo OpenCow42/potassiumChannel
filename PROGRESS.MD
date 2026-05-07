@@ -512,3 +512,10 @@ not started
 - Reused existing `KChatChannel` for response decoding.
 - Added `KChatChannelSearchOptions`, `KChatRequests.searchChannels(teamId:options:)`, and `KChatService.searchChannels(teamId:options:)` returning `[KChatChannel]`.
 - Added request tests covering method/path/auth/accept/content-type headers, percent-encoded `team_id`, JSON body encoding, absence of query parameters, required empty `term` preservation, and response decoding.
+
+### 2026-05-07 - kChat archived team channels search
+
+- Verified OpenAPI `SearchArchivedChannels` for `POST /api/v4/teams/{team_id}/channels/search_archived`; required path parameter is `team_id`, required JSON body field is `term`, no query parameters, and response `201` is an array of Mattermost-compatible `Channel` objects.
+- Reused `KChatChannelSearchOptions` because the archived-channel search body has the same required `term` shape as the existing team channel search endpoint.
+- Added `KChatRequests.searchArchivedChannels(teamId:options:)` and `KChatService.searchArchivedChannels(teamId:options:)` returning `[KChatChannel]`.
+- Added request/decoding unit tests covering POST method, encoded path, auth/accept/content-type headers, JSON body, no query parameters, empty required term preservation, and channel array decoding.
