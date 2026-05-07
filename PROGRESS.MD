@@ -1,3 +1,9 @@
+## 2026-05-07 — kDrive export activity share links statistics route
+
+- Added shared support for `GET /2/drive/{drive_id}/statistics/activities/links/export` via `KDriveRequests.exportActivityShareLinks`, `KDriveService.exportActivityShareLinks`, and `ExportKDriveActivityShareLinksOptions`, reusing `KDriveStatisticShareLink`.
+- Added request/decoding tests covering method, OpenAPI path, auth header, required `from` and `until` query parameters, optional export filters, and non-paginated share-link response decoding.
+- Validation: `swift test` passes (286 tests).
+
 ### Progress of the project
 
 ## 2026-05-07 — kDrive activity share links statistics route
@@ -98,6 +104,7 @@ kDrive request factories, and `KDriveService` wrappers moved from Potassium.
 | GET | `/2/drive/{drive_id}/statistics/activities/users` | `KDriveRequests.listActivityUsers` |
 | GET | `/2/drive/{drive_id}/statistics/activities/shared_files` | `KDriveRequests.listActivitySharedFiles` |
 | GET | `/2/drive/{drive_id}/statistics/activities/links` | `KDriveRequests.listActivityShareLinks` |
+| GET | `/2/drive/{drive_id}/statistics/activities/links/export` | `KDriveRequests.exportActivityShareLinks` |
 | GET | `/2/drive/{drive_id}/activities/reports` | `KDriveRequests.listActivityReports` |
 | GET | `/2/drive/{drive_id}/imports` | `KDriveRequests.listImports` |
 | GET | `/2/drive/{drive_id}/users/invitation` | `KDriveRequests.listUserInvitations` |

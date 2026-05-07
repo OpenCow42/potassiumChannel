@@ -1732,6 +1732,41 @@ public enum KDriveRequests {
         )
     }
 
+    /// Creates a request that exports share links active on a kDrive during a statistics period.
+    public static func exportActivityShareLinks(
+        driveId: Int,
+        from: Int,
+        until: Int,
+        options: ExportKDriveActivityShareLinksOptions = ExportKDriveActivityShareLinksOptions()
+    ) -> APIRequest<InfomaniakResponse<[KDriveStatisticShareLink]>> {
+        var queryParameters: [QueryParameter] = [
+            QueryParameter(name: "from", value: .integer(from)),
+            QueryParameter(name: "until", value: .integer(until)),
+        ]
+
+        if let maxView = options.maxView {
+            queryParameters.append(QueryParameter(name: "max_view", value: .integer(maxView)))
+        }
+
+        if let minView = options.minView {
+            queryParameters.append(QueryParameter(name: "min_view", value: .integer(minView)))
+        }
+
+        if !options.rights.isEmpty {
+            queryParameters.append(QueryParameter(name: "rights", value: .strings(options.rights)))
+        }
+
+        if let validUntil = options.validUntil {
+            queryParameters.append(QueryParameter(name: "valid_until", value: .integer(validUntil)))
+        }
+
+        return APIRequest(
+            method: .get,
+            path: "/2/drive/\(driveId)/statistics/activities/links/export",
+            queryParameters: queryParameters
+        )
+    }
+
     /// Creates a request that lists generated kDrive activity reports.
     public static func listActivityReports(
         driveId: Int,
