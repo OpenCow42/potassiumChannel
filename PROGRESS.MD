@@ -178,6 +178,7 @@ kDrive request factories, and `KDriveService` wrappers moved from Potassium.
 | GET | `/2/drive/{drive_id}/imports/oauth/drives` | `KDriveRequests.listOAuthImportDrives` |
 | GET | `/2/drive/{drive_id}/users/invitation` | `KDriveRequests.listUserInvitations` |
 | GET | `/2/drive/preferences` | `KDriveRequests.getUserPreferences` |
+| PATCH | `/2/drive/preferences` | `KDriveRequests.setUserPreferences` |
 | GET | `/2/drive/users` | `KDriveRequests.listKDriveUsers` |
 | GET | `/2/drive/{drive_id}/files/archives/{archive_uuid}` | `KDriveRequests.downloadArchive` |
 | POST | `/3/drive/{drive_id}/files/{file_id}/file` | `KDriveRequests.createDefaultFileV3` |

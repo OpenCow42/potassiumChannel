@@ -893,6 +893,15 @@ public struct KDriveService: Sendable {
         )
     }
 
+    /// Updates preferences for the authenticated kDrive user.
+    public func setUserPreferences(
+        options: SetKDriveUserPreferencesOptions
+    ) async throws -> InfomaniakResponse<Bool> {
+        try await client.send(
+            try KDriveRequests.setUserPreferences(options: options)
+        )
+    }
+
     /// Lists users associated with the authenticated user's accessible kDrives.
     public func listKDriveUsers(
         with includedResources: String? = nil,
