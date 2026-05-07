@@ -490,3 +490,11 @@ not started
 - Verified OpenAPI `GetDeletedChannelsForTeam` for `GET /api/v4/teams/{team_id}/channels/deleted`; response is an array of Mattermost-compatible `Channel` objects and supports `page`/`per_page` query parameters.
 - Added `KChatDeletedChannelsForTeamOptions`, `KChatRequests.getDeletedChannelsForTeam(teamId:options:)`, and `KChatService.getDeletedChannelsForTeam(teamId:options:)`, reusing `KChatChannel`.
 - Added request tests for method/path/auth/accept headers, path percent-encoding, query encoding, omitted empty options, no body, and response decoding.
+
+## 2026-05-07 — kChat autocomplete channels for team route
+
+- Verified OpenAPI `AutocompleteChannelsForTeam` for `GET /api/v4/teams/{team_id}/channels/autocomplete`; required query parameter is `name`, and the response is an array of Mattermost-compatible `Channel` objects.
+- Reused `KChatChannel` for response decoding.
+- Added `KChatChannelsForTeamAutocompleteOptions` with required `name` query parameter.
+- Added `KChatRequests.autocompleteChannelsForTeam(teamId:options:)` and `KChatService.autocompleteChannelsForTeam(teamId:options:)` returning `[KChatChannel]`.
+- Added unit tests covering GET method, OpenAPI path, auth/accept headers, percent-encoded `team_id`, required query encoding, no body, and snake-case channel decoding.

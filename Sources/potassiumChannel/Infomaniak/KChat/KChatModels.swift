@@ -194,6 +194,17 @@ public struct KChatPublicChannelsForTeamOptions: Equatable, Sendable {
     }
 }
 
+/// Query options accepted by the Mattermost-compatible kChat team channels autocomplete endpoint.
+public struct KChatChannelsForTeamAutocompleteOptions: Equatable, Sendable {
+    /// Channel name or display name search term.
+    public let name: String
+
+    /// Creates kChat team channels autocomplete query options.
+    public init(name: String) {
+        self.name = name
+    }
+}
+
 /// Query options accepted by the Mattermost-compatible kChat private team channels endpoint.
 public struct KChatPrivateChannelsForTeamOptions: Equatable, Sendable {
     /// The page to select.
