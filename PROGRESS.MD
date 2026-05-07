@@ -51,6 +51,7 @@ kDrive request factories, and `KDriveService` wrappers moved from Potassium.
 | GET | `/2/drive/{drive_id}/activities` | `KDriveRequests.listActivities` |
 | GET | `/3/drive/{drive_id}/activities` | `KDriveRequests.listDriveActivities` |
 | GET | `/3/drive/{drive_id}/activities/total` | `KDriveRequests.listDriveActivityTotals` |
+| GET | `/2/drive/{drive_id}/statistics/sizes` | `KDriveRequests.chartFileSizes` |
 | GET | `/2/drive/{drive_id}/activities/reports` | `KDriveRequests.listActivityReports` |
 | GET | `/2/drive/{drive_id}/imports` | `KDriveRequests.listImports` |
 | GET | `/2/drive/{drive_id}/users/invitation` | `KDriveRequests.listUserInvitations` |
@@ -583,3 +584,10 @@ not started
 - Added `ListKDriveDriveUsersV2Options` for search, status, type, user id, pagination, total, and sort query parameters.
 - Added unit coverage for request path/query encoding and response decoding.
 - Verified with `swift test`.
+
+## 2026-05-07 — kDrive chart file sizes route
+
+- Branch: `feat/kdrive`.
+- Added typed request/service support for non-destructive `GET /2/drive/{drive_id}/statistics/sizes` as `KDriveRequests.chartFileSizes` and `KDriveService.chartFileSizes`.
+- Added `KDriveChart`, `KDriveChartData`, and flexible chart data value DTOs for the route's chart response schema.
+- Added unit coverage for the OpenAPI path, required query parameters (`from`, `interval`, repeatable `metrics`, `until`), authorization header, and chart decoding.
