@@ -126,6 +126,44 @@ public struct KChatListTeamsOptions: Equatable, Sendable {
     }
 }
 
+/// Query options accepted by the Mattermost-compatible kChat channels list endpoint.
+public struct KChatListChannelsOptions: Equatable, Sendable {
+    /// The page to select.
+    public let page: Int?
+
+    /// The number of channels per page.
+    public let perPage: Int?
+
+    /// Whether default channels should be excluded.
+    public let excludeDefaultChannels: Bool?
+
+    /// Whether archived channels should be included.
+    public let includeDeleted: Bool?
+
+    /// Whether the API should include a total count when supported by the server.
+    public let includeTotalCount: Bool?
+
+    /// Whether policy-constrained channels should be excluded.
+    public let excludePolicyConstrained: Bool?
+
+    /// Creates kChat channels list query options.
+    public init(
+        page: Int? = nil,
+        perPage: Int? = nil,
+        excludeDefaultChannels: Bool? = nil,
+        includeDeleted: Bool? = nil,
+        includeTotalCount: Bool? = nil,
+        excludePolicyConstrained: Bool? = nil
+    ) {
+        self.page = page
+        self.perPage = perPage
+        self.excludeDefaultChannels = excludeDefaultChannels
+        self.includeDeleted = includeDeleted
+        self.includeTotalCount = includeTotalCount
+        self.excludePolicyConstrained = excludePolicyConstrained
+    }
+}
+
 /// Query options accepted by the Mattermost-compatible kChat team members list endpoint.
 public struct KChatTeamMembersOptions: Equatable, Sendable {
     /// The page to select.
@@ -741,6 +779,10 @@ public struct KChatChannel: Codable, Equatable, Sendable {
     public let lastPostAt: Int?
     public let totalMsgCount: Int?
     public let creatorId: String?
+    public let teamDisplayName: String?
+    public let teamName: String?
+    public let teamUpdateAt: Int64?
+    public let policyId: String?
 
     public init(
         id: String? = nil,
@@ -755,7 +797,11 @@ public struct KChatChannel: Codable, Equatable, Sendable {
         purpose: String? = nil,
         lastPostAt: Int? = nil,
         totalMsgCount: Int? = nil,
-        creatorId: String? = nil
+        creatorId: String? = nil,
+        teamDisplayName: String? = nil,
+        teamName: String? = nil,
+        teamUpdateAt: Int64? = nil,
+        policyId: String? = nil
     ) {
         self.id = id
         self.createAt = createAt
@@ -770,6 +816,10 @@ public struct KChatChannel: Codable, Equatable, Sendable {
         self.lastPostAt = lastPostAt
         self.totalMsgCount = totalMsgCount
         self.creatorId = creatorId
+        self.teamDisplayName = teamDisplayName
+        self.teamName = teamName
+        self.teamUpdateAt = teamUpdateAt
+        self.policyId = policyId
     }
 }
 

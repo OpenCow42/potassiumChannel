@@ -71,6 +71,7 @@ not started
 | Method | Route | Request factory |
 | --- | --- | --- |
 | GET | `/api/v4/config/client` | `KChatRequests.getClientConfig` |
+| GET | `/api/v4/channels` | `KChatRequests.listChannels` |
 | GET | `/api/v4/teams` | `KChatRequests.listTeams` |
 | GET | `/api/v4/teams/{team_id}/stats` | `KChatRequests.getTeamStats` |
 | GET | `/api/v4/teams/{team_id}/members/{user_id}` | `KChatRequests.getTeamMember` |
@@ -101,10 +102,12 @@ not started
 
 - `KChatClientConfig` response DTO for Mattermost-compatible client configuration values.
 - `KChatListTeamsOptions` for the Mattermost-compatible teams list endpoint.
+- `KChatListChannelsOptions` for the Mattermost-compatible all channels list endpoint.
 - `KChatRequests.getClientConfig(format:)`, `listTeams(options:)`, `getUsersByUsernames(body:)`, `getUsersByGroupChannels(body:)`, `getChannelPosts(channelId:options:)`, `getPost(postId:)`, and `getPostThread(postId:)` request factories.
 - `KChatPost` and `KChatPostList` Mattermost-compatible post DTOs.
 - `KChatService`, which sends kChat route factories through `InfomaniakAPIClient`, includes `getPostThread(postId:)`, and can build `https://<team>.kchat.infomaniak.com` base URLs.
 - `KChatService.listTeams(options:)` convenience API returning `[KChatTeam]`.
+- `KChatService.listChannels(options:)` convenience API returning `[KChatChannel]`.
 - `KChatService.getTeamStats(teamId:)` convenience API returning `KChatTeamStats`.
 - `KChatService.getTeamMember(teamId:userId:)` convenience API returning `KChatTeamMember`.
 - `KChatService.getUserTeamMembers(userId:)` convenience API returning `[KChatTeamMember]`.
@@ -116,6 +119,16 @@ not started
 ### Validation
 
 - `swift test` passes with route/DTO/channel coverage.
+
+## 2026-05-07 — kChat get all channels route
+
+- Target app: kChat.
+- Branch: `feat/kchat`.
+- Verified OpenAPI `GetAllChannels` for `GET /api/v4/channels`; response is an array of `ChannelWithTeamData`.
+- Added `KChatRequests.listChannels(options:)` with `page`, `per_page`, `exclude_default_channels`, `include_deleted`, `include_total_count`, and `exclude_policy_constrained` query parameters.
+- Reused and extended `KChatChannel` for optional team metadata (`team_display_name`, `team_name`, `team_update_at`, `policy_id`).
+- Added `KChatService.listChannels(options:)` convenience API returning `[KChatChannel]`.
+- Added unit tests covering GET method, OpenAPI path, auth/accept headers, query encoding, omitted empty options, no body, and snake-case channel/team metadata decoding.
 
 
 ## 2026-05-07 — kChat get team stats route
