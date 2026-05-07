@@ -2126,6 +2126,29 @@ public struct SearchKDriveShareLinksOptions: Equatable, Sendable {
     }
 }
 
+/// Query parameters accepted by the kDrive activity share-links export endpoint.
+public struct ExportKDriveActivityShareLinksOptions: Equatable, Sendable {
+    /// Maximum views filter.
+    public let maxView: Int?
+
+    /// Minimum views filter.
+    public let minView: Int?
+
+    /// Link rights to filter by (`inherit`, `password`, or `public`).
+    public let rights: [String]
+
+    /// Link expiration timestamp filter.
+    public let validUntil: Int?
+
+    /// Creates options for exporting kDrive activity share-link statistics.
+    public init(maxView: Int? = nil, minView: Int? = nil, rights: [String] = [], validUntil: Int? = nil) {
+        self.maxView = maxView
+        self.minView = minView
+        self.rights = rights
+        self.validUntil = validUntil
+    }
+}
+
 /// Query parameters accepted by the kDrive activity share-links statistics endpoint.
 public struct ListKDriveActivityShareLinksOptions: Equatable, Sendable {
     /// Optional related resources to include.
