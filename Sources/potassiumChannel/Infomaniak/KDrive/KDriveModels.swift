@@ -1915,6 +1915,33 @@ public struct ListAccessibleKDrivesOptions: Equatable, Sendable {
     }
 }
 
+/// Query parameters accepted by the kDrive user drives endpoint.
+public struct ListKDriveUserDrivesOptions: Equatable, Sendable {
+    /// User roles to filter by.
+    public let roles: [String]
+
+    /// User statuses to filter by.
+    public let statuses: [String]
+
+    /// The page number to request.
+    public let page: Int?
+
+    /// The number of items per page to request.
+    public let perPage: Int?
+
+    /// Whether the API should return the total item count.
+    public let total: Bool?
+
+    /// Creates options for listing kDrives associated with a user.
+    public init(roles: [String] = [], statuses: [String] = [], page: Int? = nil, perPage: Int? = nil, total: Bool? = nil) {
+        self.roles = roles
+        self.statuses = statuses
+        self.page = page
+        self.perPage = perPage
+        self.total = total
+    }
+}
+
 /// Query parameters accepted by the kDrive users endpoint.
 public struct ListKDriveUsersOptions: Equatable, Sendable {
     /// Search text used to match first name, last name, or email.

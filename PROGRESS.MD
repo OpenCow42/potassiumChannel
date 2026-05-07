@@ -570,3 +570,9 @@ not started
 - Reused `KChatChannelMember` for responses.
 - Added `KChatRequests.getChannelMembersByIds(channelId:userIds:)` and `KChatService.getChannelMembersByIds(channelId:userIds:)` returning `[KChatChannelMember]`.
 - Added request/decoding tests covering method, path, auth/accept/content-type headers, percent-encoded `channel_id`, JSON body encoding, no query parameters, and member array decoding.
+
+## 2026-05-07 — kDrive user drives route
+
+- Added `GET /2/drive/users/{user_id}/drives` (`kDriveGetDrivesV2`) request factory and service method.
+- Added query option support for `account_id`, `with`, `roles`, `status`, `page`, `per_page`, and `total`.
+- Added unit coverage for URL construction and response decoding.

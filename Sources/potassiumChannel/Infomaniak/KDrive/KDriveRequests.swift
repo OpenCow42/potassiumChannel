@@ -66,6 +66,48 @@ public enum KDriveRequests {
         )
     }
 
+    /// Creates a request that lists kDrives associated with a specific user.
+    public static func listUserDrivesV2(
+        userId: Int,
+        accountId: Int,
+        with includedResources: String? = nil,
+        options: ListKDriveUserDrivesOptions = ListKDriveUserDrivesOptions()
+    ) -> APIRequest<PaginatedInfomaniakResponse<[KDriveDriveUser]>> {
+        var queryParameters: [QueryParameter] = [
+            QueryParameter(name: "account_id", value: .integer(accountId)),
+        ]
+
+        if let includedResources {
+            queryParameters.append(QueryParameter(name: "with", value: .string(includedResources)))
+        }
+
+        if !options.roles.isEmpty {
+            queryParameters.append(QueryParameter(name: "roles[]", value: .strings(options.roles)))
+        }
+
+        if !options.statuses.isEmpty {
+            queryParameters.append(QueryParameter(name: "status[]", value: .strings(options.statuses)))
+        }
+
+        if let page = options.page {
+            queryParameters.append(QueryParameter(name: "page", value: .integer(page)))
+        }
+
+        if let perPage = options.perPage {
+            queryParameters.append(QueryParameter(name: "per_page", value: .integer(perPage)))
+        }
+
+        if let total = options.total {
+            queryParameters.append(QueryParameter(name: "total", value: .bool(total)))
+        }
+
+        return APIRequest(
+            method: .get,
+            path: "/2/drive/users/\(userId)/drives",
+            queryParameters: queryParameters
+        )
+    }
+
     /// Creates a request that lists recent files and directories on a kDrive.
     public static func listRecentFiles(
         driveId: Int,
