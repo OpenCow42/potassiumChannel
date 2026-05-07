@@ -1612,6 +1612,27 @@ public enum KDriveRequests {
         )
     }
 
+    /// Creates a request that exports v2 drive-scoped activity statistics as CSV.
+    public static func exportActivities(
+        driveId: Int,
+        from: Int,
+        interval: Int,
+        metric: String,
+        until: Int
+    ) -> APIRequest<Data> {
+        APIRequest(
+            method: .get,
+            path: "/2/drive/\(driveId)/statistics/activities/export",
+            queryParameters: [
+                QueryParameter(name: "from", value: .integer(from)),
+                QueryParameter(name: "interval", value: .integer(interval)),
+                QueryParameter(name: "metric", value: .string(metric)),
+                QueryParameter(name: "until", value: .integer(until)),
+            ],
+            headers: [HTTPHeader(name: "Accept", value: "text/csv")]
+        )
+    }
+
     /// Creates a request that lists users active on a kDrive during a statistics period.
     public static func listActivityUsers(
         driveId: Int,
