@@ -72,6 +72,7 @@ not started
 | --- | --- | --- |
 | GET | `/api/v4/config/client` | `KChatRequests.getClientConfig` |
 | GET | `/api/v4/channels` | `KChatRequests.listChannels` |
+| GET | `/api/v4/channels/{channel_id}` | `KChatRequests.getChannel` |
 | GET | `/api/v4/teams` | `KChatRequests.listTeams` |
 | GET | `/api/v4/teams/{team_id}/stats` | `KChatRequests.getTeamStats` |
 | GET | `/api/v4/teams/{team_id}/members/{user_id}` | `KChatRequests.getTeamMember` |
@@ -108,6 +109,7 @@ not started
 - `KChatService`, which sends kChat route factories through `InfomaniakAPIClient`, includes `getPostThread(postId:)`, and can build `https://<team>.kchat.infomaniak.com` base URLs.
 - `KChatService.listTeams(options:)` convenience API returning `[KChatTeam]`.
 - `KChatService.listChannels(options:)` convenience API returning `[KChatChannel]`.
+- `KChatService.getChannel(channelId:)` convenience API returning `KChatChannel`.
 - `KChatService.getTeamStats(teamId:)` convenience API returning `KChatTeamStats`.
 - `KChatService.getTeamMember(teamId:userId:)` convenience API returning `KChatTeamMember`.
 - `KChatService.getUserTeamMembers(userId:)` convenience API returning `[KChatTeamMember]`.
@@ -119,6 +121,14 @@ not started
 ### Validation
 
 - `swift test` passes with route/DTO/channel coverage.
+
+
+## 2026-05-07 — kChat get channel route
+
+- Verified OpenAPI `GetChannel` for `GET /api/v4/channels/{channel_id}`; response is `Channel`.
+- Reused `KChatChannel` for Mattermost-compatible channel decoding.
+- Added `KChatRequests.getChannel(channelId:)` and `KChatService.getChannel(channelId:)`.
+- Added unit tests covering GET method, OpenAPI path, auth/accept headers, no query/body, path-segment percent encoding, and snake-case response decoding.
 
 ## 2026-05-07 — kChat get all channels route
 

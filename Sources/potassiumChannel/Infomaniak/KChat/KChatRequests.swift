@@ -84,6 +84,14 @@ public enum KChatRequests {
         )
     }
 
+    /// Creates a request that gets a kChat channel by id.
+    public static func getChannel(channelId: String) -> APIRequest<KChatChannel> {
+        APIRequest(
+            method: .get,
+            path: "/api/v4/channels/\(percentEncodePathSegment(channelId))"
+        )
+    }
+
     /// Creates a request that gets a kChat team by id.
     public static func getTeam(teamId: String) -> APIRequest<KChatTeam> {
         APIRequest(
