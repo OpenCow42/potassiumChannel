@@ -20,6 +20,17 @@ public struct KDriveCancelResource: Codable, Equatable, Sendable {
     }
 }
 
+/// UUID token returned after requesting an asynchronous kDrive archive build.
+public struct KDriveUUIDResource: Codable, Equatable, Sendable {
+    /// Universally unique identifier of the built archive resource.
+    public let uuid: String
+
+    /// Creates a UUID resource value.
+    public init(uuid: String) {
+        self.uuid = uuid
+    }
+}
+
 /// Query parameters and headers accepted by the kDrive file download endpoint.
 public struct DownloadKDriveFileOptions: Equatable, Sendable {
     /// Optional conversion format before download, such as `pdf` or `text`.
@@ -1324,6 +1335,31 @@ public struct RenameKDriveFileOptions: Encodable, Equatable, Sendable {
     /// Creates options for renaming a kDrive file or directory.
     public init(name: String) {
         self.name = name
+    }
+}
+
+/// JSON body accepted by the kDrive archive build endpoint.
+public struct BuildKDriveArchiveOptions: Encodable, Equatable, Sendable {
+    /// File identifiers to include in the archive. Required when `parentId` is not set.
+    public let fileIds: [Int]?
+
+    /// Directory containing files to include in the archive. Required when `fileIds` is not set.
+    public let parentId: Int?
+
+    /// File identifiers to exclude when building an archive from `parentId`.
+    public let exceptFileIds: [Int]?
+
+    public enum CodingKeys: String, CodingKey {
+        case fileIds = "file_ids"
+        case parentId = "parent_id"
+        case exceptFileIds = "except_file_ids"
+    }
+
+    /// Creates options for building a kDrive archive.
+    public init(fileIds: [Int]? = nil, parentId: Int? = nil, exceptFileIds: [Int]? = nil) {
+        self.fileIds = fileIds
+        self.parentId = parentId
+        self.exceptFileIds = exceptFileIds
     }
 }
 

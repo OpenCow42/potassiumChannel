@@ -28,14 +28,14 @@ struct KChatGetUserTeamsRequestTests {
 
     @Test("kChat team decodes Mattermost-compatible snake-case fields")
     func kChatTeamDecodesSnakeCaseFields() throws {
-        let json = #"{"id":"team-id","create_at":1,"update_at":2,"delete_at":0,"display_name":"Moo Moo","name":"moo-moo","description":"Team description","email":"team@example.com","type":"O","allowed_domains":"example.com","invite_id":"invite","allow_open_invite":true,"policy_id":"policy"}"#.data(using: .utf8)!
+        let json = #"{"id":"team-id","create_at":1,"update_at":2,"delete_at":0,"display_name":"Bob Team","name":"bob-team","description":"Team description","email":"team@example.com","type":"O","allowed_domains":"example.com","invite_id":"invite","allow_open_invite":true,"policy_id":"policy"}"#.data(using: .utf8)!
 
         let team = try JSONDecoder.kChat.decode(KChatTeam.self, from: json)
 
         #expect(team.id == "team-id")
         #expect(team.createAt == 1)
-        #expect(team.displayName == "Moo Moo")
-        #expect(team.name == "moo-moo")
+        #expect(team.displayName == "Bob Team")
+        #expect(team.name == "bob-team")
         #expect(team.allowOpenInvite == true)
         #expect(team.policyId == "policy")
     }
