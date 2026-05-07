@@ -576,3 +576,10 @@ not started
 - Added `GET /2/drive/users/{user_id}/drives` (`kDriveGetDrivesV2`) request factory and service method.
 - Added query option support for `account_id`, `with`, `roles`, `status`, `page`, `per_page`, and `total`.
 - Added unit coverage for URL construction and response decoding.
+
+## 2026-05-07 — kDrive v2 drive users route
+
+- Added network support for `GET /2/drive/{drive_id}/users` as `KDriveRequests.listDriveUsersV2` and `KDriveService.listDriveUsersV2`.
+- Added `ListKDriveDriveUsersV2Options` for search, status, type, user id, pagination, total, and sort query parameters.
+- Added unit coverage for request path/query encoding and response decoding.
+- Verified with `swift test`.

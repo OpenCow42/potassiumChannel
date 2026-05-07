@@ -66,6 +66,65 @@ public enum KDriveRequests {
         )
     }
 
+    /// Creates a request that lists users associated with a specific kDrive using the v2 endpoint.
+    public static func listDriveUsersV2(
+        driveId: Int,
+        with includedResources: String? = nil,
+        options: ListKDriveDriveUsersV2Options = ListKDriveDriveUsersV2Options()
+    ) -> APIRequest<PaginatedInfomaniakResponse<[KDriveDriveUser]>> {
+        var queryParameters: [QueryParameter] = []
+
+        if let includedResources {
+            queryParameters.append(QueryParameter(name: "with", value: .string(includedResources)))
+        }
+
+        if let search = options.search {
+            queryParameters.append(QueryParameter(name: "search", value: .string(search)))
+        }
+
+        if !options.statuses.isEmpty {
+            queryParameters.append(QueryParameter(name: "status", value: .strings(options.statuses)))
+        }
+
+        if !options.types.isEmpty {
+            queryParameters.append(QueryParameter(name: "types", value: .strings(options.types)))
+        }
+
+        if !options.userIds.isEmpty {
+            queryParameters.append(QueryParameter(name: "user_ids", value: .integers(options.userIds)))
+        }
+
+        if let page = options.page {
+            queryParameters.append(QueryParameter(name: "page", value: .integer(page)))
+        }
+
+        if let perPage = options.perPage {
+            queryParameters.append(QueryParameter(name: "per_page", value: .integer(perPage)))
+        }
+
+        if let total = options.total {
+            queryParameters.append(QueryParameter(name: "total", value: .bool(total)))
+        }
+
+        if !options.orderBy.isEmpty {
+            queryParameters.append(QueryParameter(name: "order_by", value: .strings(options.orderBy)))
+        }
+
+        if let order = options.order {
+            queryParameters.append(QueryParameter(name: "order", value: .string(order)))
+        }
+
+        for (field, order) in options.orderFor {
+            queryParameters.append(QueryParameter(name: "order_for[\(field)]", value: .string(order)))
+        }
+
+        return APIRequest(
+            method: .get,
+            path: "/2/drive/\(driveId)/users",
+            queryParameters: queryParameters
+        )
+    }
+
     /// Creates a request that lists kDrives associated with a specific user.
     public static func listUserDrivesV2(
         userId: Int,

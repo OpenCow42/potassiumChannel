@@ -1942,6 +1942,64 @@ public struct ListKDriveUserDrivesOptions: Equatable, Sendable {
     }
 }
 
+/// Query parameters accepted by the v2 drive-scoped kDrive users endpoint.
+public struct ListKDriveDriveUsersV2Options: Equatable, Sendable {
+    /// Search text used to match first name, last name, or email.
+    public let search: String?
+
+    /// User statuses to filter by.
+    public let statuses: [String]
+
+    /// User types to filter by.
+    public let types: [String]
+
+    /// User identifiers to filter by.
+    public let userIds: [Int]
+
+    /// The page number to request.
+    public let page: Int?
+
+    /// The number of items per page to request.
+    public let perPage: Int?
+
+    /// Whether the API should return the total item count.
+    public let total: Bool?
+
+    /// Fields used for sorting.
+    public let orderBy: [String]
+
+    /// Default sort order.
+    public let order: String?
+
+    /// Per-field sort orders encoded as order_for[field]=asc|desc.
+    public let orderFor: [String: String]
+
+    /// Creates options for listing users associated with a specific kDrive using v2.
+    public init(
+        search: String? = nil,
+        statuses: [String] = [],
+        types: [String] = [],
+        userIds: [Int] = [],
+        page: Int? = nil,
+        perPage: Int? = nil,
+        total: Bool? = nil,
+        orderBy: [String] = [],
+        order: String? = nil,
+        orderFor: [String: String] = [:]
+    ) {
+        self.search = search
+        self.statuses = statuses
+        self.types = types
+        self.userIds = userIds
+        self.page = page
+        self.perPage = perPage
+        self.total = total
+        self.orderBy = orderBy
+        self.order = order
+        self.orderFor = orderFor
+    }
+}
+
 /// Query parameters accepted by the kDrive users endpoint.
 public struct ListKDriveUsersOptions: Equatable, Sendable {
     /// Search text used to match first name, last name, or email.
