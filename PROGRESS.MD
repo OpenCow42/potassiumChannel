@@ -77,6 +77,7 @@ not started
 | GET | `/api/v4/channels/{channel_id}/members/{user_id}` | `KChatRequests.getChannelMember` |
 | POST | `/api/v4/channels/{channel_id}/members/ids` | `KChatRequests.getChannelMembersByIds` |
 | GET | `/api/v4/teams` | `KChatRequests.listTeams` |
+| POST | `/api/v4/teams/{team_id}/members/ids` | `KChatRequests.getTeamMembersByIds` |
 | GET | `/api/v4/teams/{team_id}/stats` | `KChatRequests.getTeamStats` |
 | GET | `/api/v4/teams/{team_id}/members/{user_id}` | `KChatRequests.getTeamMember` |
 | GET | `/api/v4/users/{user_id}/image` | `KChatRequests.getUserImage` |
@@ -552,6 +553,13 @@ not started
 - Added `KChatChannelMembersOptions` and `KChatRequests.getChannelMembers(channelId:options:)` for the channel members endpoint.
 - Reused `KChatChannelMember` for the response and hardened its `channel_id`/`user_id` decoding for numeric ids returned by live kChat.
 - Added `KChatService.getChannelMembers(channelId:options:)` and request/decoding tests covering headers, auth, path encoding, query omission, no body, and response decoding.
+
+## 2026-05-07 — kChat get team members by ids route
+
+- Verified OpenAPI `GetTeamMembersByIds` uses `POST /api/v4/teams/{team_id}/members/ids` with a required JSON array of user ids and returns an array of Mattermost-compatible `TeamMember` rows.
+- Reused `KChatTeamMember` for responses.
+- Added `KChatRequests.getTeamMembersByIds(teamId:userIds:)` and `KChatService.getTeamMembersByIds(teamId:userIds:)` returning `[KChatTeamMember]`.
+- Added request/decoding tests covering method, path, auth/accept/content-type headers, percent-encoded `team_id`, JSON body encoding, no query parameters, and member array decoding.
 
 ## 2026-05-07 — kChat get channel members by ids route
 

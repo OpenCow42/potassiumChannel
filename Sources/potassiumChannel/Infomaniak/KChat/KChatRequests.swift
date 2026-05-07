@@ -146,6 +146,15 @@ public enum KChatRequests {
         )
     }
 
+    /// Creates a request that gets kChat team members by user ids.
+    public static func getTeamMembersByIds(teamId: String, userIds: [String]) throws -> APIRequest<[KChatTeamMember]> {
+        APIRequest(
+            method: .post,
+            path: "/api/v4/teams/\(percentEncodePathSegment(teamId))/members/ids",
+            body: try JSONEncoder().encode(userIds)
+        )
+    }
+
     /// Creates a request that lists kChat members for a channel.
     public static func getChannelMembers(
         channelId: String,
