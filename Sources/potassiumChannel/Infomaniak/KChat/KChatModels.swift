@@ -467,6 +467,53 @@ public struct KChatTeamMember: Codable, Equatable, Sendable {
         self.schemeAdmin = schemeAdmin
         self.explicitRoles = explicitRoles
     }
+
+    private enum CodingKeys: String, CodingKey {
+        case teamId
+        case userId
+        case roles
+        case deleteAt
+        case schemeUser
+        case schemeAdmin
+        case explicitRoles
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.teamId = try Self.decodeStringOrNumberIfPresent(from: container, forKey: .teamId)
+        self.userId = try Self.decodeStringOrNumberIfPresent(from: container, forKey: .userId)
+        self.roles = try container.decodeIfPresent(String.self, forKey: .roles)
+        self.deleteAt = try container.decodeIfPresent(Int64.self, forKey: .deleteAt)
+        self.schemeUser = try container.decodeIfPresent(Bool.self, forKey: .schemeUser)
+        self.schemeAdmin = try container.decodeIfPresent(Bool.self, forKey: .schemeAdmin)
+        self.explicitRoles = try container.decodeIfPresent(String.self, forKey: .explicitRoles)
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeIfPresent(teamId, forKey: .teamId)
+        try container.encodeIfPresent(userId, forKey: .userId)
+        try container.encodeIfPresent(roles, forKey: .roles)
+        try container.encodeIfPresent(deleteAt, forKey: .deleteAt)
+        try container.encodeIfPresent(schemeUser, forKey: .schemeUser)
+        try container.encodeIfPresent(schemeAdmin, forKey: .schemeAdmin)
+        try container.encodeIfPresent(explicitRoles, forKey: .explicitRoles)
+    }
+
+    private static func decodeStringOrNumberIfPresent(
+        from container: KeyedDecodingContainer<CodingKeys>,
+        forKey key: CodingKeys
+    ) throws -> String? {
+        if let string = try? container.decodeIfPresent(String.self, forKey: key) {
+            return string
+        }
+
+        if let integer = try? container.decodeIfPresent(Int64.self, forKey: key) {
+            return String(integer)
+        }
+
+        return nil
+    }
 }
 
 /// A Mattermost-compatible kChat unread count for a team.
