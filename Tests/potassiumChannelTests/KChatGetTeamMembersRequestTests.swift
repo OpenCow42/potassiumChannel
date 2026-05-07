@@ -85,6 +85,19 @@ struct KChatGetTeamMembersRequestTests {
         #expect(member.schemeAdmin == false)
         #expect(member.explicitRoles == "team_user")
     }
+
+    @Test("kChat get team members decodes numeric member ids returned by live kChat")
+    func kChatGetTeamMembersDecodesNumericMemberIds() throws {
+        let json = #"[{"team_id":"team-id","user_id":12345,"roles":"team_user","delete_at":0}]"#.data(using: .utf8)!
+
+        let members = try JSONDecoder.kChat.decode([KChatTeamMember].self, from: json)
+        let member = try #require(members.first)
+
+        #expect(member.teamId == "team-id")
+        #expect(member.userId == "12345")
+        #expect(member.roles == "team_user")
+        #expect(member.deleteAt == 0)
+    }
 }
 
 private extension JSONDecoder {
