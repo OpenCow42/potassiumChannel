@@ -96,6 +96,14 @@ public struct KChatService: Sendable {
         try await client.send(KChatRequests.autocompleteChannelsForTeamForSearch(teamId: teamId, options: options))
     }
 
+    /// Searches public channels in a kChat team.
+    public func searchChannels(
+        teamId: String,
+        options: KChatChannelSearchOptions
+    ) async throws -> [KChatChannel] {
+        try await client.send(try KChatRequests.searchChannels(teamId: teamId, options: options))
+    }
+
     /// Lists private channels in a kChat team.
     public func getPrivateChannelsForTeam(
         teamId: String,

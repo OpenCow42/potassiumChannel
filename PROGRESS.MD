@@ -505,3 +505,10 @@ not started
 - Reused existing `KChatChannel` response model and added `KChatChannelsForTeamSearchAutocompleteOptions`.
 - Added `KChatRequests.autocompleteChannelsForTeamForSearch(teamId:options:)` and `KChatService.autocompleteChannelsForTeamForSearch(teamId:options:)` returning `[KChatChannel]`.
 - Added request/encoding/header/body/response-decoding tests for the new search autocomplete endpoint.
+
+## 2026-05-07 — kChat search channels route
+
+- Verified OpenAPI `SearchChannels` for `POST /api/v4/teams/{team_id}/channels/search`; required path parameter is `team_id`, required JSON body field is `term`, response `201` is an array of Mattermost-compatible `Channel` objects.
+- Reused existing `KChatChannel` for response decoding.
+- Added `KChatChannelSearchOptions`, `KChatRequests.searchChannels(teamId:options:)`, and `KChatService.searchChannels(teamId:options:)` returning `[KChatChannel]`.
+- Added request tests covering method/path/auth/accept/content-type headers, percent-encoded `team_id`, JSON body encoding, absence of query parameters, required empty `term` preservation, and response decoding.
