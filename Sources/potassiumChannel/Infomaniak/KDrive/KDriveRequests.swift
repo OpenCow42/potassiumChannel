@@ -1460,6 +1460,17 @@ public enum KDriveRequests {
         )
     }
 
+    /// Creates a request that gets the content hash for a kDrive file.
+    public static func getFileHash(
+        driveId: Int,
+        fileId: Int
+    ) -> APIRequest<InfomaniakResponse<KDriveFileHash>> {
+        APIRequest(
+            method: .get,
+            path: "/2/drive/\(driveId)/files/\(fileId)/hash"
+        )
+    }
+
     /// Creates a request that lists versions for a kDrive file.
     public static func listFileVersions(
         driveId: Int,
