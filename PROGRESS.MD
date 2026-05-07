@@ -624,3 +624,9 @@ not started
 - Added typed request/service support for non-destructive `GET /2/drive/{drive_id}/statistics/sizes` as `KDriveRequests.chartFileSizes` and `KDriveService.chartFileSizes`.
 - Added `KDriveChart`, `KDriveChartData`, and flexible chart data value DTOs for the route's chart response schema.
 - Added unit coverage for the OpenAPI path, required query parameters (`from`, `interval`, repeatable `metrics`, `until`), authorization header, and chart decoding.
+
+## 2026-05-07 — kDrive export activities route
+
+- Added typed request/service support for `GET /2/drive/{drive_id}/statistics/activities/export` as `KDriveRequests.exportActivities` and `KDriveService.exportActivities`.
+- The request sends required query parameters `from`, `interval`, singular `metric`, and `until`, and requests `text/csv`.
+- Added unit coverage for OpenAPI path, authorization, CSV accept header, and required query parameters.

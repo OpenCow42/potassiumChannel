@@ -665,6 +665,25 @@ public struct KDriveService: Sendable {
         )
     }
 
+    /// Exports v2 drive-scoped activity statistics as CSV data.
+    public func exportActivities(
+        driveId: Int,
+        from: Int,
+        interval: Int,
+        metric: String,
+        until: Int
+    ) async throws -> Data {
+        try await client.sendData(
+            KDriveRequests.exportActivities(
+                driveId: driveId,
+                from: from,
+                interval: interval,
+                metric: metric,
+                until: until
+            )
+        )
+    }
+
     /// Lists users active on a kDrive during a statistics period.
     public func listActivityUsers(
         driveId: Int,
