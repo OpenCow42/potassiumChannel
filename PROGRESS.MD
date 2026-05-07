@@ -71,7 +71,16 @@ not started
 | Method | Route | Request factory |
 | --- | --- | --- |
 | GET | `/api/v4/config/client` | `KChatRequests.getClientConfig` |
+| GET | `/api/v4/users/{user_id}/image` | `KChatRequests.getUserImage` |
+| GET | `/api/v4/users/{user_id}/image/default` | `KChatRequests.getUserDefaultImage` |
+| GET | `/api/v4/users/{user_id}/teams/members` | `KChatRequests.getUserTeamMembers` |
+| GET | `/api/v4/users/{user_id}/teams/unread` | `KChatRequests.getUserTeamsUnread` |
+| GET | `/api/v4/users/{user_id}/teams/{team_id}/unread` | `KChatRequests.getUserTeamUnread` |
+| POST | `/api/v4/users/usernames` | `KChatRequests.getUsersByUsernames` |
 | GET | `/api/v4/channels/{channel_id}/posts` | `KChatRequests.getChannelPosts` |
+| GET | `/api/v4/posts/{post_id}` | `KChatRequests.getPost` |
+| GET | `/api/v4/posts/{post_id}/thread` | `KChatRequests.getPostThread` |
+| POST | `/api/v4/users/group_channels` | `KChatRequests.getUsersByGroupChannels` |
 
 ### Implemented DTO and service scope
 
@@ -88,12 +97,58 @@ not started
 #### kChat
 
 - `KChatClientConfig` response DTO for Mattermost-compatible client configuration values.
-- `KChatRequests.getClientConfig(format:)` request factory.
-- `KChatService`, which sends kChat route factories through `InfomaniakAPIClient` and can build `https://<team>.kchat.infomaniak.com` base URLs.
+- `KChatRequests.getClientConfig(format:)`, `getUsersByUsernames(body:)`, `getUsersByGroupChannels(body:)`, `getChannelPosts(channelId:options:)`, `getPost(postId:)`, and `getPostThread(postId:)` request factories.
+- `KChatPost` and `KChatPostList` Mattermost-compatible post DTOs.
+- `KChatService`, which sends kChat route factories through `InfomaniakAPIClient`, includes `getPostThread(postId:)`, and can build `https://<team>.kchat.infomaniak.com` base URLs.
+- `KChatService.getUserTeamMembers(userId:)` convenience API returning `[KChatTeamMember]`.
+- `KChatService.getUserTeamsUnread(userId:)` convenience API returning `[KChatTeamUnread]`.
+- `KChatService.getUserTeamUnread(userId:teamId:)` convenience API returning `KChatTeamUnread`.
+- `KChatService.getUserImage(userId:)`, which returns profile image bytes through the raw-data send path.
+- `KChatService.getUserDefaultImage(userId:)`, which returns generated default profile image bytes through the raw-data send path.
 
 ### Validation
 
 - `swift test` passes with route/DTO/channel coverage.
+
+
+## 2026-05-07 — kChat get user team unread route
+
+- Added `GET /api/v4/users/{user_id}/teams/{team_id}/unread` request support via `KChatRequests.getUserTeamUnread`.
+- Added `KChatService.getUserTeamUnread(userId:teamId:)` convenience API returning `KChatTeamUnread`.
+- Added unit tests covering GET method, OpenAPI path, auth/accept headers, no query, no body, special `me`, percent encoding for both user and team ids, and response decoding.
+- Live verification against the configured kChat tenant returned 404 route not found for this singular-team endpoint while `/api/v4/users/{user_id}/teams/unread` exists, so downstream live coverage should stay guarded/documentary unless the API becomes available.
+
+## 2026-05-07 — kChat get user team unreads route
+
+- Added `GET /api/v4/users/{user_id}/teams/unread` request support via `KChatRequests.getUserTeamsUnread`.
+- Added `KChatTeamUnread` response model for Mattermost-compatible team unread rows.
+- Added `KChatService.getUserTeamsUnread(userId:)` convenience API.
+- Added unit tests covering GET method, OpenAPI path, auth/accept headers, no query, no body, special `me`, path encoding, and response decoding.
+
+## 2026-05-07 — kChat get user team members route
+
+- Added `GET /api/v4/users/{user_id}/teams/members` request support via `KChatRequests.getUserTeamMembers`.
+- Added `KChatTeamMember` response model for Mattermost-compatible team membership rows.
+- Added `KChatService.getUserTeamMembers(userId:)` convenience API.
+- Added unit tests covering GET method, OpenAPI path, auth/accept headers, no query, no body, special `me`, path encoding, and response decoding.
+
+## 2026-05-06 — kChat get user default image route
+
+- Added `GET /api/v4/users/{user_id}/image/default` request support via `KChatRequests.getUserDefaultImage`.
+- Added `KChatService.getUserDefaultImage(userId:)` convenience API returning raw default profile image bytes through `InfomaniakAPIClient.sendData`.
+- Added unit tests covering GET method, OpenAPI path, auth/accept headers, no content type, no query, no body, and the special `me` user id path.
+
+## 2026-05-06 — kChat get users by group channels route
+
+- Added `POST /api/v4/users/group_channels` request support via `KChatRequests.getUsersByGroupChannels`.
+- Added `KChatService.getUsersByGroupChannels(channelIds:)` convenience API returning the OpenAPI response shape as `[String: [KChatUser]]` keyed by group-channel id.
+- Added unit tests covering POST method, OpenAPI path, auth/accept/content-type headers, JSON array body, no query parameters, and response decoding.
+
+## 2026-05-06 — kChat get users by usernames route
+
+- Added `POST /api/v4/users/usernames` request support via `KChatRequests.getUsersByUsernames`.
+- Added `KChatService.getUsersByUsernames(usernames:)` convenience API reusing `KChatUser` response decoding.
+- Added unit tests covering POST method, OpenAPI path, auth/accept/content-type headers, JSON array body, no query parameters, and response decoding.
 
 
 ## 2026-05-05 — kDrive create directory route
@@ -206,4 +261,125 @@ not started
 - Added `KChatPostList` for the Mattermost-compatible post list response.
 - Added `KChatService.getChannelPosts(channelId:options:)` convenience API.
 - Added unit tests covering method, OpenAPI path, auth/accept headers, query parameters, absent body, omitted options, and snake-case post-list decoding.
+- Verified with `swift test` in `potassiumChannel`.
+
+## 2026-05-06 — kChat get post route
+
+- Target app: kChat.
+- Branch: `feat/kchat`.
+- Added `GET /api/v4/posts/{post_id}` request support via `KChatRequests.getPost(postId:)`.
+- Reused `KChatPost` for the Mattermost-compatible response body.
+- Added `KChatService.getPost(postId:)` convenience API.
+- Added unit tests covering method, OpenAPI path, auth/accept headers, absent content type/body, and snake-case response decoding.
+- Verified with `swift test` in `potassiumChannel`.
+
+## 2026-05-06 — kChat get post thread route
+
+- Target app: kChat.
+- Branch: `feat/kchat`.
+- Added `GET /api/v4/posts/{post_id}/thread` request support via `KChatRequests.getPostThread(postId:)`, returning the Mattermost-compatible `KChatPostList` thread shape from the OpenAPI spec.
+- Added `KChatService.getPostThread(postId:)` convenience API.
+- Added unit tests covering method, OpenAPI path, auth/accept headers, absent content type/body, and snake-case post-list/thread decoding.
+- Verified with `swift test` in `potassiumChannel`.
+
+## 2026-05-06 — kChat post files info route
+
+- Target app: kChat.
+- Branch: `feat/kchat`.
+- Added `GET /api/v4/posts/{post_id}/files/info` request support via `KChatRequests.getPostFilesInfo(postId:options:)`.
+- Reused `KChatFileInfo` for the `[KChatFileInfo]` endpoint response and added `KChatPostFilesInfoOptions(includeDeleted:)` for the optional `include_deleted` query.
+- Added `KChatService.getPostFilesInfo(postId:options:)` convenience API.
+- Added unit tests covering method, OpenAPI path, auth/accept headers, no body, optional query, and snake-case response decoding.
+- Verified with `swift test` in `potassiumChannel`.
+
+## 2026-05-06 — kChat file info route
+
+- Target app: kChat.
+- Branch: `feat/kchat`.
+- Added `GET /api/v4/files/{file_id}/info` request support via `KChatRequests.getFileInfo(fileId:)`.
+- Reused `KChatFileInfo` for the endpoint response; the local OpenAPI schema matches the existing Mattermost-compatible file info fields.
+- Added `KChatService.getFileInfo(fileId:)` convenience API.
+- Added unit tests covering method, OpenAPI path, auth/accept headers, no body, and snake-case response decoding.
+
+## 2026-05-06 — kChat get user image route
+
+- Target app: kChat.
+- Branch: `feat/kchat`.
+- Added `GET /api/v4/users/{user_id}/image` request support via `KChatRequests.getUserImage(userId:)`, including the API's special `me` user id.
+- Added `KChatService.getUserImage(userId:)` returning raw `Data` through `InfomaniakAPIClient.sendData`, matching the profile image response body.
+- Added unit tests covering method, OpenAPI path, auth/accept headers, absent content type, absent body, absent query, and the special `me` path.
+
+## 2026-05-06 — kChat get user status route
+
+- Target app: kChat.
+- Branch: `feat/kchat`.
+- Added `GET /api/v4/users/{user_id}/status` request support via `KChatRequests.getUserStatus(userId:)`, including the API's special `me` user id.
+- Added `KChatUserStatus` for the Mattermost-compatible status response (`user_id`, `status`, `manual`, `last_activity_at`, and tolerant `dnd_end_time`).
+- Added `KChatService.getUserStatus(userId:)` convenience API.
+- Added unit tests covering method, OpenAPI path, auth/accept headers, no body, the special `me` id, and snake-case response decoding.
+- Verified with `swift test` in `potassiumChannel`.
+
+## 2026-05-06 — kChat batch user statuses route
+
+- Added `POST /api/v4/users/status/ids` request support via `KChatRequests.getUserStatusesByIds(body:)`.
+- Added `KChatService.getUserStatusesByIds(userIds:)`, encoding the OpenAPI raw JSON string-array request body.
+- Added Swift Testing coverage for method, OpenAPI path, auth/content/accept headers, JSON body, and response decoding.
+- Verified targeted coverage with `swift test --filter KChatGetUserStatusesByIdsRequestTests`.
+
+## 2026-05-06 — kChat list users route
+
+- Target app: kChat.
+- Branch: `feat/kchat`.
+- Added `GET /api/v4/users` request support via `KChatRequests.listUsers(options:)`.
+- Added `KChatListUsersOptions` for pagination and common user list filters including team/channel/group, active/inactive, role, sort, and role-scope query parameters.
+- Reused `KChatUser` for the Mattermost-compatible user array response.
+- Added `KChatService.listUsers(options:)` convenience API.
+- Added unit tests covering method, OpenAPI path, auth/accept headers, query parameters, absent body, omitted options, and snake-case response decoding.
+
+## 2026-05-06 — kChat users by ids route
+
+- Target app: kChat.
+- Branch: `feat/kchat`.
+- Added `POST /api/v4/users/ids` request support via `KChatRequests.getUsersByIds(body:)`.
+- Reused `KChatUser` for the returned Mattermost-compatible user array.
+- Added `KChatService.getUsersByIds(userIds:)` convenience API.
+- Added unit tests covering POST method, OpenAPI path, auth/accept/content-type headers, JSON array body, no query parameters, and response decoding.
+
+## 2026-05-06 — kChat users autocomplete route
+
+- Target app: kChat.
+- Branch: `feat/kchat`.
+- Added `GET /api/v4/users/autocomplete` request support via `KChatRequests.autocompleteUsers(options:)`.
+- Added `KChatUserAutocompleteOptions` for `name`, `team_id`, `channel_id`, and `limit` query parameters.
+- Added `KChatUserAutocomplete` for the OpenAPI response shape with separate `users` and `out_of_channel` user arrays, reusing `KChatUser`.
+- Added `KChatService.autocompleteUsers(options:)` convenience API.
+- Added unit tests covering method, OpenAPI path, auth/accept headers, query parameters, no body, omitted optional query parameters, and response decoding.
+
+## 2026-05-06 — kChat get user by username route
+
+- Added `GET /api/v4/users/username/{username}` request support via `KChatRequests.getUserByUsername(username:)`.
+- Added `KChatService.getUserByUsername(username:)` convenience API returning `KChatUser`.
+- Added unit tests covering GET method, OpenAPI path, auth/accept headers, encoded username path segment, no query/body, and response decoding.
+- Hardened request URL construction so path segments are percent-encoded without splitting encoded path parameters.
+
+## 2026-05-07 — kChat get user by username route
+
+- Added `GET /api/v4/users/username/{username}` request support via `KChatRequests.getUserByUsername(username:)`.
+- Added `KChatService.getUserByUsername(username:)` convenience API returning `KChatUser`.
+- Added request/decoding tests covering GET method, OpenAPI path, auth/accept headers, path encoding, no query/body, and response decoding.
+- Verified with `swift test` in `potassiumChannel`.
+
+## 2026-05-07 — kChat get user by email route
+
+- Added `GET /api/v4/users/email/{email}` request support via `KChatRequests.getUserByEmail(email:)`.
+- Added `KChatService.getUserByEmail(email:)` convenience API returning `KChatUser`.
+- Added request/decoding tests covering GET method, OpenAPI path, auth/accept headers, path encoding for email characters including `+`, `@`, and slash safety, no query/body, and response decoding.
+- Verified with `swift test` in `potassiumChannel`.
+
+## 2026-05-07 — kChat get user channel members route
+
+- Added `GET /api/v4/users/{user_id}/channel_members` request support via `KChatRequests.getUserChannelMembers(userId:options:)`.
+- Added `KChatUserChannelMembersOptions`, `KChatChannelMember`, and `KChatChannelNotifyProps` models for the Mattermost-compatible response.
+- Added `KChatService.getUserChannelMembers(userId:options:)` convenience API.
+- Added request/decoding tests covering GET method, OpenAPI path, auth/accept headers, path encoding, special `me`, pagination query, no body, and response decoding.
 - Verified with `swift test` in `potassiumChannel`.

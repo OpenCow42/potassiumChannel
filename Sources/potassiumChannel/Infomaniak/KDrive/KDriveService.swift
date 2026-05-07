@@ -300,6 +300,17 @@ public struct KDriveService: Sendable {
         )
     }
 
+    /// Builds a kDrive archive from selected files or a parent directory.
+    public func buildArchive(
+        driveId: Int,
+        options: BuildKDriveArchiveOptions
+    ) async throws -> InfomaniakResponse<KDriveUUIDResource> {
+        let body = try JSONEncoder().encode(options)
+        return try await client.send(
+            KDriveRequests.buildArchive(driveId: driveId, body: body)
+        )
+    }
+
     /// Downloads a built kDrive archive as ZIP data.
     public func downloadArchive(
         driveId: Int,

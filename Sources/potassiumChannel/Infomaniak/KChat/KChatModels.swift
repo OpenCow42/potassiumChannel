@@ -98,7 +98,132 @@ public struct KChatUserSearchOptions: Encodable, Equatable, Sendable {
     }
 }
 
-/// A Mattermost-compatible kChat user returned by the user search endpoint.
+/// Query options accepted by the Mattermost-compatible kChat users list endpoint.
+public struct KChatListUsersOptions: Equatable, Sendable {
+    /// The page to select.
+    public let page: Int?
+
+    /// The number of users per page.
+    public let perPage: Int?
+
+    /// Restricts the list to users in a team.
+    public let inTeam: String?
+
+    /// Excludes users in a team.
+    public let notInTeam: String?
+
+    /// Restricts the list to users in a channel.
+    public let inChannel: String?
+
+    /// Excludes users in a channel.
+    public let notInChannel: String?
+
+    /// Restricts the list to users in a group.
+    public let inGroup: String?
+
+    /// Applies group-constrained filtering.
+    public let groupConstrained: Bool?
+
+    /// Lists users that are not on any team.
+    public let withoutTeam: Bool?
+
+    /// Lists only active users.
+    public let active: Bool?
+
+    /// Lists only deactivated users.
+    public let inactive: Bool?
+
+    /// Returns users that have this role.
+    public let role: String?
+
+    /// Sort mode supported by the selected filter.
+    public let sort: String?
+
+    /// Comma-separated system roles filter.
+    public let roles: String?
+
+    /// Comma-separated channel roles filter.
+    public let channelRoles: String?
+
+    /// Comma-separated team roles filter.
+    public let teamRoles: String?
+
+    /// Creates kChat users list query options.
+    public init(
+        page: Int? = nil,
+        perPage: Int? = nil,
+        inTeam: String? = nil,
+        notInTeam: String? = nil,
+        inChannel: String? = nil,
+        notInChannel: String? = nil,
+        inGroup: String? = nil,
+        groupConstrained: Bool? = nil,
+        withoutTeam: Bool? = nil,
+        active: Bool? = nil,
+        inactive: Bool? = nil,
+        role: String? = nil,
+        sort: String? = nil,
+        roles: String? = nil,
+        channelRoles: String? = nil,
+        teamRoles: String? = nil
+    ) {
+        self.page = page
+        self.perPage = perPage
+        self.inTeam = inTeam
+        self.notInTeam = notInTeam
+        self.inChannel = inChannel
+        self.notInChannel = notInChannel
+        self.inGroup = inGroup
+        self.groupConstrained = groupConstrained
+        self.withoutTeam = withoutTeam
+        self.active = active
+        self.inactive = inactive
+        self.role = role
+        self.sort = sort
+        self.roles = roles
+        self.channelRoles = channelRoles
+        self.teamRoles = teamRoles
+    }
+}
+
+/// Query options accepted by the Mattermost-compatible kChat users autocomplete endpoint.
+public struct KChatUserAutocompleteOptions: Equatable, Sendable {
+    /// Team ID used to filter autocomplete results.
+    public let teamId: String?
+
+    /// Channel ID used to filter autocomplete results.
+    public let channelId: String?
+
+    /// Username, nickname, first name, or last name search term.
+    public let name: String
+
+    /// Maximum number of users to return in each subresult.
+    public let limit: Int?
+
+    /// Creates kChat users autocomplete query options.
+    public init(teamId: String? = nil, channelId: String? = nil, name: String, limit: Int? = nil) {
+        self.teamId = teamId
+        self.channelId = channelId
+        self.name = name
+        self.limit = limit
+    }
+}
+
+/// A Mattermost-compatible kChat user autocomplete response.
+public struct KChatUserAutocomplete: Codable, Equatable, Sendable {
+    /// Main user autocomplete results.
+    public let users: [KChatUser]?
+
+    /// Users outside the channel when autocompleting in a specific channel.
+    public let outOfChannel: [KChatUser]?
+
+    public init(users: [KChatUser]? = nil, outOfChannel: [KChatUser]? = nil) {
+        self.users = users
+        self.outOfChannel = outOfChannel
+    }
+}
+
+/// A Mattermost-compatible kChat user returned by user endpoints.
 public struct KChatUser: Codable, Equatable, Sendable {
     public let id: String?
     public let createAt: Int64?
@@ -163,6 +288,54 @@ public struct KChatUser: Codable, Equatable, Sendable {
     }
 }
 
+/// A Mattermost-compatible kChat user status response.
+public struct KChatUserStatus: Codable, Equatable, Sendable {
+    /// User identifier for this status value.
+    public let userId: String?
+
+    /// User presence status, for example `online`, `away`, `offline`, or `dnd`.
+    public let status: String?
+
+    /// Whether the status was set manually.
+    public let manual: Bool?
+
+    /// Last user activity timestamp in epoch milliseconds.
+    public let lastActivityAt: Int64?
+
+    /// Do-not-disturb end timestamp when supplied by Mattermost-compatible servers.
+    public let dndEndTime: Int64?
+
+    /// Creates a kChat user status response.
+    public init(
+        userId: String? = nil,
+        status: String? = nil,
+        manual: Bool? = nil,
+        lastActivityAt: Int64? = nil,
+        dndEndTime: Int64? = nil
+    ) {
+        self.userId = userId
+        self.status = status
+        self.manual = manual
+        self.lastActivityAt = lastActivityAt
+        self.dndEndTime = dndEndTime
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        userId = try container.decodeIfPresent(String.self, forKey: .userId)
+        status = try container.decodeIfPresent(String.self, forKey: .status)
+        if let boolValue = try? container.decodeIfPresent(Bool.self, forKey: .manual) {
+            manual = boolValue
+        } else if let intValue = try? container.decodeIfPresent(Int.self, forKey: .manual) {
+            manual = intValue != 0
+        } else {
+            manual = nil
+        }
+        lastActivityAt = try container.decodeIfPresent(Int64.self, forKey: .lastActivityAt)
+        dndEndTime = try container.decodeIfPresent(Int64.self, forKey: .dndEndTime)
+    }
+}
+
 /// A Mattermost-compatible kChat team returned by user team endpoints.
 public struct KChatTeam: Codable, Equatable, Sendable {
     public let id: String?
@@ -210,6 +383,68 @@ public struct KChatTeam: Codable, Equatable, Sendable {
     }
 }
 
+/// A Mattermost-compatible kChat team membership returned by user team member endpoints.
+public struct KChatTeamMember: Codable, Equatable, Sendable {
+    /// Team identifier for this membership.
+    public let teamId: String?
+
+    /// User identifier for this membership.
+    public let userId: String?
+
+    /// Complete role list, including implicit scheme roles.
+    public let roles: String?
+
+    /// Deletion timestamp in epoch milliseconds.
+    public let deleteAt: Int64?
+
+    /// Whether this member receives the team's default user role from the permission scheme.
+    public let schemeUser: Bool?
+
+    /// Whether this member receives the team's default admin role from the permission scheme.
+    public let schemeAdmin: Bool?
+
+    /// Explicitly assigned roles, excluding implicit scheme roles.
+    public let explicitRoles: String?
+
+    /// Creates a kChat team membership.
+    public init(
+        teamId: String? = nil,
+        userId: String? = nil,
+        roles: String? = nil,
+        deleteAt: Int64? = nil,
+        schemeUser: Bool? = nil,
+        schemeAdmin: Bool? = nil,
+        explicitRoles: String? = nil
+    ) {
+        self.teamId = teamId
+        self.userId = userId
+        self.roles = roles
+        self.deleteAt = deleteAt
+        self.schemeUser = schemeUser
+        self.schemeAdmin = schemeAdmin
+        self.explicitRoles = explicitRoles
+    }
+}
+
+/// A Mattermost-compatible kChat unread count for a team.
+public struct KChatTeamUnread: Codable, Equatable, Sendable {
+    /// Team identifier for these unread counters.
+    public let teamId: String?
+
+    /// Number of unread messages in the team.
+    public let msgCount: Int?
+
+    /// Number of unread mentions in the team.
+    public let mentionCount: Int?
+
+    /// Creates a kChat team unread count.
+    public init(teamId: String? = nil, msgCount: Int? = nil, mentionCount: Int? = nil) {
+        self.teamId = teamId
+        self.msgCount = msgCount
+        self.mentionCount = mentionCount
+    }
+}
+
 /// Query parameters accepted by the kChat user team channels endpoint.
 public struct KChatUserTeamChannelsOptions: Equatable, Sendable {
     /// Whether deleted channels should be included.
@@ -222,6 +457,87 @@ public struct KChatUserTeamChannelsOptions: Equatable, Sendable {
     public init(includeDeleted: Bool? = nil, lastDeleteAt: Int? = nil) {
         self.includeDeleted = includeDeleted
         self.lastDeleteAt = lastDeleteAt
+    }
+}
+
+/// Query parameters accepted by the kChat user channel memberships endpoint.
+public struct KChatUserChannelMembersOptions: Equatable, Sendable {
+    /// The page to select.
+    public let page: Int?
+
+    /// The number of memberships per page.
+    public let pageSize: Int?
+
+    /// Creates kChat user channel membership listing options.
+    public init(page: Int? = nil, pageSize: Int? = nil) {
+        self.page = page
+        self.pageSize = pageSize
+    }
+}
+
+/// Mattermost-compatible channel notification settings for a kChat channel member.
+public struct KChatChannelNotifyProps: Codable, Equatable, Sendable {
+    public let desktop: String?
+    public let email: String?
+    public let markUnread: String?
+    public let push: String?
+    public let ignoreChannelMentions: String?
+
+    /// Creates kChat channel notification settings.
+    public init(
+        desktop: String? = nil,
+        email: String? = nil,
+        markUnread: String? = nil,
+        push: String? = nil,
+        ignoreChannelMentions: String? = nil
+    ) {
+        self.desktop = desktop
+        self.email = email
+        self.markUnread = markUnread
+        self.push = push
+        self.ignoreChannelMentions = ignoreChannelMentions
+    }
+}
+
+/// A Mattermost-compatible kChat channel membership with team metadata.
+public struct KChatChannelMember: Codable, Equatable, Sendable {
+    public let channelId: String?
+    public let userId: String?
+    public let roles: String?
+    public let lastViewedAt: Int64?
+    public let msgCount: Int?
+    public let mentionCount: Int?
+    public let notifyProps: KChatChannelNotifyProps?
+    public let lastUpdateAt: Int64?
+    public let teamDisplayName: String?
+    public let teamName: String?
+    public let teamUpdateAt: Int64?
+
+    /// Creates a kChat channel membership with optional team metadata.
+    public init(
+        channelId: String? = nil,
+        userId: String? = nil,
+        roles: String? = nil,
+        lastViewedAt: Int64? = nil,
+        msgCount: Int? = nil,
+        mentionCount: Int? = nil,
+        notifyProps: KChatChannelNotifyProps? = nil,
+        lastUpdateAt: Int64? = nil,
+        teamDisplayName: String? = nil,
+        teamName: String? = nil,
+        teamUpdateAt: Int64? = nil
+    ) {
+        self.channelId = channelId
+        self.userId = userId
+        self.roles = roles
+        self.lastViewedAt = lastViewedAt
+        self.msgCount = msgCount
+        self.mentionCount = mentionCount
+        self.notifyProps = notifyProps
+        self.lastUpdateAt = lastUpdateAt
+        self.teamDisplayName = teamDisplayName
+        self.teamName = teamName
+        self.teamUpdateAt = teamUpdateAt
     }
 }
 
@@ -259,6 +575,17 @@ public struct KChatChannelPostsOptions: Equatable, Sendable {
         self.since = since
         self.before = before
         self.after = after
+        self.includeDeleted = includeDeleted
+    }
+}
+
+/// Query parameters accepted by the kChat post file info endpoint.
+public struct KChatPostFilesInfoOptions: Equatable, Sendable {
+    /// Whether deleted files should be included. Requires system management permission.
+    public let includeDeleted: Bool?
+
+    /// Creates kChat post file info options.
+    public init(includeDeleted: Bool? = nil) {
         self.includeDeleted = includeDeleted
     }
 }

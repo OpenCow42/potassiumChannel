@@ -1570,6 +1570,18 @@ public enum KDriveRequests {
         )
     }
 
+    /// Creates a request that builds a kDrive archive from selected files or a parent directory.
+    public static func buildArchive(
+        driveId: Int,
+        body: Data
+    ) -> APIRequest<InfomaniakResponse<KDriveUUIDResource>> {
+        APIRequest(
+            method: .post,
+            path: "/3/drive/\(driveId)/files/archives",
+            body: body
+        )
+    }
+
     /// Creates a request that downloads a built kDrive archive.
     public static func downloadArchive(
         driveId: Int,
