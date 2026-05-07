@@ -22,39 +22,63 @@ public actor InfomaniakAPIClient {
 
     /// Builds a URL request without executing it.
     public func makeURLRequest<Response>(for request: APIRequest<Response>) throws -> URLRequest {
+        let url = try makeURL(for: request)
+        var urlRequest = URLRequest(url: url)
+        configureHTTPBasics(on: &urlRequest, for: request)
+        applyDefaultHeaders(to: &urlRequest, hasBody: request.body != nil)
+        applyCustomHeaders(request.headers, to: &urlRequest)
+
+        return urlRequest
+    }
+
+    private func makeURL<Response>(for request: APIRequest<Response>) throws -> URL {
         guard var components = URLComponents(url: configuration.baseURL, resolvingAgainstBaseURL: false) else {
             throw APIClientError.invalidURL(path: request.path)
         }
 
-        let basePath = components.path.trimmingCharacters(in: CharacterSet(charactersIn: "/"))
-        let requestPath = request.path.trimmingCharacters(in: CharacterSet(charactersIn: "/"))
-        let pathSegments = [basePath, requestPath]
-            .filter { !$0.isEmpty }
-            .flatMap { $0.split(separator: "/", omittingEmptySubsequences: true).map(String.init) }
-        components.percentEncodedPath = "/" + pathSegments.map(Self.percentEncodePathSegment).joined(separator: "/")
-        components.queryItems = request.queryParameters.flatMap { parameter in
-            parameter.value.makeQueryItems(named: parameter.name)
-        }
+        components.percentEncodedPath = percentEncodedPath(for: request.path, basePath: components.path)
+        components.queryItems = queryItems(from: request.queryParameters)
 
         guard let url = components.url else {
             throw APIClientError.invalidURL(path: request.path)
         }
 
-        var urlRequest = URLRequest(url: url)
+        return url
+    }
+
+    private func percentEncodedPath(for requestPath: String, basePath: String) -> String {
+        let pathSegments = [basePath, requestPath]
+            .map { $0.trimmingCharacters(in: CharacterSet(charactersIn: "/")) }
+            .filter { !$0.isEmpty }
+            .flatMap { $0.split(separator: "/", omittingEmptySubsequences: true).map(String.init) }
+
+        return "/" + pathSegments.map(Self.percentEncodePathSegment).joined(separator: "/")
+    }
+
+    private func queryItems(from parameters: [QueryParameter]) -> [URLQueryItem] {
+        parameters.flatMap { parameter in
+            parameter.value.makeQueryItems(named: parameter.name)
+        }
+    }
+
+    private func configureHTTPBasics<Response>(on urlRequest: inout URLRequest, for request: APIRequest<Response>) {
         urlRequest.httpMethod = request.method.rawValue
         urlRequest.httpBody = request.body
+    }
+
+    private func applyDefaultHeaders(to urlRequest: inout URLRequest, hasBody: Bool) {
         urlRequest.setValue("Bearer \(configuration.bearerToken)", forHTTPHeaderField: "Authorization")
         urlRequest.setValue("application/json", forHTTPHeaderField: "Accept")
 
-        if request.body != nil {
+        if hasBody {
             urlRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
         }
+    }
 
-        for header in request.headers {
+    private func applyCustomHeaders(_ headers: [HTTPHeader], to urlRequest: inout URLRequest) {
+        for header in headers {
             urlRequest.setValue(header.value, forHTTPHeaderField: header.name)
         }
-
-        return urlRequest
     }
 
     private static func percentEncodePathSegment(_ segment: String) -> String {
