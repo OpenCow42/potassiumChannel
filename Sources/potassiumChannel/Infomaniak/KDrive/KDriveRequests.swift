@@ -1665,6 +1665,73 @@ public enum KDriveRequests {
         )
     }
 
+    /// Creates a request that lists share links active on a kDrive during a statistics period.
+    public static func listActivityShareLinks(
+        driveId: Int,
+        from: Int,
+        until: Int,
+        options: ListKDriveActivityShareLinksOptions = ListKDriveActivityShareLinksOptions()
+    ) -> APIRequest<PaginatedInfomaniakResponse<[KDriveStatisticShareLink]>> {
+        var queryParameters: [QueryParameter] = [
+            QueryParameter(name: "from", value: .integer(from)),
+            QueryParameter(name: "until", value: .integer(until)),
+        ]
+
+        if let includedResources = options.includedResources {
+            queryParameters.append(QueryParameter(name: "with", value: .string(includedResources)))
+        }
+
+        if let maxView = options.maxView {
+            queryParameters.append(QueryParameter(name: "max_view", value: .integer(maxView)))
+        }
+
+        if let minView = options.minView {
+            queryParameters.append(QueryParameter(name: "min_view", value: .integer(minView)))
+        }
+
+        if !options.rights.isEmpty {
+            queryParameters.append(QueryParameter(name: "rights", value: .strings(options.rights)))
+        }
+
+        if let search = options.search {
+            queryParameters.append(QueryParameter(name: "search", value: .string(search)))
+        }
+
+        if let validUntil = options.validUntil {
+            queryParameters.append(QueryParameter(name: "valid_until", value: .integer(validUntil)))
+        }
+
+        if let page = options.page {
+            queryParameters.append(QueryParameter(name: "page", value: .integer(page)))
+        }
+
+        if let perPage = options.perPage {
+            queryParameters.append(QueryParameter(name: "per_page", value: .integer(perPage)))
+        }
+
+        if let total = options.total {
+            queryParameters.append(QueryParameter(name: "total", value: .bool(total)))
+        }
+
+        if !options.orderBy.isEmpty {
+            queryParameters.append(QueryParameter(name: "order_by", value: .strings(options.orderBy)))
+        }
+
+        if let order = options.order {
+            queryParameters.append(QueryParameter(name: "order", value: .string(order)))
+        }
+
+        for (field, direction) in options.orderFor.sorted(by: { $0.key < $1.key }) {
+            queryParameters.append(QueryParameter(name: "order_for[\(field)]", value: .string(direction)))
+        }
+
+        return APIRequest(
+            method: .get,
+            path: "/2/drive/\(driveId)/statistics/activities/links",
+            queryParameters: queryParameters
+        )
+    }
+
     /// Creates a request that lists generated kDrive activity reports.
     public static func listActivityReports(
         driveId: Int,
