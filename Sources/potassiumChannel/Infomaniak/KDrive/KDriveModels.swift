@@ -630,6 +630,33 @@ public enum KDriveChartDataValue: Codable, Equatable, Sendable {
     }
 }
 
+/// A user active on a kDrive during a statistics period.
+public struct KDriveActiveMember: Codable, Equatable, Sendable {
+    /// User identifier, when Infomaniak can associate the activity with a user.
+    public let userId: Int?
+
+    /// Connected user display name, when available.
+    public let name: String?
+
+    /// User agent used on connection.
+    public let agent: String
+
+    /// IP address used on connection.
+    public let ip: String
+
+    /// Last login timestamp.
+    public let lastLoginAt: Int
+
+    /// Creates an active-member statistics value.
+    public init(userId: Int?, name: String?, agent: String, ip: String, lastLoginAt: Int) {
+        self.userId = userId
+        self.name = name
+        self.agent = agent
+        self.ip = ip
+        self.lastLoginAt = lastLoginAt
+    }
+}
+
 /// A drive-scoped file activity returned by the kDrive v3 API.
 public struct KDriveDriveActivity: Codable, Equatable, Sendable {
     /// The unique activity identifier.
