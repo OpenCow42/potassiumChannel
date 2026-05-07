@@ -71,6 +71,7 @@ not started
 | Method | Route | Request factory |
 | --- | --- | --- |
 | GET | `/api/v4/config/client` | `KChatRequests.getClientConfig` |
+| GET | `/api/v4/teams` | `KChatRequests.listTeams` |
 | GET | `/api/v4/users/{user_id}/image` | `KChatRequests.getUserImage` |
 | GET | `/api/v4/users/{user_id}/image/default` | `KChatRequests.getUserDefaultImage` |
 | GET | `/api/v4/users/{user_id}/teams/members` | `KChatRequests.getUserTeamMembers` |
@@ -97,9 +98,11 @@ not started
 #### kChat
 
 - `KChatClientConfig` response DTO for Mattermost-compatible client configuration values.
-- `KChatRequests.getClientConfig(format:)`, `getUsersByUsernames(body:)`, `getUsersByGroupChannels(body:)`, `getChannelPosts(channelId:options:)`, `getPost(postId:)`, and `getPostThread(postId:)` request factories.
+- `KChatListTeamsOptions` for the Mattermost-compatible teams list endpoint.
+- `KChatRequests.getClientConfig(format:)`, `listTeams(options:)`, `getUsersByUsernames(body:)`, `getUsersByGroupChannels(body:)`, `getChannelPosts(channelId:options:)`, `getPost(postId:)`, and `getPostThread(postId:)` request factories.
 - `KChatPost` and `KChatPostList` Mattermost-compatible post DTOs.
 - `KChatService`, which sends kChat route factories through `InfomaniakAPIClient`, includes `getPostThread(postId:)`, and can build `https://<team>.kchat.infomaniak.com` base URLs.
+- `KChatService.listTeams(options:)` convenience API returning `[KChatTeam]`.
 - `KChatService.getUserTeamMembers(userId:)` convenience API returning `[KChatTeamMember]`.
 - `KChatService.getUserTeamsUnread(userId:)` convenience API returning `[KChatTeamUnread]`.
 - `KChatService.getUserTeamUnread(userId:teamId:)` convenience API returning `KChatTeamUnread`.
@@ -110,6 +113,16 @@ not started
 
 - `swift test` passes with route/DTO/channel coverage.
 
+
+## 2026-05-07 — kChat get all teams route
+
+- Target app: kChat.
+- Branch: `feat/kchat`.
+- Added `GET /api/v4/teams` request support via `KChatRequests.listTeams(options:)`.
+- Added `KChatListTeamsOptions` for `page`, `per_page`, `include_total_count`, and `exclude_policy_constrained` query parameters.
+- Reused `KChatTeam` response decoding and added `KChatService.listTeams(options:)` convenience API.
+- Added unit tests covering GET method, OpenAPI path, auth/accept headers, query encoding, omitted empty options, no body, and snake-case team response decoding.
+- Verified with `swift test` in `potassiumChannel`.
 
 ## 2026-05-07 — kChat get user team unread route
 

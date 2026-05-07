@@ -98,6 +98,34 @@ public struct KChatUserSearchOptions: Encodable, Equatable, Sendable {
     }
 }
 
+/// Query options accepted by the Mattermost-compatible kChat teams list endpoint.
+public struct KChatListTeamsOptions: Equatable, Sendable {
+    /// The page to select.
+    public let page: Int?
+
+    /// The number of teams per page.
+    public let perPage: Int?
+
+    /// Whether the API should include a total count when supported by the server.
+    public let includeTotalCount: Bool?
+
+    /// Whether policy-constrained teams should be excluded.
+    public let excludePolicyConstrained: Bool?
+
+    /// Creates kChat teams list query options.
+    public init(
+        page: Int? = nil,
+        perPage: Int? = nil,
+        includeTotalCount: Bool? = nil,
+        excludePolicyConstrained: Bool? = nil
+    ) {
+        self.page = page
+        self.perPage = perPage
+        self.includeTotalCount = includeTotalCount
+        self.excludePolicyConstrained = excludePolicyConstrained
+    }
+}
+
 /// Query options accepted by the Mattermost-compatible kChat users list endpoint.
 public struct KChatListUsersOptions: Equatable, Sendable {
     /// The page to select.

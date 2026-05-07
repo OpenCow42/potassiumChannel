@@ -22,6 +22,33 @@ public enum KChatRequests {
         )
     }
 
+    /// Creates a request that lists kChat teams.
+    public static func listTeams(options: KChatListTeamsOptions = KChatListTeamsOptions()) -> APIRequest<[KChatTeam]> {
+        var queryParameters: [QueryParameter] = []
+
+        if let page = options.page {
+            queryParameters.append(QueryParameter(name: "page", value: .integer(page)))
+        }
+
+        if let perPage = options.perPage {
+            queryParameters.append(QueryParameter(name: "per_page", value: .integer(perPage)))
+        }
+
+        if let includeTotalCount = options.includeTotalCount {
+            queryParameters.append(QueryParameter(name: "include_total_count", value: .bool(includeTotalCount)))
+        }
+
+        if let excludePolicyConstrained = options.excludePolicyConstrained {
+            queryParameters.append(QueryParameter(name: "exclude_policy_constrained", value: .bool(excludePolicyConstrained)))
+        }
+
+        return APIRequest(
+            method: .get,
+            path: "/api/v4/teams",
+            queryParameters: queryParameters
+        )
+    }
+
     /// Creates a request that searches kChat users.
     public static func searchUsers(body: Data) -> APIRequest<[KChatUser]> {
         APIRequest(
