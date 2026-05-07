@@ -29,6 +29,148 @@ public struct KChatService: Sendable {
         try await client.send(KChatRequests.getClientConfig(format: format))
     }
 
+    /// Lists teams in kChat.
+    public func listTeams(options: KChatListTeamsOptions = KChatListTeamsOptions()) async throws -> [KChatTeam] {
+        try await client.send(KChatRequests.listTeams(options: options))
+    }
+
+    /// Lists all kChat channels visible to the token.
+    public func listChannels(options: KChatListChannelsOptions = KChatListChannelsOptions()) async throws -> [KChatChannel] {
+        try await client.send(KChatRequests.listChannels(options: options))
+    }
+
+    /// Gets a kChat channel by id.
+    public func getChannel(channelId: String) async throws -> KChatChannel {
+        try await client.send(KChatRequests.getChannel(channelId: channelId))
+    }
+
+    /// Gets statistics for a kChat channel.
+    public func getChannelStats(channelId: String) async throws -> KChatChannelStats {
+        try await client.send(KChatRequests.getChannelStats(channelId: channelId))
+    }
+
+    /// Gets a team in kChat by id.
+    public func getTeam(teamId: String) async throws -> KChatTeam {
+        try await client.send(KChatRequests.getTeam(teamId: teamId))
+    }
+
+    /// Gets a team in kChat by name.
+    public func getTeamByName(name: String) async throws -> KChatTeam {
+        try await client.send(KChatRequests.getTeamByName(name: name))
+    }
+
+    /// Gets statistics for a kChat team.
+    public func getTeamStats(teamId: String) async throws -> KChatTeamStats {
+        try await client.send(KChatRequests.getTeamStats(teamId: teamId))
+    }
+
+    /// Lists members in a kChat team.
+    public func getTeamMembers(
+        teamId: String,
+        options: KChatTeamMembersOptions = KChatTeamMembersOptions()
+    ) async throws -> [KChatTeamMember] {
+        try await client.send(KChatRequests.getTeamMembers(teamId: teamId, options: options))
+    }
+
+    /// Gets kChat team members by user ids.
+    public func getTeamMembersByIds(teamId: String, userIds: [String]) async throws -> [KChatTeamMember] {
+        try await client.send(try KChatRequests.getTeamMembersByIds(teamId: teamId, userIds: userIds))
+    }
+
+    /// Lists members in a kChat channel.
+    public func getChannelMembers(
+        channelId: String,
+        options: KChatChannelMembersOptions = KChatChannelMembersOptions()
+    ) async throws -> [KChatChannelMember] {
+        try await client.send(KChatRequests.getChannelMembers(channelId: channelId, options: options))
+    }
+
+    /// Gets a member in a kChat channel.
+    public func getChannelMember(channelId: String, userId: String) async throws -> KChatChannelMember {
+        try await client.send(KChatRequests.getChannelMember(channelId: channelId, userId: userId))
+    }
+
+    /// Gets kChat channel members by user ids.
+    public func getChannelMembersByIds(channelId: String, userIds: [String]) async throws -> [KChatChannelMember] {
+        try await client.send(try KChatRequests.getChannelMembersByIds(channelId: channelId, userIds: userIds))
+    }
+
+    /// Lists public channels in a kChat team.
+    public func getPublicChannelsForTeam(
+        teamId: String,
+        options: KChatPublicChannelsForTeamOptions = KChatPublicChannelsForTeamOptions()
+    ) async throws -> [KChatChannel] {
+        try await client.send(KChatRequests.getPublicChannelsForTeam(teamId: teamId, options: options))
+    }
+
+    /// Gets a channel in a kChat team by channel name.
+    public func getChannelByName(teamId: String, channelName: String) async throws -> KChatChannel {
+        try await client.send(KChatRequests.getChannelByName(teamId: teamId, channelName: channelName))
+    }
+
+    /// Gets a channel by kChat team name and channel name.
+    public func getChannelByNameForTeamName(teamName: String, channelName: String) async throws -> KChatChannel {
+        try await client.send(KChatRequests.getChannelByNameForTeamName(teamName: teamName, channelName: channelName))
+    }
+
+    /// Autocompletes public channels in a kChat team.
+    public func autocompleteChannelsForTeam(
+        teamId: String,
+        options: KChatChannelsForTeamAutocompleteOptions
+    ) async throws -> [KChatChannel] {
+        try await client.send(KChatRequests.autocompleteChannelsForTeam(teamId: teamId, options: options))
+    }
+
+    /// Autocompletes channels for search in a kChat team.
+    public func autocompleteChannelsForTeamForSearch(
+        teamId: String,
+        options: KChatChannelsForTeamSearchAutocompleteOptions
+    ) async throws -> [KChatChannel] {
+        try await client.send(KChatRequests.autocompleteChannelsForTeamForSearch(teamId: teamId, options: options))
+    }
+
+    /// Searches public channels in a kChat team.
+    public func searchChannels(
+        teamId: String,
+        options: KChatChannelSearchOptions
+    ) async throws -> [KChatChannel] {
+        try await client.send(try KChatRequests.searchChannels(teamId: teamId, options: options))
+    }
+
+    /// Searches archived channels in a kChat team.
+    public func searchArchivedChannels(
+        teamId: String,
+        options: KChatChannelSearchOptions
+    ) async throws -> [KChatChannel] {
+        try await client.send(try KChatRequests.searchArchivedChannels(teamId: teamId, options: options))
+    }
+
+    /// Searches all private and open kChat channels visible to the token.
+    public func searchAllChannels(options: KChatSearchAllChannelsOptions) async throws -> KChatSearchAllChannelsResponse {
+        try await client.send(try KChatRequests.searchAllChannels(options: options))
+    }
+
+    /// Lists private channels in a kChat team.
+    public func getPrivateChannelsForTeam(
+        teamId: String,
+        options: KChatPrivateChannelsForTeamOptions = KChatPrivateChannelsForTeamOptions()
+    ) async throws -> [KChatChannel] {
+        try await client.send(KChatRequests.getPrivateChannelsForTeam(teamId: teamId, options: options))
+    }
+
+    /// Lists deleted channels in a kChat team.
+    public func getDeletedChannelsForTeam(
+        teamId: String,
+        options: KChatDeletedChannelsForTeamOptions = KChatDeletedChannelsForTeamOptions()
+    ) async throws -> [KChatChannel] {
+        try await client.send(KChatRequests.getDeletedChannelsForTeam(teamId: teamId, options: options))
+    }
+
+    /// Gets a member in a kChat team.
+    public func getTeamMember(teamId: String, userId: String) async throws -> KChatTeamMember {
+        try await client.send(KChatRequests.getTeamMember(teamId: teamId, userId: userId))
+    }
+
     /// Searches users in kChat.
     public func searchUsers(options: KChatUserSearchOptions) async throws -> [KChatUser] {
         let body = try JSONEncoder().encode(options)
@@ -142,6 +284,11 @@ public struct KChatService: Sendable {
         options: KChatChannelPostsOptions = KChatChannelPostsOptions()
     ) async throws -> KChatPostList {
         try await client.send(KChatRequests.getChannelPosts(channelId: channelId, options: options))
+    }
+
+    /// Gets pinned posts for a kChat channel.
+    public func getPinnedPosts(channelId: String) async throws -> KChatPostList {
+        try await client.send(KChatRequests.getPinnedPosts(channelId: channelId))
     }
 
     /// Creates a kChat post.

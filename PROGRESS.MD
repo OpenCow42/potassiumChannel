@@ -71,6 +71,16 @@ not started
 | Method | Route | Request factory |
 | --- | --- | --- |
 | GET | `/api/v4/config/client` | `KChatRequests.getClientConfig` |
+| GET | `/api/v4/channels` | `KChatRequests.listChannels` |
+| GET | `/api/v4/channels/{channel_id}` | `KChatRequests.getChannel` |
+| POST | `/api/v4/channels/search` | `KChatRequests.searchAllChannels` |
+| GET | `/api/v4/channels/{channel_id}/stats` | `KChatRequests.getChannelStats` |
+| GET | `/api/v4/channels/{channel_id}/members/{user_id}` | `KChatRequests.getChannelMember` |
+| POST | `/api/v4/channels/{channel_id}/members/ids` | `KChatRequests.getChannelMembersByIds` |
+| GET | `/api/v4/teams` | `KChatRequests.listTeams` |
+| POST | `/api/v4/teams/{team_id}/members/ids` | `KChatRequests.getTeamMembersByIds` |
+| GET | `/api/v4/teams/{team_id}/stats` | `KChatRequests.getTeamStats` |
+| GET | `/api/v4/teams/{team_id}/members/{user_id}` | `KChatRequests.getTeamMember` |
 | GET | `/api/v4/users/{user_id}/image` | `KChatRequests.getUserImage` |
 | GET | `/api/v4/users/{user_id}/image/default` | `KChatRequests.getUserDefaultImage` |
 | GET | `/api/v4/users/{user_id}/teams/members` | `KChatRequests.getUserTeamMembers` |
@@ -97,9 +107,22 @@ not started
 #### kChat
 
 - `KChatClientConfig` response DTO for Mattermost-compatible client configuration values.
-- `KChatRequests.getClientConfig(format:)`, `getUsersByUsernames(body:)`, `getUsersByGroupChannels(body:)`, `getChannelPosts(channelId:options:)`, `getPost(postId:)`, and `getPostThread(postId:)` request factories.
+- `KChatListTeamsOptions` for the Mattermost-compatible teams list endpoint.
+- `KChatListChannelsOptions` for the Mattermost-compatible all channels list endpoint.
+- `KChatSearchAllChannelsOptions` and `KChatSearchAllChannelsResponse` for `POST /api/v4/channels/search`, including optional `system_console` query support and flexible paginated/non-paginated response decoding.
+- `KChatRequests.getClientConfig(format:)`, `listTeams(options:)`, `getUsersByUsernames(body:)`, `getUsersByGroupChannels(body:)`, `getChannelPosts(channelId:options:)`, `getPost(postId:)`, and `getPostThread(postId:)` request factories.
 - `KChatPost` and `KChatPostList` Mattermost-compatible post DTOs.
 - `KChatService`, which sends kChat route factories through `InfomaniakAPIClient`, includes `getPostThread(postId:)`, and can build `https://<team>.kchat.infomaniak.com` base URLs.
+- `KChatService.listTeams(options:)` convenience API returning `[KChatTeam]`.
+- `KChatService.listChannels(options:)` convenience API returning `[KChatChannel]`.
+- `KChatService.searchAllChannels(options:)` convenience API returning `KChatSearchAllChannelsResponse`.
+- `KChatService.getChannel(channelId:)` convenience API returning `KChatChannel`.
+- `KChatService.getChannelByName(teamId:channelName:)` convenience API returning `KChatChannel`.
+- `KChatService.getChannelStats(channelId:)` convenience API returning `KChatChannelStats`.
+- `KChatService.getChannelMember(channelId:userId:)` convenience API returning `KChatChannelMember`.
+- `KChatService.getChannelMembersByIds(channelId:userIds:)` convenience API returning `[KChatChannelMember]`.
+- `KChatService.getTeamStats(teamId:)` convenience API returning `KChatTeamStats`.
+- `KChatService.getTeamMember(teamId:userId:)` convenience API returning `KChatTeamMember`.
 - `KChatService.getUserTeamMembers(userId:)` convenience API returning `[KChatTeamMember]`.
 - `KChatService.getUserTeamsUnread(userId:)` convenience API returning `[KChatTeamUnread]`.
 - `KChatService.getUserTeamUnread(userId:teamId:)` convenience API returning `KChatTeamUnread`.
@@ -110,6 +133,69 @@ not started
 
 - `swift test` passes with route/DTO/channel coverage.
 
+
+## 2026-05-07 — kChat get channel member route
+
+- Verified OpenAPI `GetChannelMember` for `GET /api/v4/channels/{channel_id}/members/{user_id}`; response is Mattermost-compatible `ChannelMember`.
+- Reused existing `KChatChannelMember`, including numeric `channel_id`/`user_id` string decoding.
+- Added `KChatRequests.getChannelMember(channelId:userId:)` and `KChatService.getChannelMember(channelId:userId:)` returning `KChatChannelMember`.
+- Added unit coverage for method/path/auth/accept headers, no body/query, percent-encoded channel id and user id path segments, and response decoding.
+
+## 2026-05-07 — kChat get channel by team name and channel name route
+
+- Verified OpenAPI `GetChannelByNameForTeamName` for `GET /api/v4/teams/name/{team_name}/channels/name/{channel_name}`; response is Mattermost-compatible `Channel`, with optional `include_deleted` query defaulting false.
+- Reused existing `KChatChannel` for response decoding.
+- Added `KChatRequests.getChannelByNameForTeamName(teamName:channelName:)` and `KChatService.getChannelByNameForTeamName(teamName:channelName:)` returning `KChatChannel`.
+- Added unit coverage for method/path/auth/accept headers, no body/query, percent-encoded team name and channel name path segments, and response decoding.
+
+## 2026-05-07 — kChat get channel by name route
+
+- Verified OpenAPI `GetChannelByName` for `GET /api/v4/teams/{team_id}/channels/name/{channel_name}`; response is Mattermost-compatible `Channel`, with optional `include_deleted` query defaulting false.
+- Reused existing `KChatChannel` for response decoding.
+- Added `KChatRequests.getChannelByName(teamId:channelName:)` and `KChatService.getChannelByName(teamId:channelName:)` returning `KChatChannel`.
+- Added unit coverage for method/path/auth/accept headers, no body/query, percent-encoded team id and channel name path segments, and response decoding.
+
+## 2026-05-07 — kChat get channel route
+
+- Verified OpenAPI `GetChannel` for `GET /api/v4/channels/{channel_id}`; response is `Channel`.
+- Reused `KChatChannel` for Mattermost-compatible channel decoding.
+- Added `KChatRequests.getChannel(channelId:)` and `KChatService.getChannel(channelId:)`.
+- Added unit tests covering GET method, OpenAPI path, auth/accept headers, no query/body, path-segment percent encoding, and snake-case response decoding.
+
+## 2026-05-07 — kChat get all channels route
+
+- Target app: kChat.
+- Branch: `feat/kchat`.
+- Verified OpenAPI `GetAllChannels` for `GET /api/v4/channels`; response is an array of `ChannelWithTeamData`.
+- Added `KChatRequests.listChannels(options:)` with `page`, `per_page`, `exclude_default_channels`, `include_deleted`, `include_total_count`, and `exclude_policy_constrained` query parameters.
+- Reused and extended `KChatChannel` for optional team metadata (`team_display_name`, `team_name`, `team_update_at`, `policy_id`).
+- Added `KChatService.listChannels(options:)` convenience API returning `[KChatChannel]`.
+- Added unit tests covering GET method, OpenAPI path, auth/accept headers, query encoding, omitted empty options, no body, and snake-case channel/team metadata decoding.
+
+
+## 2026-05-07 — kChat get team stats route
+
+- Added `GET /api/v4/teams/{team_id}/stats` request support via `KChatRequests.getTeamStats`.
+- Added `KChatTeamStats` Mattermost-compatible response DTO with `team_id`, `total_member_count`, and `active_member_count` decoding.
+- Added `KChatService.getTeamStats(teamId:)` convenience API returning `KChatTeamStats`.
+- Added unit tests covering GET method, OpenAPI path, auth/accept headers, no query/body, percent encoding, and snake-case response decoding.
+
+## 2026-05-07 — kChat get team member route
+
+- Added `GET /api/v4/teams/{team_id}/members/{user_id}` request support via `KChatRequests.getTeamMember`.
+- Reused `KChatTeamMember`, including its hardened numeric `user_id` decoding to `String`.
+- Added `KChatService.getTeamMember(teamId:userId:)` convenience API returning `KChatTeamMember`.
+- Added unit tests covering GET method, OpenAPI path, auth/accept headers, no query/body, percent encoding for both path segments, and response decoding including numeric `user_id`.
+
+## 2026-05-07 — kChat get all teams route
+
+- Target app: kChat.
+- Branch: `feat/kchat`.
+- Added `GET /api/v4/teams` request support via `KChatRequests.listTeams(options:)`.
+- Added `KChatListTeamsOptions` for `page`, `per_page`, `include_total_count`, and `exclude_policy_constrained` query parameters.
+- Reused `KChatTeam` response decoding and added `KChatService.listTeams(options:)` convenience API.
+- Added unit tests covering GET method, OpenAPI path, auth/accept headers, query encoding, omitted empty options, no body, and snake-case team response decoding.
+- Verified with `swift test` in `potassiumChannel`.
 
 ## 2026-05-07 — kChat get user team unread route
 
@@ -383,3 +469,104 @@ not started
 - Added `KChatService.getUserChannelMembers(userId:options:)` convenience API.
 - Added request/decoding tests covering GET method, OpenAPI path, auth/accept headers, path encoding, special `me`, pagination query, no body, and response decoding.
 - Verified with `swift test` in `potassiumChannel`.
+
+## 2026-05-07 — kChat get team route
+
+- Added `GET /api/v4/teams/{team_id}` request support via `KChatRequests.getTeam(teamId:)`.
+- Added `KChatService.getTeam(teamId:)` convenience API returning `KChatTeam`.
+- Added request/decoding tests covering GET method, OpenAPI path, auth/accept headers, percent-encoded team id path segment, no query/body, and response decoding.
+- Verified with `swift test` in `potassiumChannel`.
+
+## 2026-05-07 — kChat get team by name route
+
+- Added `GET /api/v4/teams/name/{name}` request support via `KChatRequests.getTeamByName(name:)`.
+- Added `KChatService.getTeamByName(name:)` convenience API returning `KChatTeam`.
+- Added request/decoding tests covering GET method, OpenAPI path, auth/accept headers, percent-encoded team name path segment, no query/body, and response decoding.
+- Verified with `swift test` in `potassiumChannel`.
+
+## 2026-05-07 — kChat get team members route
+
+- Added `GET /api/v4/teams/{team_id}/members` request support via `KChatRequests.getTeamMembers(teamId:options:)`.
+- Added `KChatTeamMembersOptions` for `page` and `per_page` query parameters.
+- Added `KChatService.getTeamMembers(teamId:options:)` convenience API returning `[KChatTeamMember]`.
+- Added request/decoding tests covering GET method, OpenAPI path, auth/accept headers, query encoding, omitted empty options, percent-encoded team id path segment, no body, and response decoding.
+- Verified with `swift test` in `potassiumChannel`.
+
+## 2026-05-07 — kChat get pinned posts route
+
+- Verified OpenAPI `GetPinnedPosts` for `GET /api/v4/channels/{channel_id}/pinned`; response is Mattermost-compatible `PostList` (`38cb7293_PostList`).
+- Reused `KChatPostList`/`KChatPost` for pinned post list decoding.
+- Added `KChatRequests.getPinnedPosts(channelId:)` and `KChatService.getPinnedPosts(channelId:)`.
+- Added unit tests covering GET method, OpenAPI path, auth/accept headers, no query/body, path-segment percent encoding, and snake-case post-list decoding.
+
+## 2026-05-07 — kChat get public channels for team route
+
+- Verified OpenAPI `GetPublicChannelsForTeam` for `GET /api/v4/teams/{team_id}/channels`; response is an array of Mattermost-compatible `Channel` objects.
+- Reused `KChatChannel` for response decoding.
+- Added `KChatPublicChannelsForTeamOptions` with `page` and `per_page` query parameters.
+- Added `KChatRequests.getPublicChannelsForTeam(teamId:options:)` and `KChatService.getPublicChannelsForTeam(teamId:options:)` returning `[KChatChannel]`.
+- Added unit tests covering GET method, OpenAPI path, auth/accept headers, percent-encoded `team_id`, query encoding, omitted empty options, no body, and snake-case channel decoding.
+
+## 2026-05-07 — kChat get private channels for team route
+
+- Verified OpenAPI `GetPrivateChannelsForTeam` for `GET /api/v4/teams/{team_id}/channels/private`; response is an array of Mattermost-compatible `Channel` objects and supports `page`/`per_page` query parameters.
+- Reused `KChatChannel` for response decoding.
+- Added `KChatPrivateChannelsForTeamOptions` with `page` and `per_page` query parameters.
+- Added `KChatRequests.getPrivateChannelsForTeam(teamId:options:)` and `KChatService.getPrivateChannelsForTeam(teamId:options:)` returning `[KChatChannel]`.
+- Added unit tests covering GET method, OpenAPI path, auth/accept headers, percent-encoded `team_id`, query encoding, omitted empty options, no body, and snake-case channel decoding.
+
+## 2026-05-07 — kChat get deleted channels for team route
+
+- Verified OpenAPI `GetDeletedChannelsForTeam` for `GET /api/v4/teams/{team_id}/channels/deleted`; response is an array of Mattermost-compatible `Channel` objects and supports `page`/`per_page` query parameters.
+- Added `KChatDeletedChannelsForTeamOptions`, `KChatRequests.getDeletedChannelsForTeam(teamId:options:)`, and `KChatService.getDeletedChannelsForTeam(teamId:options:)`, reusing `KChatChannel`.
+- Added request tests for method/path/auth/accept headers, path percent-encoding, query encoding, omitted empty options, no body, and response decoding.
+
+## 2026-05-07 — kChat autocomplete channels for team route
+
+- Verified OpenAPI `AutocompleteChannelsForTeam` for `GET /api/v4/teams/{team_id}/channels/autocomplete`; required query parameter is `name`, and the response is an array of Mattermost-compatible `Channel` objects.
+- Reused `KChatChannel` for response decoding.
+- Added `KChatChannelsForTeamAutocompleteOptions` with required `name` query parameter.
+- Added `KChatRequests.autocompleteChannelsForTeam(teamId:options:)` and `KChatService.autocompleteChannelsForTeam(teamId:options:)` returning `[KChatChannel]`.
+- Added unit tests covering GET method, OpenAPI path, auth/accept headers, percent-encoded `team_id`, required query encoding, no body, and snake-case channel decoding.
+
+## 2026-05-07 - kChat team channels search autocomplete
+
+- Verified OpenAPI `AutocompleteChannelsForTeamForSearch` for `GET /api/v4/teams/{team_id}/channels/search_autocomplete`; required query parameter is `name`, and the response is an array of Mattermost-compatible `Channel` objects.
+- Reused existing `KChatChannel` response model and added `KChatChannelsForTeamSearchAutocompleteOptions`.
+- Added `KChatRequests.autocompleteChannelsForTeamForSearch(teamId:options:)` and `KChatService.autocompleteChannelsForTeamForSearch(teamId:options:)` returning `[KChatChannel]`.
+- Added request/encoding/header/body/response-decoding tests for the new search autocomplete endpoint.
+
+## 2026-05-07 — kChat search channels route
+
+- Verified OpenAPI `SearchChannels` for `POST /api/v4/teams/{team_id}/channels/search`; required path parameter is `team_id`, required JSON body field is `term`, response `201` is an array of Mattermost-compatible `Channel` objects.
+- Reused existing `KChatChannel` for response decoding.
+- Added `KChatChannelSearchOptions`, `KChatRequests.searchChannels(teamId:options:)`, and `KChatService.searchChannels(teamId:options:)` returning `[KChatChannel]`.
+- Added request tests covering method/path/auth/accept/content-type headers, percent-encoded `team_id`, JSON body encoding, absence of query parameters, required empty `term` preservation, and response decoding.
+
+### 2026-05-07 - kChat archived team channels search
+
+- Verified OpenAPI `SearchArchivedChannels` for `POST /api/v4/teams/{team_id}/channels/search_archived`; required path parameter is `team_id`, required JSON body field is `term`, no query parameters, and response `201` is an array of Mattermost-compatible `Channel` objects.
+- Reused `KChatChannelSearchOptions` because the archived-channel search body has the same required `term` shape as the existing team channel search endpoint.
+- Added `KChatRequests.searchArchivedChannels(teamId:options:)` and `KChatService.searchArchivedChannels(teamId:options:)` returning `[KChatChannel]`.
+- Added request/decoding unit tests covering POST method, encoded path, auth/accept/content-type headers, JSON body, no query parameters, empty required term preservation, and channel array decoding.
+
+## 2026-05-07 — kChat get channel members route
+
+- Verified OpenAPI `GetChannelMembers` uses `GET /api/v4/channels/{channel_id}/members` with optional `page` and `per_page` query parameters and returns an array of Mattermost-compatible `ChannelMember` rows.
+- Added `KChatChannelMembersOptions` and `KChatRequests.getChannelMembers(channelId:options:)` for the channel members endpoint.
+- Reused `KChatChannelMember` for the response and hardened its `channel_id`/`user_id` decoding for numeric ids returned by live kChat.
+- Added `KChatService.getChannelMembers(channelId:options:)` and request/decoding tests covering headers, auth, path encoding, query omission, no body, and response decoding.
+
+## 2026-05-07 — kChat get team members by ids route
+
+- Verified OpenAPI `GetTeamMembersByIds` uses `POST /api/v4/teams/{team_id}/members/ids` with a required JSON array of user ids and returns an array of Mattermost-compatible `TeamMember` rows.
+- Reused `KChatTeamMember` for responses.
+- Added `KChatRequests.getTeamMembersByIds(teamId:userIds:)` and `KChatService.getTeamMembersByIds(teamId:userIds:)` returning `[KChatTeamMember]`.
+- Added request/decoding tests covering method, path, auth/accept/content-type headers, percent-encoded `team_id`, JSON body encoding, no query parameters, and member array decoding.
+
+## 2026-05-07 — kChat get channel members by ids route
+
+- Verified OpenAPI `GetChannelMembersByIds` uses `POST /api/v4/channels/{channel_id}/members/ids` with a required JSON array of user ids and returns an array of Mattermost-compatible `ChannelMember` rows.
+- Reused `KChatChannelMember` for responses.
+- Added `KChatRequests.getChannelMembersByIds(channelId:userIds:)` and `KChatService.getChannelMembersByIds(channelId:userIds:)` returning `[KChatChannelMember]`.
+- Added request/decoding tests covering method, path, auth/accept/content-type headers, percent-encoded `channel_id`, JSON body encoding, no query parameters, and member array decoding.
