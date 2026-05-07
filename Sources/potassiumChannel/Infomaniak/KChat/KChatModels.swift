@@ -179,6 +179,21 @@ public struct KChatTeamMembersOptions: Equatable, Sendable {
     }
 }
 
+/// Query options accepted by the Mattermost-compatible kChat channel members list endpoint.
+public struct KChatChannelMembersOptions: Equatable, Sendable {
+    /// The page to select.
+    public let page: Int?
+
+    /// The number of channel members per page.
+    public let perPage: Int?
+
+    /// Creates kChat channel members list query options.
+    public init(page: Int? = nil, perPage: Int? = nil) {
+        self.page = page
+        self.perPage = perPage
+    }
+}
+
 /// Query options accepted by the Mattermost-compatible kChat public team channels endpoint.
 public struct KChatPublicChannelsForTeamOptions: Equatable, Sendable {
     /// The page to select.
@@ -782,6 +797,65 @@ public struct KChatChannelMember: Codable, Equatable, Sendable {
         self.teamDisplayName = teamDisplayName
         self.teamName = teamName
         self.teamUpdateAt = teamUpdateAt
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case channelId
+        case userId
+        case roles
+        case lastViewedAt
+        case msgCount
+        case mentionCount
+        case notifyProps
+        case lastUpdateAt
+        case teamDisplayName
+        case teamName
+        case teamUpdateAt
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.channelId = try Self.decodeStringOrNumberIfPresent(from: container, forKey: .channelId)
+        self.userId = try Self.decodeStringOrNumberIfPresent(from: container, forKey: .userId)
+        self.roles = try container.decodeIfPresent(String.self, forKey: .roles)
+        self.lastViewedAt = try container.decodeIfPresent(Int64.self, forKey: .lastViewedAt)
+        self.msgCount = try container.decodeIfPresent(Int.self, forKey: .msgCount)
+        self.mentionCount = try container.decodeIfPresent(Int.self, forKey: .mentionCount)
+        self.notifyProps = try container.decodeIfPresent(KChatChannelNotifyProps.self, forKey: .notifyProps)
+        self.lastUpdateAt = try container.decodeIfPresent(Int64.self, forKey: .lastUpdateAt)
+        self.teamDisplayName = try container.decodeIfPresent(String.self, forKey: .teamDisplayName)
+        self.teamName = try container.decodeIfPresent(String.self, forKey: .teamName)
+        self.teamUpdateAt = try container.decodeIfPresent(Int64.self, forKey: .teamUpdateAt)
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeIfPresent(channelId, forKey: .channelId)
+        try container.encodeIfPresent(userId, forKey: .userId)
+        try container.encodeIfPresent(roles, forKey: .roles)
+        try container.encodeIfPresent(lastViewedAt, forKey: .lastViewedAt)
+        try container.encodeIfPresent(msgCount, forKey: .msgCount)
+        try container.encodeIfPresent(mentionCount, forKey: .mentionCount)
+        try container.encodeIfPresent(notifyProps, forKey: .notifyProps)
+        try container.encodeIfPresent(lastUpdateAt, forKey: .lastUpdateAt)
+        try container.encodeIfPresent(teamDisplayName, forKey: .teamDisplayName)
+        try container.encodeIfPresent(teamName, forKey: .teamName)
+        try container.encodeIfPresent(teamUpdateAt, forKey: .teamUpdateAt)
+    }
+
+    private static func decodeStringOrNumberIfPresent(
+        from container: KeyedDecodingContainer<CodingKeys>,
+        forKey key: CodingKeys
+    ) throws -> String? {
+        if let string = try? container.decodeIfPresent(String.self, forKey: key) {
+            return string
+        }
+
+        if let integer = try? container.decodeIfPresent(Int64.self, forKey: key) {
+            return String(integer)
+        }
+
+        return nil
     }
 }
 

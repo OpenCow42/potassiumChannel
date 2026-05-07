@@ -146,6 +146,28 @@ public enum KChatRequests {
         )
     }
 
+    /// Creates a request that lists kChat members for a channel.
+    public static func getChannelMembers(
+        channelId: String,
+        options: KChatChannelMembersOptions = KChatChannelMembersOptions()
+    ) -> APIRequest<[KChatChannelMember]> {
+        var queryParameters: [QueryParameter] = []
+
+        if let page = options.page {
+            queryParameters.append(QueryParameter(name: "page", value: .integer(page)))
+        }
+
+        if let perPage = options.perPage {
+            queryParameters.append(QueryParameter(name: "per_page", value: .integer(perPage)))
+        }
+
+        return APIRequest(
+            method: .get,
+            path: "/api/v4/channels/\(percentEncodePathSegment(channelId))/members",
+            queryParameters: queryParameters
+        )
+    }
+
     /// Creates a request that lists public kChat channels for a team.
     public static func getPublicChannelsForTeam(
         teamId: String,

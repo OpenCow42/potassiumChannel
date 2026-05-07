@@ -534,3 +534,10 @@ not started
 - Reused `KChatChannelSearchOptions` because the archived-channel search body has the same required `term` shape as the existing team channel search endpoint.
 - Added `KChatRequests.searchArchivedChannels(teamId:options:)` and `KChatService.searchArchivedChannels(teamId:options:)` returning `[KChatChannel]`.
 - Added request/decoding unit tests covering POST method, encoded path, auth/accept/content-type headers, JSON body, no query parameters, empty required term preservation, and channel array decoding.
+
+## 2026-05-07 — kChat get channel members route
+
+- Verified OpenAPI `GetChannelMembers` uses `GET /api/v4/channels/{channel_id}/members` with optional `page` and `per_page` query parameters and returns an array of Mattermost-compatible `ChannelMember` rows.
+- Added `KChatChannelMembersOptions` and `KChatRequests.getChannelMembers(channelId:options:)` for the channel members endpoint.
+- Reused `KChatChannelMember` for the response and hardened its `channel_id`/`user_id` decoding for numeric ids returned by live kChat.
+- Added `KChatService.getChannelMembers(channelId:options:)` and request/decoding tests covering headers, auth, path encoding, query omission, no body, and response decoding.
