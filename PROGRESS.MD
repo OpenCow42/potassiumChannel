@@ -126,6 +126,13 @@ not started
 - `swift test` passes with route/DTO/channel coverage.
 
 
+## 2026-05-07 — kChat get channel by team name and channel name route
+
+- Verified OpenAPI `GetChannelByNameForTeamName` for `GET /api/v4/teams/name/{team_name}/channels/name/{channel_name}`; response is Mattermost-compatible `Channel`, with optional `include_deleted` query defaulting false.
+- Reused existing `KChatChannel` for response decoding.
+- Added `KChatRequests.getChannelByNameForTeamName(teamName:channelName:)` and `KChatService.getChannelByNameForTeamName(teamName:channelName:)` returning `KChatChannel`.
+- Added unit coverage for method/path/auth/accept headers, no body/query, percent-encoded team name and channel name path segments, and response decoding.
+
 ## 2026-05-07 — kChat get channel by name route
 
 - Verified OpenAPI `GetChannelByName` for `GET /api/v4/teams/{team_id}/channels/name/{channel_name}`; response is Mattermost-compatible `Channel`, with optional `include_deleted` query defaulting false.
