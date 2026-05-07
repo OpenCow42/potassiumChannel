@@ -657,6 +657,29 @@ public struct KDriveActiveMember: Codable, Equatable, Sendable {
     }
 }
 
+/// A file shared during a kDrive statistics period.
+public struct KDriveSharedFileActivity: Codable, Equatable, Sendable {
+    /// Shared file identifier.
+    public let id: Int
+
+    /// File name.
+    public let name: String
+
+    /// Last update timestamp.
+    public let updateAt: Int
+
+    /// Number of active users on the file.
+    public let users: Int
+
+    /// Creates a shared-file activity statistics value.
+    public init(id: Int, name: String, updateAt: Int, users: Int) {
+        self.id = id
+        self.name = name
+        self.updateAt = updateAt
+        self.users = users
+    }
+}
+
 /// A drive-scoped file activity returned by the kDrive v3 API.
 public struct KDriveDriveActivity: Codable, Equatable, Sendable {
     /// The unique activity identifier.

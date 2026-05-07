@@ -657,6 +657,17 @@ public struct KDriveService: Sendable {
         )
     }
 
+    /// Lists files shared on a kDrive during a statistics period.
+    public func listActivitySharedFiles(
+        driveId: Int,
+        from: Int,
+        until: Int
+    ) async throws -> InfomaniakResponse<[KDriveSharedFileActivity]> {
+        try await client.send(
+            KDriveRequests.listActivitySharedFiles(driveId: driveId, from: from, until: until)
+        )
+    }
+
     /// Lists generated kDrive activity reports.
     public func listActivityReports(
         driveId: Int,
