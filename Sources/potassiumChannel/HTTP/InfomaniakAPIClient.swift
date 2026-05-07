@@ -1,4 +1,7 @@
 import Foundation
+#if canImport(FoundationNetworking)
+import FoundationNetworking
+#endif
 
 /// A structured-concurrency API client for Infomaniak services.
 public actor InfomaniakAPIClient {
