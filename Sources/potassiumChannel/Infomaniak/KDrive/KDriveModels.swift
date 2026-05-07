@@ -435,6 +435,101 @@ public struct KDriveDirectoryCount: Codable, Equatable, Sendable {
     }
 }
 
+/// Total file and storage size for a kDrive file or directory.
+public struct KDriveFileSize: Codable, Equatable, Sendable {
+    /// Total size of files, in bytes.
+    public let size: Int
+
+    /// Total storage size including versions, in bytes.
+    public let storageSize: Int
+
+    /// Creates a kDrive file size value.
+    public init(size: Int, storageSize: Int) {
+        self.size = size
+        self.storageSize = storageSize
+    }
+}
+
+/// Content hash for a kDrive file.
+public struct KDriveFileHash: Codable, Equatable, Sendable {
+    /// Hash of the file content, including the algorithm prefix when returned by the API.
+    public let hash: String
+
+    /// Creates a kDrive file hash value.
+    public init(hash: String) {
+        self.hash = hash
+    }
+}
+
+/// Temporary public URL for a kDrive file.
+public struct KDriveFileTemporaryURL: Codable, Equatable, Sendable {
+    /// Temporary URL for the file.
+    public let temporaryUrl: String
+
+    /// Creates a kDrive file temporary URL value.
+    public init(temporaryUrl: String) {
+        self.temporaryUrl = temporaryUrl
+    }
+}
+
+/// A version of a kDrive file returned by the deprecated v2 versions endpoint.
+public struct KDriveFileVersionV2: Codable, Equatable, Sendable {
+    /// The unique file version identifier.
+    public let id: Int
+
+    /// Whether this version should be kept forever.
+    public let keepForever: Bool
+
+    /// MIME type for the version, when known.
+    public let mimeType: String?
+
+    /// Generic converted file type.
+    public let convertedType: String
+
+    /// Version name, when returned.
+    public let name: String?
+
+    /// Version size in bytes.
+    public let size: Int
+
+    /// The user that updated this file version.
+    public let updatedBy: KDriveUser
+
+    /// The creation timestamp.
+    public let createdAt: Int
+
+    /// The update timestamp, when known.
+    public let updatedAt: Int?
+
+    /// The last modified timestamp, when known.
+    public let lastModifiedAt: Int?
+
+    /// Creates a kDrive v2 file version value.
+    public init(
+        id: Int,
+        keepForever: Bool,
+        mimeType: String?,
+        convertedType: String,
+        name: String?,
+        size: Int,
+        updatedBy: KDriveUser,
+        createdAt: Int,
+        updatedAt: Int?,
+        lastModifiedAt: Int?
+    ) {
+        self.id = id
+        self.keepForever = keepForever
+        self.mimeType = mimeType
+        self.convertedType = convertedType
+        self.name = name
+        self.size = size
+        self.updatedBy = updatedBy
+        self.createdAt = createdAt
+        self.updatedAt = updatedAt
+        self.lastModifiedAt = lastModifiedAt
+    }
+}
+
 /// A version of a kDrive file.
 public struct KDriveFileVersion: Codable, Equatable, Sendable {
     /// The unique file version identifier.
@@ -520,6 +615,250 @@ public struct KDriveActivity: Codable, Equatable, Sendable {
         self.oldPath = oldPath
         self.fileId = fileId
         self.userId = userId
+    }
+}
+
+/// A chart returned by kDrive statistics endpoints.
+public struct KDriveChart: Codable, Equatable, Sendable {
+    /// Chart title.
+    public let title: String
+
+    /// X-axis labels for the chart.
+    public let labels: KDriveChartData
+
+    /// Chart data series.
+    public let data: [KDriveChartData]
+
+    /// Creates a kDrive chart value.
+    public init(title: String, labels: KDriveChartData, data: [KDriveChartData]) {
+        self.title = title
+        self.labels = labels
+        self.data = data
+    }
+}
+
+/// A labels or metric data series in a kDrive chart.
+public struct KDriveChartData: Codable, Equatable, Sendable {
+    /// Data coordinate or series name.
+    public let name: String
+
+    /// Data unit.
+    public let unit: String
+
+    /// Data points. The API schema allows timestamp arrays, string arrays, and object-shaped values.
+    public let data: KDriveChartDataValue
+
+    /// Requested metric associated with this series, when present.
+    public let metric: String?
+
+    /// Creates a kDrive chart data value.
+    public init(name: String, unit: String, data: KDriveChartDataValue, metric: String? = nil) {
+        self.name = name
+        self.unit = unit
+        self.data = data
+        self.metric = metric
+    }
+}
+
+/// A flexible JSON value for kDrive chart data points.
+public enum KDriveChartDataValue: Codable, Equatable, Sendable {
+    /// Null value.
+    case null
+
+    /// Boolean value.
+    case bool(Bool)
+
+    /// Integer value.
+    case integer(Int)
+
+    /// Floating-point value.
+    case double(Double)
+
+    /// String value.
+    case string(String)
+
+    /// Array value.
+    case array([KDriveChartDataValue])
+
+    /// Object value.
+    case object([String: KDriveChartDataValue])
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.singleValueContainer()
+
+        if container.decodeNil() {
+            self = .null
+        } else if let value = try? container.decode(Bool.self) {
+            self = .bool(value)
+        } else if let value = try? container.decode(Int.self) {
+            self = .integer(value)
+        } else if let value = try? container.decode(Double.self) {
+            self = .double(value)
+        } else if let value = try? container.decode(String.self) {
+            self = .string(value)
+        } else if let value = try? container.decode([KDriveChartDataValue].self) {
+            self = .array(value)
+        } else {
+            self = .object(try container.decode([String: KDriveChartDataValue].self))
+        }
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.singleValueContainer()
+
+        switch self {
+        case .null:
+            try container.encodeNil()
+        case let .bool(value):
+            try container.encode(value)
+        case let .integer(value):
+            try container.encode(value)
+        case let .double(value):
+            try container.encode(value)
+        case let .string(value):
+            try container.encode(value)
+        case let .array(value):
+            try container.encode(value)
+        case let .object(value):
+            try container.encode(value)
+        }
+    }
+}
+
+/// A user active on a kDrive during a statistics period.
+public struct KDriveActiveMember: Codable, Equatable, Sendable {
+    /// User identifier, when Infomaniak can associate the activity with a user.
+    public let userId: Int?
+
+    /// Connected user display name, when available.
+    public let name: String?
+
+    /// User agent used on connection.
+    public let agent: String
+
+    /// IP address used on connection.
+    public let ip: String
+
+    /// Last login timestamp.
+    public let lastLoginAt: Int
+
+    /// Creates an active-member statistics value.
+    public init(userId: Int?, name: String?, agent: String, ip: String, lastLoginAt: Int) {
+        self.userId = userId
+        self.name = name
+        self.agent = agent
+        self.ip = ip
+        self.lastLoginAt = lastLoginAt
+    }
+}
+
+/// A file shared during a kDrive statistics period.
+public struct KDriveSharedFileActivity: Codable, Equatable, Sendable {
+    /// Shared file identifier.
+    public let id: Int
+
+    /// File name.
+    public let name: String
+
+    /// Last update timestamp.
+    public let updateAt: Int
+
+    /// Number of active users on the file.
+    public let users: Int
+
+    /// Creates a shared-file activity statistics value.
+    public init(id: Int, name: String, updateAt: Int, users: Int) {
+        self.id = id
+        self.name = name
+        self.updateAt = updateAt
+        self.users = users
+    }
+}
+
+/// A share link returned by kDrive activity statistics.
+public struct KDriveStatisticShareLink: Codable, Equatable, Sendable {
+    /// Share link URL.
+    public let url: String
+
+    /// Shared file identifier.
+    public let fileId: Int
+
+    /// Access right required to view the link (`inherit`, `password`, or `public`).
+    public let right: String
+
+    /// Timestamp until which the share link is valid, when limited.
+    public let validUntil: Int?
+
+    /// User identifier of the link creator.
+    public let createdBy: Int
+
+    /// Link creation timestamp, when returned.
+    public let createdAt: Int?
+
+    /// Link update timestamp, when returned.
+    public let updatedAt: Int?
+
+    /// Share link capabilities.
+    public let capabilities: KDriveStatisticShareLinkCapabilities
+
+    /// Whether link access is blocked.
+    public let accessBlocked: Bool
+
+    /// Total number of views on the share link.
+    public let views: Int
+
+    /// File information, when the authenticated user can see it.
+    public let file: KDriveFileItem?
+
+    /// Number of unique views on the share link.
+    public let uniqueViews: Int
+
+    /// Creates a kDrive statistic share link value.
+    public init(
+        url: String,
+        fileId: Int,
+        right: String,
+        validUntil: Int?,
+        createdBy: Int,
+        createdAt: Int?,
+        updatedAt: Int?,
+        capabilities: KDriveStatisticShareLinkCapabilities,
+        accessBlocked: Bool,
+        views: Int,
+        file: KDriveFileItem? = nil,
+        uniqueViews: Int
+    ) {
+        self.url = url
+        self.fileId = fileId
+        self.right = right
+        self.validUntil = validUntil
+        self.createdBy = createdBy
+        self.createdAt = createdAt
+        self.updatedAt = updatedAt
+        self.capabilities = capabilities
+        self.accessBlocked = accessBlocked
+        self.views = views
+        self.file = file
+        self.uniqueViews = uniqueViews
+    }
+}
+
+/// Capability flags attached to a kDrive statistic share link.
+public struct KDriveStatisticShareLinkCapabilities: Codable, Equatable, Sendable {
+    public let canEdit: Bool
+    public let canSeeStats: Bool
+    public let canSeeInfo: Bool
+    public let canDownload: Bool
+    public let canComment: Bool
+    public let canRequestAccess: Bool
+
+    public init(canEdit: Bool, canSeeStats: Bool, canSeeInfo: Bool, canDownload: Bool, canComment: Bool, canRequestAccess: Bool) {
+        self.canEdit = canEdit
+        self.canSeeStats = canSeeStats
+        self.canSeeInfo = canSeeInfo
+        self.canDownload = canDownload
+        self.canComment = canComment
+        self.canRequestAccess = canRequestAccess
     }
 }
 
@@ -679,6 +1018,63 @@ public struct KDriveExternalImport: Codable, Equatable, Sendable {
         self.updatedAt = updatedAt
         self.countSuccessFiles = countSuccessFiles
         self.countFailedFiles = countFailedFiles
+    }
+}
+
+/// A file entry reported by an external import, including errored imports.
+public struct KDriveExternalImportFile: Codable, Equatable, Sendable {
+    /// The unique external file import identifier.
+    public let id: Int
+
+    /// The external file name.
+    public let name: String
+
+    /// The external file import status.
+    public let status: String
+
+    /// Message describing the import result or failure.
+    public let message: String
+
+    /// External file creation timestamp.
+    public let createdAt: Int
+
+    /// Creates an external import file value.
+    public init(id: Int, name: String, status: String, message: String, createdAt: Int) {
+        self.id = id
+        self.name = name
+        self.status = status
+        self.message = message
+        self.createdAt = createdAt
+    }
+}
+
+/// Third-party drives eligible for an external import.
+public struct KDriveThirdPartyDrivesList: Codable, Equatable, Sendable {
+    /// All suitable third-party drives.
+    public let drives: [KDriveThirdPartyDrive]
+
+    /// Access token identifier to reuse for future import requests.
+    public let accessTokenId: Int
+
+    /// Creates a third-party drives list value.
+    public init(drives: [KDriveThirdPartyDrive], accessTokenId: Int) {
+        self.drives = drives
+        self.accessTokenId = accessTokenId
+    }
+}
+
+/// A third-party drive eligible for an external import.
+public struct KDriveThirdPartyDrive: Codable, Equatable, Sendable {
+    /// The third-party drive identifier.
+    public let id: String
+
+    /// The third-party drive display name.
+    public let name: String
+
+    /// Creates a third-party drive value.
+    public init(id: String, name: String) {
+        self.id = id
+        self.name = name
     }
 }
 
@@ -1882,6 +2278,97 @@ public struct SearchKDriveShareLinksOptions: Equatable, Sendable {
     }
 }
 
+/// Query parameters accepted by the kDrive activity share-links export endpoint.
+public struct ExportKDriveActivityShareLinksOptions: Equatable, Sendable {
+    /// Maximum views filter.
+    public let maxView: Int?
+
+    /// Minimum views filter.
+    public let minView: Int?
+
+    /// Link rights to filter by (`inherit`, `password`, or `public`).
+    public let rights: [String]
+
+    /// Link expiration timestamp filter.
+    public let validUntil: Int?
+
+    /// Creates options for exporting kDrive activity share-link statistics.
+    public init(maxView: Int? = nil, minView: Int? = nil, rights: [String] = [], validUntil: Int? = nil) {
+        self.maxView = maxView
+        self.minView = minView
+        self.rights = rights
+        self.validUntil = validUntil
+    }
+}
+
+/// Query parameters accepted by the kDrive activity share-links statistics endpoint.
+public struct ListKDriveActivityShareLinksOptions: Equatable, Sendable {
+    /// Optional related resources to include.
+    public let includedResources: String?
+
+    /// Maximum views filter.
+    public let maxView: Int?
+
+    /// Minimum views filter.
+    public let minView: Int?
+
+    /// Link rights to filter by (`inherit`, `password`, or `public`).
+    public let rights: [String]
+
+    /// Exact share-link filename match.
+    public let search: String?
+
+    /// Link expiration timestamp filter.
+    public let validUntil: Int?
+
+    /// The page number to request.
+    public let page: Int?
+
+    /// The number of items per page to request.
+    public let perPage: Int?
+
+    /// Whether the API should return the total item count.
+    public let total: Bool?
+
+    /// Fields used for sorting.
+    public let orderBy: [String]
+
+    /// Default sort order.
+    public let order: String?
+
+    /// Per-field sort orders encoded as order_for[field]=asc|desc.
+    public let orderFor: [String: String]
+
+    /// Creates options for listing kDrive activity share-link statistics.
+    public init(
+        includedResources: String? = nil,
+        maxView: Int? = nil,
+        minView: Int? = nil,
+        rights: [String] = [],
+        search: String? = nil,
+        validUntil: Int? = nil,
+        page: Int? = nil,
+        perPage: Int? = nil,
+        total: Bool? = nil,
+        orderBy: [String] = [],
+        order: String? = nil,
+        orderFor: [String: String] = [:]
+    ) {
+        self.includedResources = includedResources
+        self.maxView = maxView
+        self.minView = minView
+        self.rights = rights
+        self.search = search
+        self.validUntil = validUntil
+        self.page = page
+        self.perPage = perPage
+        self.total = total
+        self.orderBy = orderBy
+        self.order = order
+        self.orderFor = orderFor
+    }
+}
+
 /// Query parameters accepted by the accessible kDrives endpoint.
 public struct ListAccessibleKDrivesOptions: Equatable, Sendable {
     /// Whether to include drives matching the maintenance state.
@@ -1912,6 +2399,91 @@ public struct ListAccessibleKDrivesOptions: Equatable, Sendable {
         self.tags = tags
         self.page = page
         self.perPage = perPage
+    }
+}
+
+/// Query parameters accepted by the kDrive user drives endpoint.
+public struct ListKDriveUserDrivesOptions: Equatable, Sendable {
+    /// User roles to filter by.
+    public let roles: [String]
+
+    /// User statuses to filter by.
+    public let statuses: [String]
+
+    /// The page number to request.
+    public let page: Int?
+
+    /// The number of items per page to request.
+    public let perPage: Int?
+
+    /// Whether the API should return the total item count.
+    public let total: Bool?
+
+    /// Creates options for listing kDrives associated with a user.
+    public init(roles: [String] = [], statuses: [String] = [], page: Int? = nil, perPage: Int? = nil, total: Bool? = nil) {
+        self.roles = roles
+        self.statuses = statuses
+        self.page = page
+        self.perPage = perPage
+        self.total = total
+    }
+}
+
+/// Query parameters accepted by the v2 drive-scoped kDrive users endpoint.
+public struct ListKDriveDriveUsersV2Options: Equatable, Sendable {
+    /// Search text used to match first name, last name, or email.
+    public let search: String?
+
+    /// User statuses to filter by.
+    public let statuses: [String]
+
+    /// User types to filter by.
+    public let types: [String]
+
+    /// User identifiers to filter by.
+    public let userIds: [Int]
+
+    /// The page number to request.
+    public let page: Int?
+
+    /// The number of items per page to request.
+    public let perPage: Int?
+
+    /// Whether the API should return the total item count.
+    public let total: Bool?
+
+    /// Fields used for sorting.
+    public let orderBy: [String]
+
+    /// Default sort order.
+    public let order: String?
+
+    /// Per-field sort orders encoded as order_for[field]=asc|desc.
+    public let orderFor: [String: String]
+
+    /// Creates options for listing users associated with a specific kDrive using v2.
+    public init(
+        search: String? = nil,
+        statuses: [String] = [],
+        types: [String] = [],
+        userIds: [Int] = [],
+        page: Int? = nil,
+        perPage: Int? = nil,
+        total: Bool? = nil,
+        orderBy: [String] = [],
+        order: String? = nil,
+        orderFor: [String: String] = [:]
+    ) {
+        self.search = search
+        self.statuses = statuses
+        self.types = types
+        self.userIds = userIds
+        self.page = page
+        self.perPage = perPage
+        self.total = total
+        self.orderBy = orderBy
+        self.order = order
+        self.orderFor = orderFor
     }
 }
 

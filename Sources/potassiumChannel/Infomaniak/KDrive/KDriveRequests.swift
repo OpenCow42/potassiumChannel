@@ -66,6 +66,107 @@ public enum KDriveRequests {
         )
     }
 
+    /// Creates a request that lists users associated with a specific kDrive using the v2 endpoint.
+    public static func listDriveUsersV2(
+        driveId: Int,
+        with includedResources: String? = nil,
+        options: ListKDriveDriveUsersV2Options = ListKDriveDriveUsersV2Options()
+    ) -> APIRequest<PaginatedInfomaniakResponse<[KDriveDriveUser]>> {
+        var queryParameters: [QueryParameter] = []
+
+        if let includedResources {
+            queryParameters.append(QueryParameter(name: "with", value: .string(includedResources)))
+        }
+
+        if let search = options.search {
+            queryParameters.append(QueryParameter(name: "search", value: .string(search)))
+        }
+
+        if !options.statuses.isEmpty {
+            queryParameters.append(QueryParameter(name: "status", value: .strings(options.statuses)))
+        }
+
+        if !options.types.isEmpty {
+            queryParameters.append(QueryParameter(name: "types", value: .strings(options.types)))
+        }
+
+        if !options.userIds.isEmpty {
+            queryParameters.append(QueryParameter(name: "user_ids", value: .integers(options.userIds)))
+        }
+
+        if let page = options.page {
+            queryParameters.append(QueryParameter(name: "page", value: .integer(page)))
+        }
+
+        if let perPage = options.perPage {
+            queryParameters.append(QueryParameter(name: "per_page", value: .integer(perPage)))
+        }
+
+        if let total = options.total {
+            queryParameters.append(QueryParameter(name: "total", value: .bool(total)))
+        }
+
+        if !options.orderBy.isEmpty {
+            queryParameters.append(QueryParameter(name: "order_by", value: .strings(options.orderBy)))
+        }
+
+        if let order = options.order {
+            queryParameters.append(QueryParameter(name: "order", value: .string(order)))
+        }
+
+        for (field, order) in options.orderFor {
+            queryParameters.append(QueryParameter(name: "order_for[\(field)]", value: .string(order)))
+        }
+
+        return APIRequest(
+            method: .get,
+            path: "/2/drive/\(driveId)/users",
+            queryParameters: queryParameters
+        )
+    }
+
+    /// Creates a request that lists kDrives associated with a specific user.
+    public static func listUserDrivesV2(
+        userId: Int,
+        accountId: Int,
+        with includedResources: String? = nil,
+        options: ListKDriveUserDrivesOptions = ListKDriveUserDrivesOptions()
+    ) -> APIRequest<PaginatedInfomaniakResponse<[KDriveDriveUser]>> {
+        var queryParameters: [QueryParameter] = [
+            QueryParameter(name: "account_id", value: .integer(accountId)),
+        ]
+
+        if let includedResources {
+            queryParameters.append(QueryParameter(name: "with", value: .string(includedResources)))
+        }
+
+        if !options.roles.isEmpty {
+            queryParameters.append(QueryParameter(name: "roles[]", value: .strings(options.roles)))
+        }
+
+        if !options.statuses.isEmpty {
+            queryParameters.append(QueryParameter(name: "status[]", value: .strings(options.statuses)))
+        }
+
+        if let page = options.page {
+            queryParameters.append(QueryParameter(name: "page", value: .integer(page)))
+        }
+
+        if let perPage = options.perPage {
+            queryParameters.append(QueryParameter(name: "per_page", value: .integer(perPage)))
+        }
+
+        if let total = options.total {
+            queryParameters.append(QueryParameter(name: "total", value: .bool(total)))
+        }
+
+        return APIRequest(
+            method: .get,
+            path: "/2/drive/users/\(userId)/drives",
+            queryParameters: queryParameters
+        )
+    }
+
     /// Creates a request that lists recent files and directories on a kDrive.
     public static func listRecentFiles(
         driveId: Int,
@@ -1340,6 +1441,96 @@ public enum KDriveRequests {
         )
     }
 
+    /// Creates a request that gets total file and storage size for a kDrive file or directory.
+    public static func getFileSize(
+        driveId: Int,
+        fileId: Int,
+        depth: String? = nil
+    ) -> APIRequest<InfomaniakResponse<KDriveFileSize>> {
+        var queryParameters: [QueryParameter] = []
+
+        if let depth {
+            queryParameters.append(QueryParameter(name: "depth", value: .string(depth)))
+        }
+
+        return APIRequest(
+            method: .get,
+            path: "/2/drive/\(driveId)/files/\(fileId)/sizes",
+            queryParameters: queryParameters
+        )
+    }
+
+    /// Creates a request that gets the content hash for a kDrive file.
+    public static func getFileHash(
+        driveId: Int,
+        fileId: Int
+    ) -> APIRequest<InfomaniakResponse<KDriveFileHash>> {
+        APIRequest(
+            method: .get,
+            path: "/2/drive/\(driveId)/files/\(fileId)/hash"
+        )
+    }
+
+    /// Creates a request that gets a temporary URL for a kDrive file.
+    public static func getFileTemporaryURL(
+        driveId: Int,
+        fileId: Int,
+        duration: Int? = nil
+    ) -> APIRequest<InfomaniakResponse<KDriveFileTemporaryURL>> {
+        var queryParameters: [QueryParameter] = []
+
+        if let duration {
+            queryParameters.append(QueryParameter(name: "duration", value: .integer(duration)))
+        }
+
+        return APIRequest(
+            method: .get,
+            path: "/2/drive/\(driveId)/files/\(fileId)/temporary_url",
+            queryParameters: queryParameters
+        )
+    }
+
+    /// Creates a request that lists versions for a kDrive file using the deprecated v2 endpoint.
+    public static func listFileVersionsV2(
+        driveId: Int,
+        fileId: Int,
+        orderBy: String? = nil,
+        order: String? = nil,
+        orderFor: [String: String] = [:]
+    ) -> APIRequest<InfomaniakResponse<[KDriveFileVersionV2]>> {
+        var queryParameters: [QueryParameter] = []
+
+        if let orderBy {
+            queryParameters.append(QueryParameter(name: "order_by", value: .string(orderBy)))
+        }
+
+        if let order {
+            queryParameters.append(QueryParameter(name: "order", value: .string(order)))
+        }
+
+        for (field, direction) in orderFor.sorted(by: { $0.key < $1.key }) {
+            queryParameters.append(QueryParameter(name: "order_for[\(field)]", value: .string(direction)))
+        }
+
+        return APIRequest(
+            method: .get,
+            path: "/2/drive/\(driveId)/files/\(fileId)/versions",
+            queryParameters: queryParameters
+        )
+    }
+
+    /// Creates a request that gets a single version for a kDrive file using the deprecated v2 endpoint.
+    public static func getFileVersionV2(
+        driveId: Int,
+        fileId: Int,
+        versionId: Int
+    ) -> APIRequest<InfomaniakResponse<KDriveFileVersionV2>> {
+        APIRequest(
+            method: .get,
+            path: "/2/drive/\(driveId)/files/\(fileId)/versions/\(versionId)"
+        )
+    }
+
     /// Creates a request that lists versions for a kDrive file.
     public static func listFileVersions(
         driveId: Int,
@@ -1450,6 +1641,222 @@ public enum KDriveRequests {
         )
     }
 
+    /// Creates a request that returns v2 drive-scoped file size statistics.
+    public static func chartFileSizes(
+        driveId: Int,
+        from: Int,
+        interval: Int,
+        metrics: [String],
+        until: Int
+    ) -> APIRequest<InfomaniakResponse<KDriveChart>> {
+        APIRequest(
+            method: .get,
+            path: "/2/drive/\(driveId)/statistics/sizes",
+            queryParameters: [
+                QueryParameter(name: "from", value: .integer(from)),
+                QueryParameter(name: "interval", value: .integer(interval)),
+                QueryParameter(name: "metrics", value: .strings(metrics)),
+                QueryParameter(name: "until", value: .integer(until)),
+            ]
+        )
+    }
+
+    /// Creates a request that returns v2 drive-scoped activity statistics.
+    public static func chartActivities(
+        driveId: Int,
+        from: Int,
+        interval: Int,
+        metric: String,
+        until: Int
+    ) -> APIRequest<InfomaniakResponse<KDriveChart>> {
+        APIRequest(
+            method: .get,
+            path: "/2/drive/\(driveId)/statistics/activities",
+            queryParameters: [
+                QueryParameter(name: "from", value: .integer(from)),
+                QueryParameter(name: "interval", value: .integer(interval)),
+                QueryParameter(name: "metric", value: .string(metric)),
+                QueryParameter(name: "until", value: .integer(until)),
+            ]
+        )
+    }
+
+    /// Creates a request that exports v2 drive-scoped file size statistics as CSV.
+    public static func exportFileSizes(
+        driveId: Int,
+        from: Int,
+        interval: Int,
+        metrics: [String],
+        until: Int
+    ) -> APIRequest<Data> {
+        APIRequest(
+            method: .get,
+            path: "/2/drive/\(driveId)/statistics/sizes/export",
+            queryParameters: [
+                QueryParameter(name: "from", value: .integer(from)),
+                QueryParameter(name: "interval", value: .integer(interval)),
+                QueryParameter(name: "metrics", value: .strings(metrics)),
+                QueryParameter(name: "until", value: .integer(until)),
+            ],
+            headers: [HTTPHeader(name: "Accept", value: "text/csv")]
+        )
+    }
+
+    /// Creates a request that exports v2 drive-scoped activity statistics as CSV.
+    public static func exportActivities(
+        driveId: Int,
+        from: Int,
+        interval: Int,
+        metric: String,
+        until: Int
+    ) -> APIRequest<Data> {
+        APIRequest(
+            method: .get,
+            path: "/2/drive/\(driveId)/statistics/activities/export",
+            queryParameters: [
+                QueryParameter(name: "from", value: .integer(from)),
+                QueryParameter(name: "interval", value: .integer(interval)),
+                QueryParameter(name: "metric", value: .string(metric)),
+                QueryParameter(name: "until", value: .integer(until)),
+            ],
+            headers: [HTTPHeader(name: "Accept", value: "text/csv")]
+        )
+    }
+
+    /// Creates a request that lists users active on a kDrive during a statistics period.
+    public static func listActivityUsers(
+        driveId: Int,
+        from: Int,
+        until: Int
+    ) -> APIRequest<InfomaniakResponse<[KDriveActiveMember]>> {
+        APIRequest(
+            method: .get,
+            path: "/2/drive/\(driveId)/statistics/activities/users",
+            queryParameters: [
+                QueryParameter(name: "from", value: .integer(from)),
+                QueryParameter(name: "until", value: .integer(until)),
+            ]
+        )
+    }
+
+    /// Creates a request that lists files shared on a kDrive during a statistics period.
+    public static func listActivitySharedFiles(
+        driveId: Int,
+        from: Int,
+        until: Int
+    ) -> APIRequest<InfomaniakResponse<[KDriveSharedFileActivity]>> {
+        APIRequest(
+            method: .get,
+            path: "/2/drive/\(driveId)/statistics/activities/shared_files",
+            queryParameters: [
+                QueryParameter(name: "from", value: .integer(from)),
+                QueryParameter(name: "until", value: .integer(until)),
+            ]
+        )
+    }
+
+    /// Creates a request that lists share links active on a kDrive during a statistics period.
+    public static func listActivityShareLinks(
+        driveId: Int,
+        from: Int,
+        until: Int,
+        options: ListKDriveActivityShareLinksOptions = ListKDriveActivityShareLinksOptions()
+    ) -> APIRequest<PaginatedInfomaniakResponse<[KDriveStatisticShareLink]>> {
+        var queryParameters: [QueryParameter] = [
+            QueryParameter(name: "from", value: .integer(from)),
+            QueryParameter(name: "until", value: .integer(until)),
+        ]
+
+        if let includedResources = options.includedResources {
+            queryParameters.append(QueryParameter(name: "with", value: .string(includedResources)))
+        }
+
+        if let maxView = options.maxView {
+            queryParameters.append(QueryParameter(name: "max_view", value: .integer(maxView)))
+        }
+
+        if let minView = options.minView {
+            queryParameters.append(QueryParameter(name: "min_view", value: .integer(minView)))
+        }
+
+        if !options.rights.isEmpty {
+            queryParameters.append(QueryParameter(name: "rights[]", value: .strings(options.rights)))
+        }
+
+        if let search = options.search {
+            queryParameters.append(QueryParameter(name: "search", value: .string(search)))
+        }
+
+        if let validUntil = options.validUntil {
+            queryParameters.append(QueryParameter(name: "valid_until", value: .integer(validUntil)))
+        }
+
+        if let page = options.page {
+            queryParameters.append(QueryParameter(name: "page", value: .integer(page)))
+        }
+
+        if let perPage = options.perPage {
+            queryParameters.append(QueryParameter(name: "per_page", value: .integer(perPage)))
+        }
+
+        if let total = options.total {
+            queryParameters.append(QueryParameter(name: "total", value: .bool(total)))
+        }
+
+        if !options.orderBy.isEmpty {
+            queryParameters.append(QueryParameter(name: "order_by", value: .strings(options.orderBy)))
+        }
+
+        if let order = options.order {
+            queryParameters.append(QueryParameter(name: "order", value: .string(order)))
+        }
+
+        for (field, direction) in options.orderFor.sorted(by: { $0.key < $1.key }) {
+            queryParameters.append(QueryParameter(name: "order_for[\(field)]", value: .string(direction)))
+        }
+
+        return APIRequest(
+            method: .get,
+            path: "/2/drive/\(driveId)/statistics/activities/links",
+            queryParameters: queryParameters
+        )
+    }
+
+    /// Creates a request that exports share links active on a kDrive during a statistics period.
+    public static func exportActivityShareLinks(
+        driveId: Int,
+        from: Int,
+        until: Int,
+        options: ExportKDriveActivityShareLinksOptions = ExportKDriveActivityShareLinksOptions()
+    ) -> APIRequest<InfomaniakResponse<[KDriveStatisticShareLink]>> {
+        var queryParameters: [QueryParameter] = [
+            QueryParameter(name: "from", value: .integer(from)),
+            QueryParameter(name: "until", value: .integer(until)),
+        ]
+
+        if let maxView = options.maxView {
+            queryParameters.append(QueryParameter(name: "max_view", value: .integer(maxView)))
+        }
+
+        if let minView = options.minView {
+            queryParameters.append(QueryParameter(name: "min_view", value: .integer(minView)))
+        }
+
+        if !options.rights.isEmpty {
+            queryParameters.append(QueryParameter(name: "rights", value: .strings(options.rights)))
+        }
+
+        if let validUntil = options.validUntil {
+            queryParameters.append(QueryParameter(name: "valid_until", value: .integer(validUntil)))
+        }
+
+        return APIRequest(
+            method: .get,
+            path: "/2/drive/\(driveId)/statistics/activities/links/export",
+            queryParameters: queryParameters
+        )
+    }
+
     /// Creates a request that lists generated kDrive activity reports.
     public static func listActivityReports(
         driveId: Int,
@@ -1492,6 +1899,66 @@ public enum KDriveRequests {
         return APIRequest(
             method: .get,
             path: "/2/drive/\(driveId)/imports",
+            queryParameters: queryParameters
+        )
+    }
+
+    /// Creates a request that lists files that could not be imported for an external import.
+    public static func listErroredImportFiles(
+        driveId: Int,
+        importId: Int,
+        with includedResources: String? = nil,
+        page: Int? = nil,
+        perPage: Int? = nil,
+        total: Bool? = nil
+    ) -> APIRequest<PaginatedInfomaniakResponse<[KDriveExternalImportFile]>> {
+        var queryParameters: [QueryParameter] = []
+
+        if let includedResources {
+            queryParameters.append(QueryParameter(name: "with", value: .string(includedResources)))
+        }
+
+        if let page {
+            queryParameters.append(QueryParameter(name: "page", value: .integer(page)))
+        }
+
+        if let perPage {
+            queryParameters.append(QueryParameter(name: "per_page", value: .integer(perPage)))
+        }
+
+        if let total {
+            queryParameters.append(QueryParameter(name: "total", value: .bool(total)))
+        }
+
+        return APIRequest(
+            method: .get,
+            path: "/2/drive/\(driveId)/imports/\(importId)",
+            queryParameters: queryParameters
+        )
+    }
+
+    /// Creates a request that lists third-party drives eligible for OAuth external import.
+    public static func listOAuthImportDrives(
+        driveId: Int,
+        application: String,
+        accessTokenId: Int? = nil,
+        authCode: String? = nil
+    ) -> APIRequest<InfomaniakResponse<KDriveThirdPartyDrivesList>> {
+        var queryParameters: [QueryParameter] = [
+            QueryParameter(name: "application", value: .string(application)),
+        ]
+
+        if let accessTokenId {
+            queryParameters.append(QueryParameter(name: "access_token_id", value: .integer(accessTokenId)))
+        }
+
+        if let authCode {
+            queryParameters.append(QueryParameter(name: "auth_code", value: .string(authCode)))
+        }
+
+        return APIRequest(
+            method: .get,
+            path: "/2/drive/\(driveId)/imports/oauth/drives",
             queryParameters: queryParameters
         )
     }

@@ -1,4 +1,94 @@
+## 2026-05-07 — kDrive v2 file version detail route
+
+- Added shared support for `GET /2/drive/{drive_id}/files/{file_id}/versions/{version_id}` via `KDriveRequests.getFileVersionV2` and `KDriveService.getFileVersionV2`, reusing `KDriveFileVersionV2`.
+- Added request/decoding tests covering method, OpenAPI v2 path with required `drive_id`/`file_id`/`version_id`, auth header, absent query parameters, explicit required path parameter substitution checks, and single-version decoding.
+- Validation: `swift test` passes (309 tests).
+
+## 2026-05-07 — kDrive v2 file versions route
+
+- Added shared support for `GET /2/drive/{drive_id}/files/{file_id}/versions` via `KDriveRequests.listFileVersionsV2`, `KDriveService.listFileVersionsV2`, and `KDriveFileVersionV2`, keeping it distinct from the existing v3 `listFileVersions` route.
+- Added request/decoding tests covering method, OpenAPI v2 path with required `drive_id`/`file_id`, auth header, optional `order_by`/`order`/`order_for` query parameters, absent query parameters, explicit required path parameter substitution checks, and `converted_type`/`name` decoding.
+- Validation: `swift test` passes (306 tests).
+
+## 2026-05-07 — kDrive file temporary URL route
+
+- Added shared support for `GET /2/drive/{drive_id}/files/{file_id}/temporary_url` via `KDriveRequests.getFileTemporaryURL`, `KDriveService.getFileTemporaryURL`, and `KDriveFileTemporaryURL`.
+- Added request/decoding tests covering method, OpenAPI path with required `drive_id`/`file_id`, auth header, optional `duration` query parameter, absent query parameters, explicit required path parameter substitution checks, and `temporary_url` decoding.
+- Validation: `swift test` passes (302 tests).
+
+## 2026-05-07 — kDrive file hash route
+
+- Added shared support for `GET /2/drive/{drive_id}/files/{file_id}/hash` via `KDriveRequests.getFileHash`, `KDriveService.getFileHash`, and `KDriveFileHash`.
+- Added request/decoding tests covering method, OpenAPI path with required `drive_id`/`file_id`, auth header, absent query parameters, explicit required path parameter substitution checks, and `hash` decoding.
+- Validation: `swift test` passes (299 tests).
+
+## 2026-05-07 — kDrive file size route
+
+- Added shared support for `GET /2/drive/{drive_id}/files/{file_id}/sizes` via `KDriveRequests.getFileSize`, `KDriveService.getFileSize`, and `KDriveFileSize`.
+- Added request/decoding tests covering method, OpenAPI path with required `drive_id`/`file_id`, auth header, optional `depth` query parameter, and `storage_size` decoding.
+- Validation: `swift test` passes (296 tests).
+
+## 2026-05-07 — kDrive import errored files route
+
+- Added shared support for `GET /2/drive/{drive_id}/imports/{import_id}` via `KDriveRequests.listErroredImportFiles`, `KDriveService.listErroredImportFiles`, and `KDriveExternalImportFile`.
+- Added request/decoding tests covering method, OpenAPI path with required `drive_id`/`import_id`, auth header, optional `with`/pagination/`total` query parameters, and response decoding.
+- Validation: `swift test` passes (292 tests).
+
+## 2026-05-07 — kDrive OAuth import eligible drives route
+
+- Added shared support for `GET /2/drive/{drive_id}/imports/oauth/drives` via `KDriveRequests.listOAuthImportDrives`, `KDriveService.listOAuthImportDrives`, `KDriveThirdPartyDrivesList`, and `KDriveThirdPartyDrive`.
+- Added request/decoding tests covering method, OpenAPI path, auth header, required `application` query parameter, optional `access_token_id`/`auth_code`, and response decoding.
+- Validation: `swift test` passes (289 tests).
+
+## 2026-05-07 — kDrive export activity share links statistics route
+
+- Added shared support for `GET /2/drive/{drive_id}/statistics/activities/links/export` via `KDriveRequests.exportActivityShareLinks`, `KDriveService.exportActivityShareLinks`, and `ExportKDriveActivityShareLinksOptions`, reusing `KDriveStatisticShareLink`.
+- Added request/decoding tests covering method, OpenAPI path, auth header, required `from` and `until` query parameters, optional export filters, and non-paginated share-link response decoding.
+- Validation: `swift test` passes (286 tests).
+
 ### Progress of the project
+
+## 2026-05-07 — kDrive activity share links statistics route
+
+- Added shared support for `GET /2/drive/{drive_id}/statistics/activities/links` via `KDriveRequests.listActivityShareLinks`, `KDriveService.listActivityShareLinks`, `KDriveStatisticShareLink`, `KDriveStatisticShareLinkCapabilities`, and `ListKDriveActivityShareLinksOptions`.
+- Added request/decoding tests covering method, OpenAPI path, auth header, required `from` and `until` query parameters, optional filters/sorting/pagination, and share-link fields.
+- Validation: `swift test` passes (284 tests).
+
+## 2026-05-07 — kDrive activity share links statistics route
+
+- Added shared typed support for `GET /2/drive/{drive_id}/statistics/activities/links` via `KDriveRequests.listActivityShareLinks` and `KDriveService.listActivityShareLinks`.
+- Added DTO/query option coverage for activity share-link statistics and request/decoding tests with explicit required `from`/`until` query checks.
+- Validation: `swift test` passes.
+
+## 2026-05-07 — kDrive activity chart statistics route
+
+- Added shared support for `GET /2/drive/{drive_id}/statistics/activities` via `KDriveRequests.chartActivities` and `KDriveService.chartActivities`, returning `KDriveChart` for the required `metric` query parameter.
+- Added request/decoding tests covering method, OpenAPI path, auth header, required `from`, `interval`, `metric`, and `until` query parameters, and chart decoding.
+- Validation: `swift test` passes (281 tests).
+
+## 2026-05-07 — kDrive activity shared files statistics route
+
+- Added shared support for `GET /2/drive/{drive_id}/statistics/activities/shared_files` via `KDriveRequests.listActivitySharedFiles`, `KDriveService.listActivitySharedFiles`, and `KDriveSharedFileActivity`.
+- Added request/decoding tests covering method, OpenAPI path, auth header, required `from` and `until` query parameters, and shared-file fields.
+- Validation: `swift test` passes (279 tests).
+
+
+## 2026-05-07 — kDrive activity users statistics route
+
+- Added shared support for `GET /2/drive/{drive_id}/statistics/activities/users` via `KDriveRequests.listActivityUsers`, `KDriveService.listActivityUsers`, and `KDriveActiveMember`.
+- Added request/decoding tests covering method, OpenAPI path, auth header, required `from` and `until` query parameters, and nullable user fields.
+- Validation: `swift test` passes (277 tests).
+
+## 2026-05-07 — kDrive export file sizes route
+
+- Added shared support for `GET /2/drive/{drive_id}/statistics/sizes/export` via `KDriveRequests.exportFileSizes` and `KDriveService.exportFileSizes`, returning raw CSV `Data` with `Accept: text/csv`.
+- Added request coverage for method/path/auth/CSV accept header and required `from`, `interval`, repeated `metrics`, and `until` query parameters.
+- Validation: `swift test` passes (276 tests).
+
+## 2026-05-07 — kDrive chart file sizes route consumed by Potassium CLI
+
+- Existing shared `GET /2/drive/{drive_id}/statistics/sizes` support (`KDriveRequests.chartFileSizes`, `KDriveService.chartFileSizes`, `KDriveChart`) was verified while wiring Potassium CLI on `feat/kdrive`.
+- No channel code changes were required for this follow-up; Potassium now consumes this route through `potassium kdrive chart-file-sizes`.
 
 ### Implemented API route inventory
 
@@ -47,12 +137,23 @@ kDrive request factories, and `KDriveService` wrappers moved from Potassium.
 | GET | `/2/drive/{drive_id}/categories/rights` | `KDriveRequests.getCategoryRights` |
 | GET | `/2/drive/{drive_id}/trash/count` | `KDriveRequests.getTrashCount` |
 | GET | `/3/drive/{drive_id}/files/{file_id}/count` | `KDriveRequests.getDirectoryCount` |
+| GET | `/2/drive/{drive_id}/files/{file_id}/sizes` | `KDriveRequests.getFileSize` |
 | GET | `/3/drive/{drive_id}/files/{file_id}/versions` | `KDriveRequests.listFileVersions` |
+| GET | `/2/drive/{drive_id}/files/{file_id}/versions` | `KDriveRequests.listFileVersionsV2` |
+| GET | `/2/drive/{drive_id}/files/{file_id}/versions/{version_id}` | `KDriveRequests.getFileVersionV2` |
 | GET | `/2/drive/{drive_id}/activities` | `KDriveRequests.listActivities` |
 | GET | `/3/drive/{drive_id}/activities` | `KDriveRequests.listDriveActivities` |
 | GET | `/3/drive/{drive_id}/activities/total` | `KDriveRequests.listDriveActivityTotals` |
+| GET | `/2/drive/{drive_id}/statistics/sizes` | `KDriveRequests.chartFileSizes` |
+| GET | `/2/drive/{drive_id}/statistics/activities` | `KDriveRequests.chartActivities` |
+| GET | `/2/drive/{drive_id}/statistics/activities/users` | `KDriveRequests.listActivityUsers` |
+| GET | `/2/drive/{drive_id}/statistics/activities/shared_files` | `KDriveRequests.listActivitySharedFiles` |
+| GET | `/2/drive/{drive_id}/statistics/activities/links` | `KDriveRequests.listActivityShareLinks` |
+| GET | `/2/drive/{drive_id}/statistics/activities/links/export` | `KDriveRequests.exportActivityShareLinks` |
 | GET | `/2/drive/{drive_id}/activities/reports` | `KDriveRequests.listActivityReports` |
 | GET | `/2/drive/{drive_id}/imports` | `KDriveRequests.listImports` |
+| GET | `/2/drive/{drive_id}/imports/{import_id}` | `KDriveRequests.listErroredImportFiles` |
+| GET | `/2/drive/{drive_id}/imports/oauth/drives` | `KDriveRequests.listOAuthImportDrives` |
 | GET | `/2/drive/{drive_id}/users/invitation` | `KDriveRequests.listUserInvitations` |
 | GET | `/2/drive/preferences` | `KDriveRequests.getUserPreferences` |
 | GET | `/2/drive/users` | `KDriveRequests.listKDriveUsers` |
@@ -570,3 +671,29 @@ not started
 - Reused `KChatChannelMember` for responses.
 - Added `KChatRequests.getChannelMembersByIds(channelId:userIds:)` and `KChatService.getChannelMembersByIds(channelId:userIds:)` returning `[KChatChannelMember]`.
 - Added request/decoding tests covering method, path, auth/accept/content-type headers, percent-encoded `channel_id`, JSON body encoding, no query parameters, and member array decoding.
+
+## 2026-05-07 — kDrive user drives route
+
+- Added `GET /2/drive/users/{user_id}/drives` (`kDriveGetDrivesV2`) request factory and service method.
+- Added query option support for `account_id`, `with`, `roles`, `status`, `page`, `per_page`, and `total`.
+- Added unit coverage for URL construction and response decoding.
+
+## 2026-05-07 — kDrive v2 drive users route
+
+- Added network support for `GET /2/drive/{drive_id}/users` as `KDriveRequests.listDriveUsersV2` and `KDriveService.listDriveUsersV2`.
+- Added `ListKDriveDriveUsersV2Options` for search, status, type, user id, pagination, total, and sort query parameters.
+- Added unit coverage for request path/query encoding and response decoding.
+- Verified with `swift test`.
+
+## 2026-05-07 — kDrive chart file sizes route
+
+- Branch: `feat/kdrive`.
+- Added typed request/service support for non-destructive `GET /2/drive/{drive_id}/statistics/sizes` as `KDriveRequests.chartFileSizes` and `KDriveService.chartFileSizes`.
+- Added `KDriveChart`, `KDriveChartData`, and flexible chart data value DTOs for the route's chart response schema.
+- Added unit coverage for the OpenAPI path, required query parameters (`from`, `interval`, repeatable `metrics`, `until`), authorization header, and chart decoding.
+
+## 2026-05-07 — kDrive export activities route
+
+- Added typed request/service support for `GET /2/drive/{drive_id}/statistics/activities/export` as `KDriveRequests.exportActivities` and `KDriveService.exportActivities`.
+- The request sends required query parameters `from`, `interval`, singular `metric`, and `until`, and requests `text/csv`.
+- Added unit coverage for OpenAPI path, authorization, CSV accept header, and required query parameters.
