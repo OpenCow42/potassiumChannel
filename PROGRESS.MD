@@ -1,5 +1,10 @@
 ### Progress of the project
 
+## 2026-05-07 — kDrive chart file sizes route consumed by Potassium CLI
+
+- Existing shared `GET /2/drive/{drive_id}/statistics/sizes` support (`KDriveRequests.chartFileSizes`, `KDriveService.chartFileSizes`, `KDriveChart`) was verified while wiring Potassium CLI on `feat/kdrive`.
+- No channel code changes were required for this follow-up; Potassium now consumes this route through `potassium kdrive chart-file-sizes`.
+
 ### Implemented API route inventory
 
 `potassiumChannel` owns shared typed routes and DTOs segmented by target app.
