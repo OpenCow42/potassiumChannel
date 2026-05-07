@@ -582,6 +582,25 @@ public struct KDriveService: Sendable {
         )
     }
 
+    /// Lists versions for a kDrive file using the deprecated v2 endpoint.
+    public func listFileVersionsV2(
+        driveId: Int,
+        fileId: Int,
+        orderBy: String? = nil,
+        order: String? = nil,
+        orderFor: [String: String] = [:]
+    ) async throws -> InfomaniakResponse<[KDriveFileVersionV2]> {
+        try await client.send(
+            KDriveRequests.listFileVersionsV2(
+                driveId: driveId,
+                fileId: fileId,
+                orderBy: orderBy,
+                order: order,
+                orderFor: orderFor
+            )
+        )
+    }
+
     /// Lists versions for a kDrive file.
     public func listFileVersions(
         driveId: Int,
