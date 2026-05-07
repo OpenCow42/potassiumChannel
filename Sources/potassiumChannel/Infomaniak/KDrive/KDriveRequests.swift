@@ -1690,7 +1690,7 @@ public enum KDriveRequests {
         }
 
         if !options.rights.isEmpty {
-            queryParameters.append(QueryParameter(name: "rights", value: .strings(options.rights)))
+            queryParameters.append(QueryParameter(name: "rights[]", value: .strings(options.rights)))
         }
 
         if let search = options.search {
