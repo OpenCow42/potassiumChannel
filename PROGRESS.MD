@@ -1,5 +1,11 @@
 ### Progress of the project
 
+## 2026-05-07 — kDrive export file sizes route
+
+- Added shared support for `GET /2/drive/{drive_id}/statistics/sizes/export` via `KDriveRequests.exportFileSizes` and `KDriveService.exportFileSizes`, returning raw CSV `Data` with `Accept: text/csv`.
+- Added request coverage for method/path/auth/CSV accept header and required `from`, `interval`, repeated `metrics`, and `until` query parameters.
+- Validation: `swift test` passes (276 tests).
+
 ## 2026-05-07 — kDrive chart file sizes route consumed by Potassium CLI
 
 - Existing shared `GET /2/drive/{drive_id}/statistics/sizes` support (`KDriveRequests.chartFileSizes`, `KDriveService.chartFileSizes`, `KDriveChart`) was verified while wiring Potassium CLI on `feat/kdrive`.
