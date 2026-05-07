@@ -706,6 +706,18 @@ public struct KDriveService: Sendable {
         )
     }
 
+    /// Lists share links active on a kDrive during a statistics period.
+    public func listActivityShareLinks(
+        driveId: Int,
+        from: Int,
+        until: Int,
+        options: ListKDriveActivityShareLinksOptions = ListKDriveActivityShareLinksOptions()
+    ) async throws -> PaginatedInfomaniakResponse<[KDriveStatisticShareLink]> {
+        try await client.send(
+            KDriveRequests.listActivityShareLinks(driveId: driveId, from: from, until: until, options: options)
+        )
+    }
+
     /// Lists generated kDrive activity reports.
     public func listActivityReports(
         driveId: Int,

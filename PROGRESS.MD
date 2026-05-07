@@ -1,5 +1,17 @@
 ### Progress of the project
 
+## 2026-05-07 — kDrive activity share links statistics route
+
+- Added shared support for `GET /2/drive/{drive_id}/statistics/activities/links` via `KDriveRequests.listActivityShareLinks`, `KDriveService.listActivityShareLinks`, `KDriveStatisticShareLink`, `KDriveStatisticShareLinkCapabilities`, and `ListKDriveActivityShareLinksOptions`.
+- Added request/decoding tests covering method, OpenAPI path, auth header, required `from` and `until` query parameters, optional filters/sorting/pagination, and share-link fields.
+- Validation: `swift test` passes (284 tests).
+
+## 2026-05-07 — kDrive activity share links statistics route
+
+- Added shared typed support for `GET /2/drive/{drive_id}/statistics/activities/links` via `KDriveRequests.listActivityShareLinks` and `KDriveService.listActivityShareLinks`.
+- Added DTO/query option coverage for activity share-link statistics and request/decoding tests with explicit required `from`/`until` query checks.
+- Validation: `swift test` passes.
+
 ## 2026-05-07 — kDrive activity chart statistics route
 
 - Added shared support for `GET /2/drive/{drive_id}/statistics/activities` via `KDriveRequests.chartActivities` and `KDriveService.chartActivities`, returning `KDriveChart` for the required `metric` query parameter.
@@ -85,6 +97,7 @@ kDrive request factories, and `KDriveService` wrappers moved from Potassium.
 | GET | `/2/drive/{drive_id}/statistics/activities` | `KDriveRequests.chartActivities` |
 | GET | `/2/drive/{drive_id}/statistics/activities/users` | `KDriveRequests.listActivityUsers` |
 | GET | `/2/drive/{drive_id}/statistics/activities/shared_files` | `KDriveRequests.listActivitySharedFiles` |
+| GET | `/2/drive/{drive_id}/statistics/activities/links` | `KDriveRequests.listActivityShareLinks` |
 | GET | `/2/drive/{drive_id}/activities/reports` | `KDriveRequests.listActivityReports` |
 | GET | `/2/drive/{drive_id}/imports` | `KDriveRequests.listImports` |
 | GET | `/2/drive/{drive_id}/users/invitation` | `KDriveRequests.listUserInvitations` |
