@@ -32,7 +32,7 @@ struct KChatGetUsersByGroupChannelsRequestTests {
 
     @Test("kChat get users by group channels response decodes users keyed by channel id")
     func kChatGetUsersByGroupChannelsResponseDecodesUsersByChannelId() throws {
-        let json = #"{"channel-one":[{"id":"user-one","create_at":1,"update_at":2,"delete_at":0,"username":"adrien","first_name":"Adrien","last_name":"Example","email":"adrien@example.com","roles":"system_user"}],"channel-two":[{"id":"user-two","username":"cow","nickname":"Moo"}]}"#.data(using: .utf8)!
+        let json = #"{"channel-one":[{"id":"user-one","create_at":1,"update_at":2,"delete_at":0,"username":"alice","first_name":"Alice","last_name":"Example","email":"alice@example.com","roles":"system_user"}],"channel-two":[{"id":"user-two","username":"bob","nickname":"Bob"}]}"#.data(using: .utf8)!
 
         let usersByChannel = try JSONDecoder.kChat.decode([String: [KChatUser]].self, from: json)
 
@@ -40,12 +40,12 @@ struct KChatGetUsersByGroupChannelsRequestTests {
         #expect(usersByChannel["channel-one"]?.count == 1)
         #expect(usersByChannel["channel-one"]?.first?.id == "user-one")
         #expect(usersByChannel["channel-one"]?.first?.createAt == 1)
-        #expect(usersByChannel["channel-one"]?.first?.username == "adrien")
-        #expect(usersByChannel["channel-one"]?.first?.firstName == "Adrien")
+        #expect(usersByChannel["channel-one"]?.first?.username == "alice")
+        #expect(usersByChannel["channel-one"]?.first?.firstName == "Alice")
         #expect(usersByChannel["channel-one"]?.first?.roles == "system_user")
         #expect(usersByChannel["channel-two"]?.first?.id == "user-two")
-        #expect(usersByChannel["channel-two"]?.first?.username == "cow")
-        #expect(usersByChannel["channel-two"]?.first?.nickname == "Moo")
+        #expect(usersByChannel["channel-two"]?.first?.username == "bob")
+        #expect(usersByChannel["channel-two"]?.first?.nickname == "Bob")
     }
 }
 
