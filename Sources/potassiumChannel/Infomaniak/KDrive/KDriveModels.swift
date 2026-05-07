@@ -926,6 +926,33 @@ public struct KDriveExternalImport: Codable, Equatable, Sendable {
     }
 }
 
+/// A file entry reported by an external import, including errored imports.
+public struct KDriveExternalImportFile: Codable, Equatable, Sendable {
+    /// The unique external file import identifier.
+    public let id: Int
+
+    /// The external file name.
+    public let name: String
+
+    /// The external file import status.
+    public let status: String
+
+    /// Message describing the import result or failure.
+    public let message: String
+
+    /// External file creation timestamp.
+    public let createdAt: Int
+
+    /// Creates an external import file value.
+    public init(id: Int, name: String, status: String, message: String, createdAt: Int) {
+        self.id = id
+        self.name = name
+        self.status = status
+        self.message = message
+        self.createdAt = createdAt
+    }
+}
+
 /// Third-party drives eligible for an external import.
 public struct KDriveThirdPartyDrivesList: Codable, Equatable, Sendable {
     /// All suitable third-party drives.
