@@ -1,3 +1,9 @@
+## 2026-05-07 — kDrive file temporary URL route
+
+- Added shared support for `GET /2/drive/{drive_id}/files/{file_id}/temporary_url` via `KDriveRequests.getFileTemporaryURL`, `KDriveService.getFileTemporaryURL`, and `KDriveFileTemporaryURL`.
+- Added request/decoding tests covering method, OpenAPI path with required `drive_id`/`file_id`, auth header, optional `duration` query parameter, absent query parameters, explicit required path parameter substitution checks, and `temporary_url` decoding.
+- Validation: `swift test` passes (302 tests).
+
 ## 2026-05-07 — kDrive file hash route
 
 - Added shared support for `GET /2/drive/{drive_id}/files/{file_id}/hash` via `KDriveRequests.getFileHash`, `KDriveService.getFileHash`, and `KDriveFileHash`.

@@ -461,6 +461,17 @@ public struct KDriveFileHash: Codable, Equatable, Sendable {
     }
 }
 
+/// Temporary public URL for a kDrive file.
+public struct KDriveFileTemporaryURL: Codable, Equatable, Sendable {
+    /// Temporary URL for the file.
+    public let temporaryUrl: String
+
+    /// Creates a kDrive file temporary URL value.
+    public init(temporaryUrl: String) {
+        self.temporaryUrl = temporaryUrl
+    }
+}
+
 /// A version of a kDrive file.
 public struct KDriveFileVersion: Codable, Equatable, Sendable {
     /// The unique file version identifier.

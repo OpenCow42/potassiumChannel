@@ -571,6 +571,17 @@ public struct KDriveService: Sendable {
         )
     }
 
+    /// Gets a temporary URL for a kDrive file.
+    public func getFileTemporaryURL(
+        driveId: Int,
+        fileId: Int,
+        duration: Int? = nil
+    ) async throws -> InfomaniakResponse<KDriveFileTemporaryURL> {
+        try await client.send(
+            KDriveRequests.getFileTemporaryURL(driveId: driveId, fileId: fileId, duration: duration)
+        )
+    }
+
     /// Lists versions for a kDrive file.
     public func listFileVersions(
         driveId: Int,
