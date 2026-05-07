@@ -627,6 +627,25 @@ public struct KDriveService: Sendable {
         )
     }
 
+    /// Returns v2 drive-scoped activity statistics.
+    public func chartActivities(
+        driveId: Int,
+        from: Int,
+        interval: Int,
+        metric: String,
+        until: Int
+    ) async throws -> InfomaniakResponse<KDriveChart> {
+        try await client.send(
+            KDriveRequests.chartActivities(
+                driveId: driveId,
+                from: from,
+                interval: interval,
+                metric: metric,
+                until: until
+            )
+        )
+    }
+
     /// Exports v2 drive-scoped file size statistics as CSV data.
     public func exportFileSizes(
         driveId: Int,

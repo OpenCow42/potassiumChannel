@@ -1,5 +1,11 @@
 ### Progress of the project
 
+## 2026-05-07 — kDrive activity chart statistics route
+
+- Added shared support for `GET /2/drive/{drive_id}/statistics/activities` via `KDriveRequests.chartActivities` and `KDriveService.chartActivities`, returning `KDriveChart` for the required `metric` query parameter.
+- Added request/decoding tests covering method, OpenAPI path, auth header, required `from`, `interval`, `metric`, and `until` query parameters, and chart decoding.
+- Validation: `swift test` passes (281 tests).
+
 ## 2026-05-07 — kDrive activity shared files statistics route
 
 - Added shared support for `GET /2/drive/{drive_id}/statistics/activities/shared_files` via `KDriveRequests.listActivitySharedFiles`, `KDriveService.listActivitySharedFiles`, and `KDriveSharedFileActivity`.
@@ -76,6 +82,7 @@ kDrive request factories, and `KDriveService` wrappers moved from Potassium.
 | GET | `/3/drive/{drive_id}/activities` | `KDriveRequests.listDriveActivities` |
 | GET | `/3/drive/{drive_id}/activities/total` | `KDriveRequests.listDriveActivityTotals` |
 | GET | `/2/drive/{drive_id}/statistics/sizes` | `KDriveRequests.chartFileSizes` |
+| GET | `/2/drive/{drive_id}/statistics/activities` | `KDriveRequests.chartActivities` |
 | GET | `/2/drive/{drive_id}/statistics/activities/users` | `KDriveRequests.listActivityUsers` |
 | GET | `/2/drive/{drive_id}/statistics/activities/shared_files` | `KDriveRequests.listActivitySharedFiles` |
 | GET | `/2/drive/{drive_id}/activities/reports` | `KDriveRequests.listActivityReports` |
