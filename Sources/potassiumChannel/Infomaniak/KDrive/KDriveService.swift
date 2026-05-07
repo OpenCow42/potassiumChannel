@@ -50,6 +50,16 @@ public struct KDriveService: Sendable {
         )
     }
 
+    /// Fetches a single user associated with a specific kDrive using the v2 endpoint.
+    public func getDriveUserV2(
+        driveId: Int,
+        userId: Int
+    ) async throws -> InfomaniakResponse<KDriveDriveUser?> {
+        try await client.send(
+            KDriveRequests.getDriveUserV2(driveId: driveId, userId: userId)
+        )
+    }
+
     /// Lists kDrives associated with a specific user.
     public func listUserDrivesV2(
         userId: Int,

@@ -125,6 +125,17 @@ public enum KDriveRequests {
         )
     }
 
+    /// Creates a request that fetches a single user associated with a specific kDrive using the v2 endpoint.
+    public static func getDriveUserV2(
+        driveId: Int,
+        userId: Int
+    ) -> APIRequest<InfomaniakResponse<KDriveDriveUser?>> {
+        APIRequest(
+            method: .get,
+            path: "/2/drive/\(driveId)/users/\(userId)"
+        )
+    }
+
     /// Creates a request that lists kDrives associated with a specific user.
     public static func listUserDrivesV2(
         userId: Int,
