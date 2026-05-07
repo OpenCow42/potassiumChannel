@@ -35,6 +35,38 @@ public struct KDriveService: Sendable {
         )
     }
 
+    /// Lists users associated with a specific kDrive using the v2 endpoint.
+    public func listDriveUsersV2(
+        driveId: Int,
+        with includedResources: String? = nil,
+        options: ListKDriveDriveUsersV2Options = ListKDriveDriveUsersV2Options()
+    ) async throws -> PaginatedInfomaniakResponse<[KDriveDriveUser]> {
+        try await client.send(
+            KDriveRequests.listDriveUsersV2(
+                driveId: driveId,
+                with: includedResources,
+                options: options
+            )
+        )
+    }
+
+    /// Lists kDrives associated with a specific user.
+    public func listUserDrivesV2(
+        userId: Int,
+        accountId: Int,
+        with includedResources: String? = nil,
+        options: ListKDriveUserDrivesOptions = ListKDriveUserDrivesOptions()
+    ) async throws -> PaginatedInfomaniakResponse<[KDriveDriveUser]> {
+        try await client.send(
+            KDriveRequests.listUserDrivesV2(
+                userId: userId,
+                accountId: accountId,
+                with: includedResources,
+                options: options
+            )
+        )
+    }
+
     /// Lists recent files and directories on a kDrive.
     public func listRecentFiles(
         driveId: Int,
@@ -518,6 +550,68 @@ public struct KDriveService: Sendable {
         )
     }
 
+    /// Gets total file and storage size for a kDrive file or directory.
+    public func getFileSize(
+        driveId: Int,
+        fileId: Int,
+        depth: String? = nil
+    ) async throws -> InfomaniakResponse<KDriveFileSize> {
+        try await client.send(
+            KDriveRequests.getFileSize(driveId: driveId, fileId: fileId, depth: depth)
+        )
+    }
+
+    /// Gets the content hash for a kDrive file.
+    public func getFileHash(
+        driveId: Int,
+        fileId: Int
+    ) async throws -> InfomaniakResponse<KDriveFileHash> {
+        try await client.send(
+            KDriveRequests.getFileHash(driveId: driveId, fileId: fileId)
+        )
+    }
+
+    /// Gets a temporary URL for a kDrive file.
+    public func getFileTemporaryURL(
+        driveId: Int,
+        fileId: Int,
+        duration: Int? = nil
+    ) async throws -> InfomaniakResponse<KDriveFileTemporaryURL> {
+        try await client.send(
+            KDriveRequests.getFileTemporaryURL(driveId: driveId, fileId: fileId, duration: duration)
+        )
+    }
+
+    /// Lists versions for a kDrive file using the deprecated v2 endpoint.
+    public func listFileVersionsV2(
+        driveId: Int,
+        fileId: Int,
+        orderBy: String? = nil,
+        order: String? = nil,
+        orderFor: [String: String] = [:]
+    ) async throws -> InfomaniakResponse<[KDriveFileVersionV2]> {
+        try await client.send(
+            KDriveRequests.listFileVersionsV2(
+                driveId: driveId,
+                fileId: fileId,
+                orderBy: orderBy,
+                order: order,
+                orderFor: orderFor
+            )
+        )
+    }
+
+    /// Gets a single version for a kDrive file using the deprecated v2 endpoint.
+    public func getFileVersionV2(
+        driveId: Int,
+        fileId: Int,
+        versionId: Int
+    ) async throws -> InfomaniakResponse<KDriveFileVersionV2> {
+        try await client.send(
+            KDriveRequests.getFileVersionV2(driveId: driveId, fileId: fileId, versionId: versionId)
+        )
+    }
+
     /// Lists versions for a kDrive file.
     public func listFileVersions(
         driveId: Int,
@@ -576,6 +670,128 @@ public struct KDriveService: Sendable {
         )
     }
 
+    /// Returns v2 drive-scoped file size statistics.
+    public func chartFileSizes(
+        driveId: Int,
+        from: Int,
+        interval: Int,
+        metrics: [String],
+        until: Int
+    ) async throws -> InfomaniakResponse<KDriveChart> {
+        try await client.send(
+            KDriveRequests.chartFileSizes(
+                driveId: driveId,
+                from: from,
+                interval: interval,
+                metrics: metrics,
+                until: until
+            )
+        )
+    }
+
+    /// Returns v2 drive-scoped activity statistics.
+    public func chartActivities(
+        driveId: Int,
+        from: Int,
+        interval: Int,
+        metric: String,
+        until: Int
+    ) async throws -> InfomaniakResponse<KDriveChart> {
+        try await client.send(
+            KDriveRequests.chartActivities(
+                driveId: driveId,
+                from: from,
+                interval: interval,
+                metric: metric,
+                until: until
+            )
+        )
+    }
+
+    /// Exports v2 drive-scoped file size statistics as CSV data.
+    public func exportFileSizes(
+        driveId: Int,
+        from: Int,
+        interval: Int,
+        metrics: [String],
+        until: Int
+    ) async throws -> Data {
+        try await client.sendData(
+            KDriveRequests.exportFileSizes(
+                driveId: driveId,
+                from: from,
+                interval: interval,
+                metrics: metrics,
+                until: until
+            )
+        )
+    }
+
+    /// Exports v2 drive-scoped activity statistics as CSV data.
+    public func exportActivities(
+        driveId: Int,
+        from: Int,
+        interval: Int,
+        metric: String,
+        until: Int
+    ) async throws -> Data {
+        try await client.sendData(
+            KDriveRequests.exportActivities(
+                driveId: driveId,
+                from: from,
+                interval: interval,
+                metric: metric,
+                until: until
+            )
+        )
+    }
+
+    /// Lists users active on a kDrive during a statistics period.
+    public func listActivityUsers(
+        driveId: Int,
+        from: Int,
+        until: Int
+    ) async throws -> InfomaniakResponse<[KDriveActiveMember]> {
+        try await client.send(
+            KDriveRequests.listActivityUsers(driveId: driveId, from: from, until: until)
+        )
+    }
+
+    /// Lists files shared on a kDrive during a statistics period.
+    public func listActivitySharedFiles(
+        driveId: Int,
+        from: Int,
+        until: Int
+    ) async throws -> InfomaniakResponse<[KDriveSharedFileActivity]> {
+        try await client.send(
+            KDriveRequests.listActivitySharedFiles(driveId: driveId, from: from, until: until)
+        )
+    }
+
+    /// Lists share links active on a kDrive during a statistics period.
+    public func listActivityShareLinks(
+        driveId: Int,
+        from: Int,
+        until: Int,
+        options: ListKDriveActivityShareLinksOptions = ListKDriveActivityShareLinksOptions()
+    ) async throws -> PaginatedInfomaniakResponse<[KDriveStatisticShareLink]> {
+        try await client.send(
+            KDriveRequests.listActivityShareLinks(driveId: driveId, from: from, until: until, options: options)
+        )
+    }
+
+    /// Exports share links active on a kDrive during a statistics period.
+    public func exportActivityShareLinks(
+        driveId: Int,
+        from: Int,
+        until: Int,
+        options: ExportKDriveActivityShareLinksOptions = ExportKDriveActivityShareLinksOptions()
+    ) async throws -> InfomaniakResponse<[KDriveStatisticShareLink]> {
+        try await client.send(
+            KDriveRequests.exportActivityShareLinks(driveId: driveId, from: from, until: until, options: options)
+        )
+    }
+
     /// Lists generated kDrive activity reports.
     public func listActivityReports(
         driveId: Int,
@@ -595,6 +811,44 @@ public struct KDriveService: Sendable {
     ) async throws -> PaginatedInfomaniakResponse<[KDriveExternalImport]> {
         try await client.send(
             KDriveRequests.listImports(driveId: driveId, page: page, perPage: perPage)
+        )
+    }
+
+    /// Lists files that could not be imported for an external import.
+    public func listErroredImportFiles(
+        driveId: Int,
+        importId: Int,
+        with includedResources: String? = nil,
+        page: Int? = nil,
+        perPage: Int? = nil,
+        total: Bool? = nil
+    ) async throws -> PaginatedInfomaniakResponse<[KDriveExternalImportFile]> {
+        try await client.send(
+            KDriveRequests.listErroredImportFiles(
+                driveId: driveId,
+                importId: importId,
+                with: includedResources,
+                page: page,
+                perPage: perPage,
+                total: total
+            )
+        )
+    }
+
+    /// Lists third-party drives eligible for OAuth external import.
+    public func listOAuthImportDrives(
+        driveId: Int,
+        application: String,
+        accessTokenId: Int? = nil,
+        authCode: String? = nil
+    ) async throws -> InfomaniakResponse<KDriveThirdPartyDrivesList> {
+        try await client.send(
+            KDriveRequests.listOAuthImportDrives(
+                driveId: driveId,
+                application: application,
+                accessTokenId: accessTokenId,
+                authCode: authCode
+            )
         )
     }
 
