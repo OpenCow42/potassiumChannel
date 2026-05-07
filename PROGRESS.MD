@@ -73,6 +73,7 @@ not started
 | GET | `/api/v4/config/client` | `KChatRequests.getClientConfig` |
 | GET | `/api/v4/channels` | `KChatRequests.listChannels` |
 | GET | `/api/v4/channels/{channel_id}` | `KChatRequests.getChannel` |
+| POST | `/api/v4/channels/search` | `KChatRequests.searchAllChannels` |
 | GET | `/api/v4/channels/{channel_id}/stats` | `KChatRequests.getChannelStats` |
 | GET | `/api/v4/channels/{channel_id}/members/{user_id}` | `KChatRequests.getChannelMember` |
 | POST | `/api/v4/channels/{channel_id}/members/ids` | `KChatRequests.getChannelMembersByIds` |
@@ -108,11 +109,13 @@ not started
 - `KChatClientConfig` response DTO for Mattermost-compatible client configuration values.
 - `KChatListTeamsOptions` for the Mattermost-compatible teams list endpoint.
 - `KChatListChannelsOptions` for the Mattermost-compatible all channels list endpoint.
+- `KChatSearchAllChannelsOptions` and `KChatSearchAllChannelsResponse` for `POST /api/v4/channels/search`, including optional `system_console` query support and flexible paginated/non-paginated response decoding.
 - `KChatRequests.getClientConfig(format:)`, `listTeams(options:)`, `getUsersByUsernames(body:)`, `getUsersByGroupChannels(body:)`, `getChannelPosts(channelId:options:)`, `getPost(postId:)`, and `getPostThread(postId:)` request factories.
 - `KChatPost` and `KChatPostList` Mattermost-compatible post DTOs.
 - `KChatService`, which sends kChat route factories through `InfomaniakAPIClient`, includes `getPostThread(postId:)`, and can build `https://<team>.kchat.infomaniak.com` base URLs.
 - `KChatService.listTeams(options:)` convenience API returning `[KChatTeam]`.
 - `KChatService.listChannels(options:)` convenience API returning `[KChatChannel]`.
+- `KChatService.searchAllChannels(options:)` convenience API returning `KChatSearchAllChannelsResponse`.
 - `KChatService.getChannel(channelId:)` convenience API returning `KChatChannel`.
 - `KChatService.getChannelByName(teamId:channelName:)` convenience API returning `KChatChannel`.
 - `KChatService.getChannelStats(channelId:)` convenience API returning `KChatChannelStats`.

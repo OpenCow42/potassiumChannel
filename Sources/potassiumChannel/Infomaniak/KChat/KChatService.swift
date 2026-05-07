@@ -145,6 +145,11 @@ public struct KChatService: Sendable {
         try await client.send(try KChatRequests.searchArchivedChannels(teamId: teamId, options: options))
     }
 
+    /// Searches all private and open kChat channels visible to the token.
+    public func searchAllChannels(options: KChatSearchAllChannelsOptions) async throws -> KChatSearchAllChannelsResponse {
+        try await client.send(try KChatRequests.searchAllChannels(options: options))
+    }
+
     /// Lists private channels in a kChat team.
     public func getPrivateChannelsForTeam(
         teamId: String,

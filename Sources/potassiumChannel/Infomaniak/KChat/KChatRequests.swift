@@ -284,6 +284,22 @@ public enum KChatRequests {
         )
     }
 
+    /// Creates a request that searches all private and open kChat channels visible to the token.
+    public static func searchAllChannels(options: KChatSearchAllChannelsOptions) throws -> APIRequest<KChatSearchAllChannelsResponse> {
+        var queryParameters: [QueryParameter] = []
+
+        if let systemConsole = options.systemConsole {
+            queryParameters.append(QueryParameter(name: "system_console", value: .bool(systemConsole)))
+        }
+
+        return APIRequest(
+            method: .post,
+            path: "/api/v4/channels/search",
+            queryParameters: queryParameters,
+            body: try JSONEncoder().encode(options)
+        )
+    }
+
     /// Creates a request that lists private kChat channels for a team.
     public static func getPrivateChannelsForTeam(
         teamId: String,
