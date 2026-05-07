@@ -209,6 +209,21 @@ public struct KChatPrivateChannelsForTeamOptions: Equatable, Sendable {
     }
 }
 
+/// Query options accepted by the Mattermost-compatible kChat deleted team channels endpoint.
+public struct KChatDeletedChannelsForTeamOptions: Equatable, Sendable {
+    /// The page to select.
+    public let page: Int?
+
+    /// The number of deleted channels per page.
+    public let perPage: Int?
+
+    /// Creates kChat deleted team channels query options.
+    public init(page: Int? = nil, perPage: Int? = nil) {
+        self.page = page
+        self.perPage = perPage
+    }
+}
+
 /// A Mattermost-compatible kChat team statistics response.
 public struct KChatTeamStats: Codable, Equatable, Sendable {
     /// Team identifier these statistics belong to.
