@@ -168,6 +168,14 @@ public enum KChatRequests {
         )
     }
 
+    /// Creates a request that gets a kChat channel member by channel id and user id.
+    public static func getChannelMember(channelId: String, userId: String) -> APIRequest<KChatChannelMember> {
+        APIRequest(
+            method: .get,
+            path: "/api/v4/channels/\(percentEncodePathSegment(channelId))/members/\(percentEncodePathSegment(userId))"
+        )
+    }
+
     /// Creates a request that lists public kChat channels for a team.
     public static func getPublicChannelsForTeam(
         teamId: String,

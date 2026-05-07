@@ -74,6 +74,7 @@ not started
 | GET | `/api/v4/channels` | `KChatRequests.listChannels` |
 | GET | `/api/v4/channels/{channel_id}` | `KChatRequests.getChannel` |
 | GET | `/api/v4/channels/{channel_id}/stats` | `KChatRequests.getChannelStats` |
+| GET | `/api/v4/channels/{channel_id}/members/{user_id}` | `KChatRequests.getChannelMember` |
 | GET | `/api/v4/teams` | `KChatRequests.listTeams` |
 | GET | `/api/v4/teams/{team_id}/stats` | `KChatRequests.getTeamStats` |
 | GET | `/api/v4/teams/{team_id}/members/{user_id}` | `KChatRequests.getTeamMember` |
@@ -113,6 +114,7 @@ not started
 - `KChatService.getChannel(channelId:)` convenience API returning `KChatChannel`.
 - `KChatService.getChannelByName(teamId:channelName:)` convenience API returning `KChatChannel`.
 - `KChatService.getChannelStats(channelId:)` convenience API returning `KChatChannelStats`.
+- `KChatService.getChannelMember(channelId:userId:)` convenience API returning `KChatChannelMember`.
 - `KChatService.getTeamStats(teamId:)` convenience API returning `KChatTeamStats`.
 - `KChatService.getTeamMember(teamId:userId:)` convenience API returning `KChatTeamMember`.
 - `KChatService.getUserTeamMembers(userId:)` convenience API returning `[KChatTeamMember]`.
@@ -125,6 +127,13 @@ not started
 
 - `swift test` passes with route/DTO/channel coverage.
 
+
+## 2026-05-07 — kChat get channel member route
+
+- Verified OpenAPI `GetChannelMember` for `GET /api/v4/channels/{channel_id}/members/{user_id}`; response is Mattermost-compatible `ChannelMember`.
+- Reused existing `KChatChannelMember`, including numeric `channel_id`/`user_id` string decoding.
+- Added `KChatRequests.getChannelMember(channelId:userId:)` and `KChatService.getChannelMember(channelId:userId:)` returning `KChatChannelMember`.
+- Added unit coverage for method/path/auth/accept headers, no body/query, percent-encoded channel id and user id path segments, and response decoding.
 
 ## 2026-05-07 — kChat get channel by team name and channel name route
 
