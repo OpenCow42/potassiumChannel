@@ -523,6 +523,113 @@ public struct KDriveActivity: Codable, Equatable, Sendable {
     }
 }
 
+/// A chart returned by kDrive statistics endpoints.
+public struct KDriveChart: Codable, Equatable, Sendable {
+    /// Chart title.
+    public let title: String
+
+    /// X-axis labels for the chart.
+    public let labels: KDriveChartData
+
+    /// Chart data series.
+    public let data: [KDriveChartData]
+
+    /// Creates a kDrive chart value.
+    public init(title: String, labels: KDriveChartData, data: [KDriveChartData]) {
+        self.title = title
+        self.labels = labels
+        self.data = data
+    }
+}
+
+/// A labels or metric data series in a kDrive chart.
+public struct KDriveChartData: Codable, Equatable, Sendable {
+    /// Data coordinate or series name.
+    public let name: String
+
+    /// Data unit.
+    public let unit: String
+
+    /// Data points. The API schema allows timestamp arrays, string arrays, and object-shaped values.
+    public let data: KDriveChartDataValue
+
+    /// Requested metric associated with this series, when present.
+    public let metric: String?
+
+    /// Creates a kDrive chart data value.
+    public init(name: String, unit: String, data: KDriveChartDataValue, metric: String? = nil) {
+        self.name = name
+        self.unit = unit
+        self.data = data
+        self.metric = metric
+    }
+}
+
+/// A flexible JSON value for kDrive chart data points.
+public enum KDriveChartDataValue: Codable, Equatable, Sendable {
+    /// Null value.
+    case null
+
+    /// Boolean value.
+    case bool(Bool)
+
+    /// Integer value.
+    case integer(Int)
+
+    /// Floating-point value.
+    case double(Double)
+
+    /// String value.
+    case string(String)
+
+    /// Array value.
+    case array([KDriveChartDataValue])
+
+    /// Object value.
+    case object([String: KDriveChartDataValue])
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.singleValueContainer()
+
+        if container.decodeNil() {
+            self = .null
+        } else if let value = try? container.decode(Bool.self) {
+            self = .bool(value)
+        } else if let value = try? container.decode(Int.self) {
+            self = .integer(value)
+        } else if let value = try? container.decode(Double.self) {
+            self = .double(value)
+        } else if let value = try? container.decode(String.self) {
+            self = .string(value)
+        } else if let value = try? container.decode([KDriveChartDataValue].self) {
+            self = .array(value)
+        } else {
+            self = .object(try container.decode([String: KDriveChartDataValue].self))
+        }
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.singleValueContainer()
+
+        switch self {
+        case .null:
+            try container.encodeNil()
+        case let .bool(value):
+            try container.encode(value)
+        case let .integer(value):
+            try container.encode(value)
+        case let .double(value):
+            try container.encode(value)
+        case let .string(value):
+            try container.encode(value)
+        case let .array(value):
+            try container.encode(value)
+        case let .object(value):
+            try container.encode(value)
+        }
+    }
+}
+
 /// A drive-scoped file activity returned by the kDrive v3 API.
 public struct KDriveDriveActivity: Codable, Equatable, Sendable {
     /// The unique activity identifier.

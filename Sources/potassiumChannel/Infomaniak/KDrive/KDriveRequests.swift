@@ -1551,6 +1551,26 @@ public enum KDriveRequests {
         )
     }
 
+    /// Creates a request that returns v2 drive-scoped file size statistics.
+    public static func chartFileSizes(
+        driveId: Int,
+        from: Int,
+        interval: Int,
+        metrics: [String],
+        until: Int
+    ) -> APIRequest<InfomaniakResponse<KDriveChart>> {
+        APIRequest(
+            method: .get,
+            path: "/2/drive/\(driveId)/statistics/sizes",
+            queryParameters: [
+                QueryParameter(name: "from", value: .integer(from)),
+                QueryParameter(name: "interval", value: .integer(interval)),
+                QueryParameter(name: "metrics", value: .strings(metrics)),
+                QueryParameter(name: "until", value: .integer(until)),
+            ]
+        )
+    }
+
     /// Creates a request that lists generated kDrive activity reports.
     public static func listActivityReports(
         driveId: Int,
