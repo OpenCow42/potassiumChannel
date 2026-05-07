@@ -2038,6 +2038,19 @@ public enum KDriveRequests {
         )
     }
 
+    /// Creates a request that updates preferences for the authenticated kDrive user.
+    public static func setUserPreferences(
+        options: SetKDriveUserPreferencesOptions
+    ) throws -> APIRequest<InfomaniakResponse<Bool>> {
+        let body = try JSONEncoder().encode(options)
+
+        return APIRequest(
+            method: .patch,
+            path: "/2/drive/preferences",
+            body: body
+        )
+    }
+
     /// Creates a request that lists users associated with accessible kDrives.
     public static func listKDriveUsers(
         with includedResources: String? = nil,

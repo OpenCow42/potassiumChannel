@@ -1214,6 +1214,115 @@ public struct KDriveUserPreferences: Codable, Equatable, Sendable {
     }
 }
 
+/// JSON body accepted by the endpoint that updates authenticated kDrive user preferences.
+public struct SetKDriveUserPreferencesOptions: Encodable, Equatable, Sendable {
+    /// The user's date display format, such as `d/m/Y`, `m/d/Y`, or `d F Y`.
+    public let dateFormat: String?
+
+    /// Default drive identifier for the authenticated user.
+    public let defaultDrive: Int?
+
+    /// Layout density of user interface elements: `compact`, `normal`, or `large`.
+    public let density: String?
+
+    /// List display and sorting preferences.
+    public let list: KDriveUserPreferencesListOptions?
+
+    /// Whether recent files should be sorted by recency.
+    public let sortRecentFile: Bool?
+
+    /// Tutorial identifiers already seen by the user.
+    public let tutorials: [Int]?
+
+    /// Whether shortcuts are enabled.
+    public let useShortcut: Bool?
+
+    public enum CodingKeys: String, CodingKey {
+        case dateFormat = "date_format"
+        case defaultDrive = "default_drive"
+        case density
+        case list
+        case sortRecentFile = "sort_recent_file"
+        case tutorials
+        case useShortcut = "use_shortcut"
+    }
+
+    /// Creates options for updating authenticated kDrive user preferences.
+    public init(
+        dateFormat: String? = nil,
+        defaultDrive: Int? = nil,
+        density: String? = nil,
+        list: KDriveUserPreferencesListOptions? = nil,
+        sortRecentFile: Bool? = nil,
+        tutorials: [Int]? = nil,
+        useShortcut: Bool? = nil
+    ) {
+        self.dateFormat = dateFormat
+        self.defaultDrive = defaultDrive
+        self.density = density
+        self.list = list
+        self.sortRecentFile = sortRecentFile
+        self.tutorials = tutorials
+        self.useShortcut = useShortcut
+    }
+}
+
+/// Nested list preferences accepted when updating authenticated kDrive user preferences.
+public struct KDriveUserPreferencesListOptions: Encodable, Equatable, Sendable {
+    /// File list sorting preference.
+    public let files: KDriveUserPreferencesListSortOptions?
+
+    /// Largest-file storage list sorting preference.
+    public let storageLargest: KDriveUserPreferencesListSortOptions?
+
+    /// Most-versioned storage list sorting preference.
+    public let storageVersions: KDriveUserPreferencesListSortOptions?
+
+    /// Trash list sorting preference.
+    public let trash: KDriveUserPreferencesListSortOptions?
+
+    /// List view mode: `largeGrid`, `medGrid`, `smallGrid`, or `table`.
+    public let view: String?
+
+    public enum CodingKeys: String, CodingKey {
+        case files
+        case storageLargest = "storage_largest"
+        case storageVersions = "storage_versions"
+        case trash
+        case view
+    }
+
+    /// Creates list preferences for the authenticated kDrive user.
+    public init(
+        files: KDriveUserPreferencesListSortOptions? = nil,
+        storageLargest: KDriveUserPreferencesListSortOptions? = nil,
+        storageVersions: KDriveUserPreferencesListSortOptions? = nil,
+        trash: KDriveUserPreferencesListSortOptions? = nil,
+        view: String? = nil
+    ) {
+        self.files = files
+        self.storageLargest = storageLargest
+        self.storageVersions = storageVersions
+        self.trash = trash
+        self.view = view
+    }
+}
+
+/// A list sorting preference accepted when updating authenticated kDrive user preferences.
+public struct KDriveUserPreferencesListSortOptions: Encodable, Equatable, Sendable {
+    /// Sort direction: `asc` or `desc`.
+    public let direction: String?
+
+    /// Field used for sorting.
+    public let property: String?
+
+    /// Creates a list sorting preference.
+    public init(direction: String? = nil, property: String? = nil) {
+        self.direction = direction
+        self.property = property
+    }
+}
+
 /// Settings for a kDrive.
 public struct KDriveSettings: Codable, Equatable, Sendable {
     /// Artificial-intelligence scan settings.
