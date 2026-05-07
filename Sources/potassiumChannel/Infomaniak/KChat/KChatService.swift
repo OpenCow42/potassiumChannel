@@ -114,6 +114,11 @@ public struct KChatService: Sendable {
         try await client.send(KChatRequests.getUserTeamsUnread(userId: userId))
     }
 
+    /// Gets unread counts for a specific kChat team for a user, or `me` for the authenticated user.
+    public func getUserTeamUnread(userId: String, teamId: String) async throws -> KChatTeamUnread {
+        try await client.send(KChatRequests.getUserTeamUnread(userId: userId, teamId: teamId))
+    }
+
     /// Lists kChat channels for a user in a team.
     public func getUserTeamChannels(
         userId: String,
