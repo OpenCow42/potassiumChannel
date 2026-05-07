@@ -111,6 +111,7 @@ not started
 - `KChatService.listTeams(options:)` convenience API returning `[KChatTeam]`.
 - `KChatService.listChannels(options:)` convenience API returning `[KChatChannel]`.
 - `KChatService.getChannel(channelId:)` convenience API returning `KChatChannel`.
+- `KChatService.getChannelByName(teamId:channelName:)` convenience API returning `KChatChannel`.
 - `KChatService.getChannelStats(channelId:)` convenience API returning `KChatChannelStats`.
 - `KChatService.getTeamStats(teamId:)` convenience API returning `KChatTeamStats`.
 - `KChatService.getTeamMember(teamId:userId:)` convenience API returning `KChatTeamMember`.
@@ -124,6 +125,13 @@ not started
 
 - `swift test` passes with route/DTO/channel coverage.
 
+
+## 2026-05-07 — kChat get channel by name route
+
+- Verified OpenAPI `GetChannelByName` for `GET /api/v4/teams/{team_id}/channels/name/{channel_name}`; response is Mattermost-compatible `Channel`, with optional `include_deleted` query defaulting false.
+- Reused existing `KChatChannel` for response decoding.
+- Added `KChatRequests.getChannelByName(teamId:channelName:)` and `KChatService.getChannelByName(teamId:channelName:)` returning `KChatChannel`.
+- Added unit coverage for method/path/auth/accept headers, no body/query, percent-encoded team id and channel name path segments, and response decoding.
 
 ## 2026-05-07 — kChat get channel route
 

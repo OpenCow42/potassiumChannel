@@ -80,6 +80,11 @@ public struct KChatService: Sendable {
         try await client.send(KChatRequests.getPublicChannelsForTeam(teamId: teamId, options: options))
     }
 
+    /// Gets a channel in a kChat team by channel name.
+    public func getChannelByName(teamId: String, channelName: String) async throws -> KChatChannel {
+        try await client.send(KChatRequests.getChannelByName(teamId: teamId, channelName: channelName))
+    }
+
     /// Autocompletes public channels in a kChat team.
     public func autocompleteChannelsForTeam(
         teamId: String,
