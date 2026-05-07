@@ -1,3 +1,10 @@
+## 2026-05-08 — kDrive user preferences patch route
+
+- Added shared support for `PATCH /2/drive/preferences` via `KDriveRequests.setUserPreferences` and `KDriveService.setUserPreferences`, returning `InfomaniakResponse<Bool>`.
+- Added typed optional request models for user preference updates, including `density`, `date_format`, `default_drive`, shortcut/recent-file flags, and nested list sort/view preferences with snake_case encoding.
+- Added request/encoding coverage for PATCH method, OpenAPI path, auth/content headers, flat preference fields, nested list preferences, and boolean response decoding.
+- Validation: `swift test` passes.
+
 ## 2026-05-08 — kDrive v2 file thumbnail route
 
 - Added shared raw-data support for `GET /2/drive/{drive_id}/files/{file_id}/thumbnail` via `KDriveRequests.getFileThumbnail` and `KDriveService.getFileThumbnail`, with optional `height`/`width` query parameters and `Accept: image/*`.
