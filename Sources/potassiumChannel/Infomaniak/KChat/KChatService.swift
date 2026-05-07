@@ -44,6 +44,11 @@ public struct KChatService: Sendable {
         try await client.send(KChatRequests.getChannel(channelId: channelId))
     }
 
+    /// Gets statistics for a kChat channel.
+    public func getChannelStats(channelId: String) async throws -> KChatChannelStats {
+        try await client.send(KChatRequests.getChannelStats(channelId: channelId))
+    }
+
     /// Gets a team in kChat by id.
     public func getTeam(teamId: String) async throws -> KChatTeam {
         try await client.send(KChatRequests.getTeam(teamId: teamId))

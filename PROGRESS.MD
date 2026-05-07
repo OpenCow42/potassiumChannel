@@ -73,6 +73,7 @@ not started
 | GET | `/api/v4/config/client` | `KChatRequests.getClientConfig` |
 | GET | `/api/v4/channels` | `KChatRequests.listChannels` |
 | GET | `/api/v4/channels/{channel_id}` | `KChatRequests.getChannel` |
+| GET | `/api/v4/channels/{channel_id}/stats` | `KChatRequests.getChannelStats` |
 | GET | `/api/v4/teams` | `KChatRequests.listTeams` |
 | GET | `/api/v4/teams/{team_id}/stats` | `KChatRequests.getTeamStats` |
 | GET | `/api/v4/teams/{team_id}/members/{user_id}` | `KChatRequests.getTeamMember` |
@@ -110,6 +111,7 @@ not started
 - `KChatService.listTeams(options:)` convenience API returning `[KChatTeam]`.
 - `KChatService.listChannels(options:)` convenience API returning `[KChatChannel]`.
 - `KChatService.getChannel(channelId:)` convenience API returning `KChatChannel`.
+- `KChatService.getChannelStats(channelId:)` convenience API returning `KChatChannelStats`.
 - `KChatService.getTeamStats(teamId:)` convenience API returning `KChatTeamStats`.
 - `KChatService.getTeamMember(teamId:userId:)` convenience API returning `KChatTeamMember`.
 - `KChatService.getUserTeamMembers(userId:)` convenience API returning `[KChatTeamMember]`.

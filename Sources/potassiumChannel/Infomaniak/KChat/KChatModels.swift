@@ -202,6 +202,21 @@ public struct KChatTeamStats: Codable, Equatable, Sendable {
     }
 }
 
+/// A Mattermost-compatible kChat channel statistics response.
+public struct KChatChannelStats: Codable, Equatable, Sendable {
+    /// Channel identifier these statistics belong to.
+    public let channelId: String?
+
+    /// Total number of members in the channel.
+    public let memberCount: Int?
+
+    /// Creates kChat channel statistics.
+    public init(channelId: String? = nil, memberCount: Int? = nil) {
+        self.channelId = channelId
+        self.memberCount = memberCount
+    }
+}
+
 /// Query options accepted by the Mattermost-compatible kChat users list endpoint.
 public struct KChatListUsersOptions: Equatable, Sendable {
     /// The page to select.
