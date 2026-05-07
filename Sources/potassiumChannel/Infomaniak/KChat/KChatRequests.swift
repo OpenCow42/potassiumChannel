@@ -182,6 +182,20 @@ public enum KChatRequests {
         )
     }
 
+    /// Creates a request that autocompletes kChat channels for team search.
+    public static func autocompleteChannelsForTeamForSearch(
+        teamId: String,
+        options: KChatChannelsForTeamSearchAutocompleteOptions
+    ) -> APIRequest<[KChatChannel]> {
+        APIRequest(
+            method: .get,
+            path: "/api/v4/teams/\(percentEncodePathSegment(teamId))/channels/search_autocomplete",
+            queryParameters: [
+                QueryParameter(name: "name", value: .string(options.name)),
+            ]
+        )
+    }
+
     /// Creates a request that lists private kChat channels for a team.
     public static func getPrivateChannelsForTeam(
         teamId: String,

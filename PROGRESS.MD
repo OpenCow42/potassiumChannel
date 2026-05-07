@@ -498,3 +498,10 @@ not started
 - Added `KChatChannelsForTeamAutocompleteOptions` with required `name` query parameter.
 - Added `KChatRequests.autocompleteChannelsForTeam(teamId:options:)` and `KChatService.autocompleteChannelsForTeam(teamId:options:)` returning `[KChatChannel]`.
 - Added unit tests covering GET method, OpenAPI path, auth/accept headers, percent-encoded `team_id`, required query encoding, no body, and snake-case channel decoding.
+
+## 2026-05-07 - kChat team channels search autocomplete
+
+- Verified OpenAPI `AutocompleteChannelsForTeamForSearch` for `GET /api/v4/teams/{team_id}/channels/search_autocomplete`; required query parameter is `name`, and the response is an array of Mattermost-compatible `Channel` objects.
+- Reused existing `KChatChannel` response model and added `KChatChannelsForTeamSearchAutocompleteOptions`.
+- Added `KChatRequests.autocompleteChannelsForTeamForSearch(teamId:options:)` and `KChatService.autocompleteChannelsForTeamForSearch(teamId:options:)` returning `[KChatChannel]`.
+- Added request/encoding/header/body/response-decoding tests for the new search autocomplete endpoint.
