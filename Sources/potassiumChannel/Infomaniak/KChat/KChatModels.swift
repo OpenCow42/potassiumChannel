@@ -141,6 +141,29 @@ public struct KChatTeamMembersOptions: Equatable, Sendable {
     }
 }
 
+/// A Mattermost-compatible kChat team statistics response.
+public struct KChatTeamStats: Codable, Equatable, Sendable {
+    /// Team identifier these statistics belong to.
+    public let teamId: String?
+
+    /// Total number of members in the team.
+    public let totalMemberCount: Int?
+
+    /// Number of active members in the team.
+    public let activeMemberCount: Int?
+
+    /// Creates kChat team statistics.
+    public init(
+        teamId: String? = nil,
+        totalMemberCount: Int? = nil,
+        activeMemberCount: Int? = nil
+    ) {
+        self.teamId = teamId
+        self.totalMemberCount = totalMemberCount
+        self.activeMemberCount = activeMemberCount
+    }
+}
+
 /// Query options accepted by the Mattermost-compatible kChat users list endpoint.
 public struct KChatListUsersOptions: Equatable, Sendable {
     /// The page to select.
