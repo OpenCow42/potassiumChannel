@@ -463,6 +463,14 @@ public enum KChatRequests {
         )
     }
 
+    /// Creates a request that gets pinned posts for a kChat channel.
+    public static func getPinnedPosts(channelId: String) -> APIRequest<KChatPostList> {
+        APIRequest(
+            method: .get,
+            path: "/api/v4/channels/\(percentEncodePathSegment(channelId))/pinned"
+        )
+    }
+
     /// Creates a request that posts a message to kChat.
     public static func createPost(body: Data) -> APIRequest<KChatPost> {
         APIRequest(
