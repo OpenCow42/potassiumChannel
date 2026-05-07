@@ -1,3 +1,9 @@
+## 2026-05-08 — kDrive v2 single drive user route
+
+- Added shared support for `GET /2/drive/{drive_id}/users/{user_id}` via `KDriveRequests.getDriveUserV2` and `KDriveService.getDriveUserV2`, reusing `KDriveDriveUser`.
+- Added request/decoding tests covering method, OpenAPI v2 path with required `drive_id`/`user_id`, auth header, no-query behavior, nullable single-user payloads, and user field decoding.
+- Validation: `swift test --filter KDriveDriveUserV2RequestTests` passes; `swift test` passes (313 tests).
+
 ## 2026-05-08 — kDrive v2 drive users route
 
 - Branch: `feat/kdrive`.
@@ -110,6 +116,8 @@ kDrive request factories, and `KDriveService` wrappers moved from Potassium.
 | --- | --- | --- |
 | GET | `/2/drive` | `KDriveRequests.listAccessibleKDrives` |
 | GET | `/3/drive/{drive_id}/users` | `KDriveRequests.listDriveUsers` |
+| GET | `/2/drive/{drive_id}/users` | `KDriveRequests.listDriveUsersV2` |
+| GET | `/2/drive/{drive_id}/users/{user_id}` | `KDriveRequests.getDriveUserV2` |
 | GET | `/3/drive/{drive_id}/files/recents` | `KDriveRequests.listRecentFiles` |
 | GET | `/3/drive/{drive_id}/files/largest` | `KDriveRequests.listLargestFiles` |
 | GET | `/3/drive/{drive_id}/files/last_modified` | `KDriveRequests.listLastModifiedFiles` |
