@@ -461,3 +461,10 @@ not started
 - Added `KChatService.getTeamMembers(teamId:options:)` convenience API returning `[KChatTeamMember]`.
 - Added request/decoding tests covering GET method, OpenAPI path, auth/accept headers, query encoding, omitted empty options, percent-encoded team id path segment, no body, and response decoding.
 - Verified with `swift test` in `potassiumChannel`.
+
+## 2026-05-07 — kChat get pinned posts route
+
+- Verified OpenAPI `GetPinnedPosts` for `GET /api/v4/channels/{channel_id}/pinned`; response is Mattermost-compatible `PostList` (`38cb7293_PostList`).
+- Reused `KChatPostList`/`KChatPost` for pinned post list decoding.
+- Added `KChatRequests.getPinnedPosts(channelId:)` and `KChatService.getPinnedPosts(channelId:)`.
+- Added unit tests covering GET method, OpenAPI path, auth/accept headers, no query/body, path-segment percent encoding, and snake-case post-list decoding.
