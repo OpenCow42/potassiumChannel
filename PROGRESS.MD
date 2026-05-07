@@ -1,3 +1,9 @@
+## 2026-05-07 — kDrive OAuth import eligible drives route
+
+- Added shared support for `GET /2/drive/{drive_id}/imports/oauth/drives` via `KDriveRequests.listOAuthImportDrives`, `KDriveService.listOAuthImportDrives`, `KDriveThirdPartyDrivesList`, and `KDriveThirdPartyDrive`.
+- Added request/decoding tests covering method, OpenAPI path, auth header, required `application` query parameter, optional `access_token_id`/`auth_code`, and response decoding.
+- Validation: `swift test` passes (289 tests).
+
 ## 2026-05-07 — kDrive export activity share links statistics route
 
 - Added shared support for `GET /2/drive/{drive_id}/statistics/activities/links/export` via `KDriveRequests.exportActivityShareLinks`, `KDriveService.exportActivityShareLinks`, and `ExportKDriveActivityShareLinksOptions`, reusing `KDriveStatisticShareLink`.
@@ -107,6 +113,7 @@ kDrive request factories, and `KDriveService` wrappers moved from Potassium.
 | GET | `/2/drive/{drive_id}/statistics/activities/links/export` | `KDriveRequests.exportActivityShareLinks` |
 | GET | `/2/drive/{drive_id}/activities/reports` | `KDriveRequests.listActivityReports` |
 | GET | `/2/drive/{drive_id}/imports` | `KDriveRequests.listImports` |
+| GET | `/2/drive/{drive_id}/imports/oauth/drives` | `KDriveRequests.listOAuthImportDrives` |
 | GET | `/2/drive/{drive_id}/users/invitation` | `KDriveRequests.listUserInvitations` |
 | GET | `/2/drive/preferences` | `KDriveRequests.getUserPreferences` |
 | GET | `/2/drive/users` | `KDriveRequests.listKDriveUsers` |

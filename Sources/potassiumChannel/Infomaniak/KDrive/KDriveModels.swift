@@ -926,6 +926,36 @@ public struct KDriveExternalImport: Codable, Equatable, Sendable {
     }
 }
 
+/// Third-party drives eligible for an external import.
+public struct KDriveThirdPartyDrivesList: Codable, Equatable, Sendable {
+    /// All suitable third-party drives.
+    public let drives: [KDriveThirdPartyDrive]
+
+    /// Access token identifier to reuse for future import requests.
+    public let accessTokenId: Int
+
+    /// Creates a third-party drives list value.
+    public init(drives: [KDriveThirdPartyDrive], accessTokenId: Int) {
+        self.drives = drives
+        self.accessTokenId = accessTokenId
+    }
+}
+
+/// A third-party drive eligible for an external import.
+public struct KDriveThirdPartyDrive: Codable, Equatable, Sendable {
+    /// The third-party drive identifier.
+    public let id: String
+
+    /// The third-party drive display name.
+    public let name: String
+
+    /// Creates a third-party drive value.
+    public init(id: String, name: String) {
+        self.id = id
+        self.name = name
+    }
+}
+
 /// A user invitation created for a kDrive.
 public struct KDriveUserInvitation: Codable, Equatable, Sendable {
     /// The unique invitation identifier.
