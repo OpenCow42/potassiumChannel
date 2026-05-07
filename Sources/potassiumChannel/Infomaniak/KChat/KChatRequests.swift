@@ -196,6 +196,18 @@ public enum KChatRequests {
         )
     }
 
+    /// Creates a request that searches public kChat channels for a team.
+    public static func searchChannels(
+        teamId: String,
+        options: KChatChannelSearchOptions
+    ) throws -> APIRequest<[KChatChannel]> {
+        APIRequest(
+            method: .post,
+            path: "/api/v4/teams/\(percentEncodePathSegment(teamId))/channels/search",
+            body: try JSONEncoder().encode(options)
+        )
+    }
+
     /// Creates a request that lists private kChat channels for a team.
     public static func getPrivateChannelsForTeam(
         teamId: String,
