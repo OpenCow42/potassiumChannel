@@ -601,6 +601,17 @@ public struct KDriveService: Sendable {
         )
     }
 
+    /// Gets a single version for a kDrive file using the deprecated v2 endpoint.
+    public func getFileVersionV2(
+        driveId: Int,
+        fileId: Int,
+        versionId: Int
+    ) async throws -> InfomaniakResponse<KDriveFileVersionV2> {
+        try await client.send(
+            KDriveRequests.getFileVersionV2(driveId: driveId, fileId: fileId, versionId: versionId)
+        )
+    }
+
     /// Lists versions for a kDrive file.
     public func listFileVersions(
         driveId: Int,
