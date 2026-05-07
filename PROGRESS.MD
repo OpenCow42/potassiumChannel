@@ -396,3 +396,10 @@ not started
 - Added `KChatService.getUserChannelMembers(userId:options:)` convenience API.
 - Added request/decoding tests covering GET method, OpenAPI path, auth/accept headers, path encoding, special `me`, pagination query, no body, and response decoding.
 - Verified with `swift test` in `potassiumChannel`.
+
+## 2026-05-07 — kChat get team route
+
+- Added `GET /api/v4/teams/{team_id}` request support via `KChatRequests.getTeam(teamId:)`.
+- Added `KChatService.getTeam(teamId:)` convenience API returning `KChatTeam`.
+- Added request/decoding tests covering GET method, OpenAPI path, auth/accept headers, percent-encoded team id path segment, no query/body, and response decoding.
+- Verified with `swift test` in `potassiumChannel`.
