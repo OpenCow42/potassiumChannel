@@ -57,6 +57,14 @@ public enum KChatRequests {
         )
     }
 
+    /// Creates a request that gets a kChat team by name.
+    public static func getTeamByName(name: String) -> APIRequest<KChatTeam> {
+        APIRequest(
+            method: .get,
+            path: "/api/v4/teams/name/\(percentEncodePathSegment(name))"
+        )
+    }
+
     /// Creates a request that searches kChat users.
     public static func searchUsers(body: Data) -> APIRequest<[KChatUser]> {
         APIRequest(
