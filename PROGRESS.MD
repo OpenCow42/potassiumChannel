@@ -476,3 +476,11 @@ not started
 - Added `KChatPublicChannelsForTeamOptions` with `page` and `per_page` query parameters.
 - Added `KChatRequests.getPublicChannelsForTeam(teamId:options:)` and `KChatService.getPublicChannelsForTeam(teamId:options:)` returning `[KChatChannel]`.
 - Added unit tests covering GET method, OpenAPI path, auth/accept headers, percent-encoded `team_id`, query encoding, omitted empty options, no body, and snake-case channel decoding.
+
+## 2026-05-07 — kChat get private channels for team route
+
+- Verified OpenAPI `GetPrivateChannelsForTeam` for `GET /api/v4/teams/{team_id}/channels/private`; response is an array of Mattermost-compatible `Channel` objects and supports `page`/`per_page` query parameters.
+- Reused `KChatChannel` for response decoding.
+- Added `KChatPrivateChannelsForTeamOptions` with `page` and `per_page` query parameters.
+- Added `KChatRequests.getPrivateChannelsForTeam(teamId:options:)` and `KChatService.getPrivateChannelsForTeam(teamId:options:)` returning `[KChatChannel]`.
+- Added unit tests covering GET method, OpenAPI path, auth/accept headers, percent-encoded `team_id`, query encoding, omitted empty options, no body, and snake-case channel decoding.

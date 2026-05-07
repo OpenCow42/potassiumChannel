@@ -80,6 +80,14 @@ public struct KChatService: Sendable {
         try await client.send(KChatRequests.getPublicChannelsForTeam(teamId: teamId, options: options))
     }
 
+    /// Lists private channels in a kChat team.
+    public func getPrivateChannelsForTeam(
+        teamId: String,
+        options: KChatPrivateChannelsForTeamOptions = KChatPrivateChannelsForTeamOptions()
+    ) async throws -> [KChatChannel] {
+        try await client.send(KChatRequests.getPrivateChannelsForTeam(teamId: teamId, options: options))
+    }
+
     /// Gets a member in a kChat team.
     public func getTeamMember(teamId: String, userId: String) async throws -> KChatTeamMember {
         try await client.send(KChatRequests.getTeamMember(teamId: teamId, userId: userId))

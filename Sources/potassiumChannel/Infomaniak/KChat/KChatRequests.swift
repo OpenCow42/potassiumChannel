@@ -168,6 +168,28 @@ public enum KChatRequests {
         )
     }
 
+    /// Creates a request that lists private kChat channels for a team.
+    public static func getPrivateChannelsForTeam(
+        teamId: String,
+        options: KChatPrivateChannelsForTeamOptions = KChatPrivateChannelsForTeamOptions()
+    ) -> APIRequest<[KChatChannel]> {
+        var queryParameters: [QueryParameter] = []
+
+        if let page = options.page {
+            queryParameters.append(QueryParameter(name: "page", value: .integer(page)))
+        }
+
+        if let perPage = options.perPage {
+            queryParameters.append(QueryParameter(name: "per_page", value: .integer(perPage)))
+        }
+
+        return APIRequest(
+            method: .get,
+            path: "/api/v4/teams/\(percentEncodePathSegment(teamId))/channels/private",
+            queryParameters: queryParameters
+        )
+    }
+
     /// Creates a request that gets a kChat team member by team id and user id.
     public static func getTeamMember(teamId: String, userId: String) -> APIRequest<KChatTeamMember> {
         APIRequest(
