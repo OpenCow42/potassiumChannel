@@ -472,6 +472,64 @@ public struct KDriveFileTemporaryURL: Codable, Equatable, Sendable {
     }
 }
 
+/// A version of a kDrive file returned by the deprecated v2 versions endpoint.
+public struct KDriveFileVersionV2: Codable, Equatable, Sendable {
+    /// The unique file version identifier.
+    public let id: Int
+
+    /// Whether this version should be kept forever.
+    public let keepForever: Bool
+
+    /// MIME type for the version, when known.
+    public let mimeType: String?
+
+    /// Generic converted file type.
+    public let convertedType: String
+
+    /// Version name, when returned.
+    public let name: String?
+
+    /// Version size in bytes.
+    public let size: Int
+
+    /// The user that updated this file version.
+    public let updatedBy: KDriveUser
+
+    /// The creation timestamp.
+    public let createdAt: Int
+
+    /// The update timestamp, when known.
+    public let updatedAt: Int?
+
+    /// The last modified timestamp, when known.
+    public let lastModifiedAt: Int?
+
+    /// Creates a kDrive v2 file version value.
+    public init(
+        id: Int,
+        keepForever: Bool,
+        mimeType: String?,
+        convertedType: String,
+        name: String?,
+        size: Int,
+        updatedBy: KDriveUser,
+        createdAt: Int,
+        updatedAt: Int?,
+        lastModifiedAt: Int?
+    ) {
+        self.id = id
+        self.keepForever = keepForever
+        self.mimeType = mimeType
+        self.convertedType = convertedType
+        self.name = name
+        self.size = size
+        self.updatedBy = updatedBy
+        self.createdAt = createdAt
+        self.updatedAt = updatedAt
+        self.lastModifiedAt = lastModifiedAt
+    }
+}
+
 /// A version of a kDrive file.
 public struct KDriveFileVersion: Codable, Equatable, Sendable {
     /// The unique file version identifier.

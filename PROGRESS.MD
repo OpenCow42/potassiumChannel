@@ -1,3 +1,9 @@
+## 2026-05-07 — kDrive v2 file versions route
+
+- Added shared support for `GET /2/drive/{drive_id}/files/{file_id}/versions` via `KDriveRequests.listFileVersionsV2`, `KDriveService.listFileVersionsV2`, and `KDriveFileVersionV2`, keeping it distinct from the existing v3 `listFileVersions` route.
+- Added request/decoding tests covering method, OpenAPI v2 path with required `drive_id`/`file_id`, auth header, optional `order_by`/`order`/`order_for` query parameters, absent query parameters, explicit required path parameter substitution checks, and `converted_type`/`name` decoding.
+- Validation: `swift test` passes (306 tests).
+
 ## 2026-05-07 — kDrive file temporary URL route
 
 - Added shared support for `GET /2/drive/{drive_id}/files/{file_id}/temporary_url` via `KDriveRequests.getFileTemporaryURL`, `KDriveService.getFileTemporaryURL`, and `KDriveFileTemporaryURL`.
@@ -127,6 +133,7 @@ kDrive request factories, and `KDriveService` wrappers moved from Potassium.
 | GET | `/3/drive/{drive_id}/files/{file_id}/count` | `KDriveRequests.getDirectoryCount` |
 | GET | `/2/drive/{drive_id}/files/{file_id}/sizes` | `KDriveRequests.getFileSize` |
 | GET | `/3/drive/{drive_id}/files/{file_id}/versions` | `KDriveRequests.listFileVersions` |
+| GET | `/2/drive/{drive_id}/files/{file_id}/versions` | `KDriveRequests.listFileVersionsV2` |
 | GET | `/2/drive/{drive_id}/activities` | `KDriveRequests.listActivities` |
 | GET | `/3/drive/{drive_id}/activities` | `KDriveRequests.listDriveActivities` |
 | GET | `/3/drive/{drive_id}/activities/total` | `KDriveRequests.listDriveActivityTotals` |

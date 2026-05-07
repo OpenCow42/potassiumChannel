@@ -1490,6 +1490,35 @@ public enum KDriveRequests {
         )
     }
 
+    /// Creates a request that lists versions for a kDrive file using the deprecated v2 endpoint.
+    public static func listFileVersionsV2(
+        driveId: Int,
+        fileId: Int,
+        orderBy: String? = nil,
+        order: String? = nil,
+        orderFor: [String: String] = [:]
+    ) -> APIRequest<InfomaniakResponse<[KDriveFileVersionV2]>> {
+        var queryParameters: [QueryParameter] = []
+
+        if let orderBy {
+            queryParameters.append(QueryParameter(name: "order_by", value: .string(orderBy)))
+        }
+
+        if let order {
+            queryParameters.append(QueryParameter(name: "order", value: .string(order)))
+        }
+
+        for (field, direction) in orderFor.sorted(by: { $0.key < $1.key }) {
+            queryParameters.append(QueryParameter(name: "order_for[\(field)]", value: .string(direction)))
+        }
+
+        return APIRequest(
+            method: .get,
+            path: "/2/drive/\(driveId)/files/\(fileId)/versions",
+            queryParameters: queryParameters
+        )
+    }
+
     /// Creates a request that lists versions for a kDrive file.
     public static func listFileVersions(
         driveId: Int,
