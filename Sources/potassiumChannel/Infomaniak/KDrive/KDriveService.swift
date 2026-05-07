@@ -35,6 +35,21 @@ public struct KDriveService: Sendable {
         )
     }
 
+    /// Lists users associated with a specific kDrive using the v2 endpoint.
+    public func listDriveUsersV2(
+        driveId: Int,
+        with includedResources: String? = nil,
+        options: ListKDriveDriveUsersV2Options = ListKDriveDriveUsersV2Options()
+    ) async throws -> PaginatedInfomaniakResponse<[KDriveDriveUser]> {
+        try await client.send(
+            KDriveRequests.listDriveUsersV2(
+                driveId: driveId,
+                with: includedResources,
+                options: options
+            )
+        )
+    }
+
     /// Lists kDrives associated with a specific user.
     public func listUserDrivesV2(
         userId: Int,
