@@ -1,3 +1,10 @@
+## 2026-05-08 — kDrive v2 drive users route
+
+- Branch: `feat/kdrive`.
+- Confirmed shared networking for non-destructive `GET /2/drive/{drive_id}/users` via `KDriveRequests.listDriveUsersV2`, `KDriveService.listDriveUsersV2`, and `ListKDriveDriveUsersV2Options`.
+- Strengthened unit coverage for the exact v2 path, auth header, optional filters/sorting query encoding, no-query default behavior, and response decoding without leaking credentials.
+- Validation: `swift test --filter KDriveDriveUsersV2RequestTests` passes (3 tests); `swift test` passes (310 tests).
+
 ## 2026-05-07 — kDrive v2 file version detail route
 
 - Added shared support for `GET /2/drive/{drive_id}/files/{file_id}/versions/{version_id}` via `KDriveRequests.getFileVersionV2` and `KDriveService.getFileVersionV2`, reusing `KDriveFileVersionV2`.
