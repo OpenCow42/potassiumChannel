@@ -627,6 +627,25 @@ public struct KDriveService: Sendable {
         )
     }
 
+    /// Exports v2 drive-scoped file size statistics as CSV data.
+    public func exportFileSizes(
+        driveId: Int,
+        from: Int,
+        interval: Int,
+        metrics: [String],
+        until: Int
+    ) async throws -> Data {
+        try await client.sendData(
+            KDriveRequests.exportFileSizes(
+                driveId: driveId,
+                from: from,
+                interval: interval,
+                metrics: metrics,
+                until: until
+            )
+        )
+    }
+
     /// Lists generated kDrive activity reports.
     public func listActivityReports(
         driveId: Int,
