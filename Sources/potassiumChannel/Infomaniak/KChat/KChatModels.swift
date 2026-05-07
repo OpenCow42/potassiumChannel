@@ -98,6 +98,344 @@ public struct KChatUserSearchOptions: Encodable, Equatable, Sendable {
     }
 }
 
+/// Query options accepted by the Mattermost-compatible kChat teams list endpoint.
+public struct KChatListTeamsOptions: Equatable, Sendable {
+    /// The page to select.
+    public let page: Int?
+
+    /// The number of teams per page.
+    public let perPage: Int?
+
+    /// Whether the API should include a total count when supported by the server.
+    public let includeTotalCount: Bool?
+
+    /// Whether policy-constrained teams should be excluded.
+    public let excludePolicyConstrained: Bool?
+
+    /// Creates kChat teams list query options.
+    public init(
+        page: Int? = nil,
+        perPage: Int? = nil,
+        includeTotalCount: Bool? = nil,
+        excludePolicyConstrained: Bool? = nil
+    ) {
+        self.page = page
+        self.perPage = perPage
+        self.includeTotalCount = includeTotalCount
+        self.excludePolicyConstrained = excludePolicyConstrained
+    }
+}
+
+/// Query options accepted by the Mattermost-compatible kChat channels list endpoint.
+public struct KChatListChannelsOptions: Equatable, Sendable {
+    /// The page to select.
+    public let page: Int?
+
+    /// The number of channels per page.
+    public let perPage: Int?
+
+    /// Whether default channels should be excluded.
+    public let excludeDefaultChannels: Bool?
+
+    /// Whether archived channels should be included.
+    public let includeDeleted: Bool?
+
+    /// Whether the API should include a total count when supported by the server.
+    public let includeTotalCount: Bool?
+
+    /// Whether policy-constrained channels should be excluded.
+    public let excludePolicyConstrained: Bool?
+
+    /// Creates kChat channels list query options.
+    public init(
+        page: Int? = nil,
+        perPage: Int? = nil,
+        excludeDefaultChannels: Bool? = nil,
+        includeDeleted: Bool? = nil,
+        includeTotalCount: Bool? = nil,
+        excludePolicyConstrained: Bool? = nil
+    ) {
+        self.page = page
+        self.perPage = perPage
+        self.excludeDefaultChannels = excludeDefaultChannels
+        self.includeDeleted = includeDeleted
+        self.includeTotalCount = includeTotalCount
+        self.excludePolicyConstrained = excludePolicyConstrained
+    }
+}
+
+/// Query options accepted by the Mattermost-compatible kChat team members list endpoint.
+public struct KChatTeamMembersOptions: Equatable, Sendable {
+    /// The page to select.
+    public let page: Int?
+
+    /// The number of team members per page.
+    public let perPage: Int?
+
+    /// Creates kChat team members list query options.
+    public init(page: Int? = nil, perPage: Int? = nil) {
+        self.page = page
+        self.perPage = perPage
+    }
+}
+
+/// Query options accepted by the Mattermost-compatible kChat channel members list endpoint.
+public struct KChatChannelMembersOptions: Equatable, Sendable {
+    /// The page to select.
+    public let page: Int?
+
+    /// The number of channel members per page.
+    public let perPage: Int?
+
+    /// Creates kChat channel members list query options.
+    public init(page: Int? = nil, perPage: Int? = nil) {
+        self.page = page
+        self.perPage = perPage
+    }
+}
+
+/// Query options accepted by the Mattermost-compatible kChat public team channels endpoint.
+public struct KChatPublicChannelsForTeamOptions: Equatable, Sendable {
+    /// The page to select.
+    public let page: Int?
+
+    /// The number of public channels per page.
+    public let perPage: Int?
+
+    /// Creates kChat public team channels query options.
+    public init(page: Int? = nil, perPage: Int? = nil) {
+        self.page = page
+        self.perPage = perPage
+    }
+}
+
+/// Query options accepted by the Mattermost-compatible kChat team channels autocomplete endpoint.
+public struct KChatChannelsForTeamAutocompleteOptions: Equatable, Sendable {
+    /// Channel name or display name search term.
+    public let name: String
+
+    /// Creates kChat team channels autocomplete query options.
+    public init(name: String) {
+        self.name = name
+    }
+}
+
+/// Query options accepted by the Mattermost-compatible kChat team channels search autocomplete endpoint.
+public struct KChatChannelsForTeamSearchAutocompleteOptions: Equatable, Sendable {
+    /// Channel name or display name search term.
+    public let name: String
+
+    /// Creates kChat team channels search autocomplete query options.
+    public init(name: String) {
+        self.name = name
+    }
+}
+
+/// Search criteria accepted by the Mattermost-compatible kChat team channels search endpoint.
+public struct KChatChannelSearchOptions: Encodable, Equatable, Sendable {
+    /// The search term to match against the name or display name of channels.
+    public let term: String
+
+    /// Creates kChat team channel search options.
+    public init(term: String) {
+        self.term = term
+    }
+}
+
+/// Search criteria accepted by the Mattermost-compatible kChat all channels search endpoint.
+public struct KChatSearchAllChannelsOptions: Encodable, Equatable, Sendable {
+    /// The string to search in the channel name, display name, and purpose.
+    public let term: String
+
+    /// Whether the request is from the system console. Sent as a query parameter.
+    public let systemConsole: Bool?
+
+    /// A group id to exclude channels that are associated to that group via GroupChannel records.
+    public let notAssociatedToGroup: String?
+
+    /// Excludes default channels from the results when true.
+    public let excludeDefaultChannels: Bool?
+
+    /// Filters results to channels belonging to the given team ids.
+    public let teamIds: [String]?
+
+    /// Filters results to only return channels constrained to a group.
+    public let groupConstrained: Bool?
+
+    /// Filters results to exclude channels constrained to a group.
+    public let excludeGroupConstrained: Bool?
+
+    /// Filters results to public/open channels.
+    public let `public`: Bool?
+
+    /// Filters results to private channels.
+    public let `private`: Bool?
+
+    /// Filters results to deleted/archived channels.
+    public let deleted: Bool?
+
+    /// The page number to return, if paginated.
+    public let page: Int?
+
+    /// The number of entries to return per page, if paginated.
+    public let perPage: Int?
+
+    /// Filters results to channels without granular retention policy when true.
+    public let excludePolicyConstrained: Bool?
+
+    /// Includes channels where the search term matches channel id when true.
+    public let includeSearchById: Bool?
+
+    public enum CodingKeys: String, CodingKey {
+        case term
+        case notAssociatedToGroup = "not_associated_to_group"
+        case excludeDefaultChannels = "exclude_default_channels"
+        case teamIds = "team_ids"
+        case groupConstrained = "group_constrained"
+        case excludeGroupConstrained = "exclude_group_constrained"
+        case `public`
+        case `private`
+        case deleted
+        case page
+        case perPage = "per_page"
+        case excludePolicyConstrained = "exclude_policy_constrained"
+        case includeSearchById = "include_search_by_id"
+    }
+
+    /// Creates all-channel search options.
+    public init(
+        term: String,
+        systemConsole: Bool? = nil,
+        notAssociatedToGroup: String? = nil,
+        excludeDefaultChannels: Bool? = nil,
+        teamIds: [String]? = nil,
+        groupConstrained: Bool? = nil,
+        excludeGroupConstrained: Bool? = nil,
+        public: Bool? = nil,
+        private: Bool? = nil,
+        deleted: Bool? = nil,
+        page: Int? = nil,
+        perPage: Int? = nil,
+        excludePolicyConstrained: Bool? = nil,
+        includeSearchById: Bool? = nil
+    ) {
+        self.term = term
+        self.systemConsole = systemConsole
+        self.notAssociatedToGroup = notAssociatedToGroup
+        self.excludeDefaultChannels = excludeDefaultChannels
+        self.teamIds = teamIds
+        self.groupConstrained = groupConstrained
+        self.excludeGroupConstrained = excludeGroupConstrained
+        self.public = `public`
+        self.private = `private`
+        self.deleted = deleted
+        self.page = page
+        self.perPage = perPage
+        self.excludePolicyConstrained = excludePolicyConstrained
+        self.includeSearchById = includeSearchById
+    }
+}
+
+/// Mattermost-compatible kChat all channels search response.
+public struct KChatSearchAllChannelsResponse: Codable, Equatable, Sendable {
+    /// The channels that matched the query.
+    public let channels: [KChatChannel]
+
+    /// The total number of results, regardless of page and per_page requested.
+    public let totalCount: Double?
+
+    public enum CodingKeys: String, CodingKey {
+        case channels
+        case totalCount
+    }
+
+    /// Creates an all channels search response.
+    public init(channels: [KChatChannel], totalCount: Double? = nil) {
+        self.channels = channels
+        self.totalCount = totalCount
+    }
+
+    public init(from decoder: Decoder) throws {
+        if let channels = try? [KChatChannel](from: decoder) {
+            self.channels = channels
+            self.totalCount = nil
+            return
+        }
+
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.channels = try container.decodeIfPresent([KChatChannel].self, forKey: .channels) ?? []
+        self.totalCount = try container.decodeIfPresent(Double.self, forKey: .totalCount)
+    }
+}
+
+/// Query options accepted by the Mattermost-compatible kChat private team channels endpoint.
+public struct KChatPrivateChannelsForTeamOptions: Equatable, Sendable {
+    /// The page to select.
+    public let page: Int?
+
+    /// The number of private channels per page.
+    public let perPage: Int?
+
+    /// Creates kChat private team channels query options.
+    public init(page: Int? = nil, perPage: Int? = nil) {
+        self.page = page
+        self.perPage = perPage
+    }
+}
+
+/// Query options accepted by the Mattermost-compatible kChat deleted team channels endpoint.
+public struct KChatDeletedChannelsForTeamOptions: Equatable, Sendable {
+    /// The page to select.
+    public let page: Int?
+
+    /// The number of deleted channels per page.
+    public let perPage: Int?
+
+    /// Creates kChat deleted team channels query options.
+    public init(page: Int? = nil, perPage: Int? = nil) {
+        self.page = page
+        self.perPage = perPage
+    }
+}
+
+/// A Mattermost-compatible kChat team statistics response.
+public struct KChatTeamStats: Codable, Equatable, Sendable {
+    /// Team identifier these statistics belong to.
+    public let teamId: String?
+
+    /// Total number of members in the team.
+    public let totalMemberCount: Int?
+
+    /// Number of active members in the team.
+    public let activeMemberCount: Int?
+
+    /// Creates kChat team statistics.
+    public init(
+        teamId: String? = nil,
+        totalMemberCount: Int? = nil,
+        activeMemberCount: Int? = nil
+    ) {
+        self.teamId = teamId
+        self.totalMemberCount = totalMemberCount
+        self.activeMemberCount = activeMemberCount
+    }
+}
+
+/// A Mattermost-compatible kChat channel statistics response.
+public struct KChatChannelStats: Codable, Equatable, Sendable {
+    /// Channel identifier these statistics belong to.
+    public let channelId: String?
+
+    /// Total number of members in the channel.
+    public let memberCount: Int?
+
+    /// Creates kChat channel statistics.
+    public init(channelId: String? = nil, memberCount: Int? = nil) {
+        self.channelId = channelId
+        self.memberCount = memberCount
+    }
+}
+
 /// Query options accepted by the Mattermost-compatible kChat users list endpoint.
 public struct KChatListUsersOptions: Equatable, Sendable {
     /// The page to select.
@@ -383,7 +721,7 @@ public struct KChatTeam: Codable, Equatable, Sendable {
     }
 }
 
-/// A Mattermost-compatible kChat team membership returned by user team member endpoints.
+/// A Mattermost-compatible kChat team membership returned by team member endpoints.
 public struct KChatTeamMember: Codable, Equatable, Sendable {
     /// Team identifier for this membership.
     public let teamId: String?
@@ -423,6 +761,53 @@ public struct KChatTeamMember: Codable, Equatable, Sendable {
         self.schemeUser = schemeUser
         self.schemeAdmin = schemeAdmin
         self.explicitRoles = explicitRoles
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case teamId
+        case userId
+        case roles
+        case deleteAt
+        case schemeUser
+        case schemeAdmin
+        case explicitRoles
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.teamId = try Self.decodeStringOrNumberIfPresent(from: container, forKey: .teamId)
+        self.userId = try Self.decodeStringOrNumberIfPresent(from: container, forKey: .userId)
+        self.roles = try container.decodeIfPresent(String.self, forKey: .roles)
+        self.deleteAt = try container.decodeIfPresent(Int64.self, forKey: .deleteAt)
+        self.schemeUser = try container.decodeIfPresent(Bool.self, forKey: .schemeUser)
+        self.schemeAdmin = try container.decodeIfPresent(Bool.self, forKey: .schemeAdmin)
+        self.explicitRoles = try container.decodeIfPresent(String.self, forKey: .explicitRoles)
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeIfPresent(teamId, forKey: .teamId)
+        try container.encodeIfPresent(userId, forKey: .userId)
+        try container.encodeIfPresent(roles, forKey: .roles)
+        try container.encodeIfPresent(deleteAt, forKey: .deleteAt)
+        try container.encodeIfPresent(schemeUser, forKey: .schemeUser)
+        try container.encodeIfPresent(schemeAdmin, forKey: .schemeAdmin)
+        try container.encodeIfPresent(explicitRoles, forKey: .explicitRoles)
+    }
+
+    private static func decodeStringOrNumberIfPresent(
+        from container: KeyedDecodingContainer<CodingKeys>,
+        forKey key: CodingKeys
+    ) throws -> String? {
+        if let string = try? container.decodeIfPresent(String.self, forKey: key) {
+            return string
+        }
+
+        if let integer = try? container.decodeIfPresent(Int64.self, forKey: key) {
+            return String(integer)
+        }
+
+        return nil
     }
 }
 
@@ -539,6 +924,65 @@ public struct KChatChannelMember: Codable, Equatable, Sendable {
         self.teamName = teamName
         self.teamUpdateAt = teamUpdateAt
     }
+
+    private enum CodingKeys: String, CodingKey {
+        case channelId
+        case userId
+        case roles
+        case lastViewedAt
+        case msgCount
+        case mentionCount
+        case notifyProps
+        case lastUpdateAt
+        case teamDisplayName
+        case teamName
+        case teamUpdateAt
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.channelId = try Self.decodeStringOrNumberIfPresent(from: container, forKey: .channelId)
+        self.userId = try Self.decodeStringOrNumberIfPresent(from: container, forKey: .userId)
+        self.roles = try container.decodeIfPresent(String.self, forKey: .roles)
+        self.lastViewedAt = try container.decodeIfPresent(Int64.self, forKey: .lastViewedAt)
+        self.msgCount = try container.decodeIfPresent(Int.self, forKey: .msgCount)
+        self.mentionCount = try container.decodeIfPresent(Int.self, forKey: .mentionCount)
+        self.notifyProps = try container.decodeIfPresent(KChatChannelNotifyProps.self, forKey: .notifyProps)
+        self.lastUpdateAt = try container.decodeIfPresent(Int64.self, forKey: .lastUpdateAt)
+        self.teamDisplayName = try container.decodeIfPresent(String.self, forKey: .teamDisplayName)
+        self.teamName = try container.decodeIfPresent(String.self, forKey: .teamName)
+        self.teamUpdateAt = try container.decodeIfPresent(Int64.self, forKey: .teamUpdateAt)
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeIfPresent(channelId, forKey: .channelId)
+        try container.encodeIfPresent(userId, forKey: .userId)
+        try container.encodeIfPresent(roles, forKey: .roles)
+        try container.encodeIfPresent(lastViewedAt, forKey: .lastViewedAt)
+        try container.encodeIfPresent(msgCount, forKey: .msgCount)
+        try container.encodeIfPresent(mentionCount, forKey: .mentionCount)
+        try container.encodeIfPresent(notifyProps, forKey: .notifyProps)
+        try container.encodeIfPresent(lastUpdateAt, forKey: .lastUpdateAt)
+        try container.encodeIfPresent(teamDisplayName, forKey: .teamDisplayName)
+        try container.encodeIfPresent(teamName, forKey: .teamName)
+        try container.encodeIfPresent(teamUpdateAt, forKey: .teamUpdateAt)
+    }
+
+    private static func decodeStringOrNumberIfPresent(
+        from container: KeyedDecodingContainer<CodingKeys>,
+        forKey key: CodingKeys
+    ) throws -> String? {
+        if let string = try? container.decodeIfPresent(String.self, forKey: key) {
+            return string
+        }
+
+        if let integer = try? container.decodeIfPresent(Int64.self, forKey: key) {
+            return String(integer)
+        }
+
+        return nil
+    }
 }
 
 /// Query parameters accepted by the kChat channel posts endpoint.
@@ -628,6 +1072,10 @@ public struct KChatChannel: Codable, Equatable, Sendable {
     public let lastPostAt: Int?
     public let totalMsgCount: Int?
     public let creatorId: String?
+    public let teamDisplayName: String?
+    public let teamName: String?
+    public let teamUpdateAt: Int64?
+    public let policyId: String?
 
     public init(
         id: String? = nil,
@@ -642,7 +1090,11 @@ public struct KChatChannel: Codable, Equatable, Sendable {
         purpose: String? = nil,
         lastPostAt: Int? = nil,
         totalMsgCount: Int? = nil,
-        creatorId: String? = nil
+        creatorId: String? = nil,
+        teamDisplayName: String? = nil,
+        teamName: String? = nil,
+        teamUpdateAt: Int64? = nil,
+        policyId: String? = nil
     ) {
         self.id = id
         self.createAt = createAt
@@ -657,6 +1109,10 @@ public struct KChatChannel: Codable, Equatable, Sendable {
         self.lastPostAt = lastPostAt
         self.totalMsgCount = totalMsgCount
         self.creatorId = creatorId
+        self.teamDisplayName = teamDisplayName
+        self.teamName = teamName
+        self.teamUpdateAt = teamUpdateAt
+        self.policyId = policyId
     }
 }
 
