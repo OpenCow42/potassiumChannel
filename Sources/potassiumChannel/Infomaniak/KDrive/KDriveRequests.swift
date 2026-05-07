@@ -1813,6 +1813,32 @@ public enum KDriveRequests {
         )
     }
 
+    /// Creates a request that lists third-party drives eligible for OAuth external import.
+    public static func listOAuthImportDrives(
+        driveId: Int,
+        application: String,
+        accessTokenId: Int? = nil,
+        authCode: String? = nil
+    ) -> APIRequest<InfomaniakResponse<KDriveThirdPartyDrivesList>> {
+        var queryParameters: [QueryParameter] = [
+            QueryParameter(name: "application", value: .string(application)),
+        ]
+
+        if let accessTokenId {
+            queryParameters.append(QueryParameter(name: "access_token_id", value: .integer(accessTokenId)))
+        }
+
+        if let authCode {
+            queryParameters.append(QueryParameter(name: "auth_code", value: .string(authCode)))
+        }
+
+        return APIRequest(
+            method: .get,
+            path: "/2/drive/\(driveId)/imports/oauth/drives",
+            queryParameters: queryParameters
+        )
+    }
+
     /// Creates a request that lists user invitations for a kDrive.
     public static func listUserInvitations(
         driveId: Int,

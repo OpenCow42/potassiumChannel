@@ -752,6 +752,23 @@ public struct KDriveService: Sendable {
         )
     }
 
+    /// Lists third-party drives eligible for OAuth external import.
+    public func listOAuthImportDrives(
+        driveId: Int,
+        application: String,
+        accessTokenId: Int? = nil,
+        authCode: String? = nil
+    ) async throws -> InfomaniakResponse<KDriveThirdPartyDrivesList> {
+        try await client.send(
+            KDriveRequests.listOAuthImportDrives(
+                driveId: driveId,
+                application: application,
+                accessTokenId: accessTokenId,
+                authCode: authCode
+            )
+        )
+    }
+
     /// Lists user invitations for a kDrive.
     public func listUserInvitations(
         driveId: Int,
