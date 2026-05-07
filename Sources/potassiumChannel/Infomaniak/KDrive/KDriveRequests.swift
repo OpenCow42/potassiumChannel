@@ -1471,6 +1471,25 @@ public enum KDriveRequests {
         )
     }
 
+    /// Creates a request that gets a temporary URL for a kDrive file.
+    public static func getFileTemporaryURL(
+        driveId: Int,
+        fileId: Int,
+        duration: Int? = nil
+    ) -> APIRequest<InfomaniakResponse<KDriveFileTemporaryURL>> {
+        var queryParameters: [QueryParameter] = []
+
+        if let duration {
+            queryParameters.append(QueryParameter(name: "duration", value: .integer(duration)))
+        }
+
+        return APIRequest(
+            method: .get,
+            path: "/2/drive/\(driveId)/files/\(fileId)/temporary_url",
+            queryParameters: queryParameters
+        )
+    }
+
     /// Creates a request that lists versions for a kDrive file.
     public static func listFileVersions(
         driveId: Int,
