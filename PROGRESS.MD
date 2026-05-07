@@ -72,6 +72,7 @@ not started
 | --- | --- | --- |
 | GET | `/api/v4/config/client` | `KChatRequests.getClientConfig` |
 | GET | `/api/v4/teams` | `KChatRequests.listTeams` |
+| GET | `/api/v4/teams/{team_id}/members/{user_id}` | `KChatRequests.getTeamMember` |
 | GET | `/api/v4/users/{user_id}/image` | `KChatRequests.getUserImage` |
 | GET | `/api/v4/users/{user_id}/image/default` | `KChatRequests.getUserDefaultImage` |
 | GET | `/api/v4/users/{user_id}/teams/members` | `KChatRequests.getUserTeamMembers` |
@@ -103,6 +104,7 @@ not started
 - `KChatPost` and `KChatPostList` Mattermost-compatible post DTOs.
 - `KChatService`, which sends kChat route factories through `InfomaniakAPIClient`, includes `getPostThread(postId:)`, and can build `https://<team>.kchat.infomaniak.com` base URLs.
 - `KChatService.listTeams(options:)` convenience API returning `[KChatTeam]`.
+- `KChatService.getTeamMember(teamId:userId:)` convenience API returning `KChatTeamMember`.
 - `KChatService.getUserTeamMembers(userId:)` convenience API returning `[KChatTeamMember]`.
 - `KChatService.getUserTeamsUnread(userId:)` convenience API returning `[KChatTeamUnread]`.
 - `KChatService.getUserTeamUnread(userId:teamId:)` convenience API returning `KChatTeamUnread`.
@@ -113,6 +115,13 @@ not started
 
 - `swift test` passes with route/DTO/channel coverage.
 
+
+## 2026-05-07 — kChat get team member route
+
+- Added `GET /api/v4/teams/{team_id}/members/{user_id}` request support via `KChatRequests.getTeamMember`.
+- Reused `KChatTeamMember`, including its hardened numeric `user_id` decoding to `String`.
+- Added `KChatService.getTeamMember(teamId:userId:)` convenience API returning `KChatTeamMember`.
+- Added unit tests covering GET method, OpenAPI path, auth/accept headers, no query/body, percent encoding for both path segments, and response decoding including numeric `user_id`.
 
 ## 2026-05-07 — kChat get all teams route
 
