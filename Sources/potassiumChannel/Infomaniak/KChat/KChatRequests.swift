@@ -65,6 +65,28 @@ public enum KChatRequests {
         )
     }
 
+    /// Creates a request that lists kChat members for a team.
+    public static func getTeamMembers(
+        teamId: String,
+        options: KChatTeamMembersOptions = KChatTeamMembersOptions()
+    ) -> APIRequest<[KChatTeamMember]> {
+        var queryParameters: [QueryParameter] = []
+
+        if let page = options.page {
+            queryParameters.append(QueryParameter(name: "page", value: .integer(page)))
+        }
+
+        if let perPage = options.perPage {
+            queryParameters.append(QueryParameter(name: "per_page", value: .integer(perPage)))
+        }
+
+        return APIRequest(
+            method: .get,
+            path: "/api/v4/teams/\(percentEncodePathSegment(teamId))/members",
+            queryParameters: queryParameters
+        )
+    }
+
     /// Creates a request that searches kChat users.
     public static func searchUsers(body: Data) -> APIRequest<[KChatUser]> {
         APIRequest(

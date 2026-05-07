@@ -410,3 +410,11 @@ not started
 - Added `KChatService.getTeamByName(name:)` convenience API returning `KChatTeam`.
 - Added request/decoding tests covering GET method, OpenAPI path, auth/accept headers, percent-encoded team name path segment, no query/body, and response decoding.
 - Verified with `swift test` in `potassiumChannel`.
+
+## 2026-05-07 — kChat get team members route
+
+- Added `GET /api/v4/teams/{team_id}/members` request support via `KChatRequests.getTeamMembers(teamId:options:)`.
+- Added `KChatTeamMembersOptions` for `page` and `per_page` query parameters.
+- Added `KChatService.getTeamMembers(teamId:options:)` convenience API returning `[KChatTeamMember]`.
+- Added request/decoding tests covering GET method, OpenAPI path, auth/accept headers, query encoding, omitted empty options, percent-encoded team id path segment, no body, and response decoding.
+- Verified with `swift test` in `potassiumChannel`.

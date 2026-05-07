@@ -126,6 +126,21 @@ public struct KChatListTeamsOptions: Equatable, Sendable {
     }
 }
 
+/// Query options accepted by the Mattermost-compatible kChat team members list endpoint.
+public struct KChatTeamMembersOptions: Equatable, Sendable {
+    /// The page to select.
+    public let page: Int?
+
+    /// The number of team members per page.
+    public let perPage: Int?
+
+    /// Creates kChat team members list query options.
+    public init(page: Int? = nil, perPage: Int? = nil) {
+        self.page = page
+        self.perPage = perPage
+    }
+}
+
 /// Query options accepted by the Mattermost-compatible kChat users list endpoint.
 public struct KChatListUsersOptions: Equatable, Sendable {
     /// The page to select.
@@ -411,7 +426,7 @@ public struct KChatTeam: Codable, Equatable, Sendable {
     }
 }
 
-/// A Mattermost-compatible kChat team membership returned by user team member endpoints.
+/// A Mattermost-compatible kChat team membership returned by team member endpoints.
 public struct KChatTeamMember: Codable, Equatable, Sendable {
     /// Team identifier for this membership.
     public let teamId: String?
