@@ -46,6 +46,21 @@ public struct DownloadKDriveFileOptions: Equatable, Sendable {
     }
 }
 
+/// Query parameters accepted by the kDrive file thumbnail endpoint.
+public struct GetKDriveFileThumbnailOptions: Equatable, Sendable {
+    /// Optional thumbnail height in pixels. The API accepts values from 10 through 400.
+    public let height: Int?
+
+    /// Optional thumbnail width in pixels. The API accepts values from 10 through 400.
+    public let width: Int?
+
+    /// Creates options for requesting a kDrive file thumbnail.
+    public init(height: Int? = nil, width: Int? = nil) {
+        self.height = height
+        self.width = width
+    }
+}
+
 /// Query parameters and headers accepted by the kDrive single-request upload endpoint.
 public struct UploadKDriveFileOptions: Equatable, Sendable {
     /// Optional related resources to include in the response.

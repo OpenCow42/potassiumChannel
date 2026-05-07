@@ -1,3 +1,9 @@
+## 2026-05-08 — kDrive v2 file thumbnail route
+
+- Added shared raw-data support for `GET /2/drive/{drive_id}/files/{file_id}/thumbnail` via `KDriveRequests.getFileThumbnail` and `KDriveService.getFileThumbnail`, with optional `height`/`width` query parameters and `Accept: image/*`.
+- Added request coverage for the exact OpenAPI v2 file-thumbnail path, auth header, image accept header, and dimensions query encoding.
+- Validation: `swift test` passes (314 tests).
+
 ## 2026-05-08 — kDrive v2 single drive user route
 
 - Added shared support for `GET /2/drive/{drive_id}/users/{user_id}` via `KDriveRequests.getDriveUserV2` and `KDriveService.getDriveUserV2`, reusing `KDriveDriveUser`.
@@ -138,6 +144,7 @@ kDrive request factories, and `KDriveService` wrappers moved from Potassium.
 | GET | `/3/drive/{drive_id}/files/{file_id}/files` | `KDriveRequests.listDirectoryFiles` |
 | GET | `/3/drive/{drive_id}/trash/{file_id}` | `KDriveRequests.getTrashedFile` |
 | GET | `/2/drive/{drive_id}/files/{file_id}/download` | `KDriveRequests.downloadFile` |
+| GET | `/2/drive/{drive_id}/files/{file_id}/thumbnail` | `KDriveRequests.getFileThumbnail` |
 | POST | `/3/drive/{drive_id}/upload` | `KDriveRequests.uploadFile` |
 | GET | `/2/drive/{drive_id}/trash/{file_id}/thumbnail` | `KDriveRequests.getV2TrashedItemThumbnail` |
 | GET | `/2/drive/{drive_id}/trash/{file_id}/count` | `KDriveRequests.getV2TrashedItemCount` |
