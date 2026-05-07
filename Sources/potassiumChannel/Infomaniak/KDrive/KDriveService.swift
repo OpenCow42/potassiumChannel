@@ -550,6 +550,17 @@ public struct KDriveService: Sendable {
         )
     }
 
+    /// Gets total file and storage size for a kDrive file or directory.
+    public func getFileSize(
+        driveId: Int,
+        fileId: Int,
+        depth: String? = nil
+    ) async throws -> InfomaniakResponse<KDriveFileSize> {
+        try await client.send(
+            KDriveRequests.getFileSize(driveId: driveId, fileId: fileId, depth: depth)
+        )
+    }
+
     /// Lists versions for a kDrive file.
     public func listFileVersions(
         driveId: Int,
