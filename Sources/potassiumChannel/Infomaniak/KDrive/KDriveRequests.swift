@@ -1608,6 +1608,22 @@ public enum KDriveRequests {
         )
     }
 
+    /// Creates a request that lists files shared on a kDrive during a statistics period.
+    public static func listActivitySharedFiles(
+        driveId: Int,
+        from: Int,
+        until: Int
+    ) -> APIRequest<InfomaniakResponse<[KDriveSharedFileActivity]>> {
+        APIRequest(
+            method: .get,
+            path: "/2/drive/\(driveId)/statistics/activities/shared_files",
+            queryParameters: [
+                QueryParameter(name: "from", value: .integer(from)),
+                QueryParameter(name: "until", value: .integer(until)),
+            ]
+        )
+    }
+
     /// Creates a request that lists generated kDrive activity reports.
     public static func listActivityReports(
         driveId: Int,
