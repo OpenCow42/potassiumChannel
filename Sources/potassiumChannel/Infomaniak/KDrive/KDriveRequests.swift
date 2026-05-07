@@ -1519,6 +1519,18 @@ public enum KDriveRequests {
         )
     }
 
+    /// Creates a request that gets a single version for a kDrive file using the deprecated v2 endpoint.
+    public static func getFileVersionV2(
+        driveId: Int,
+        fileId: Int,
+        versionId: Int
+    ) -> APIRequest<InfomaniakResponse<KDriveFileVersionV2>> {
+        APIRequest(
+            method: .get,
+            path: "/2/drive/\(driveId)/files/\(fileId)/versions/\(versionId)"
+        )
+    }
+
     /// Creates a request that lists versions for a kDrive file.
     public static func listFileVersions(
         driveId: Int,
