@@ -239,6 +239,14 @@ public enum KChatRequests {
         )
     }
 
+    /// Creates a request that gets unread counts for a specific team for a user, or `me` for the authenticated user.
+    public static func getUserTeamUnread(userId: String, teamId: String) -> APIRequest<KChatTeamUnread> {
+        APIRequest(
+            method: .get,
+            path: "/api/v4/users/\(percentEncodePathSegment(userId))/teams/\(percentEncodePathSegment(teamId))/unread"
+        )
+    }
+
     /// Creates a request that lists kChat channels for a user in a team.
     public static func getUserTeamChannels(
         userId: String,

@@ -75,6 +75,7 @@ not started
 | GET | `/api/v4/users/{user_id}/image/default` | `KChatRequests.getUserDefaultImage` |
 | GET | `/api/v4/users/{user_id}/teams/members` | `KChatRequests.getUserTeamMembers` |
 | GET | `/api/v4/users/{user_id}/teams/unread` | `KChatRequests.getUserTeamsUnread` |
+| GET | `/api/v4/users/{user_id}/teams/{team_id}/unread` | `KChatRequests.getUserTeamUnread` |
 | POST | `/api/v4/users/usernames` | `KChatRequests.getUsersByUsernames` |
 | GET | `/api/v4/channels/{channel_id}/posts` | `KChatRequests.getChannelPosts` |
 | GET | `/api/v4/posts/{post_id}` | `KChatRequests.getPost` |
@@ -101,6 +102,7 @@ not started
 - `KChatService`, which sends kChat route factories through `InfomaniakAPIClient`, includes `getPostThread(postId:)`, and can build `https://<team>.kchat.infomaniak.com` base URLs.
 - `KChatService.getUserTeamMembers(userId:)` convenience API returning `[KChatTeamMember]`.
 - `KChatService.getUserTeamsUnread(userId:)` convenience API returning `[KChatTeamUnread]`.
+- `KChatService.getUserTeamUnread(userId:teamId:)` convenience API returning `KChatTeamUnread`.
 - `KChatService.getUserImage(userId:)`, which returns profile image bytes through the raw-data send path.
 - `KChatService.getUserDefaultImage(userId:)`, which returns generated default profile image bytes through the raw-data send path.
 
@@ -108,6 +110,13 @@ not started
 
 - `swift test` passes with route/DTO/channel coverage.
 
+
+## 2026-05-07 — kChat get user team unread route
+
+- Added `GET /api/v4/users/{user_id}/teams/{team_id}/unread` request support via `KChatRequests.getUserTeamUnread`.
+- Added `KChatService.getUserTeamUnread(userId:teamId:)` convenience API returning `KChatTeamUnread`.
+- Added unit tests covering GET method, OpenAPI path, auth/accept headers, no query, no body, special `me`, percent encoding for both user and team ids, and response decoding.
+- Live verification against the configured kChat tenant returned 404 route not found for this singular-team endpoint while `/api/v4/users/{user_id}/teams/unread` exists, so downstream live coverage should stay guarded/documentary unless the API becomes available.
 
 ## 2026-05-07 — kChat get user team unreads route
 
