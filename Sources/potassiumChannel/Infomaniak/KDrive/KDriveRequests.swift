@@ -817,6 +817,17 @@ public enum KDriveRequests {
         )
     }
 
+    /// Creates a request that lists invitation access entries for a kDrive file or directory.
+    public static func listFileAccessInvitations(
+        driveId: Int,
+        fileId: Int
+    ) -> APIRequest<InfomaniakResponse<[KDriveFileAccessInvitation]>> {
+        APIRequest(
+            method: .get,
+            path: "/2/drive/\(driveId)/files/\(fileId)/access/invitations"
+        )
+    }
+
     /// Creates a request that gets a child kDrive file or directory by name.
     public static func getFileByName(
         driveId: Int,
