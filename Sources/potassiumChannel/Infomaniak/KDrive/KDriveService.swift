@@ -24,6 +24,13 @@ public struct KDriveService: Sendable {
         )
     }
 
+    /// Wakes a sleeping kDrive up.
+    public func wakeDrive(
+        driveId: Int
+    ) async throws -> InfomaniakResponse<Bool> {
+        try await client.send(KDriveRequests.wakeDrive(driveId: driveId))
+    }
+
     /// Lists users associated with a specific kDrive.
     public func listDriveUsers(
         driveId: Int,

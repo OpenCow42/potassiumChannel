@@ -43,6 +43,16 @@ public enum KDriveRequests {
         )
     }
 
+    /// Creates a request that wakes a sleeping kDrive up.
+    public static func wakeDrive(
+        driveId: Int
+    ) -> APIRequest<InfomaniakResponse<Bool>> {
+        APIRequest(
+            method: .post,
+            path: "/3/drive/\(driveId)/wake"
+        )
+    }
+
     /// Creates a request that lists users associated with a specific kDrive.
     public static func listDriveUsers(
         driveId: Int,
