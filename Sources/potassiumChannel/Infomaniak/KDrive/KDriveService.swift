@@ -882,6 +882,19 @@ public struct KDriveService: Sendable {
         )
     }
 
+    /// Updates trash settings for a single kDrive.
+    public func updateTrashSettings(
+        driveId: Int,
+        maxDuration: Int
+    ) async throws -> InfomaniakResponse<Bool> {
+        try await client.send(
+            KDriveRequests.updateTrashSettings(
+                driveId: driveId,
+                options: UpdateKDriveTrashSettingsOptions(maxDuration: maxDuration)
+            )
+        )
+    }
+
     /// Lists categories configured on a kDrive.
     public func listCategories(
         driveId: Int
