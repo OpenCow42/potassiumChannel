@@ -1182,6 +1182,20 @@ public enum KDriveRequests {
         )
     }
 
+    /// Creates a request that checks whether kDrive file or directory identifiers still exist.
+    public static func checkFilesExistence(
+        driveId: Int,
+        fileIds: [Int]
+    ) -> APIRequest<InfomaniakResponse<[KDriveFilesExistenceResult]>> {
+        let body = try! JSONEncoder().encode(KDriveFilesExistenceRequestBody(ids: fileIds))
+
+        return APIRequest(
+            method: .post,
+            path: "/2/drive/\(driveId)/files/exists",
+            body: body
+        )
+    }
+
     /// Creates a request that uploads a file to kDrive using the v3 single-request endpoint.
     public static func uploadFile(
         driveId: Int,

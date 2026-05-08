@@ -490,6 +490,14 @@ public struct KDriveService: Sendable {
         )
     }
 
+    /// Checks whether kDrive file or directory identifiers still exist.
+    public func checkFilesExistence(
+        driveId: Int,
+        fileIds: [Int]
+    ) async throws -> InfomaniakResponse<[KDriveFilesExistenceResult]> {
+        try await client.send(KDriveRequests.checkFilesExistence(driveId: driveId, fileIds: fileIds))
+    }
+
     /// Uploads raw file data to kDrive using the v3 single-request endpoint.
     public func uploadFile(
         driveId: Int,
