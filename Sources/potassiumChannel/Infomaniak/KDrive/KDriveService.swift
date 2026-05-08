@@ -353,6 +353,17 @@ public struct KDriveService: Sendable {
         )
     }
 
+    /// Gets preview image data for a kDrive file.
+    public func getFilePreview(
+        driveId: Int,
+        fileId: Int,
+        options: GetKDriveFilePreviewOptions = GetKDriveFilePreviewOptions()
+    ) async throws -> Data {
+        try await client.sendData(
+            KDriveRequests.getFilePreview(driveId: driveId, fileId: fileId, options: options)
+        )
+    }
+
     /// Builds a kDrive archive from selected files or a parent directory.
     public func buildArchive(
         driveId: Int,
