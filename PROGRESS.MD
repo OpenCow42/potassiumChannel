@@ -1,3 +1,10 @@
+## 2026-05-08 — kDrive v2 restore trashed file route
+
+- Added shared support for mutation `POST /2/drive/{drive_id}/trash/{file_id}/restore` via `KDriveRequests.restoreTrashedFile` and `KDriveService.restoreTrashedFile`.
+- Added `RestoreKDriveTrashedFileOptions(destinationDirectoryId:)` encoding required `destination_directory_id`, plus `KDriveRestoreTrashedFileResult` for the documented boolean-or-cancel-resource response shape.
+- Added request/response coverage for POST method, exact OpenAPI trash restore path, auth/JSON headers, required body encoding, and both boolean and cancel-resource response decoding.
+- Validation: `swift test --filter KDriveRestoreTrashedFileRequestTests` passed (4 tests).
+
 ## 2026-05-08 — kDrive v2 remove trashed file route
 
 - Added shared support for destructive mutation `DELETE /2/drive/{drive_id}/trash/{file_id}` via `KDriveRequests.removeTrashedFile` and `KDriveService.removeTrashedFile`, returning `InfomaniakResponse<Bool>`.
