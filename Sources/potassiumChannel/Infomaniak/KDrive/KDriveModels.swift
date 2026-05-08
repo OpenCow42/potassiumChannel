@@ -196,6 +196,49 @@ public struct AddKDriveFileCommentReplyOptions: Encodable, Equatable, Sendable {
     }
 }
 
+/// Query parameters accepted by the kDrive file comment replies endpoint.
+public struct ListKDriveFileCommentRepliesOptions: Equatable, Sendable {
+    /// Related resources to include in the API response.
+    public let includedResources: String?
+
+    /// The page number to request.
+    public let page: Int?
+
+    /// The number of items per page to request.
+    public let perPage: Int?
+
+    /// Whether the API should return the total item count.
+    public let total: Bool?
+
+    /// Field used for sorting, such as created_at.
+    public let orderBy: String?
+
+    /// Default sort order.
+    public let order: String?
+
+    /// Per-field sort orders encoded as order_for[field]=asc|desc.
+    public let orderFor: [String: String]
+
+    /// Creates options for listing replies to a kDrive file comment.
+    public init(
+        includedResources: String? = nil,
+        page: Int? = nil,
+        perPage: Int? = nil,
+        total: Bool? = nil,
+        orderBy: String? = nil,
+        order: String? = nil,
+        orderFor: [String: String] = [:]
+    ) {
+        self.includedResources = includedResources
+        self.page = page
+        self.perPage = perPage
+        self.total = total
+        self.orderBy = orderBy
+        self.order = order
+        self.orderFor = orderFor
+    }
+}
+
 /// Dropbox metadata for a kDrive file or directory.
 public struct KDriveFileDropbox: Codable, Equatable, Sendable {
     /// Raw dropbox payload returned by the API.

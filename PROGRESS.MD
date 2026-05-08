@@ -1,3 +1,10 @@
+## 2026-05-08 — kDrive v2 file comment replies route
+
+- Added shared support for read endpoint `GET /2/drive/{drive_id}/files/{file_id}/comments/{comment_id}` via `KDriveRequests.listFileCommentReplies` and `KDriveService.listFileCommentReplies`, returning `PaginatedInfomaniakResponse<[KDriveFileComment]>`.
+- Added `ListKDriveFileCommentRepliesOptions` for optional `with`, `page`, `per_page`, `total`, `order_by`, `order`, and `order_for[created_at]` style query parameters.
+- Added request/response coverage for GET method, exact OpenAPI path, auth header, path interpolation, query encoding, pagination metadata, and variable reply payload decoding.
+- Validation: `swift test --filter KDriveFileCommentRepliesRequestTests` passed (4 tests).
+
 ## 2026-05-08 — kDrive v2 add file comment reply route
 
 - Added shared support for mutation `POST /2/drive/{drive_id}/files/{file_id}/comments/{comment_id}` via `KDriveRequests.addFileCommentReply` and `KDriveService.addFileCommentReply`, returning `InfomaniakResponse<KDriveFileComment>`.

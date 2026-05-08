@@ -914,6 +914,50 @@ public enum KDriveRequests {
         )
     }
 
+    /// Creates a request that lists replies to a kDrive file comment.
+    public static func listFileCommentReplies(
+        driveId: Int,
+        fileId: Int,
+        commentId: String,
+        options: ListKDriveFileCommentRepliesOptions = ListKDriveFileCommentRepliesOptions()
+    ) -> APIRequest<PaginatedInfomaniakResponse<[KDriveFileComment]>> {
+        var queryParameters: [QueryParameter] = []
+
+        if let includedResources = options.includedResources {
+            queryParameters.append(QueryParameter(name: "with", value: .string(includedResources)))
+        }
+
+        if let page = options.page {
+            queryParameters.append(QueryParameter(name: "page", value: .integer(page)))
+        }
+
+        if let perPage = options.perPage {
+            queryParameters.append(QueryParameter(name: "per_page", value: .integer(perPage)))
+        }
+
+        if let total = options.total {
+            queryParameters.append(QueryParameter(name: "total", value: .bool(total)))
+        }
+
+        if let orderBy = options.orderBy {
+            queryParameters.append(QueryParameter(name: "order_by", value: .string(orderBy)))
+        }
+
+        if let order = options.order {
+            queryParameters.append(QueryParameter(name: "order", value: .string(order)))
+        }
+
+        for (field, direction) in options.orderFor.sorted(by: { $0.key < $1.key }) {
+            queryParameters.append(QueryParameter(name: "order_for[\(field)]", value: .string(direction)))
+        }
+
+        return APIRequest(
+            method: .get,
+            path: "/2/drive/\(driveId)/files/\(fileId)/comments/\(commentId)",
+            queryParameters: queryParameters
+        )
+    }
+
     /// Creates a request that gets dropbox metadata for a kDrive file or directory.
     public static func getFileDropbox(
         driveId: Int,
