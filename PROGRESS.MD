@@ -1,3 +1,10 @@
+## 2026-05-08 — kDrive v2 add file comment reply route
+
+- Added shared support for mutation `POST /2/drive/{drive_id}/files/{file_id}/comments/{comment_id}` via `KDriveRequests.addFileCommentReply` and `KDriveService.addFileCommentReply`, returning `InfomaniakResponse<KDriveFileComment>`.
+- Added `AddKDriveFileCommentReplyOptions` with required JSON body field `body`, plus optional `with` query support.
+- Added request/response coverage for POST method, exact OpenAPI path, auth/JSON headers, body forwarding, option encoding, and variable reply payload decoding.
+- Validation: `swift test --filter KDriveAddFileCommentReplyRequestTests` passed (3 tests).
+
 ## 2026-05-08 — kDrive v2 add file comment route
 
 - Added shared support for mutation `POST /2/drive/{drive_id}/files/{file_id}/comments` via `KDriveRequests.addFileComment` and `KDriveService.addFileComment`, returning `InfomaniakResponse<KDriveFileComment>`.
