@@ -1,3 +1,9 @@
+## 2026-05-08 — kDrive v3 wake drive route
+
+- Added shared support for benign `POST /3/drive/{drive_id}/wake` via `KDriveRequests.wakeDrive` and `KDriveService.wakeDrive`, returning `InfomaniakResponse<Bool>`.
+- Added request/response coverage for POST method, exact OpenAPI path, auth/accept headers, empty query/body behavior, and boolean data decoding.
+- Validation: `swift test --filter KDriveWakeDriveRequestTests` passed (2 tests).
+
 ## 2026-05-08 — kDrive v2 files-exists route
 
 - Added shared support for non-destructive `POST /2/drive/{drive_id}/files/exists` via `KDriveRequests.checkFilesExistence` and `KDriveService.checkFilesExistence`, sending JSON body `{ "ids": [Int] }`.
