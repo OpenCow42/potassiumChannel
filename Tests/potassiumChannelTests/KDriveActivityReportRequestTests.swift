@@ -42,6 +42,25 @@ struct KDriveActivityReportRequestTests {
         #expect(URLComponents(url: try #require(urlRequest.url), resolvingAgainstBaseURL: false)?.queryItems == [])
     }
 
+    @Test("kDrive export activity report request matches the OpenAPI path and CSV accept header")
+    func kDriveExportActivityReportRequestMatchesOpenAPIShape() async throws {
+        let client = InfomaniakAPIClient(
+            configuration: APIClientConfiguration(
+                baseURL: URL(string: "https://api.infomaniak.com")!,
+                bearerToken: "test-token"
+            )
+        )
+        let request = KDriveRequests.exportActivityReport(driveId: 100, reportId: 42)
+
+        let urlRequest = try await client.makeURLRequest(for: request)
+
+        #expect(urlRequest.httpMethod == "GET")
+        #expect(urlRequest.value(forHTTPHeaderField: "Authorization") == "Bearer test-token")
+        #expect(urlRequest.value(forHTTPHeaderField: "Accept") == "text/csv")
+        #expect(urlRequest.url?.path == "/2/drive/100/activities/reports/42/export")
+        #expect(URLComponents(url: try #require(urlRequest.url), resolvingAgainstBaseURL: false)?.queryItems == [])
+    }
+
     @Test("kDrive activity report required path parameters are encoded into the URL")
     func kDriveActivityReportRequiredParametersAreNotOmitted() async throws {
         let client = InfomaniakAPIClient(
@@ -56,6 +75,26 @@ struct KDriveActivityReportRequestTests {
         let path = try #require(urlRequest.url?.path)
 
         #expect(path == "/2/drive/123/activities/reports/456")
+        #expect(!path.contains("{drive_id}"))
+        #expect(!path.contains("{report_id}"))
+        #expect(urlRequest.url?.pathComponents.contains("123") == true)
+        #expect(urlRequest.url?.pathComponents.contains("456") == true)
+    }
+
+    @Test("kDrive export activity report required path parameters are encoded into the URL")
+    func kDriveExportActivityReportRequiredParametersAreNotOmitted() async throws {
+        let client = InfomaniakAPIClient(
+            configuration: APIClientConfiguration(
+                baseURL: URL(string: "https://api.infomaniak.com")!,
+                bearerToken: "test-token"
+            )
+        )
+        let request = KDriveRequests.exportActivityReport(driveId: 123, reportId: 456)
+
+        let urlRequest = try await client.makeURLRequest(for: request)
+        let path = try #require(urlRequest.url?.path)
+
+        #expect(path == "/2/drive/123/activities/reports/456/export")
         #expect(!path.contains("{drive_id}"))
         #expect(!path.contains("{report_id}"))
         #expect(urlRequest.url?.pathComponents.contains("123") == true)

@@ -1,3 +1,9 @@
+## 2026-05-08 — kDrive v2 activity report export route
+
+- Added shared raw-data support for `GET /2/drive/{drive_id}/activities/reports/{report_id}/export` via `KDriveRequests.exportActivityReport` and `KDriveService.exportActivityReport`, returning CSV `Data`.
+- Added request coverage for method, exact OpenAPI path, auth header, `Accept: text/csv`, empty query behavior, and required `drive_id`/`report_id` path substitution.
+- Validation: `swift test --filter KDriveActivityReportRequestTests` passed (7 tests).
+
 ## 2026-05-08 — kDrive v2 unfavorite file route
 
 - Added shared support for mutation `DELETE /2/drive/{drive_id}/files/{file_id}/favorite` via `KDriveRequests.unfavoriteFile` and `KDriveService.unfavoriteFile`, returning `InfomaniakResponse<Bool>`.

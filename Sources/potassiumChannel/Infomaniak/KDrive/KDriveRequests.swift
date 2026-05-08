@@ -2103,6 +2103,18 @@ public enum KDriveRequests {
         )
     }
 
+    /// Creates a request that exports a generated kDrive activity report as CSV data.
+    public static func exportActivityReport(
+        driveId: Int,
+        reportId: Int
+    ) -> APIRequest<Data> {
+        APIRequest(
+            method: .get,
+            path: "/2/drive/\(driveId)/activities/reports/\(reportId)/export",
+            headers: [HTTPHeader(name: "Accept", value: "text/csv")]
+        )
+    }
+
     /// Creates a request that lists external imports for a kDrive.
     public static func listImports(
         driveId: Int,

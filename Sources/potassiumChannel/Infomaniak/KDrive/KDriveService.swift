@@ -950,6 +950,16 @@ public struct KDriveService: Sendable {
         )
     }
 
+    /// Exports a generated kDrive activity report as CSV data.
+    public func exportActivityReport(
+        driveId: Int,
+        reportId: Int
+    ) async throws -> Data {
+        try await client.sendData(
+            KDriveRequests.exportActivityReport(driveId: driveId, reportId: reportId)
+        )
+    }
+
     /// Lists external imports for a kDrive.
     public func listImports(
         driveId: Int,
