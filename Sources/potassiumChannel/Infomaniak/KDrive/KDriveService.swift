@@ -604,6 +604,22 @@ public struct KDriveService: Sendable {
         )
     }
 
+    /// Updates the modification date of a kDrive file.
+    public func updateFileLastModified(
+        driveId: Int,
+        fileId: Int,
+        lastModifiedAt: Int
+    ) async throws -> InfomaniakResponse<Bool> {
+        let body = try JSONEncoder().encode(UpdateKDriveFileLastModifiedOptions(lastModifiedAt: lastModifiedAt))
+        return try await client.send(
+            KDriveRequests.updateFileLastModified(
+                driveId: driveId,
+                fileId: fileId,
+                body: body
+            )
+        )
+    }
+
     /// Gets thumbnail data for a trashed kDrive item using the deprecated v2 endpoint.
     public func getV2TrashedItemThumbnail(
         driveId: Int,
