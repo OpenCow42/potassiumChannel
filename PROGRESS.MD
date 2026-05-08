@@ -1,3 +1,10 @@
+## 2026-05-08 — kDrive v2 file comments route
+
+- Added shared support for non-destructive `GET /2/drive/{drive_id}/files/{file_id}/comments` via `KDriveRequests.listFileComments` and `KDriveService.listFileComments`.
+- Added `KDriveFileComment` with a lossless `KDriveJSONValue` payload so comment entries round-trip without dropping unknown fields.
+- Added request/decoding coverage for method, exact OpenAPI path, auth header, no-query behavior, required path substitution, empty arrays, and representative variable comment payload decoding.
+- Validation: `swift test --filter KDriveFileCommentsRequestTests` passed (4 tests).
+
 ## 2026-05-08 — kDrive v2 file access users route
 
 - Added shared support for non-destructive `GET /2/drive/{drive_id}/files/{file_id}/access/users` via `KDriveRequests.listFileAccessUsers` and `KDriveService.listFileAccessUsers`.

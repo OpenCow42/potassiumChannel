@@ -314,6 +314,16 @@ public struct KDriveService: Sendable {
         )
     }
 
+    /// Lists comments for a kDrive file or directory.
+    public func listFileComments(
+        driveId: Int,
+        fileId: Int
+    ) async throws -> InfomaniakResponse<[KDriveFileComment]> {
+        try await client.send(
+            KDriveRequests.listFileComments(driveId: driveId, fileId: fileId)
+        )
+    }
+
     /// Gets a child kDrive file or directory by name.
     public func getFileByName(
         driveId: Int,

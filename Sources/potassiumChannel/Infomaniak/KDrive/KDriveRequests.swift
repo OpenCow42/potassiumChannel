@@ -850,6 +850,17 @@ public enum KDriveRequests {
         )
     }
 
+    /// Creates a request that lists comments for a kDrive file or directory.
+    public static func listFileComments(
+        driveId: Int,
+        fileId: Int
+    ) -> APIRequest<InfomaniakResponse<[KDriveFileComment]>> {
+        APIRequest(
+            method: .get,
+            path: "/2/drive/\(driveId)/files/\(fileId)/comments"
+        )
+    }
+
     /// Creates a request that gets a child kDrive file or directory by name.
     public static func getFileByName(
         driveId: Int,
