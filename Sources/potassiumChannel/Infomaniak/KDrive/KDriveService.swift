@@ -908,6 +908,19 @@ public struct KDriveService: Sendable {
         )
     }
 
+    /// Updates share-link customization settings for a single kDrive.
+    public func updateShareLinkSettings(
+        driveId: Int,
+        options: UpdateKDriveShareLinkSettingsOptions
+    ) async throws -> InfomaniakResponse<Bool> {
+        try await client.send(
+            KDriveRequests.updateShareLinkSettings(
+                driveId: driveId,
+                options: options
+            )
+        )
+    }
+
     /// Updates office document integration settings for a single kDrive.
     public func updateOfficeSettings(
         driveId: Int,
