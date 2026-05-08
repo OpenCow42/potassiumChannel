@@ -1801,6 +1801,20 @@ public enum KDriveRequests {
         )
     }
 
+    /// Creates a request that updates share-link customization settings for a single kDrive.
+    public static func updateShareLinkSettings(
+        driveId: Int,
+        options: UpdateKDriveShareLinkSettingsOptions
+    ) throws -> APIRequest<InfomaniakResponse<Bool>> {
+        let body = try JSONEncoder().encode(options)
+
+        return APIRequest(
+            method: .put,
+            path: "/2/drive/\(driveId)/settings/link",
+            body: body
+        )
+    }
+
     /// Creates a request that updates office document integration settings for a single kDrive.
     public static func updateOfficeSettings(
         driveId: Int,

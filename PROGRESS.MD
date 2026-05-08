@@ -1,3 +1,10 @@
+## 2026-05-08 — kDrive v2 update share-link settings route
+
+- Added shared support for drive-level mutation `PUT /2/drive/{drive_id}/settings/link` via `KDriveRequests.updateShareLinkSettings` and `KDriveService.updateShareLinkSettings`, returning `InfomaniakResponse<Bool>`.
+- Added `UpdateKDriveShareLinkSettingsOptions(activate:bgColor:txtColor:images:)` with required `activate`, `bgColor`, and `txtColor` fields plus optional public image ids.
+- Added request/response coverage for PUT method, exact OpenAPI path, auth/JSON headers, empty query, required body encoding, optional image omission, required path parameters, and boolean success decoding.
+- Validation: `swift test --filter KDriveUpdateShareLinkSettingsRequestTests` passed (4 tests).
+
 ## 2026-05-08 — kDrive v2 update AI settings route
 
 - Added shared support for drive-level mutation `PUT /2/drive/{drive_id}/settings/ai` via `KDriveRequests.updateAISettings` and `KDriveService.updateAISettings`, returning `InfomaniakResponse<Bool>`.

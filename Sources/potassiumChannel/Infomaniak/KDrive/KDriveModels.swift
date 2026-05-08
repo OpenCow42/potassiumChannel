@@ -1886,6 +1886,29 @@ public struct KDriveSharedLinkSettings: Codable, Equatable, Sendable {
     }
 }
 
+/// JSON body accepted by the endpoint that updates kDrive share-link customization settings.
+public struct UpdateKDriveShareLinkSettingsOptions: Encodable, Equatable, Sendable {
+    /// Whether custom share-link styling is active.
+    public let activate: Bool
+
+    /// Share-link background color.
+    public let bgColor: String
+
+    /// Share-link text color.
+    public let txtColor: String
+
+    /// Public image identifiers to keep configured, when supplied.
+    public let images: [Int]?
+
+    /// Creates options for updating share-link customization settings.
+    public init(activate: Bool, bgColor: String, txtColor: String, images: [Int]? = nil) {
+        self.activate = activate
+        self.bgColor = bgColor
+        self.txtColor = txtColor
+        self.images = images
+    }
+}
+
 /// A public image used by kDrive share-link customization.
 public struct KDrivePublicImage: Codable, Equatable, Sendable {
     /// The image identifier, when returned by the API.
