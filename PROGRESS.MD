@@ -1,3 +1,10 @@
+## 2026-05-08 — kDrive v2 file access users route
+
+- Added shared support for non-destructive `GET /2/drive/{drive_id}/files/{file_id}/access/users` via `KDriveRequests.listFileAccessUsers` and `KDriveService.listFileAccessUsers`.
+- Added `KDriveFileAccessUser` with a lossless `KDriveJSONValue` payload so user access entries round-trip without dropping unknown fields.
+- Added request/decoding coverage for method, exact OpenAPI path, auth header, no-query behavior, required path substitution, empty arrays, and representative variable user payload decoding.
+- Validation: `swift test --filter KDriveFileAccessUserRequestTests` passed (4 tests).
+
 ## 2026-05-08 — kDrive v2 file access teams route
 
 - Added shared support for non-destructive `GET /2/drive/{drive_id}/files/{file_id}/access/teams` via `KDriveRequests.listFileAccessTeams` and `KDriveService.listFileAccessTeams`.
