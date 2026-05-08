@@ -283,6 +283,36 @@ public struct GetKDriveFilePreviewOptions: Equatable, Sendable {
     }
 }
 
+/// Request body for the kDrive files-exists endpoint.
+public struct KDriveFilesExistenceRequestBody: Codable, Equatable, Sendable {
+    /// The file or directory identifiers to check.
+    public let ids: [Int]
+
+    /// Creates a files-exists request body.
+    public init(ids: [Int]) {
+        self.ids = ids
+    }
+}
+
+/// A kDrive file-existence check result.
+public struct KDriveFilesExistenceResult: Codable, Equatable, Sendable {
+    /// The file or directory identifier that was checked.
+    public let id: Int
+
+    /// Whether the item exists.
+    public let result: Bool
+
+    /// Optional API message, usually present when `result` is false.
+    public let message: String?
+
+    /// Creates a file-existence result.
+    public init(id: Int, result: Bool, message: String? = nil) {
+        self.id = id
+        self.result = result
+        self.message = message
+    }
+}
+
 /// Query parameters and headers accepted by the kDrive single-request upload endpoint.
 public struct UploadKDriveFileOptions: Equatable, Sendable {
     /// Optional related resources to include in the response.

@@ -1,3 +1,10 @@
+## 2026-05-08 — kDrive v2 files-exists route
+
+- Added shared support for non-destructive `POST /2/drive/{drive_id}/files/exists` via `KDriveRequests.checkFilesExistence` and `KDriveService.checkFilesExistence`, sending JSON body `{ "ids": [Int] }`.
+- Added `KDriveFilesExistenceRequestBody` and `KDriveFilesExistenceResult` models for per-id existence feedback.
+- Added request/response coverage for method, exact OpenAPI path, auth/JSON headers, empty query behavior, request body encoding, and representative existence result decoding.
+- Validation: `swift test --filter KDriveFilesExistenceRequestTests` passed (2 tests).
+
 ## 2026-05-08 — kDrive v2 activity report export route
 
 - Added shared raw-data support for `GET /2/drive/{drive_id}/activities/reports/{report_id}/export` via `KDriveRequests.exportActivityReport` and `KDriveService.exportActivityReport`, returning CSV `Data`.
@@ -810,3 +817,9 @@ not started
 - Added typed request/service support for `GET /2/drive/{drive_id}/statistics/activities/export` as `KDriveRequests.exportActivities` and `KDriveService.exportActivities`.
 - The request sends required query parameters `from`, `interval`, singular `metric`, and `until`, and requests `text/csv`.
 - Added unit coverage for OpenAPI path, authorization, CSV accept header, and required query parameters.
+
+## 2026-05-08 — kDrive files existence route
+
+- Added typed support for `POST /2/drive/{drive_id}/files/exists` as `KDriveRequests.checkFilesExistence(driveId:fileIds:)` and `KDriveService.checkFilesExistence(driveId:fileIds:)`.
+- Added `KDriveFilesExistenceRequestBody` and `KDriveFilesExistenceResult` models for the required `ids` JSON body and per-id existence response rows.
+- Added unit coverage for method/path/auth/JSON headers, required body encoding, empty query parameters, and response decoding.
