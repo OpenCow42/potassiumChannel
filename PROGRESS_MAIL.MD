@@ -50,3 +50,9 @@ The usable discovery path for the configured account is current-user scoped, not
   - Added mailbox folder request/service support.
   - Added flexible `MailFolder` response wrapper.
   - Verified with `swift test --filter Mail`.
+
+## Mail folder threads/messages update
+
+- Added mailbox folder thread/message listing via `GET https://mail.infomaniak.com/api/mail/{mailbox_uuid}/folder/{folder_id}/message`.
+- Added flexible thread-list response handling; detailed message reads should use the message/resource URLs surfaced by this listing once the next route is implemented.
+- Verified with `swift test --filter Mail`.

@@ -150,3 +150,51 @@ public struct MailFolder: Codable, Equatable, Sendable {
         try container.encode(values)
     }
 }
+
+/// A thread-listing payload returned for a mailbox folder.
+public struct MailThreadList: Codable, Equatable, Sendable {
+    /// Raw thread-list payload returned by the API.
+    public let values: [String: KDriveJSONValue]
+
+    /// Creates a thread-list wrapper around a raw JSON payload.
+    public init(values: [String: KDriveJSONValue]) {
+        self.values = values
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.singleValueContainer()
+        self.values = try container.decode([String: KDriveJSONValue].self)
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.singleValueContainer()
+        try container.encode(values)
+    }
+}
+
+/// Query options accepted by the Mail folder message listing endpoint.
+public struct ListMailThreadsOptions: Equatable, Sendable {
+    /// Offset from which to return messages.
+    public let offset: Int
+
+    /// Whether the API should group messages into threads.
+    public let threadMode: String
+
+    /// Optional server-side filter value.
+    public let filter: String?
+
+    /// Additional related resources to include.
+    public let includedResources: String?
+
+    public init(
+        offset: Int = 0,
+        threadMode: String = "on",
+        filter: String? = nil,
+        includedResources: String? = "emoji_reactions_per_message"
+    ) {
+        self.offset = offset
+        self.threadMode = threadMode
+        self.filter = filter
+        self.includedResources = includedResources
+    }
+}
