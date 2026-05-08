@@ -5,6 +5,288 @@ public struct KDriveBinaryResponse: Decodable, Sendable {
     public init() {}
 }
 
+/// Lossless JSON value used by kDrive endpoints whose payload shape can vary by access type.
+public enum KDriveJSONValue: Codable, Equatable, Sendable {
+    case string(String)
+    case number(Double)
+    case bool(Bool)
+    case object([String: KDriveJSONValue])
+    case array([KDriveJSONValue])
+    case null
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.singleValueContainer()
+
+        if container.decodeNil() {
+            self = .null
+        } else if let value = try? container.decode(Bool.self) {
+            self = .bool(value)
+        } else if let value = try? container.decode(Double.self) {
+            self = .number(value)
+        } else if let value = try? container.decode(String.self) {
+            self = .string(value)
+        } else if let value = try? container.decode([String: KDriveJSONValue].self) {
+            self = .object(value)
+        } else if let value = try? container.decode([KDriveJSONValue].self) {
+            self = .array(value)
+        } else {
+            throw DecodingError.dataCorruptedError(in: container, debugDescription: "Unsupported JSON value")
+        }
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.singleValueContainer()
+
+        switch self {
+        case let .string(value):
+            try container.encode(value)
+        case let .number(value):
+            try container.encode(value)
+        case let .bool(value):
+            try container.encode(value)
+        case let .object(value):
+            try container.encode(value)
+        case let .array(value):
+            try container.encode(value)
+        case .null:
+            try container.encodeNil()
+        }
+    }
+}
+
+/// Multi-access information for a kDrive file or directory.
+public struct KDriveFileMultiAccess: Codable, Equatable, Sendable {
+    /// Raw access payload returned by the API, keyed by access section.
+    public let values: [String: KDriveJSONValue]
+
+    public init(values: [String: KDriveJSONValue]) {
+        self.values = values
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.singleValueContainer()
+        self.values = try container.decode([String: KDriveJSONValue].self)
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.singleValueContainer()
+        try container.encode(values)
+    }
+}
+
+/// A requested access entry for a kDrive file or directory.
+public struct KDriveFileAccessRequest: Codable, Equatable, Sendable {
+    /// Raw access-request payload returned by the API.
+    public let values: [String: KDriveJSONValue]
+
+    public init(values: [String: KDriveJSONValue]) {
+        self.values = values
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.singleValueContainer()
+        self.values = try container.decode([String: KDriveJSONValue].self)
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.singleValueContainer()
+        try container.encode(values)
+    }
+}
+
+/// An invitation access entry for a kDrive file or directory.
+public struct KDriveFileAccessInvitation: Codable, Equatable, Sendable {
+    /// Raw invitation payload returned by the API.
+    public let values: [String: KDriveJSONValue]
+
+    public init(values: [String: KDriveJSONValue]) {
+        self.values = values
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.singleValueContainer()
+        self.values = try container.decode([String: KDriveJSONValue].self)
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.singleValueContainer()
+        try container.encode(values)
+    }
+}
+
+/// A user access entry for a kDrive file or directory.
+public struct KDriveFileAccessUser: Codable, Equatable, Sendable {
+    /// Raw user access payload returned by the API.
+    public let values: [String: KDriveJSONValue]
+
+    public init(values: [String: KDriveJSONValue]) {
+        self.values = values
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.singleValueContainer()
+        self.values = try container.decode([String: KDriveJSONValue].self)
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.singleValueContainer()
+        try container.encode(values)
+    }
+}
+
+/// A team access entry for a kDrive file or directory.
+public struct KDriveFileAccessTeam: Codable, Equatable, Sendable {
+    /// Raw team access payload returned by the API.
+    public let values: [String: KDriveJSONValue]
+
+    public init(values: [String: KDriveJSONValue]) {
+        self.values = values
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.singleValueContainer()
+        self.values = try container.decode([String: KDriveJSONValue].self)
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.singleValueContainer()
+        try container.encode(values)
+    }
+}
+
+/// A comment entry for a kDrive file or directory.
+public struct KDriveFileComment: Codable, Equatable, Sendable {
+    /// Raw comment payload returned by the API.
+    public let values: [String: KDriveJSONValue]
+
+    public init(values: [String: KDriveJSONValue]) {
+        self.values = values
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.singleValueContainer()
+        self.values = try container.decode([String: KDriveJSONValue].self)
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.singleValueContainer()
+        try container.encode(values)
+    }
+}
+
+/// JSON body accepted by the kDrive add file comment endpoint.
+public struct AddKDriveFileCommentOptions: Encodable, Equatable, Sendable {
+    /// Comment body text.
+    public let body: String
+
+    /// Creates options for adding a comment to a kDrive file or directory.
+    public init(body: String) {
+        self.body = body
+    }
+}
+
+/// JSON body accepted by the kDrive add file comment reply endpoint.
+public struct AddKDriveFileCommentReplyOptions: Encodable, Equatable, Sendable {
+    /// Reply body text.
+    public let body: String
+
+    /// Creates options for adding a reply to a kDrive file comment.
+    public init(body: String) {
+        self.body = body
+    }
+}
+
+/// JSON body and query parameters accepted by the kDrive modify file comment endpoint.
+public struct ModifyKDriveFileCommentOptions: Encodable, Equatable, Sendable {
+    /// Related resources to include in the API response.
+    public let includedResources: String?
+
+    /// Updated comment body text.
+    public let body: String?
+
+    /// Updated resolved state for the comment.
+    public let isResolved: Bool?
+
+    enum CodingKeys: String, CodingKey {
+        case body
+        case isResolved = "is_resolved"
+    }
+
+    /// Creates options for modifying a kDrive file comment.
+    public init(
+        includedResources: String? = nil,
+        body: String? = nil,
+        isResolved: Bool? = nil
+    ) {
+        self.includedResources = includedResources
+        self.body = body
+        self.isResolved = isResolved
+    }
+}
+
+/// Query parameters accepted by the kDrive file comment replies endpoint.
+public struct ListKDriveFileCommentRepliesOptions: Equatable, Sendable {
+    /// Related resources to include in the API response.
+    public let includedResources: String?
+
+    /// The page number to request.
+    public let page: Int?
+
+    /// The number of items per page to request.
+    public let perPage: Int?
+
+    /// Whether the API should return the total item count.
+    public let total: Bool?
+
+    /// Field used for sorting, such as created_at.
+    public let orderBy: String?
+
+    /// Default sort order.
+    public let order: String?
+
+    /// Per-field sort orders encoded as order_for[field]=asc|desc.
+    public let orderFor: [String: String]
+
+    /// Creates options for listing replies to a kDrive file comment.
+    public init(
+        includedResources: String? = nil,
+        page: Int? = nil,
+        perPage: Int? = nil,
+        total: Bool? = nil,
+        orderBy: String? = nil,
+        order: String? = nil,
+        orderFor: [String: String] = [:]
+    ) {
+        self.includedResources = includedResources
+        self.page = page
+        self.perPage = perPage
+        self.total = total
+        self.orderBy = orderBy
+        self.order = order
+        self.orderFor = orderFor
+    }
+}
+
+/// Dropbox metadata for a kDrive file or directory.
+public struct KDriveFileDropbox: Codable, Equatable, Sendable {
+    /// Raw dropbox payload returned by the API.
+    public let values: [String: KDriveJSONValue]
+
+    public init(values: [String: KDriveJSONValue]) {
+        self.values = values
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.singleValueContainer()
+        self.values = try container.decode([String: KDriveJSONValue].self)
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.singleValueContainer()
+        try container.encode(values)
+    }
+}
+
 /// A cancellation token returned after a file is moved to kDrive trash.
 public struct KDriveCancelResource: Codable, Equatable, Sendable {
     /// Identifier that can be used by Infomaniak APIs to cancel the action while it remains valid.
@@ -17,6 +299,41 @@ public struct KDriveCancelResource: Codable, Equatable, Sendable {
     public init(cancelId: String, validUntil: Int) {
         self.cancelId = cancelId
         self.validUntil = validUntil
+    }
+}
+
+/// Result returned after restoring a trashed kDrive file or directory.
+public enum KDriveRestoreTrashedFileResult: Codable, Equatable, Sendable {
+    /// The API completed the restore synchronously.
+    case bool(Bool)
+
+    /// The API started a cancellable restore operation.
+    case cancelResource(KDriveCancelResource)
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.singleValueContainer()
+
+        if let value = try? container.decode(Bool.self) {
+            self = .bool(value)
+        } else if let value = try? container.decode(KDriveCancelResource.self) {
+            self = .cancelResource(value)
+        } else {
+            throw DecodingError.dataCorruptedError(
+                in: container,
+                debugDescription: "Expected a boolean or kDrive cancel resource"
+            )
+        }
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.singleValueContainer()
+
+        switch self {
+        case let .bool(value):
+            try container.encode(value)
+        case let .cancelResource(value):
+            try container.encode(value)
+        }
     }
 }
 
@@ -43,6 +360,158 @@ public struct DownloadKDriveFileOptions: Equatable, Sendable {
     public init(conversionFormat: String? = nil, password: String? = nil) {
         self.conversionFormat = conversionFormat
         self.password = password
+    }
+}
+
+/// Query parameters accepted by the kDrive file thumbnail endpoint.
+public struct GetKDriveFileThumbnailOptions: Equatable, Sendable {
+    /// Optional thumbnail height in pixels. The API accepts values from 10 through 400.
+    public let height: Int?
+
+    /// Optional thumbnail width in pixels. The API accepts values from 10 through 400.
+    public let width: Int?
+
+    /// Creates options for requesting a kDrive file thumbnail.
+    public init(height: Int? = nil, width: Int? = nil) {
+        self.height = height
+        self.width = width
+    }
+}
+
+/// Query parameters and headers accepted by the kDrive file preview endpoint.
+public struct GetKDriveFilePreviewOptions: Equatable, Sendable {
+    /// Optional conversion format before preview rendering, such as `jpg` or `png`.
+    public let conversionFormat: String?
+
+    /// Optional preview height in pixels.
+    public let height: Int?
+
+    /// Optional preview quality.
+    public let quality: Int?
+
+    /// Optional preview width in pixels.
+    public let width: Int?
+
+    /// Password for protected files when preview generation needs it.
+    public let password: String?
+
+    /// Creates options for requesting a kDrive file preview.
+    public init(
+        conversionFormat: String? = nil,
+        height: Int? = nil,
+        quality: Int? = nil,
+        width: Int? = nil,
+        password: String? = nil
+    ) {
+        self.conversionFormat = conversionFormat
+        self.height = height
+        self.quality = quality
+        self.width = width
+        self.password = password
+    }
+}
+
+/// Request body for the kDrive files-exists endpoint.
+public struct KDriveFilesExistenceRequestBody: Codable, Equatable, Sendable {
+    /// The file or directory identifiers to check.
+    public let ids: [Int]
+
+    /// Creates a files-exists request body.
+    public init(ids: [Int]) {
+        self.ids = ids
+    }
+}
+
+/// A kDrive file-existence check result.
+public struct KDriveFilesExistenceResult: Codable, Equatable, Sendable {
+    /// The file or directory identifier that was checked.
+    public let id: Int
+
+    /// Whether the item exists.
+    public let result: Bool
+
+    /// Optional API message, usually present when `result` is false.
+    public let message: String?
+
+    /// Creates a file-existence result.
+    public init(id: Int, result: Bool, message: String? = nil) {
+        self.id = id
+        self.result = result
+        self.message = message
+    }
+}
+
+/// JSON body accepted by the kDrive undo-action endpoint.
+public struct UndoKDriveActionOptions: Encodable, Equatable, Sendable {
+    /// Single cancellation identifier to undo.
+    public let cancelId: String?
+
+    /// Multiple cancellation identifiers to undo.
+    public let cancelIds: [String]?
+
+    public enum CodingKeys: String, CodingKey {
+        case cancelId = "cancel_id"
+        case cancelIds = "cancel_ids"
+    }
+
+    /// Creates options for undoing one or more cancellable kDrive actions.
+    public init(cancelId: String? = nil, cancelIds: [String]? = nil) {
+        self.cancelId = cancelId
+        self.cancelIds = cancelIds
+    }
+}
+
+/// A UUID feedback resource returned by kDrive undo-action responses.
+public struct KDriveUUIDFeedbackResource: Codable, Equatable, Sendable {
+    /// Identifier of the action feedback resource.
+    public let id: String
+
+    /// Whether the undo operation succeeded for this identifier.
+    public let result: Bool
+
+    /// Optional API message, usually present when `result` is false.
+    public let message: String?
+
+    /// Creates a UUID feedback resource value.
+    public init(id: String, result: Bool, message: String? = nil) {
+        self.id = id
+        self.result = result
+        self.message = message
+    }
+}
+
+/// Result returned after undoing one or more cancellable kDrive actions.
+public enum KDriveUndoActionResult: Codable, Equatable, Sendable {
+    /// The API returned a single feedback resource.
+    case feedbackResource(KDriveUUIDFeedbackResource)
+
+    /// The API returned multiple feedback resources.
+    case feedbackResources([KDriveUUIDFeedbackResource])
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.singleValueContainer()
+
+        if let value = try? container.decode(KDriveUUIDFeedbackResource.self) {
+            self = .feedbackResource(value)
+        } else if let values = try? container.decode([KDriveUUIDFeedbackResource].self) {
+            self = .feedbackResources(values)
+        } else {
+            throw DecodingError.dataCorruptedError(
+                in: container,
+                debugDescription: "Expected a kDrive UUID feedback resource or an array of feedback resources"
+            )
+        }
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.singleValueContainer()
+
+        switch self {
+        case let .feedbackResource(value):
+            try container.encode(value)
+        case let .feedbackResources(values):
+            try container.encode(values)
+        }
     }
 }
 
@@ -1199,6 +1668,115 @@ public struct KDriveUserPreferences: Codable, Equatable, Sendable {
     }
 }
 
+/// JSON body accepted by the endpoint that updates authenticated kDrive user preferences.
+public struct SetKDriveUserPreferencesOptions: Encodable, Equatable, Sendable {
+    /// The user's date display format, such as `d/m/Y`, `m/d/Y`, or `d F Y`.
+    public let dateFormat: String?
+
+    /// Default drive identifier for the authenticated user.
+    public let defaultDrive: Int?
+
+    /// Layout density of user interface elements: `compact`, `normal`, or `large`.
+    public let density: String?
+
+    /// List display and sorting preferences.
+    public let list: KDriveUserPreferencesListOptions?
+
+    /// Whether recent files should be sorted by recency.
+    public let sortRecentFile: Bool?
+
+    /// Tutorial identifiers already seen by the user.
+    public let tutorials: [Int]?
+
+    /// Whether shortcuts are enabled.
+    public let useShortcut: Bool?
+
+    public enum CodingKeys: String, CodingKey {
+        case dateFormat = "date_format"
+        case defaultDrive = "default_drive"
+        case density
+        case list
+        case sortRecentFile = "sort_recent_file"
+        case tutorials
+        case useShortcut = "use_shortcut"
+    }
+
+    /// Creates options for updating authenticated kDrive user preferences.
+    public init(
+        dateFormat: String? = nil,
+        defaultDrive: Int? = nil,
+        density: String? = nil,
+        list: KDriveUserPreferencesListOptions? = nil,
+        sortRecentFile: Bool? = nil,
+        tutorials: [Int]? = nil,
+        useShortcut: Bool? = nil
+    ) {
+        self.dateFormat = dateFormat
+        self.defaultDrive = defaultDrive
+        self.density = density
+        self.list = list
+        self.sortRecentFile = sortRecentFile
+        self.tutorials = tutorials
+        self.useShortcut = useShortcut
+    }
+}
+
+/// Nested list preferences accepted when updating authenticated kDrive user preferences.
+public struct KDriveUserPreferencesListOptions: Encodable, Equatable, Sendable {
+    /// File list sorting preference.
+    public let files: KDriveUserPreferencesListSortOptions?
+
+    /// Largest-file storage list sorting preference.
+    public let storageLargest: KDriveUserPreferencesListSortOptions?
+
+    /// Most-versioned storage list sorting preference.
+    public let storageVersions: KDriveUserPreferencesListSortOptions?
+
+    /// Trash list sorting preference.
+    public let trash: KDriveUserPreferencesListSortOptions?
+
+    /// List view mode: `largeGrid`, `medGrid`, `smallGrid`, or `table`.
+    public let view: String?
+
+    public enum CodingKeys: String, CodingKey {
+        case files
+        case storageLargest = "storage_largest"
+        case storageVersions = "storage_versions"
+        case trash
+        case view
+    }
+
+    /// Creates list preferences for the authenticated kDrive user.
+    public init(
+        files: KDriveUserPreferencesListSortOptions? = nil,
+        storageLargest: KDriveUserPreferencesListSortOptions? = nil,
+        storageVersions: KDriveUserPreferencesListSortOptions? = nil,
+        trash: KDriveUserPreferencesListSortOptions? = nil,
+        view: String? = nil
+    ) {
+        self.files = files
+        self.storageLargest = storageLargest
+        self.storageVersions = storageVersions
+        self.trash = trash
+        self.view = view
+    }
+}
+
+/// A list sorting preference accepted when updating authenticated kDrive user preferences.
+public struct KDriveUserPreferencesListSortOptions: Encodable, Equatable, Sendable {
+    /// Sort direction: `asc` or `desc`.
+    public let direction: String?
+
+    /// Field used for sorting.
+    public let property: String?
+
+    /// Creates a list sorting preference.
+    public init(direction: String? = nil, property: String? = nil) {
+        self.direction = direction
+        self.property = property
+    }
+}
+
 /// Settings for a kDrive.
 public struct KDriveSettings: Codable, Equatable, Sendable {
     /// Artificial-intelligence scan settings.
@@ -1260,6 +1838,31 @@ public struct KDriveAISettings: Codable, Equatable, Sendable {
     }
 }
 
+/// JSON body accepted by the endpoint that updates kDrive artificial-intelligence scan settings.
+public struct UpdateKDriveAISettingsOptions: Encodable, Equatable, Sendable {
+    /// Whether AI file scanning has been approved.
+    public let hasApproved: Bool?
+
+    /// Whether automatic AI categories have been approved.
+    public let hasApprovedAiCategories: Bool?
+
+    /// Whether content search has been approved.
+    public let hasApprovedContentSearch: Bool?
+
+    public enum CodingKeys: String, CodingKey {
+        case hasApproved = "has_approved"
+        case hasApprovedAiCategories = "has_approved_ai_categories"
+        case hasApprovedContentSearch = "has_approved_content_search"
+    }
+
+    /// Creates options for updating AI scan settings.
+    public init(hasApproved: Bool? = nil, hasApprovedAiCategories: Bool? = nil, hasApprovedContentSearch: Bool? = nil) {
+        self.hasApproved = hasApproved
+        self.hasApprovedAiCategories = hasApprovedAiCategories
+        self.hasApprovedContentSearch = hasApprovedContentSearch
+    }
+}
+
 /// Share-link customization settings for a kDrive.
 public struct KDriveSharedLinkSettings: Codable, Equatable, Sendable {
     /// Whether custom share-link styling is active.
@@ -1279,6 +1882,29 @@ public struct KDriveSharedLinkSettings: Codable, Equatable, Sendable {
         self.activate = activate
         self.txtColor = txtColor
         self.bgColor = bgColor
+        self.images = images
+    }
+}
+
+/// JSON body accepted by the endpoint that updates kDrive share-link customization settings.
+public struct UpdateKDriveShareLinkSettingsOptions: Encodable, Equatable, Sendable {
+    /// Whether custom share-link styling is active.
+    public let activate: Bool
+
+    /// Share-link background color.
+    public let bgColor: String
+
+    /// Share-link text color.
+    public let txtColor: String
+
+    /// Public image identifiers to keep configured, when supplied.
+    public let images: [Int]?
+
+    /// Creates options for updating share-link customization settings.
+    public init(activate: Bool, bgColor: String, txtColor: String, images: [Int]? = nil) {
+        self.activate = activate
+        self.bgColor = bgColor
+        self.txtColor = txtColor
         self.images = images
     }
 }
@@ -1306,6 +1932,44 @@ public struct KDriveTrashSettings: Codable, Equatable, Sendable {
     /// Creates trash retention settings.
     public init(maxDuration: Int) {
         self.maxDuration = maxDuration
+    }
+}
+
+/// JSON body accepted by the endpoint that updates kDrive trash retention settings.
+public struct UpdateKDriveTrashSettingsOptions: Encodable, Equatable, Sendable {
+    /// Number of days files are kept in trash.
+    public let maxDuration: Int
+
+    public enum CodingKeys: String, CodingKey {
+        case maxDuration = "max_duration"
+    }
+
+    /// Creates options for updating trash retention settings.
+    public init(maxDuration: Int) {
+        self.maxDuration = maxDuration
+    }
+}
+
+/// JSON body accepted by the endpoint that updates kDrive office document integration settings.
+public struct UpdateKDriveOfficeSettingsOptions: Encodable, Equatable, Sendable {
+    /// Default application for forms.
+    public let form: String?
+
+    /// Default application for presentations.
+    public let presentation: String?
+
+    /// Default application for spreadsheets.
+    public let spreadsheet: String?
+
+    /// Default application for text documents.
+    public let text: String?
+
+    /// Creates options for updating office document integration settings.
+    public init(form: String? = nil, presentation: String? = nil, spreadsheet: String? = nil, text: String? = nil) {
+        self.form = form
+        self.presentation = presentation
+        self.spreadsheet = spreadsheet
+        self.text = text
     }
 }
 
@@ -1824,6 +2488,62 @@ public struct CopyKDriveFileOptions: Encodable, Equatable, Sendable {
     }
 }
 
+/// JSON body accepted by the kDrive file move endpoint.
+public struct MoveKDriveFileOptions: Encodable, Equatable, Sendable {
+    /// Conflict behavior: `error` or `rename`.
+    public let conflict: String?
+
+    /// Optional name for the moved file or directory.
+    public let name: String?
+
+    /// Creates options for moving a kDrive file or directory.
+    public init(conflict: String? = nil, name: String? = nil) {
+        self.conflict = conflict
+        self.name = name
+    }
+}
+
+/// JSON body accepted by the kDrive restore trashed file endpoint.
+public struct RestoreKDriveTrashedFileOptions: Encodable, Equatable, Sendable {
+    /// Directory where the trashed file or directory should be restored.
+    public let destinationDirectoryId: Int
+
+    public enum CodingKeys: String, CodingKey {
+        case destinationDirectoryId = "destination_directory_id"
+    }
+
+    /// Creates options for restoring a trashed kDrive file or directory.
+    public init(destinationDirectoryId: Int) {
+        self.destinationDirectoryId = destinationDirectoryId
+    }
+}
+
+/// JSON body accepted by the kDrive file duplicate endpoint.
+public struct DuplicateKDriveFileOptions: Encodable, Equatable, Sendable {
+    /// Optional name for the duplicated file or directory.
+    public let name: String?
+
+    /// Creates options for duplicating a kDrive file or directory.
+    public init(name: String? = nil) {
+        self.name = name
+    }
+}
+
+/// JSON body accepted by the kDrive update modification date endpoint.
+public struct UpdateKDriveFileLastModifiedOptions: Encodable, Equatable, Sendable {
+    /// Unix timestamp to store as the file modification date.
+    public let lastModifiedAt: Int
+
+    enum CodingKeys: String, CodingKey {
+        case lastModifiedAt = "last_modified_at"
+    }
+
+    /// Creates options for updating a kDrive file modification date.
+    public init(lastModifiedAt: Int) {
+        self.lastModifiedAt = lastModifiedAt
+    }
+}
+
 /// Query parameters accepted by the kDrive trash listing endpoint.
 public struct ListKDriveTrashOptions: Equatable, Sendable {
     /// Cursor marker used to fetch the next batch of results.
@@ -1924,6 +2644,9 @@ public struct ListKDriveFileActivitiesOptions: Equatable, Sendable {
         self.users = users
     }
 }
+
+/// Query parameters accepted by the kDrive root file activity listing endpoint.
+public typealias ListKDriveRootFileActivitiesV3Options = ListKDriveFileActivitiesOptions
 
 /// Query parameters accepted by the kDrive directory file listing endpoint.
 public struct ListKDriveDirectoryFilesOptions: Equatable, Sendable {

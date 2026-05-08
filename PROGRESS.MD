@@ -1,3 +1,238 @@
+## 2026-05-08 — kDrive v2 update share-link settings route
+
+- Added shared support for drive-level mutation `PUT /2/drive/{drive_id}/settings/link` via `KDriveRequests.updateShareLinkSettings` and `KDriveService.updateShareLinkSettings`, returning `InfomaniakResponse<Bool>`.
+- Added `UpdateKDriveShareLinkSettingsOptions(activate:bgColor:txtColor:images:)` with required `activate`, `bgColor`, and `txtColor` fields plus optional public image ids.
+- Added request/response coverage for PUT method, exact OpenAPI path, auth/JSON headers, empty query, required body encoding, optional image omission, required path parameters, and boolean success decoding.
+- Validation: `swift test --filter KDriveUpdateShareLinkSettingsRequestTests` passed (4 tests).
+
+## 2026-05-08 — kDrive v2 update AI settings route
+
+- Added shared support for drive-level mutation `PUT /2/drive/{drive_id}/settings/ai` via `KDriveRequests.updateAISettings` and `KDriveService.updateAISettings`, returning `InfomaniakResponse<Bool>`.
+- Added `UpdateKDriveAISettingsOptions(hasApproved:hasApprovedAiCategories:hasApprovedContentSearch:)` with optional booleans encoded as `has_approved`, `has_approved_ai_categories`, and `has_approved_content_search`.
+- Added request/response coverage for PUT method, exact OpenAPI path, auth/JSON headers, empty query, optional body field encoding, required path parameters, and boolean success decoding.
+- Validation: `swift test --filter KDriveUpdateAISettingsRequestTests` passed (4 tests).
+
+## 2026-05-08 — kDrive v2 update office settings route
+
+- Added shared support for drive-level mutation `PUT /2/drive/{drive_id}/settings/office` via `KDriveRequests.updateOfficeSettings` and `KDriveService.updateOfficeSettings`, returning `InfomaniakResponse<Bool>`.
+- Added `UpdateKDriveOfficeSettingsOptions(form:presentation:spreadsheet:text:)` with optional JSON fields for `365`/`onlyoffice` office app selections.
+- Added request/response coverage for PUT method, exact OpenAPI path, auth/JSON headers, empty query, optional body field encoding, required path parameters, and boolean success decoding.
+- Validation: `swift test --filter KDriveUpdateOfficeSettingsRequestTests` passed (4 tests).
+
+## 2026-05-08 — kDrive v2 update trash settings route
+
+- Added shared support for drive-level mutation `PUT /2/drive/{drive_id}/settings/trash` via `KDriveRequests.updateTrashSettings` and `KDriveService.updateTrashSettings`, returning `InfomaniakResponse<Bool>`.
+- Added `UpdateKDriveTrashSettingsOptions(maxDuration:)` encoding the required JSON body field `max_duration`.
+- Added request/response coverage for PUT method, exact OpenAPI path, auth/JSON headers, empty query, snake-case body encoding, required path parameters, and boolean success decoding.
+- Validation: `swift test --filter KDriveUpdateTrashSettingsRequestTests` passed (4 tests).
+
+## 2026-05-08 — kDrive v2 delete all file versions route
+
+- Added shared support for destructive mutation `DELETE /2/drive/{drive_id}/files/{file_id}/versions` via `KDriveRequests.deleteFileVersionsV2` and `KDriveService.deleteFileVersionsV2`, returning `InfomaniakResponse<Bool>`.
+- Added request/response coverage for DELETE method, exact OpenAPI versions path, auth header, empty query/body behavior, required path parameters, and boolean success decoding.
+
+- Added shared support for mutation `POST /2/drive/{drive_id}/cancel` via `KDriveRequests.undoAction` and `KDriveService.undoAction`, returning flexible `KDriveUndoActionResult` for single or array UUID feedback resources.
+- Added unit coverage for undo-action request shape and both response payload variants.
+
+## 2026-05-08 — kDrive v2 restore trashed file route
+
+- Added shared support for mutation `POST /2/drive/{drive_id}/trash/{file_id}/restore` via `KDriveRequests.restoreTrashedFile` and `KDriveService.restoreTrashedFile`.
+- Added `RestoreKDriveTrashedFileOptions(destinationDirectoryId:)` encoding required `destination_directory_id`, plus `KDriveRestoreTrashedFileResult` for the documented boolean-or-cancel-resource response shape.
+- Added request/response coverage for POST method, exact OpenAPI trash restore path, auth/JSON headers, required body encoding, and both boolean and cancel-resource response decoding.
+- Validation: `swift test --filter KDriveRestoreTrashedFileRequestTests` passed (4 tests).
+
+## 2026-05-08 — kDrive v2 remove trashed file route
+
+- Added shared support for destructive mutation `DELETE /2/drive/{drive_id}/trash/{file_id}` via `KDriveRequests.removeTrashedFile` and `KDriveService.removeTrashedFile`, returning `InfomaniakResponse<Bool>`.
+- Added request/response coverage for DELETE method, exact OpenAPI trash path, auth header, empty query/body behavior, and boolean success decoding.
+- Validation: `swift test --filter KDriveRemoveTrashedFileRequestTests` passed (2 tests).
+
+## 2026-05-08 — kDrive v2 unlike file comment route
+
+- Added shared support for mutation `POST /2/drive/{drive_id}/files/{file_id}/comments/{comment_id}/unlike` via `KDriveRequests.unlikeFileComment` and `KDriveService.unlikeFileComment`, returning `InfomaniakResponse<Bool>`.
+- Added request/response coverage for POST method, exact OpenAPI path with `/unlike`, auth header, no body/query behavior, required path substitution, and boolean response decoding.
+- Validation: `swift test --filter KDriveUnlikeFileCommentRequestTests` passed (3 tests).
+
+## 2026-05-08 — kDrive v2 like file comment route
+
+- Added shared support for mutation `POST /2/drive/{drive_id}/files/{file_id}/comments/{comment_id}/like` via `KDriveRequests.likeFileComment` and `KDriveService.likeFileComment`, returning `InfomaniakResponse<Bool>`.
+- Added request/response coverage for POST method, exact OpenAPI path with `/like`, auth header, no body/query behavior, required path substitution, and boolean response decoding.
+- Validation: `swift test --filter KDriveLikeFileCommentRequestTests` passed (3 tests).
+
+## 2026-05-08 — kDrive v2 delete file comment route
+
+- Added shared support for mutation `DELETE /2/drive/{drive_id}/files/{file_id}/comments/{comment_id}` via `KDriveRequests.deleteFileComment` and `KDriveService.deleteFileComment`, returning `InfomaniakResponse<Bool>`.
+- Added request/response coverage for DELETE method, exact OpenAPI path, auth header, empty query/body behavior, path interpolation, and boolean data decoding.
+- Validation: `swift test --filter KDriveDeleteFileCommentRequestTests` passed (3 tests).
+
+## 2026-05-08 — kDrive v2 modify file comment route
+
+- Added shared support for mutation `PUT /2/drive/{drive_id}/files/{file_id}/comments/{comment_id}` via `KDriveRequests.modifyFileComment` and `KDriveService.modifyFileComment`, returning `InfomaniakResponse<Bool>`.
+- Added `ModifyKDriveFileCommentOptions` with optional JSON body fields `body` and `is_resolved`, plus optional `with` query support.
+- Added request/response coverage for PUT method, exact OpenAPI path, auth/JSON headers, body forwarding, option encoding, and boolean data decoding.
+- Validation: `swift test --filter KDriveModifyFileCommentRequestTests` passed (4 tests).
+
+## 2026-05-08 — kDrive v2 file comment replies route
+
+- Added shared support for read endpoint `GET /2/drive/{drive_id}/files/{file_id}/comments/{comment_id}` via `KDriveRequests.listFileCommentReplies` and `KDriveService.listFileCommentReplies`, returning `PaginatedInfomaniakResponse<[KDriveFileComment]>`.
+- Added `ListKDriveFileCommentRepliesOptions` for optional `with`, `page`, `per_page`, `total`, `order_by`, `order`, and `order_for[created_at]` style query parameters.
+- Added request/response coverage for GET method, exact OpenAPI path, auth header, path interpolation, query encoding, pagination metadata, and variable reply payload decoding.
+- Validation: `swift test --filter KDriveFileCommentRepliesRequestTests` passed (4 tests).
+
+## 2026-05-08 — kDrive v2 add file comment reply route
+
+- Added shared support for mutation `POST /2/drive/{drive_id}/files/{file_id}/comments/{comment_id}` via `KDriveRequests.addFileCommentReply` and `KDriveService.addFileCommentReply`, returning `InfomaniakResponse<KDriveFileComment>`.
+- Added `AddKDriveFileCommentReplyOptions` with required JSON body field `body`, plus optional `with` query support.
+- Added request/response coverage for POST method, exact OpenAPI path, auth/JSON headers, body forwarding, option encoding, and variable reply payload decoding.
+- Validation: `swift test --filter KDriveAddFileCommentReplyRequestTests` passed (3 tests).
+
+## 2026-05-08 — kDrive v2 add file comment route
+
+- Added shared support for mutation `POST /2/drive/{drive_id}/files/{file_id}/comments` via `KDriveRequests.addFileComment` and `KDriveService.addFileComment`, returning `InfomaniakResponse<KDriveFileComment>`.
+- Added `AddKDriveFileCommentOptions` with required JSON body field `body`, plus optional `with` query support.
+- Added request/response coverage for POST method, exact OpenAPI path, auth/JSON headers, body forwarding, option encoding, and variable comment payload decoding.
+- Validation: `swift test --filter KDriveAddFileCommentRequestTests` passed (3 tests).
+
+## 2026-05-08 — kDrive v3 move file route
+
+- Added shared support for mutation `POST /3/drive/{drive_id}/files/{file_id}/move/{destination_directory_id}` via `KDriveRequests.moveFileV3` and `KDriveService.moveFile`, returning `InfomaniakResponse<KDriveCancelResource>`.
+- Added `MoveKDriveFileOptions` with optional `conflict` (`error`/`rename`) and optional `name`.
+- Added request/response coverage for POST method, exact OpenAPI path, auth/JSON headers, body forwarding, option encoding, and cancel-resource decoding.
+- Validation: `swift test --filter KDriveMoveFileRequestTests` passed (3 tests).
+
+## 2026-05-08 — kDrive v3 update file modification date route
+
+- Added shared support for mutation `POST /3/drive/{drive_id}/files/{file_id}/last-modified` via `KDriveRequests.updateFileLastModified` and `KDriveService.updateFileLastModified`, returning `InfomaniakResponse<Bool>`.
+- Added `UpdateKDriveFileLastModifiedOptions` to encode required JSON body field `last_modified_at`.
+- Added request/response coverage for POST method, exact OpenAPI path, auth/JSON headers, body encoding, and boolean data decoding.
+- Validation: `swift test --filter KDriveUpdateFileLastModifiedRequestTests` passed (2 tests).
+
+## 2026-05-08 — kDrive v3 duplicate file route
+
+- Added shared support for mutation `POST /3/drive/{drive_id}/files/{file_id}/duplicate` via `KDriveRequests.duplicateFileV3` and `KDriveService.duplicateFile`, returning `InfomaniakResponse<KDriveFileItem>`.
+- Added `DuplicateKDriveFileOptions` with optional `name`, plus optional `with` query support.
+- Added request coverage for POST method, exact OpenAPI path, auth/JSON headers, `with` query, and JSON body forwarding.
+- Validation: `swift test --filter KDriveDuplicateFileRequestTests` passed (1 test).
+
+## 2026-05-08 — kDrive v3 wake drive route
+
+- Added shared support for benign `POST /3/drive/{drive_id}/wake` via `KDriveRequests.wakeDrive` and `KDriveService.wakeDrive`, returning `InfomaniakResponse<Bool>`.
+- Added request/response coverage for POST method, exact OpenAPI path, auth/accept headers, empty query/body behavior, and boolean data decoding.
+- Validation: `swift test --filter KDriveWakeDriveRequestTests` passed (2 tests).
+
+## 2026-05-08 — kDrive v2 files-exists route
+
+- Added shared support for non-destructive `POST /2/drive/{drive_id}/files/exists` via `KDriveRequests.checkFilesExistence` and `KDriveService.checkFilesExistence`, sending JSON body `{ "ids": [Int] }`.
+- Added `KDriveFilesExistenceRequestBody` and `KDriveFilesExistenceResult` models for per-id existence feedback.
+- Added request/response coverage for method, exact OpenAPI path, auth/JSON headers, empty query behavior, request body encoding, and representative existence result decoding.
+- Validation: `swift test --filter KDriveFilesExistenceRequestTests` passed (2 tests).
+
+## 2026-05-08 — kDrive v2 activity report export route
+
+- Added shared raw-data support for `GET /2/drive/{drive_id}/activities/reports/{report_id}/export` via `KDriveRequests.exportActivityReport` and `KDriveService.exportActivityReport`, returning CSV `Data`.
+- Added request coverage for method, exact OpenAPI path, auth header, `Accept: text/csv`, empty query behavior, and required `drive_id`/`report_id` path substitution.
+- Validation: `swift test --filter KDriveActivityReportRequestTests` passed (7 tests).
+
+## 2026-05-08 — kDrive v2 unfavorite file route
+
+- Added shared support for mutation `DELETE /2/drive/{drive_id}/files/{file_id}/favorite` via `KDriveRequests.unfavoriteFile` and `KDriveService.unfavoriteFile`, returning `InfomaniakResponse<Bool>`.
+- Added request/response coverage for DELETE method, exact OpenAPI path, auth/accept headers, empty query/body behavior, and boolean success decoding.
+- Validation: `swift test --filter KDriveDeleteFavoriteFileRequestTests` passed (2 tests).
+
+## 2026-05-08 — kDrive v2 favorite file route
+
+- Added shared support for mutation `POST /2/drive/{drive_id}/files/{file_id}/favorite` via `KDriveRequests.favoriteFile` and `KDriveService.favoriteFile`, returning `InfomaniakResponse<Bool>`.
+- Added request/response coverage for POST method, exact OpenAPI path, auth/accept headers, empty query/body behavior, and boolean success decoding.
+- Validation: `swift test --filter KDrivePostFavoriteFileRequestTests` passed (2 tests).
+
+## 2026-05-08 — kDrive v2 file dropbox route
+
+- Added shared support for non-destructive `GET /2/drive/{drive_id}/files/{file_id}/dropbox` via `KDriveRequests.getFileDropbox` and `KDriveService.getFileDropbox`.
+- Added `KDriveFileDropbox` with a lossless `KDriveJSONValue` payload and nullable response support because the API can return `data: null` for files without dropbox metadata.
+- Added request/decoding coverage for method, exact OpenAPI path, auth header, no-query behavior, required path substitution, null data, and representative variable dropbox payload decoding.
+- Validation: `swift test --filter KDriveFileDropboxRequestTests` passed (4 tests).
+
+## 2026-05-08 — kDrive v2 file comments route
+
+- Added shared support for non-destructive `GET /2/drive/{drive_id}/files/{file_id}/comments` via `KDriveRequests.listFileComments` and `KDriveService.listFileComments`.
+- Added `KDriveFileComment` with a lossless `KDriveJSONValue` payload so comment entries round-trip without dropping unknown fields.
+- Added request/decoding coverage for method, exact OpenAPI path, auth header, no-query behavior, required path substitution, empty arrays, and representative variable comment payload decoding.
+- Validation: `swift test --filter KDriveFileCommentsRequestTests` passed (4 tests).
+
+## 2026-05-08 — kDrive v2 file access users route
+
+- Added shared support for non-destructive `GET /2/drive/{drive_id}/files/{file_id}/access/users` via `KDriveRequests.listFileAccessUsers` and `KDriveService.listFileAccessUsers`.
+- Added `KDriveFileAccessUser` with a lossless `KDriveJSONValue` payload so user access entries round-trip without dropping unknown fields.
+- Added request/decoding coverage for method, exact OpenAPI path, auth header, no-query behavior, required path substitution, empty arrays, and representative variable user payload decoding.
+- Validation: `swift test --filter KDriveFileAccessUserRequestTests` passed (4 tests).
+
+## 2026-05-08 — kDrive v2 file access teams route
+
+- Added shared support for non-destructive `GET /2/drive/{drive_id}/files/{file_id}/access/teams` via `KDriveRequests.listFileAccessTeams` and `KDriveService.listFileAccessTeams`.
+- Added `KDriveFileAccessTeam` with a lossless `KDriveJSONValue` payload so team access entries round-trip without dropping unknown fields.
+- Added request/decoding coverage for method, exact OpenAPI path, auth header, no-query behavior, required path substitution, empty arrays, and representative variable team payload decoding.
+- Validation: `swift test --filter KDriveFileAccessTeamRequestTests` passed (4 tests).
+
+## 2026-05-08 — kDrive v2 file access invitations route
+
+- Added shared support for non-destructive `GET /2/drive/{drive_id}/files/{file_id}/access/invitations` via `KDriveRequests.listFileAccessInvitations` and `KDriveService.listFileAccessInvitations`.
+- Added `KDriveFileAccessInvitation` with a lossless `KDriveJSONValue` payload so invitation entries round-trip without dropping unknown fields.
+- Added request/decoding coverage for method, exact OpenAPI path, auth header, no-query behavior, required path substitution, empty arrays, and representative variable invitation payload decoding.
+- Validation: `swift test --filter KDriveFileAccessInvitationRequestTests` passed (4 tests).
+
+## 2026-05-08 — kDrive v2 file access requests route
+
+- Added shared support for non-destructive `GET /2/drive/{drive_id}/files/{file_id}/access/requests` via `KDriveRequests.listFileAccessRequests` and `KDriveService.listFileAccessRequests`.
+- Added `KDriveFileAccessRequest` with a lossless `KDriveJSONValue` payload so requested-access entries round-trip without dropping unknown fields.
+- Added request/decoding coverage for method, exact OpenAPI path, auth header, no-query behavior, required path substitution, empty arrays, and representative variable request payload decoding.
+- Validation: `swift test --filter KDriveFileAccessRequestTests` passed (4 tests).
+
+## 2026-05-08 — kDrive v2 file multi-access route
+
+- Added shared support for non-destructive `GET /2/drive/{drive_id}/files/{file_id}/access` via `KDriveRequests.getFileMultiAccess` and `KDriveService.getFileMultiAccess`.
+- Added `KDriveFileMultiAccess` with a lossless `KDriveJSONValue` payload so the varying access sections round-trip without dropping unknown access-type fields.
+- Added request/decoding coverage for method, exact OpenAPI path, auth header, no-query behavior, required path substitution, and representative variable access payload decoding.
+- Validation: `swift test --filter KDriveFileMultiAccessRequestTests` passed (3 tests).
+
+## 2026-05-08 — kDrive root file activities v3 route
+
+- Added shared support for non-destructive `GET /3/drive/{drive_id}/files/activities` via `KDriveRequests.listRootFileActivitiesV3` and `KDriveService.listRootFileActivitiesV3`, reusing `KDriveDriveActivity` and `CursorPaginatedInfomaniakResponse`.
+- Added `ListKDriveRootFileActivitiesV3Options` for root activity filters including `with`, cursor/limit, repeated `order_by`, `actions`, `users`, `order_for[...]`, depth, terms, and date bounds.
+- Added request/decoding coverage for method, OpenAPI path, auth header, representative repeated query encoding, and response decoding.
+- Validation: `swift test --filter KDriveRootFileActivityV3RequestTests` passed (2 tests); full `swift test` passed.
+
+## 2026-05-08 — kDrive v2 file preview route
+
+- Added shared raw-data support for `GET /2/drive/{drive_id}/files/{file_id}/preview` via `KDriveRequests.getFilePreview` and `KDriveService.getFilePreview`, with optional `as`, `height`, `quality`, `width`, and `x-kdrive-file-password` support plus `Accept: image/*`.
+- Added request coverage for the exact OpenAPI v2 file-preview path, auth/image headers, query encoding, and password header handling using static test data only.
+- Validation: `swift test --filter KDriveFilePreviewRequestTests` passes.
+
+## 2026-05-08 — kDrive user preferences patch route
+
+- Added shared support for `PATCH /2/drive/preferences` via `KDriveRequests.setUserPreferences` and `KDriveService.setUserPreferences`, returning `InfomaniakResponse<Bool>`.
+- Added typed optional request models for user preference updates, including `density`, `date_format`, `default_drive`, shortcut/recent-file flags, and nested list sort/view preferences with snake_case encoding.
+- Added request/encoding coverage for PATCH method, OpenAPI path, auth/content headers, flat preference fields, nested list preferences, and boolean response decoding.
+- Validation: `swift test` passes.
+
+## 2026-05-08 — kDrive v2 file thumbnail route
+
+- Added shared raw-data support for `GET /2/drive/{drive_id}/files/{file_id}/thumbnail` via `KDriveRequests.getFileThumbnail` and `KDriveService.getFileThumbnail`, with optional `height`/`width` query parameters and `Accept: image/*`.
+- Added request coverage for the exact OpenAPI v2 file-thumbnail path, auth header, image accept header, and dimensions query encoding.
+- Validation: `swift test` passes (314 tests).
+
+## 2026-05-08 — kDrive v2 single drive user route
+
+- Added shared support for `GET /2/drive/{drive_id}/users/{user_id}` via `KDriveRequests.getDriveUserV2` and `KDriveService.getDriveUserV2`, reusing `KDriveDriveUser`.
+- Added request/decoding tests covering method, OpenAPI v2 path with required `drive_id`/`user_id`, auth header, no-query behavior, nullable single-user payloads, and user field decoding.
+- Validation: `swift test --filter KDriveDriveUserV2RequestTests` passes; `swift test` passes (313 tests).
+
+## 2026-05-08 — kDrive v2 drive users route
+
+- Branch: `feat/kdrive`.
+- Confirmed shared networking for non-destructive `GET /2/drive/{drive_id}/users` via `KDriveRequests.listDriveUsersV2`, `KDriveService.listDriveUsersV2`, and `ListKDriveDriveUsersV2Options`.
+- Strengthened unit coverage for the exact v2 path, auth header, optional filters/sorting query encoding, no-query default behavior, and response decoding without leaking credentials.
+- Validation: `swift test --filter KDriveDriveUsersV2RequestTests` passes (3 tests); `swift test` passes (310 tests).
+
 ## 2026-05-07 — kDrive v2 file version detail route
 
 - Added shared support for `GET /2/drive/{drive_id}/files/{file_id}/versions/{version_id}` via `KDriveRequests.getFileVersionV2` and `KDriveService.getFileVersionV2`, reusing `KDriveFileVersionV2`.
@@ -103,6 +338,8 @@ kDrive request factories, and `KDriveService` wrappers moved from Potassium.
 | --- | --- | --- |
 | GET | `/2/drive` | `KDriveRequests.listAccessibleKDrives` |
 | GET | `/3/drive/{drive_id}/users` | `KDriveRequests.listDriveUsers` |
+| GET | `/2/drive/{drive_id}/users` | `KDriveRequests.listDriveUsersV2` |
+| GET | `/2/drive/{drive_id}/users/{user_id}` | `KDriveRequests.getDriveUserV2` |
 | GET | `/3/drive/{drive_id}/files/recents` | `KDriveRequests.listRecentFiles` |
 | GET | `/3/drive/{drive_id}/files/largest` | `KDriveRequests.listLargestFiles` |
 | GET | `/3/drive/{drive_id}/files/last_modified` | `KDriveRequests.listLastModifiedFiles` |
@@ -118,11 +355,14 @@ kDrive request factories, and `KDriveService` wrappers moved from Potassium.
 | GET | `/3/drive/{drive_id}/files/search/shared_with_me` | `KDriveRequests.searchSharedWithMe` |
 | GET | `/3/drive/{drive_id}/trash` | `KDriveRequests.listTrashFiles` |
 | GET | `/3/drive/{drive_id}/files/{file_id}` | `KDriveRequests.getFile` |
+| GET | `/2/drive/{drive_id}/files/{file_id}/dropbox` | `KDriveRequests.getFileDropbox` |
 | GET | `/3/drive/{drive_id}/files/{file_id}/name` | `KDriveRequests.getFileByName` |
 | GET | `/3/drive/{drive_id}/files/{file_id}/activities` | `KDriveRequests.listFileActivities` |
 | GET | `/3/drive/{drive_id}/files/{file_id}/files` | `KDriveRequests.listDirectoryFiles` |
 | GET | `/3/drive/{drive_id}/trash/{file_id}` | `KDriveRequests.getTrashedFile` |
 | GET | `/2/drive/{drive_id}/files/{file_id}/download` | `KDriveRequests.downloadFile` |
+| GET | `/2/drive/{drive_id}/files/{file_id}/thumbnail` | `KDriveRequests.getFileThumbnail` |
+| GET | `/2/drive/{drive_id}/files/{file_id}/preview` | `KDriveRequests.getFilePreview` |
 | POST | `/3/drive/{drive_id}/upload` | `KDriveRequests.uploadFile` |
 | GET | `/2/drive/{drive_id}/trash/{file_id}/thumbnail` | `KDriveRequests.getV2TrashedItemThumbnail` |
 | GET | `/2/drive/{drive_id}/trash/{file_id}/count` | `KDriveRequests.getV2TrashedItemCount` |
@@ -151,17 +391,20 @@ kDrive request factories, and `KDriveService` wrappers moved from Potassium.
 | GET | `/2/drive/{drive_id}/statistics/activities/links` | `KDriveRequests.listActivityShareLinks` |
 | GET | `/2/drive/{drive_id}/statistics/activities/links/export` | `KDriveRequests.exportActivityShareLinks` |
 | GET | `/2/drive/{drive_id}/activities/reports` | `KDriveRequests.listActivityReports` |
+| GET | `/2/drive/{drive_id}/activities/reports/{report_id}` | `KDriveRequests.getActivityReport` |
 | GET | `/2/drive/{drive_id}/imports` | `KDriveRequests.listImports` |
 | GET | `/2/drive/{drive_id}/imports/{import_id}` | `KDriveRequests.listErroredImportFiles` |
 | GET | `/2/drive/{drive_id}/imports/oauth/drives` | `KDriveRequests.listOAuthImportDrives` |
 | GET | `/2/drive/{drive_id}/users/invitation` | `KDriveRequests.listUserInvitations` |
 | GET | `/2/drive/preferences` | `KDriveRequests.getUserPreferences` |
+| PATCH | `/2/drive/preferences` | `KDriveRequests.setUserPreferences` |
 | GET | `/2/drive/users` | `KDriveRequests.listKDriveUsers` |
 | GET | `/2/drive/{drive_id}/files/archives/{archive_uuid}` | `KDriveRequests.downloadArchive` |
 | POST | `/3/drive/{drive_id}/files/{file_id}/file` | `KDriveRequests.createDefaultFileV3` |
 | POST | `/2/drive/{drive_id}/files/{file_id}/rename` | `KDriveRequests.renameFileV2` |
 | POST | `/3/drive/{drive_id}/files/{file_id}/copy/{destination_directory_id}` | `KDriveRequests.copyFileToDirectoryV3` |
 | DELETE | `/2/drive/{drive_id}/files/{file_id}` | `KDriveRequests.trashFileV2` |
+| POST | `/2/drive/{drive_id}/cancel` | `KDriveRequests.undoAction` |
 
 #### Mail
 
@@ -697,3 +940,9 @@ not started
 - Added typed request/service support for `GET /2/drive/{drive_id}/statistics/activities/export` as `KDriveRequests.exportActivities` and `KDriveService.exportActivities`.
 - The request sends required query parameters `from`, `interval`, singular `metric`, and `until`, and requests `text/csv`.
 - Added unit coverage for OpenAPI path, authorization, CSV accept header, and required query parameters.
+
+## 2026-05-08 — kDrive files existence route
+
+- Added typed support for `POST /2/drive/{drive_id}/files/exists` as `KDriveRequests.checkFilesExistence(driveId:fileIds:)` and `KDriveService.checkFilesExistence(driveId:fileIds:)`.
+- Added `KDriveFilesExistenceRequestBody` and `KDriveFilesExistenceResult` models for the required `ids` JSON body and per-id existence response rows.
+- Added unit coverage for method/path/auth/JSON headers, required body encoding, empty query parameters, and response decoding.

@@ -54,6 +54,23 @@ struct KDriveDriveUsersV2RequestTests {
         #expect(queryItems.contains(URLQueryItem(name: "order_for[display_name]", value: "desc")))
     }
 
+    @Test("v2 drive users request has no query when optional filters are omitted")
+    func v2DriveUsersRequestOmitsOptionalQueryParameters() async throws {
+        let client = InfomaniakAPIClient(
+            configuration: APIClientConfiguration(
+                baseURL: URL(string: "https://api.infomaniak.com")!,
+                bearerToken: "test-token"
+            )
+        )
+        let request = KDriveRequests.listDriveUsersV2(driveId: 100)
+
+        let urlRequest = try await client.makeURLRequest(for: request)
+
+        #expect(urlRequest.httpMethod == "GET")
+        #expect(urlRequest.url?.path == "/2/drive/100/users")
+        #expect(urlRequest.url?.query == "")
+    }
+
     @Test("v2 drive users response decodes using Swift API names")
     func v2DriveUsersResponseDecodes() throws {
         let json = """

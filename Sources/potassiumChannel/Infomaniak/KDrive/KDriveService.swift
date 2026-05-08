@@ -24,6 +24,13 @@ public struct KDriveService: Sendable {
         )
     }
 
+    /// Wakes a sleeping kDrive up.
+    public func wakeDrive(
+        driveId: Int
+    ) async throws -> InfomaniakResponse<Bool> {
+        try await client.send(KDriveRequests.wakeDrive(driveId: driveId))
+    }
+
     /// Lists users associated with a specific kDrive.
     public func listDriveUsers(
         driveId: Int,
@@ -47,6 +54,16 @@ public struct KDriveService: Sendable {
                 with: includedResources,
                 options: options
             )
+        )
+    }
+
+    /// Fetches a single user associated with a specific kDrive using the v2 endpoint.
+    public func getDriveUserV2(
+        driveId: Int,
+        userId: Int
+    ) async throws -> InfomaniakResponse<KDriveDriveUser?> {
+        try await client.send(
+            KDriveRequests.getDriveUserV2(driveId: driveId, userId: userId)
         )
     }
 
@@ -254,6 +271,195 @@ public struct KDriveService: Sendable {
         )
     }
 
+    /// Gets multi-access information for a kDrive file or directory.
+    public func getFileMultiAccess(
+        driveId: Int,
+        fileId: Int
+    ) async throws -> InfomaniakResponse<KDriveFileMultiAccess> {
+        try await client.send(
+            KDriveRequests.getFileMultiAccess(driveId: driveId, fileId: fileId)
+        )
+    }
+
+    /// Lists requested access entries for a kDrive file or directory.
+    public func listFileAccessRequests(
+        driveId: Int,
+        fileId: Int
+    ) async throws -> InfomaniakResponse<[KDriveFileAccessRequest]> {
+        try await client.send(
+            KDriveRequests.listFileAccessRequests(driveId: driveId, fileId: fileId)
+        )
+    }
+
+    /// Lists invitation access entries for a kDrive file or directory.
+    public func listFileAccessInvitations(
+        driveId: Int,
+        fileId: Int
+    ) async throws -> InfomaniakResponse<[KDriveFileAccessInvitation]> {
+        try await client.send(
+            KDriveRequests.listFileAccessInvitations(driveId: driveId, fileId: fileId)
+        )
+    }
+
+    /// Lists user access entries for a kDrive file or directory.
+    public func listFileAccessUsers(
+        driveId: Int,
+        fileId: Int
+    ) async throws -> InfomaniakResponse<[KDriveFileAccessUser]> {
+        try await client.send(
+            KDriveRequests.listFileAccessUsers(driveId: driveId, fileId: fileId)
+        )
+    }
+
+    /// Lists team access entries for a kDrive file or directory.
+    public func listFileAccessTeams(
+        driveId: Int,
+        fileId: Int
+    ) async throws -> InfomaniakResponse<[KDriveFileAccessTeam]> {
+        try await client.send(
+            KDriveRequests.listFileAccessTeams(driveId: driveId, fileId: fileId)
+        )
+    }
+
+    /// Lists comments for a kDrive file or directory.
+    public func listFileComments(
+        driveId: Int,
+        fileId: Int
+    ) async throws -> InfomaniakResponse<[KDriveFileComment]> {
+        try await client.send(
+            KDriveRequests.listFileComments(driveId: driveId, fileId: fileId)
+        )
+    }
+
+    /// Adds a comment to a kDrive file or directory.
+    public func addFileComment(
+        driveId: Int,
+        fileId: Int,
+        body: String,
+        with includedResources: String? = nil
+    ) async throws -> InfomaniakResponse<KDriveFileComment> {
+        let requestBody = try JSONEncoder().encode(AddKDriveFileCommentOptions(body: body))
+        return try await client.send(
+            KDriveRequests.addFileComment(
+                driveId: driveId,
+                fileId: fileId,
+                with: includedResources,
+                body: requestBody
+            )
+        )
+    }
+
+    /// Adds a reply to a kDrive file comment.
+    public func addFileCommentReply(
+        driveId: Int,
+        fileId: Int,
+        commentId: Int,
+        body: String,
+        with includedResources: String? = nil
+    ) async throws -> InfomaniakResponse<KDriveFileComment> {
+        let requestBody = try JSONEncoder().encode(AddKDriveFileCommentReplyOptions(body: body))
+        return try await client.send(
+            KDriveRequests.addFileCommentReply(
+                driveId: driveId,
+                fileId: fileId,
+                commentId: commentId,
+                with: includedResources,
+                body: requestBody
+            )
+        )
+    }
+
+    /// Modifies a kDrive file comment.
+    public func modifyFileComment(
+        driveId: Int,
+        fileId: Int,
+        commentId: String,
+        options: ModifyKDriveFileCommentOptions
+    ) async throws -> InfomaniakResponse<Bool> {
+        let requestBody = try JSONEncoder().encode(options)
+        return try await client.send(
+            KDriveRequests.modifyFileComment(
+                driveId: driveId,
+                fileId: fileId,
+                commentId: commentId,
+                options: options,
+                body: requestBody
+            )
+        )
+    }
+
+    /// Deletes a kDrive file comment.
+    public func deleteFileComment(
+        driveId: Int,
+        fileId: Int,
+        commentId: String
+    ) async throws -> InfomaniakResponse<Bool> {
+        try await client.send(
+            KDriveRequests.deleteFileComment(
+                driveId: driveId,
+                fileId: fileId,
+                commentId: commentId
+            )
+        )
+    }
+
+    /// Likes a kDrive file comment.
+    public func likeFileComment(
+        driveId: Int,
+        fileId: Int,
+        commentId: String
+    ) async throws -> InfomaniakResponse<Bool> {
+        try await client.send(
+            KDriveRequests.likeFileComment(
+                driveId: driveId,
+                fileId: fileId,
+                commentId: commentId
+            )
+        )
+    }
+
+    /// Unlikes a kDrive file comment.
+    public func unlikeFileComment(
+        driveId: Int,
+        fileId: Int,
+        commentId: String
+    ) async throws -> InfomaniakResponse<Bool> {
+        try await client.send(
+            KDriveRequests.unlikeFileComment(
+                driveId: driveId,
+                fileId: fileId,
+                commentId: commentId
+            )
+        )
+    }
+
+    /// Lists replies to a kDrive file comment.
+    public func listFileCommentReplies(
+        driveId: Int,
+        fileId: Int,
+        commentId: String,
+        options: ListKDriveFileCommentRepliesOptions = ListKDriveFileCommentRepliesOptions()
+    ) async throws -> PaginatedInfomaniakResponse<[KDriveFileComment]> {
+        try await client.send(
+            KDriveRequests.listFileCommentReplies(
+                driveId: driveId,
+                fileId: fileId,
+                commentId: commentId,
+                options: options
+            )
+        )
+    }
+
+    /// Gets dropbox metadata for a kDrive file or directory.
+    public func getFileDropbox(
+        driveId: Int,
+        fileId: Int
+    ) async throws -> InfomaniakResponse<KDriveFileDropbox?> {
+        try await client.send(
+            KDriveRequests.getFileDropbox(driveId: driveId, fileId: fileId)
+        )
+    }
+
     /// Gets a child kDrive file or directory by name.
     public func getFileByName(
         driveId: Int,
@@ -263,6 +469,21 @@ public struct KDriveService: Sendable {
     ) async throws -> InfomaniakResponse<KDriveFileItem> {
         try await client.send(
             KDriveRequests.getFileByName(driveId: driveId, fileId: fileId, name: name, with: includedResources)
+        )
+    }
+
+    /// Lists activities for the root of a kDrive.
+    public func listRootFileActivitiesV3(
+        driveId: Int,
+        with includedResources: String? = nil,
+        options: ListKDriveRootFileActivitiesV3Options = ListKDriveRootFileActivitiesV3Options()
+    ) async throws -> CursorPaginatedInfomaniakResponse<[KDriveDriveActivity]> {
+        try await client.send(
+            KDriveRequests.listRootFileActivitiesV3(
+                driveId: driveId,
+                with: includedResources,
+                options: options
+            )
         )
     }
 
@@ -310,6 +531,73 @@ public struct KDriveService: Sendable {
         )
     }
 
+    /// Permanently removes a kDrive file or directory from trash using the v2 endpoint.
+    public func removeTrashedFile(
+        driveId: Int,
+        fileId: Int
+    ) async throws -> InfomaniakResponse<Bool> {
+        try await client.send(
+            KDriveRequests.removeTrashedFile(driveId: driveId, fileId: fileId)
+        )
+    }
+
+    /// Undoes a cancellable kDrive action using the v2 endpoint.
+    public func undoAction(
+        driveId: Int,
+        cancelId: String
+    ) async throws -> InfomaniakResponse<KDriveUndoActionResult> {
+        try await undoAction(driveId: driveId, cancelIds: [cancelId])
+    }
+
+    /// Undoes one or more cancellable kDrive actions using the v2 endpoint.
+    public func undoAction(
+        driveId: Int,
+        cancelIds: [String]
+    ) async throws -> InfomaniakResponse<KDriveUndoActionResult> {
+        let body = try JSONEncoder().encode(
+            cancelIds.count == 1
+                ? UndoKDriveActionOptions(cancelId: cancelIds[0])
+                : UndoKDriveActionOptions(cancelIds: cancelIds)
+        )
+        return try await client.send(
+            KDriveRequests.undoAction(driveId: driveId, body: body)
+        )
+    }
+
+    /// Restores a kDrive file or directory from trash using the v2 endpoint.
+    public func restoreTrashedFile(
+        driveId: Int,
+        fileId: Int,
+        destinationDirectoryId: Int
+    ) async throws -> InfomaniakResponse<KDriveRestoreTrashedFileResult> {
+        let body = try JSONEncoder().encode(
+            RestoreKDriveTrashedFileOptions(destinationDirectoryId: destinationDirectoryId)
+        )
+        return try await client.send(
+            KDriveRequests.restoreTrashedFile(driveId: driveId, fileId: fileId, body: body)
+        )
+    }
+
+    /// Marks a kDrive file or directory as favorite using the v2 endpoint.
+    public func favoriteFile(
+        driveId: Int,
+        fileId: Int
+    ) async throws -> InfomaniakResponse<Bool> {
+        try await client.send(
+            KDriveRequests.favoriteFile(driveId: driveId, fileId: fileId)
+        )
+    }
+
+    /// Removes a kDrive file or directory from favorites using the v2 endpoint.
+    public func unfavoriteFile(
+        driveId: Int,
+        fileId: Int
+    ) async throws -> InfomaniakResponse<Bool> {
+        try await client.send(
+            KDriveRequests.unfavoriteFile(driveId: driveId, fileId: fileId)
+        )
+    }
+
     /// Gets a single file or directory from kDrive trash.
     public func getTrashedFile(
         driveId: Int,
@@ -332,6 +620,28 @@ public struct KDriveService: Sendable {
         )
     }
 
+    /// Gets thumbnail data for a kDrive file.
+    public func getFileThumbnail(
+        driveId: Int,
+        fileId: Int,
+        options: GetKDriveFileThumbnailOptions = GetKDriveFileThumbnailOptions()
+    ) async throws -> Data {
+        try await client.sendData(
+            KDriveRequests.getFileThumbnail(driveId: driveId, fileId: fileId, options: options)
+        )
+    }
+
+    /// Gets preview image data for a kDrive file.
+    public func getFilePreview(
+        driveId: Int,
+        fileId: Int,
+        options: GetKDriveFilePreviewOptions = GetKDriveFilePreviewOptions()
+    ) async throws -> Data {
+        try await client.sendData(
+            KDriveRequests.getFilePreview(driveId: driveId, fileId: fileId, options: options)
+        )
+    }
+
     /// Builds a kDrive archive from selected files or a parent directory.
     public func buildArchive(
         driveId: Int,
@@ -351,6 +661,14 @@ public struct KDriveService: Sendable {
         try await client.sendData(
             KDriveRequests.downloadArchive(driveId: driveId, archiveUUID: archiveUUID)
         )
+    }
+
+    /// Checks whether kDrive file or directory identifiers still exist.
+    public func checkFilesExistence(
+        driveId: Int,
+        fileIds: [Int]
+    ) async throws -> InfomaniakResponse<[KDriveFilesExistenceResult]> {
+        try await client.send(KDriveRequests.checkFilesExistence(driveId: driveId, fileIds: fileIds))
     }
 
     /// Uploads raw file data to kDrive using the v3 single-request endpoint.
@@ -434,6 +752,58 @@ public struct KDriveService: Sendable {
         )
     }
 
+    /// Moves a kDrive file or directory into another directory.
+    public func moveFile(
+        driveId: Int,
+        fileId: Int,
+        destinationDirectoryId: Int,
+        options: MoveKDriveFileOptions = MoveKDriveFileOptions()
+    ) async throws -> InfomaniakResponse<KDriveCancelResource> {
+        let body = try JSONEncoder().encode(options)
+        return try await client.send(
+            KDriveRequests.moveFileV3(
+                driveId: driveId,
+                fileId: fileId,
+                destinationDirectoryId: destinationDirectoryId,
+                body: body
+            )
+        )
+    }
+
+    /// Duplicates a kDrive file or directory in place.
+    public func duplicateFile(
+        driveId: Int,
+        fileId: Int,
+        with includedResources: String? = nil,
+        options: DuplicateKDriveFileOptions = DuplicateKDriveFileOptions()
+    ) async throws -> InfomaniakResponse<KDriveFileItem> {
+        let body = try JSONEncoder().encode(options)
+        return try await client.send(
+            KDriveRequests.duplicateFileV3(
+                driveId: driveId,
+                fileId: fileId,
+                with: includedResources,
+                body: body
+            )
+        )
+    }
+
+    /// Updates the modification date of a kDrive file.
+    public func updateFileLastModified(
+        driveId: Int,
+        fileId: Int,
+        lastModifiedAt: Int
+    ) async throws -> InfomaniakResponse<Bool> {
+        let body = try JSONEncoder().encode(UpdateKDriveFileLastModifiedOptions(lastModifiedAt: lastModifiedAt))
+        return try await client.send(
+            KDriveRequests.updateFileLastModified(
+                driveId: driveId,
+                fileId: fileId,
+                body: body
+            )
+        )
+    }
+
     /// Gets thumbnail data for a trashed kDrive item using the deprecated v2 endpoint.
     public func getV2TrashedItemThumbnail(
         driveId: Int,
@@ -509,6 +879,58 @@ public struct KDriveService: Sendable {
     ) async throws -> InfomaniakResponse<KDriveSettings> {
         try await client.send(
             KDriveRequests.getDriveSettings(driveId: driveId)
+        )
+    }
+
+    /// Updates trash settings for a single kDrive.
+    public func updateTrashSettings(
+        driveId: Int,
+        maxDuration: Int
+    ) async throws -> InfomaniakResponse<Bool> {
+        try await client.send(
+            KDriveRequests.updateTrashSettings(
+                driveId: driveId,
+                options: UpdateKDriveTrashSettingsOptions(maxDuration: maxDuration)
+            )
+        )
+    }
+
+    /// Updates artificial-intelligence scan settings for a single kDrive.
+    public func updateAISettings(
+        driveId: Int,
+        options: UpdateKDriveAISettingsOptions
+    ) async throws -> InfomaniakResponse<Bool> {
+        try await client.send(
+            KDriveRequests.updateAISettings(
+                driveId: driveId,
+                options: options
+            )
+        )
+    }
+
+    /// Updates share-link customization settings for a single kDrive.
+    public func updateShareLinkSettings(
+        driveId: Int,
+        options: UpdateKDriveShareLinkSettingsOptions
+    ) async throws -> InfomaniakResponse<Bool> {
+        try await client.send(
+            KDriveRequests.updateShareLinkSettings(
+                driveId: driveId,
+                options: options
+            )
+        )
+    }
+
+    /// Updates office document integration settings for a single kDrive.
+    public func updateOfficeSettings(
+        driveId: Int,
+        options: UpdateKDriveOfficeSettingsOptions
+    ) async throws -> InfomaniakResponse<Bool> {
+        try await client.send(
+            KDriveRequests.updateOfficeSettings(
+                driveId: driveId,
+                options: options
+            )
         )
     }
 
@@ -598,6 +1020,16 @@ public struct KDriveService: Sendable {
                 order: order,
                 orderFor: orderFor
             )
+        )
+    }
+
+    /// Deletes all versions for a kDrive file using the deprecated v2 endpoint.
+    public func deleteFileVersionsV2(
+        driveId: Int,
+        fileId: Int
+    ) async throws -> InfomaniakResponse<Bool> {
+        try await client.send(
+            KDriveRequests.deleteFileVersionsV2(driveId: driveId, fileId: fileId)
         )
     }
 
@@ -803,6 +1235,26 @@ public struct KDriveService: Sendable {
         )
     }
 
+    /// Gets a generated kDrive activity report.
+    public func getActivityReport(
+        driveId: Int,
+        reportId: Int
+    ) async throws -> InfomaniakResponse<KDriveActivityReport> {
+        try await client.send(
+            KDriveRequests.getActivityReport(driveId: driveId, reportId: reportId)
+        )
+    }
+
+    /// Exports a generated kDrive activity report as CSV data.
+    public func exportActivityReport(
+        driveId: Int,
+        reportId: Int
+    ) async throws -> Data {
+        try await client.sendData(
+            KDriveRequests.exportActivityReport(driveId: driveId, reportId: reportId)
+        )
+    }
+
     /// Lists external imports for a kDrive.
     public func listImports(
         driveId: Int,
@@ -869,6 +1321,15 @@ public struct KDriveService: Sendable {
     ) async throws -> InfomaniakResponse<KDriveUserPreferences> {
         try await client.send(
             KDriveRequests.getUserPreferences(with: includedResources)
+        )
+    }
+
+    /// Updates preferences for the authenticated kDrive user.
+    public func setUserPreferences(
+        options: SetKDriveUserPreferencesOptions
+    ) async throws -> InfomaniakResponse<Bool> {
+        try await client.send(
+            try KDriveRequests.setUserPreferences(options: options)
         )
     }
 
