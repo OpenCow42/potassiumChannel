@@ -920,6 +920,16 @@ public struct KDriveService: Sendable {
         )
     }
 
+    /// Gets a generated kDrive activity report.
+    public func getActivityReport(
+        driveId: Int,
+        reportId: Int
+    ) async throws -> InfomaniakResponse<KDriveActivityReport> {
+        try await client.send(
+            KDriveRequests.getActivityReport(driveId: driveId, reportId: reportId)
+        )
+    }
+
     /// Lists external imports for a kDrive.
     public func listImports(
         driveId: Int,
