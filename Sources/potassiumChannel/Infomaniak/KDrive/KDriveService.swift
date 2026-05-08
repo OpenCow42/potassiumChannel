@@ -971,6 +971,16 @@ public struct KDriveService: Sendable {
         )
     }
 
+    /// Deletes all versions for a kDrive file using the deprecated v2 endpoint.
+    public func deleteFileVersionsV2(
+        driveId: Int,
+        fileId: Int
+    ) async throws -> InfomaniakResponse<Bool> {
+        try await client.send(
+            KDriveRequests.deleteFileVersionsV2(driveId: driveId, fileId: fileId)
+        )
+    }
+
     /// Gets a single version for a kDrive file using the deprecated v2 endpoint.
     public func getFileVersionV2(
         driveId: Int,

@@ -1900,6 +1900,17 @@ public enum KDriveRequests {
         )
     }
 
+    /// Creates a request that deletes all versions for a kDrive file using the deprecated v2 endpoint.
+    public static func deleteFileVersionsV2(
+        driveId: Int,
+        fileId: Int
+    ) -> APIRequest<InfomaniakResponse<Bool>> {
+        APIRequest(
+            method: .delete,
+            path: "/2/drive/\(driveId)/files/\(fileId)/versions"
+        )
+    }
+
     /// Creates a request that gets a single version for a kDrive file using the deprecated v2 endpoint.
     public static func getFileVersionV2(
         driveId: Int,
