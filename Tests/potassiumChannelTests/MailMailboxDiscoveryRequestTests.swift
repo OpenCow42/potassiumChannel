@@ -145,6 +145,62 @@ struct MailMailboxDiscoveryRequestTests {
         #expect(response.data.values["threads"] != nil)
     }
 
+    @Test("Mail message request uses returned resource path")
+    func mailMessageRequestMatchesAPIShape() async throws {
+        let client = InfomaniakAPIClient(
+            configuration: APIClientConfiguration(
+                baseURL: APIClientConfiguration.defaultMailBaseURL,
+                bearerToken: "test-token"
+            )
+        )
+        let request = MailRequests.getMessage(
+            resource: "/api/mail/904443a9-fb09-3b09-b05a-6062dac0cbb6/folder/inbox/message/42"
+        )
+
+        let urlRequest = try await client.makeURLRequest(for: request)
+        let url = try #require(urlRequest.url)
+        let queryItems = try #require(URLComponents(url: url, resolvingAgainstBaseURL: false)?.queryItems)
+        let pairs = Set(queryItems.map { "\($0.name)=\($0.value ?? "")" })
+
+        #expect(urlRequest.httpMethod == "GET")
+        #expect(url.host == "mail.infomaniak.com")
+        #expect(url.path == "/api/mail/904443a9-fb09-3b09-b05a-6062dac0cbb6/folder/inbox/message/42")
+        #expect(pairs.contains("prefered_format=html"))
+        #expect(pairs.contains("with=auto_uncrypt,recipient_provider_source,emoji_reactions_per_message"))
+    }
+
+    @Test("Mail message response decodes flexible message payloads")
+    func mailMessageResponseDecodesFlexiblePayloads() throws {
+        let json = """
+        {
+          "result": "success",
+          "data": {
+            "uid": "42",
+            "subject": "Hello",
+            "seen": true,
+            "has_attachments": false,
+            "body": {
+              "type": "html",
+              "value": "<p>Hello</p>"
+            },
+            "from": [{ "email": "sender@example.com", "name": "Sender" }]
+          }
+        }
+        """.data(using: .utf8)!
+        let decoder = JSONDecoder()
+        decoder.keyDecodingStrategy = .convertFromSnakeCase
+
+        let response = try decoder.decode(InfomaniakResponse<MailMessage>.self, from: json)
+
+        #expect(response.result == "success")
+        #expect(response.data.values["uid"] == .string("42"))
+        #expect(response.data.values["subject"] == .string("Hello"))
+        #expect(response.data.values["seen"] == .bool(true))
+        #expect(response.data.values["has_attachments"] == .bool(false))
+        #expect(response.data.values["body"] != nil)
+        #expect(response.data.values["from"] != nil)
+    }
+
     @Test("Current my kSuite request includes mailbox details")
     func currentMyKSuiteRequestMatchesAPIShape() async throws {
         let client = InfomaniakAPIClient(configuration: APIClientConfiguration(bearerToken: "test-token"))

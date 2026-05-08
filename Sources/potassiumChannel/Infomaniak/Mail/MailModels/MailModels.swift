@@ -198,3 +198,41 @@ public struct ListMailThreadsOptions: Equatable, Sendable {
         self.includedResources = includedResources
     }
 }
+
+/// A message payload returned for a mailbox folder message resource.
+public struct MailMessage: Codable, Equatable, Sendable {
+    /// Raw message payload returned by the API.
+    public let values: [String: KDriveJSONValue]
+
+    /// Creates a message wrapper around a raw JSON payload.
+    public init(values: [String: KDriveJSONValue]) {
+        self.values = values
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.singleValueContainer()
+        self.values = try container.decode([String: KDriveJSONValue].self)
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.singleValueContainer()
+        try container.encode(values)
+    }
+}
+
+/// Query options accepted when reading a Mail message resource.
+public struct GetMailMessageOptions: Equatable, Sendable {
+    /// Preferred body format requested from the API.
+    public let preferredFormat: String?
+
+    /// Additional related resources to include.
+    public let includedResources: String?
+
+    public init(
+        preferredFormat: String? = "html",
+        includedResources: String? = "auto_uncrypt,recipient_provider_source,emoji_reactions_per_message"
+    ) {
+        self.preferredFormat = preferredFormat
+        self.includedResources = includedResources
+    }
+}

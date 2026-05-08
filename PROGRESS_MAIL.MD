@@ -12,8 +12,8 @@ The usable discovery path for the configured account is current-user scoped, not
 2. [x] `GET /1/my_ksuite/current?with=mail` via `MailRequests.currentMyKSuite` and `MailService.currentMyKSuite`.
 3. [blocked] `GET https://mail.infomaniak.com/api/mail/{mailbox_uuid}` — direct mailbox profile path redirects to login (`302`) with the current token; mailbox profile data currently comes from `GET /api/mailbox`.
 4. [x] `GET https://mail.infomaniak.com/api/mail/{mailbox_uuid}/folder?with=ik-static` — list folders.
-5. [ ] `GET https://mail.infomaniak.com/api/mail/{mailbox_uuid}/folder/{folder_id}/message` — list folder threads/messages.
-6. [ ] `GET {message_resource}` — read a message from a returned resource URL.
+5. [x] `GET https://mail.infomaniak.com/api/mail/{mailbox_uuid}/folder/{folder_id}/message` — list folder threads/messages.
+6. [x] `GET {message_resource}` — read a message from a returned resource URL.
 7. [ ] `GET https://mail.infomaniak.com/api/mailbox/quotas?mailbox={mailbox_name}&product_id={hosting_id}&unit=B` — read mailbox quota.
 8. [ ] `POST https://mail.infomaniak.com/api/mail/{mailbox_uuid}/draft` — create/send draft payload.
 9. [ ] `PUT https://mail.infomaniak.com/api/mail/{mailbox_uuid}/draft/{draft_uuid}` — update/send draft payload.
@@ -55,4 +55,10 @@ The usable discovery path for the configured account is current-user scoped, not
 
 - Added mailbox folder thread/message listing via `GET https://mail.infomaniak.com/api/mail/{mailbox_uuid}/folder/{folder_id}/message`.
 - Added flexible thread-list response handling; detailed message reads should use the message/resource URLs surfaced by this listing once the next route is implemented.
+- Verified with `swift test --filter Mail`.
+
+## Mail message resource update
+
+- Added message reading from returned message resources (`GET {message_resource}`).
+- Added flexible message payload handling and request-construction/decoding tests.
 - Verified with `swift test --filter Mail`.
