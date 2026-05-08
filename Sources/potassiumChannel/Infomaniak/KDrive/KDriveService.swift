@@ -264,6 +264,16 @@ public struct KDriveService: Sendable {
         )
     }
 
+    /// Gets multi-access information for a kDrive file or directory.
+    public func getFileMultiAccess(
+        driveId: Int,
+        fileId: Int
+    ) async throws -> InfomaniakResponse<KDriveFileMultiAccess> {
+        try await client.send(
+            KDriveRequests.getFileMultiAccess(driveId: driveId, fileId: fileId)
+        )
+    }
+
     /// Gets a child kDrive file or directory by name.
     public func getFileByName(
         driveId: Int,

@@ -5,6 +5,75 @@ public struct KDriveBinaryResponse: Decodable, Sendable {
     public init() {}
 }
 
+/// Lossless JSON value used by kDrive endpoints whose payload shape can vary by access type.
+public enum KDriveJSONValue: Codable, Equatable, Sendable {
+    case string(String)
+    case number(Double)
+    case bool(Bool)
+    case object([String: KDriveJSONValue])
+    case array([KDriveJSONValue])
+    case null
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.singleValueContainer()
+
+        if container.decodeNil() {
+            self = .null
+        } else if let value = try? container.decode(Bool.self) {
+            self = .bool(value)
+        } else if let value = try? container.decode(Double.self) {
+            self = .number(value)
+        } else if let value = try? container.decode(String.self) {
+            self = .string(value)
+        } else if let value = try? container.decode([String: KDriveJSONValue].self) {
+            self = .object(value)
+        } else if let value = try? container.decode([KDriveJSONValue].self) {
+            self = .array(value)
+        } else {
+            throw DecodingError.dataCorruptedError(in: container, debugDescription: "Unsupported JSON value")
+        }
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.singleValueContainer()
+
+        switch self {
+        case let .string(value):
+            try container.encode(value)
+        case let .number(value):
+            try container.encode(value)
+        case let .bool(value):
+            try container.encode(value)
+        case let .object(value):
+            try container.encode(value)
+        case let .array(value):
+            try container.encode(value)
+        case .null:
+            try container.encodeNil()
+        }
+    }
+}
+
+/// Multi-access information for a kDrive file or directory.
+public struct KDriveFileMultiAccess: Codable, Equatable, Sendable {
+    /// Raw access payload returned by the API, keyed by access section.
+    public let values: [String: KDriveJSONValue]
+
+    public init(values: [String: KDriveJSONValue]) {
+        self.values = values
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.singleValueContainer()
+        self.values = try container.decode([String: KDriveJSONValue].self)
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.singleValueContainer()
+        try container.encode(values)
+    }
+}
+
 /// A cancellation token returned after a file is moved to kDrive trash.
 public struct KDriveCancelResource: Codable, Equatable, Sendable {
     /// Identifier that can be used by Infomaniak APIs to cancel the action while it remains valid.
