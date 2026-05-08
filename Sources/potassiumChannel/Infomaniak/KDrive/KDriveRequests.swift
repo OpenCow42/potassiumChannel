@@ -2092,6 +2092,17 @@ public enum KDriveRequests {
         )
     }
 
+    /// Creates a request that gets a generated kDrive activity report.
+    public static func getActivityReport(
+        driveId: Int,
+        reportId: Int
+    ) -> APIRequest<InfomaniakResponse<KDriveActivityReport>> {
+        APIRequest(
+            method: .get,
+            path: "/2/drive/\(driveId)/activities/reports/\(reportId)"
+        )
+    }
+
     /// Creates a request that lists external imports for a kDrive.
     public static func listImports(
         driveId: Int,

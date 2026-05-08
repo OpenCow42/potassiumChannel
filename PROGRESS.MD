@@ -244,6 +244,7 @@ kDrive request factories, and `KDriveService` wrappers moved from Potassium.
 | GET | `/2/drive/{drive_id}/statistics/activities/links` | `KDriveRequests.listActivityShareLinks` |
 | GET | `/2/drive/{drive_id}/statistics/activities/links/export` | `KDriveRequests.exportActivityShareLinks` |
 | GET | `/2/drive/{drive_id}/activities/reports` | `KDriveRequests.listActivityReports` |
+| GET | `/2/drive/{drive_id}/activities/reports/{report_id}` | `KDriveRequests.getActivityReport` |
 | GET | `/2/drive/{drive_id}/imports` | `KDriveRequests.listImports` |
 | GET | `/2/drive/{drive_id}/imports/{import_id}` | `KDriveRequests.listErroredImportFiles` |
 | GET | `/2/drive/{drive_id}/imports/oauth/drives` | `KDriveRequests.listOAuthImportDrives` |
