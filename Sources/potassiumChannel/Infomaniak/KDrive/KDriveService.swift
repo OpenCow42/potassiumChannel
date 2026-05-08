@@ -586,6 +586,24 @@ public struct KDriveService: Sendable {
         )
     }
 
+    /// Duplicates a kDrive file or directory in place.
+    public func duplicateFile(
+        driveId: Int,
+        fileId: Int,
+        with includedResources: String? = nil,
+        options: DuplicateKDriveFileOptions = DuplicateKDriveFileOptions()
+    ) async throws -> InfomaniakResponse<KDriveFileItem> {
+        let body = try JSONEncoder().encode(options)
+        return try await client.send(
+            KDriveRequests.duplicateFileV3(
+                driveId: driveId,
+                fileId: fileId,
+                with: includedResources,
+                body: body
+            )
+        )
+    }
+
     /// Gets thumbnail data for a trashed kDrive item using the deprecated v2 endpoint.
     public func getV2TrashedItemThumbnail(
         driveId: Int,

@@ -1,3 +1,10 @@
+## 2026-05-08 — kDrive v3 duplicate file route
+
+- Added shared support for mutation `POST /3/drive/{drive_id}/files/{file_id}/duplicate` via `KDriveRequests.duplicateFileV3` and `KDriveService.duplicateFile`, returning `InfomaniakResponse<KDriveFileItem>`.
+- Added `DuplicateKDriveFileOptions` with optional `name`, plus optional `with` query support.
+- Added request coverage for POST method, exact OpenAPI path, auth/JSON headers, `with` query, and JSON body forwarding.
+- Validation: `swift test --filter KDriveDuplicateFileRequestTests` passed (1 test).
+
 ## 2026-05-08 — kDrive v3 wake drive route
 
 - Added shared support for benign `POST /3/drive/{drive_id}/wake` via `KDriveRequests.wakeDrive` and `KDriveService.wakeDrive`, returning `InfomaniakResponse<Bool>`.
