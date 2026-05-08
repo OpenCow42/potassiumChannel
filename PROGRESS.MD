@@ -1,3 +1,9 @@
+## 2026-05-08 — kDrive v2 favorite file route
+
+- Added shared support for mutation `POST /2/drive/{drive_id}/files/{file_id}/favorite` via `KDriveRequests.favoriteFile` and `KDriveService.favoriteFile`, returning `InfomaniakResponse<Bool>`.
+- Added request/response coverage for POST method, exact OpenAPI path, auth/accept headers, empty query/body behavior, and boolean success decoding.
+- Validation: `swift test --filter KDrivePostFavoriteFileRequestTests` passed (2 tests).
+
 ## 2026-05-08 — kDrive v2 file dropbox route
 
 - Added shared support for non-destructive `GET /2/drive/{drive_id}/files/{file_id}/dropbox` via `KDriveRequests.getFileDropbox` and `KDriveService.getFileDropbox`.

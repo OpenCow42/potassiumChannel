@@ -2385,4 +2385,15 @@ public enum KDriveRequests {
         )
     }
 
+    /// Creates a request that marks a kDrive file or directory as favorite using the v2 endpoint.
+    public static func favoriteFile(
+        driveId: Int,
+        fileId: Int
+    ) -> APIRequest<InfomaniakResponse<Bool>> {
+        APIRequest(
+            method: .post,
+            path: "/2/drive/\(driveId)/files/\(fileId)/favorite"
+        )
+    }
+
 }
