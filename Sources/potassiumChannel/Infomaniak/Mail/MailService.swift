@@ -41,6 +41,11 @@ public struct MailService: Sendable {
         try await client.send(MailRequests.listUserMailboxes(includedResources: includedResources))
     }
 
+    /// Lists folders for a mailbox.
+    public func listFolders(mailboxUUID: String, includedResources: String? = "ik-static") async throws -> InfomaniakResponse<[MailFolder]> {
+        try await client.send(MailRequests.listFolders(mailboxUUID: mailboxUUID, includedResources: includedResources))
+    }
+
     /// Reads the current my kSuite with optional mailbox details.
     public func currentMyKSuite(includedResources: String? = "mail") async throws -> InfomaniakResponse<CurrentMyKSuite> {
         try await client.send(MailRequests.currentMyKSuite(includedResources: includedResources))

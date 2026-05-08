@@ -129,3 +129,24 @@ public struct CurrentMyKSuite: Codable, Equatable, Sendable {
         try container.encode(values)
     }
 }
+
+/// Folder payload returned for a mailbox.
+public struct MailFolder: Codable, Equatable, Sendable {
+    /// Raw folder payload returned by the API.
+    public let values: [String: KDriveJSONValue]
+
+    /// Creates a folder wrapper around a raw JSON payload.
+    public init(values: [String: KDriveJSONValue]) {
+        self.values = values
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.singleValueContainer()
+        self.values = try container.decode([String: KDriveJSONValue].self)
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.singleValueContainer()
+        try container.encode(values)
+    }
+}

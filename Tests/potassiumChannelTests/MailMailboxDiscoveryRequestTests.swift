@@ -25,6 +25,60 @@ struct MailMailboxDiscoveryRequestTests {
         #expect(queryItems == [URLQueryItem(name: "with", value: "unseen,aliases")])
     }
 
+    @Test("Mail folders request uses the mailbox UUID path")
+    func mailFoldersRequestMatchesAPIShape() async throws {
+        let client = InfomaniakAPIClient(
+            configuration: APIClientConfiguration(
+                baseURL: APIClientConfiguration.defaultMailBaseURL,
+                bearerToken: "test-token"
+            )
+        )
+        let request = MailRequests.listFolders(mailboxUUID: "904443a9-fb09-3b09-b05a-6062dac0cbb6")
+
+        let urlRequest = try await client.makeURLRequest(for: request)
+        let url = try #require(urlRequest.url)
+        let queryItems = try #require(URLComponents(url: url, resolvingAgainstBaseURL: false)?.queryItems)
+
+        #expect(urlRequest.httpMethod == "GET")
+        #expect(url.host == "mail.infomaniak.com")
+        #expect(url.path == "/api/mail/904443a9-fb09-3b09-b05a-6062dac0cbb6/folder")
+        #expect(queryItems == [URLQueryItem(name: "with", value: "ik-static")])
+    }
+
+    @Test("Mail folders response decodes flexible folder payloads")
+    func mailFoldersResponseDecodesFlexiblePayloads() throws {
+        let json = """
+        {
+          "result": "success",
+          "data": [
+            {
+              "id": "inbox",
+              "name": "Inbox",
+              "role": "inbox",
+              "path": "INBOX",
+              "unread_count": 2,
+              "thread_count": 4,
+              "children": []
+            }
+          ]
+        }
+        """.data(using: .utf8)!
+        let decoder = JSONDecoder()
+        decoder.keyDecodingStrategy = .convertFromSnakeCase
+
+        let response = try decoder.decode(InfomaniakResponse<[MailFolder]>.self, from: json)
+        let folder = try #require(response.data.first)
+
+        #expect(response.result == "success")
+        #expect(folder.values["id"] == .string("inbox"))
+        #expect(folder.values["name"] == .string("Inbox"))
+        #expect(folder.values["role"] == .string("inbox"))
+        #expect(folder.values["path"] == .string("INBOX"))
+        #expect(folder.values["unread_count"] == .number(2))
+        #expect(folder.values["thread_count"] == .number(4))
+        #expect(folder.values["children"] == .array([]))
+    }
+
     @Test("Current my kSuite request includes mailbox details")
     func currentMyKSuiteRequestMatchesAPIShape() async throws {
         let client = InfomaniakAPIClient(configuration: APIClientConfiguration(bearerToken: "test-token"))
