@@ -1,3 +1,10 @@
+## 2026-05-08 — kDrive v3 move file route
+
+- Added shared support for mutation `POST /3/drive/{drive_id}/files/{file_id}/move/{destination_directory_id}` via `KDriveRequests.moveFileV3` and `KDriveService.moveFile`, returning `InfomaniakResponse<KDriveCancelResource>`.
+- Added `MoveKDriveFileOptions` with optional `conflict` (`error`/`rename`) and optional `name`.
+- Added request/response coverage for POST method, exact OpenAPI path, auth/JSON headers, body forwarding, option encoding, and cancel-resource decoding.
+- Validation: `swift test --filter KDriveMoveFileRequestTests` passed (3 tests).
+
 ## 2026-05-08 — kDrive v3 update file modification date route
 
 - Added shared support for mutation `POST /3/drive/{drive_id}/files/{file_id}/last-modified` via `KDriveRequests.updateFileLastModified` and `KDriveService.updateFileLastModified`, returning `InfomaniakResponse<Bool>`.

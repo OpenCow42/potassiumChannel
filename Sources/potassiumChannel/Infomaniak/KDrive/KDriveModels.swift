@@ -2200,6 +2200,21 @@ public struct CopyKDriveFileOptions: Encodable, Equatable, Sendable {
     }
 }
 
+/// JSON body accepted by the kDrive file move endpoint.
+public struct MoveKDriveFileOptions: Encodable, Equatable, Sendable {
+    /// Conflict behavior: `error` or `rename`.
+    public let conflict: String?
+
+    /// Optional name for the moved file or directory.
+    public let name: String?
+
+    /// Creates options for moving a kDrive file or directory.
+    public init(conflict: String? = nil, name: String? = nil) {
+        self.conflict = conflict
+        self.name = name
+    }
+}
+
 /// JSON body accepted by the kDrive file duplicate endpoint.
 public struct DuplicateKDriveFileOptions: Encodable, Equatable, Sendable {
     /// Optional name for the duplicated file or directory.
