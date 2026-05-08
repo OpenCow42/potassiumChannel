@@ -531,6 +531,16 @@ public struct KDriveService: Sendable {
         )
     }
 
+    /// Permanently removes a kDrive file or directory from trash using the v2 endpoint.
+    public func removeTrashedFile(
+        driveId: Int,
+        fileId: Int
+    ) async throws -> InfomaniakResponse<Bool> {
+        try await client.send(
+            KDriveRequests.removeTrashedFile(driveId: driveId, fileId: fileId)
+        )
+    }
+
     /// Marks a kDrive file or directory as favorite using the v2 endpoint.
     public func favoriteFile(
         driveId: Int,

@@ -1,3 +1,9 @@
+## 2026-05-08 — kDrive v2 remove trashed file route
+
+- Added shared support for destructive mutation `DELETE /2/drive/{drive_id}/trash/{file_id}` via `KDriveRequests.removeTrashedFile` and `KDriveService.removeTrashedFile`, returning `InfomaniakResponse<Bool>`.
+- Added request/response coverage for DELETE method, exact OpenAPI trash path, auth header, empty query/body behavior, and boolean success decoding.
+- Validation: `swift test --filter KDriveRemoveTrashedFileRequestTests` passed (2 tests).
+
 ## 2026-05-08 — kDrive v2 unlike file comment route
 
 - Added shared support for mutation `POST /2/drive/{drive_id}/files/{file_id}/comments/{comment_id}/unlike` via `KDriveRequests.unlikeFileComment` and `KDriveService.unlikeFileComment`, returning `InfomaniakResponse<Bool>`.

@@ -2614,6 +2614,17 @@ public enum KDriveRequests {
         )
     }
 
+    /// Creates a request that permanently removes a kDrive file or directory from trash using the v2 endpoint.
+    public static func removeTrashedFile(
+        driveId: Int,
+        fileId: Int
+    ) -> APIRequest<InfomaniakResponse<Bool>> {
+        APIRequest(
+            method: .delete,
+            path: "/2/drive/\(driveId)/trash/\(fileId)"
+        )
+    }
+
     /// Creates a request that marks a kDrive file or directory as favorite using the v2 endpoint.
     public static func favoriteFile(
         driveId: Int,
