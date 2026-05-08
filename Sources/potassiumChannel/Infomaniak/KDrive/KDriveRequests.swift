@@ -914,6 +914,28 @@ public enum KDriveRequests {
         )
     }
 
+    /// Creates a request that modifies a kDrive file comment.
+    public static func modifyFileComment(
+        driveId: Int,
+        fileId: Int,
+        commentId: String,
+        options: ModifyKDriveFileCommentOptions,
+        body: Data
+    ) -> APIRequest<InfomaniakResponse<Bool>> {
+        var queryParameters: [QueryParameter] = []
+
+        if let includedResources = options.includedResources {
+            queryParameters.append(QueryParameter(name: "with", value: .string(includedResources)))
+        }
+
+        return APIRequest(
+            method: .put,
+            path: "/2/drive/\(driveId)/files/\(fileId)/comments/\(commentId)",
+            queryParameters: queryParameters,
+            body: body
+        )
+    }
+
     /// Creates a request that lists replies to a kDrive file comment.
     public static func listFileCommentReplies(
         driveId: Int,

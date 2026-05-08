@@ -196,6 +196,34 @@ public struct AddKDriveFileCommentReplyOptions: Encodable, Equatable, Sendable {
     }
 }
 
+/// JSON body and query parameters accepted by the kDrive modify file comment endpoint.
+public struct ModifyKDriveFileCommentOptions: Encodable, Equatable, Sendable {
+    /// Related resources to include in the API response.
+    public let includedResources: String?
+
+    /// Updated comment body text.
+    public let body: String?
+
+    /// Updated resolved state for the comment.
+    public let isResolved: Bool?
+
+    enum CodingKeys: String, CodingKey {
+        case body
+        case isResolved = "is_resolved"
+    }
+
+    /// Creates options for modifying a kDrive file comment.
+    public init(
+        includedResources: String? = nil,
+        body: String? = nil,
+        isResolved: Bool? = nil
+    ) {
+        self.includedResources = includedResources
+        self.body = body
+        self.isResolved = isResolved
+    }
+}
+
 /// Query parameters accepted by the kDrive file comment replies endpoint.
 public struct ListKDriveFileCommentRepliesOptions: Equatable, Sendable {
     /// Related resources to include in the API response.

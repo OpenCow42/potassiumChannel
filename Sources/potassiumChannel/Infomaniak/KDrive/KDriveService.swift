@@ -369,6 +369,25 @@ public struct KDriveService: Sendable {
         )
     }
 
+    /// Modifies a kDrive file comment.
+    public func modifyFileComment(
+        driveId: Int,
+        fileId: Int,
+        commentId: String,
+        options: ModifyKDriveFileCommentOptions
+    ) async throws -> InfomaniakResponse<Bool> {
+        let requestBody = try JSONEncoder().encode(options)
+        return try await client.send(
+            KDriveRequests.modifyFileComment(
+                driveId: driveId,
+                fileId: fileId,
+                commentId: commentId,
+                options: options,
+                body: requestBody
+            )
+        )
+    }
+
     /// Lists replies to a kDrive file comment.
     public func listFileCommentReplies(
         driveId: Int,
