@@ -1,3 +1,10 @@
+## 2026-05-08 — kDrive v3 update file modification date route
+
+- Added shared support for mutation `POST /3/drive/{drive_id}/files/{file_id}/last-modified` via `KDriveRequests.updateFileLastModified` and `KDriveService.updateFileLastModified`, returning `InfomaniakResponse<Bool>`.
+- Added `UpdateKDriveFileLastModifiedOptions` to encode required JSON body field `last_modified_at`.
+- Added request/response coverage for POST method, exact OpenAPI path, auth/JSON headers, body encoding, and boolean data decoding.
+- Validation: `swift test --filter KDriveUpdateFileLastModifiedRequestTests` passed (2 tests).
+
 ## 2026-05-08 — kDrive v3 duplicate file route
 
 - Added shared support for mutation `POST /3/drive/{drive_id}/files/{file_id}/duplicate` via `KDriveRequests.duplicateFileV3` and `KDriveService.duplicateFile`, returning `InfomaniakResponse<KDriveFileItem>`.

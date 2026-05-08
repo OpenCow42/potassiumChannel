@@ -2431,6 +2431,19 @@ public enum KDriveRequests {
         )
     }
 
+    /// Creates a request that updates the modification date of a kDrive file.
+    public static func updateFileLastModified(
+        driveId: Int,
+        fileId: Int,
+        body: Data
+    ) -> APIRequest<InfomaniakResponse<Bool>> {
+        APIRequest(
+            method: .post,
+            path: "/3/drive/\(driveId)/files/\(fileId)/last-modified",
+            body: body
+        )
+    }
+
     /// Creates a request that moves a kDrive file to trash using the v2 endpoint.
     public static func trashFileV2(
         driveId: Int,

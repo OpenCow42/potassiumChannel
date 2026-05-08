@@ -2211,6 +2211,21 @@ public struct DuplicateKDriveFileOptions: Encodable, Equatable, Sendable {
     }
 }
 
+/// JSON body accepted by the kDrive update modification date endpoint.
+public struct UpdateKDriveFileLastModifiedOptions: Encodable, Equatable, Sendable {
+    /// Unix timestamp to store as the file modification date.
+    public let lastModifiedAt: Int
+
+    enum CodingKeys: String, CodingKey {
+        case lastModifiedAt = "last_modified_at"
+    }
+
+    /// Creates options for updating a kDrive file modification date.
+    public init(lastModifiedAt: Int) {
+        self.lastModifiedAt = lastModifiedAt
+    }
+}
+
 /// Query parameters accepted by the kDrive trash listing endpoint.
 public struct ListKDriveTrashOptions: Equatable, Sendable {
     /// Cursor marker used to fetch the next batch of results.
