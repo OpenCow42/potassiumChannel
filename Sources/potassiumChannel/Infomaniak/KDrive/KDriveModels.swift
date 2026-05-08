@@ -302,6 +302,41 @@ public struct KDriveCancelResource: Codable, Equatable, Sendable {
     }
 }
 
+/// Result returned after restoring a trashed kDrive file or directory.
+public enum KDriveRestoreTrashedFileResult: Codable, Equatable, Sendable {
+    /// The API completed the restore synchronously.
+    case bool(Bool)
+
+    /// The API started a cancellable restore operation.
+    case cancelResource(KDriveCancelResource)
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.singleValueContainer()
+
+        if let value = try? container.decode(Bool.self) {
+            self = .bool(value)
+        } else if let value = try? container.decode(KDriveCancelResource.self) {
+            self = .cancelResource(value)
+        } else {
+            throw DecodingError.dataCorruptedError(
+                in: container,
+                debugDescription: "Expected a boolean or kDrive cancel resource"
+            )
+        }
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.singleValueContainer()
+
+        switch self {
+        case let .bool(value):
+            try container.encode(value)
+        case let .cancelResource(value):
+            try container.encode(value)
+        }
+    }
+}
+
 /// UUID token returned after requesting an asynchronous kDrive archive build.
 public struct KDriveUUIDResource: Codable, Equatable, Sendable {
     /// Universally unique identifier of the built archive resource.
@@ -2305,6 +2340,21 @@ public struct MoveKDriveFileOptions: Encodable, Equatable, Sendable {
     public init(conflict: String? = nil, name: String? = nil) {
         self.conflict = conflict
         self.name = name
+    }
+}
+
+/// JSON body accepted by the kDrive restore trashed file endpoint.
+public struct RestoreKDriveTrashedFileOptions: Encodable, Equatable, Sendable {
+    /// Directory where the trashed file or directory should be restored.
+    public let destinationDirectoryId: Int
+
+    public enum CodingKeys: String, CodingKey {
+        case destinationDirectoryId = "destination_directory_id"
+    }
+
+    /// Creates options for restoring a trashed kDrive file or directory.
+    public init(destinationDirectoryId: Int) {
+        self.destinationDirectoryId = destinationDirectoryId
     }
 }
 

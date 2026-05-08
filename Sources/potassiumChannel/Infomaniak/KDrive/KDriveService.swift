@@ -541,6 +541,20 @@ public struct KDriveService: Sendable {
         )
     }
 
+    /// Restores a kDrive file or directory from trash using the v2 endpoint.
+    public func restoreTrashedFile(
+        driveId: Int,
+        fileId: Int,
+        destinationDirectoryId: Int
+    ) async throws -> InfomaniakResponse<KDriveRestoreTrashedFileResult> {
+        let body = try JSONEncoder().encode(
+            RestoreKDriveTrashedFileOptions(destinationDirectoryId: destinationDirectoryId)
+        )
+        return try await client.send(
+            KDriveRequests.restoreTrashedFile(driveId: driveId, fileId: fileId, body: body)
+        )
+    }
+
     /// Marks a kDrive file or directory as favorite using the v2 endpoint.
     public func favoriteFile(
         driveId: Int,
