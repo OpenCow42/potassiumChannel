@@ -980,3 +980,9 @@ not started
 - Added support for reading a Mail message from the `resource` URL returned by folder thread/message listing.
 - Added flexible message response handling and tests.
 - Verified with `swift test --filter Mail`.
+
+## 2026-05-09 — Mail mailbox quota route
+
+- Added support for reading Mail mailbox quota from discovered mailbox name and hosting/product id.
+- Added flexible quota response handling plus request, parser, and live current-user tests.
+- Verified with `swift test --filter Mail`.

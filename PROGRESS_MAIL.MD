@@ -62,3 +62,10 @@ The usable discovery path for the configured account is current-user scoped, not
 - Added message reading from returned message resources (`GET {message_resource}`).
 - Added flexible message payload handling and request-construction/decoding tests.
 - Verified with `swift test --filter Mail`.
+
+## Mail mailbox quota update
+
+- Added mailbox quota reading via `GET https://mail.infomaniak.com/api/mailbox/quotas?mailbox={mailbox_name}&product_id={hosting_id}&unit=B`.
+- Confirmed live API accepts `B`; the Mail OpenAPI spec documents storage units as `B`, `MB`, and `kB` on mailbox quota/settings-related parameters.
+- Added CLI support: `potassium mail quota --mailbox <mailbox-name> --product-id <hosting-id> [--unit B|kB|MB]`.
+- Verified with `swift test --filter Mail`.
