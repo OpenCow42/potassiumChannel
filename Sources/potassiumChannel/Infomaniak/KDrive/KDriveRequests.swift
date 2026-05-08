@@ -2396,4 +2396,15 @@ public enum KDriveRequests {
         )
     }
 
+    /// Creates a request that removes a kDrive file or directory from favorites using the v2 endpoint.
+    public static func unfavoriteFile(
+        driveId: Int,
+        fileId: Int
+    ) -> APIRequest<InfomaniakResponse<Bool>> {
+        APIRequest(
+            method: .delete,
+            path: "/2/drive/\(driveId)/files/\(fileId)/favorite"
+        )
+    }
+
 }
