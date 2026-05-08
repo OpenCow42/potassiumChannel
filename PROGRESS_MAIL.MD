@@ -10,9 +10,9 @@ The usable discovery path for the configured account is current-user scoped, not
 
 1. [x] `GET https://mail.infomaniak.com/api/mailbox?with=unseen,aliases` via `MailRequests.listUserMailboxes` and `MailService.mailHost(...).listUserMailboxes`.
 2. [x] `GET /1/my_ksuite/current?with=mail` via `MailRequests.currentMyKSuite` and `MailService.currentMyKSuite`.
-3. [ ] `GET https://mail.infomaniak.com/api/mail/{mailbox_uuid}` — read one mailbox by UUID.
-4. [ ] `GET https://mail.infomaniak.com/api/mail/{mailbox_uuid}/folder` or discovered folder resource route — list folders.
-5. [ ] `GET https://mail.infomaniak.com/api/mail/{mailbox_uuid}/folder/{folder_id}/threads` or discovered thread resource route — list folder threads/messages.
+3. [blocked] `GET https://mail.infomaniak.com/api/mail/{mailbox_uuid}` — direct mailbox profile path redirects to login (`302`) with the current token; mailbox profile data currently comes from `GET /api/mailbox`.
+4. [x] `GET https://mail.infomaniak.com/api/mail/{mailbox_uuid}/folder?with=ik-static` — list folders.
+5. [ ] `GET https://mail.infomaniak.com/api/mail/{mailbox_uuid}/folder/{folder_id}/message` — list folder threads/messages.
 6. [ ] `GET {message_resource}` — read a message from a returned resource URL.
 7. [ ] `GET https://mail.infomaniak.com/api/mailbox/quotas?mailbox={mailbox_name}&product_id={hosting_id}&unit=B` — read mailbox quota.
 8. [ ] `POST https://mail.infomaniak.com/api/mail/{mailbox_uuid}/draft` — create/send draft payload.
@@ -45,4 +45,8 @@ The usable discovery path for the configured account is current-user scoped, not
 - `GET /1/my_ksuite/current?with=mail`
   - Added current my kSuite request/service support.
   - Added flexible `CurrentMyKSuite` response wrapper.
+  - Verified with `swift test --filter Mail`.
+- `GET https://mail.infomaniak.com/api/mail/{mailbox_uuid}/folder?with=ik-static`
+  - Added mailbox folder request/service support.
+  - Added flexible `MailFolder` response wrapper.
   - Verified with `swift test --filter Mail`.
