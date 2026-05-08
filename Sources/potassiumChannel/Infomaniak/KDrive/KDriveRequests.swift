@@ -43,6 +43,16 @@ public enum KDriveRequests {
         )
     }
 
+    /// Creates a request that wakes a sleeping kDrive up.
+    public static func wakeDrive(
+        driveId: Int
+    ) -> APIRequest<InfomaniakResponse<Bool>> {
+        APIRequest(
+            method: .post,
+            path: "/3/drive/\(driveId)/wake"
+        )
+    }
+
     /// Creates a request that lists users associated with a specific kDrive.
     public static func listDriveUsers(
         driveId: Int,
@@ -122,6 +132,17 @@ public enum KDriveRequests {
             method: .get,
             path: "/2/drive/\(driveId)/users",
             queryParameters: queryParameters
+        )
+    }
+
+    /// Creates a request that fetches a single user associated with a specific kDrive using the v2 endpoint.
+    public static func getDriveUserV2(
+        driveId: Int,
+        userId: Int
+    ) -> APIRequest<InfomaniakResponse<KDriveDriveUser?>> {
+        APIRequest(
+            method: .get,
+            path: "/2/drive/\(driveId)/users/\(userId)"
         )
     }
 
@@ -784,6 +805,228 @@ public enum KDriveRequests {
         )
     }
 
+    /// Creates a request that gets multi-access information for a kDrive file or directory.
+    public static func getFileMultiAccess(
+        driveId: Int,
+        fileId: Int
+    ) -> APIRequest<InfomaniakResponse<KDriveFileMultiAccess>> {
+        APIRequest(
+            method: .get,
+            path: "/2/drive/\(driveId)/files/\(fileId)/access"
+        )
+    }
+
+    /// Creates a request that lists requested access entries for a kDrive file or directory.
+    public static func listFileAccessRequests(
+        driveId: Int,
+        fileId: Int
+    ) -> APIRequest<InfomaniakResponse<[KDriveFileAccessRequest]>> {
+        APIRequest(
+            method: .get,
+            path: "/2/drive/\(driveId)/files/\(fileId)/access/requests"
+        )
+    }
+
+    /// Creates a request that lists invitation access entries for a kDrive file or directory.
+    public static func listFileAccessInvitations(
+        driveId: Int,
+        fileId: Int
+    ) -> APIRequest<InfomaniakResponse<[KDriveFileAccessInvitation]>> {
+        APIRequest(
+            method: .get,
+            path: "/2/drive/\(driveId)/files/\(fileId)/access/invitations"
+        )
+    }
+
+    /// Creates a request that lists user access entries for a kDrive file or directory.
+    public static func listFileAccessUsers(
+        driveId: Int,
+        fileId: Int
+    ) -> APIRequest<InfomaniakResponse<[KDriveFileAccessUser]>> {
+        APIRequest(
+            method: .get,
+            path: "/2/drive/\(driveId)/files/\(fileId)/access/users"
+        )
+    }
+
+    /// Creates a request that lists team access entries for a kDrive file or directory.
+    public static func listFileAccessTeams(
+        driveId: Int,
+        fileId: Int
+    ) -> APIRequest<InfomaniakResponse<[KDriveFileAccessTeam]>> {
+        APIRequest(
+            method: .get,
+            path: "/2/drive/\(driveId)/files/\(fileId)/access/teams"
+        )
+    }
+
+    /// Creates a request that lists comments for a kDrive file or directory.
+    public static func listFileComments(
+        driveId: Int,
+        fileId: Int
+    ) -> APIRequest<InfomaniakResponse<[KDriveFileComment]>> {
+        APIRequest(
+            method: .get,
+            path: "/2/drive/\(driveId)/files/\(fileId)/comments"
+        )
+    }
+
+    /// Creates a request that adds a comment to a kDrive file or directory.
+    public static func addFileComment(
+        driveId: Int,
+        fileId: Int,
+        with includedResources: String? = nil,
+        body: Data
+    ) -> APIRequest<InfomaniakResponse<KDriveFileComment>> {
+        var queryParameters: [QueryParameter] = []
+
+        if let includedResources {
+            queryParameters.append(QueryParameter(name: "with", value: .string(includedResources)))
+        }
+
+        return APIRequest(
+            method: .post,
+            path: "/2/drive/\(driveId)/files/\(fileId)/comments",
+            queryParameters: queryParameters,
+            body: body
+        )
+    }
+
+    /// Creates a request that adds a reply to a kDrive file comment.
+    public static func addFileCommentReply(
+        driveId: Int,
+        fileId: Int,
+        commentId: Int,
+        with includedResources: String? = nil,
+        body: Data
+    ) -> APIRequest<InfomaniakResponse<KDriveFileComment>> {
+        var queryParameters: [QueryParameter] = []
+
+        if let includedResources {
+            queryParameters.append(QueryParameter(name: "with", value: .string(includedResources)))
+        }
+
+        return APIRequest(
+            method: .post,
+            path: "/2/drive/\(driveId)/files/\(fileId)/comments/\(commentId)",
+            queryParameters: queryParameters,
+            body: body
+        )
+    }
+
+    /// Creates a request that modifies a kDrive file comment.
+    public static func modifyFileComment(
+        driveId: Int,
+        fileId: Int,
+        commentId: String,
+        options: ModifyKDriveFileCommentOptions,
+        body: Data
+    ) -> APIRequest<InfomaniakResponse<Bool>> {
+        var queryParameters: [QueryParameter] = []
+
+        if let includedResources = options.includedResources {
+            queryParameters.append(QueryParameter(name: "with", value: .string(includedResources)))
+        }
+
+        return APIRequest(
+            method: .put,
+            path: "/2/drive/\(driveId)/files/\(fileId)/comments/\(commentId)",
+            queryParameters: queryParameters,
+            body: body
+        )
+    }
+
+    /// Creates a request that deletes a kDrive file comment.
+    public static func deleteFileComment(
+        driveId: Int,
+        fileId: Int,
+        commentId: String
+    ) -> APIRequest<InfomaniakResponse<Bool>> {
+        APIRequest(
+            method: .delete,
+            path: "/2/drive/\(driveId)/files/\(fileId)/comments/\(commentId)"
+        )
+    }
+
+    /// Creates a request that likes a kDrive file comment.
+    public static func likeFileComment(
+        driveId: Int,
+        fileId: Int,
+        commentId: String
+    ) -> APIRequest<InfomaniakResponse<Bool>> {
+        APIRequest(
+            method: .post,
+            path: "/2/drive/\(driveId)/files/\(fileId)/comments/\(commentId)/like"
+        )
+    }
+
+    /// Creates a request that unlikes a kDrive file comment.
+    public static func unlikeFileComment(
+        driveId: Int,
+        fileId: Int,
+        commentId: String
+    ) -> APIRequest<InfomaniakResponse<Bool>> {
+        APIRequest(
+            method: .post,
+            path: "/2/drive/\(driveId)/files/\(fileId)/comments/\(commentId)/unlike"
+        )
+    }
+
+    /// Creates a request that lists replies to a kDrive file comment.
+    public static func listFileCommentReplies(
+        driveId: Int,
+        fileId: Int,
+        commentId: String,
+        options: ListKDriveFileCommentRepliesOptions = ListKDriveFileCommentRepliesOptions()
+    ) -> APIRequest<PaginatedInfomaniakResponse<[KDriveFileComment]>> {
+        var queryParameters: [QueryParameter] = []
+
+        if let includedResources = options.includedResources {
+            queryParameters.append(QueryParameter(name: "with", value: .string(includedResources)))
+        }
+
+        if let page = options.page {
+            queryParameters.append(QueryParameter(name: "page", value: .integer(page)))
+        }
+
+        if let perPage = options.perPage {
+            queryParameters.append(QueryParameter(name: "per_page", value: .integer(perPage)))
+        }
+
+        if let total = options.total {
+            queryParameters.append(QueryParameter(name: "total", value: .bool(total)))
+        }
+
+        if let orderBy = options.orderBy {
+            queryParameters.append(QueryParameter(name: "order_by", value: .string(orderBy)))
+        }
+
+        if let order = options.order {
+            queryParameters.append(QueryParameter(name: "order", value: .string(order)))
+        }
+
+        for (field, direction) in options.orderFor.sorted(by: { $0.key < $1.key }) {
+            queryParameters.append(QueryParameter(name: "order_for[\(field)]", value: .string(direction)))
+        }
+
+        return APIRequest(
+            method: .get,
+            path: "/2/drive/\(driveId)/files/\(fileId)/comments/\(commentId)",
+            queryParameters: queryParameters
+        )
+    }
+
+    /// Creates a request that gets dropbox metadata for a kDrive file or directory.
+    public static func getFileDropbox(
+        driveId: Int,
+        fileId: Int
+    ) -> APIRequest<InfomaniakResponse<KDriveFileDropbox?>> {
+        APIRequest(
+            method: .get,
+            path: "/2/drive/\(driveId)/files/\(fileId)/dropbox"
+        )
+    }
+
     /// Creates a request that gets a child kDrive file or directory by name.
     public static func getFileByName(
         driveId: Int,
@@ -802,6 +1045,69 @@ public enum KDriveRequests {
         return APIRequest(
             method: .get,
             path: "/3/drive/\(driveId)/files/\(fileId)/name",
+            queryParameters: queryParameters
+        )
+    }
+
+    /// Creates a request that lists activities for the root of a kDrive.
+    public static func listRootFileActivitiesV3(
+        driveId: Int,
+        with includedResources: String? = nil,
+        options: ListKDriveRootFileActivitiesV3Options = ListKDriveRootFileActivitiesV3Options()
+    ) -> APIRequest<CursorPaginatedInfomaniakResponse<[KDriveDriveActivity]>> {
+        var queryParameters: [QueryParameter] = []
+
+        if let includedResources {
+            queryParameters.append(QueryParameter(name: "with", value: .string(includedResources)))
+        }
+
+        if let cursor = options.cursor {
+            queryParameters.append(QueryParameter(name: "cursor", value: .string(cursor)))
+        }
+
+        if let limit = options.limit {
+            queryParameters.append(QueryParameter(name: "limit", value: .integer(limit)))
+        }
+
+        if !options.orderBy.isEmpty {
+            queryParameters.append(QueryParameter(name: "order_by", value: .strings(options.orderBy)))
+        }
+
+        if let order = options.order {
+            queryParameters.append(QueryParameter(name: "order", value: .string(order)))
+        }
+
+        for (field, direction) in options.orderFor.sorted(by: { $0.key < $1.key }) {
+            queryParameters.append(QueryParameter(name: "order_for[\(field)]", value: .string(direction)))
+        }
+
+        if !options.actions.isEmpty {
+            queryParameters.append(QueryParameter(name: "actions", value: .strings(options.actions)))
+        }
+
+        if let depth = options.depth {
+            queryParameters.append(QueryParameter(name: "depth", value: .string(depth)))
+        }
+
+        if let from = options.from {
+            queryParameters.append(QueryParameter(name: "from", value: .integer(from)))
+        }
+
+        if let terms = options.terms {
+            queryParameters.append(QueryParameter(name: "terms", value: .string(terms)))
+        }
+
+        if let until = options.until {
+            queryParameters.append(QueryParameter(name: "until", value: .integer(until)))
+        }
+
+        if !options.users.isEmpty {
+            queryParameters.append(QueryParameter(name: "users", value: .integers(options.users)))
+        }
+
+        return APIRequest(
+            method: .get,
+            path: "/3/drive/\(driveId)/files/activities",
             queryParameters: queryParameters
         )
     }
@@ -967,6 +1273,81 @@ public enum KDriveRequests {
             path: "/2/drive/\(driveId)/files/\(fileId)/download",
             queryParameters: queryParameters,
             headers: headers
+        )
+    }
+
+    /// Creates a request that gets a kDrive file thumbnail using the v2 endpoint.
+    public static func getFileThumbnail(
+        driveId: Int,
+        fileId: Int,
+        options: GetKDriveFileThumbnailOptions = GetKDriveFileThumbnailOptions()
+    ) -> APIRequest<KDriveBinaryResponse> {
+        var queryParameters: [QueryParameter] = []
+
+        if let height = options.height {
+            queryParameters.append(QueryParameter(name: "height", value: .integer(height)))
+        }
+
+        if let width = options.width {
+            queryParameters.append(QueryParameter(name: "width", value: .integer(width)))
+        }
+
+        return APIRequest(
+            method: .get,
+            path: "/2/drive/\(driveId)/files/\(fileId)/thumbnail",
+            queryParameters: queryParameters,
+            headers: [HTTPHeader(name: "Accept", value: "image/*")]
+        )
+    }
+
+    /// Creates a request that gets a kDrive file preview using the v2 endpoint.
+    public static func getFilePreview(
+        driveId: Int,
+        fileId: Int,
+        options: GetKDriveFilePreviewOptions = GetKDriveFilePreviewOptions()
+    ) -> APIRequest<KDriveBinaryResponse> {
+        var queryParameters: [QueryParameter] = []
+        var headers: [HTTPHeader] = [HTTPHeader(name: "Accept", value: "image/*")]
+
+        if let conversionFormat = options.conversionFormat {
+            queryParameters.append(QueryParameter(name: "as", value: .string(conversionFormat)))
+        }
+
+        if let height = options.height {
+            queryParameters.append(QueryParameter(name: "height", value: .integer(height)))
+        }
+
+        if let quality = options.quality {
+            queryParameters.append(QueryParameter(name: "quality", value: .integer(quality)))
+        }
+
+        if let width = options.width {
+            queryParameters.append(QueryParameter(name: "width", value: .integer(width)))
+        }
+
+        if let password = options.password {
+            headers.append(HTTPHeader(name: "x-kdrive-file-password", value: password))
+        }
+
+        return APIRequest(
+            method: .get,
+            path: "/2/drive/\(driveId)/files/\(fileId)/preview",
+            queryParameters: queryParameters,
+            headers: headers
+        )
+    }
+
+    /// Creates a request that checks whether kDrive file or directory identifiers still exist.
+    public static func checkFilesExistence(
+        driveId: Int,
+        fileIds: [Int]
+    ) -> APIRequest<InfomaniakResponse<[KDriveFilesExistenceResult]>> {
+        let body = try! JSONEncoder().encode(KDriveFilesExistenceRequestBody(ids: fileIds))
+
+        return APIRequest(
+            method: .post,
+            path: "/2/drive/\(driveId)/files/exists",
+            body: body
         )
     }
 
@@ -1392,6 +1773,62 @@ public enum KDriveRequests {
         )
     }
 
+    /// Creates a request that updates trash settings for a single kDrive.
+    public static func updateTrashSettings(
+        driveId: Int,
+        options: UpdateKDriveTrashSettingsOptions
+    ) throws -> APIRequest<InfomaniakResponse<Bool>> {
+        let body = try JSONEncoder().encode(options)
+
+        return APIRequest(
+            method: .put,
+            path: "/2/drive/\(driveId)/settings/trash",
+            body: body
+        )
+    }
+
+    /// Creates a request that updates artificial-intelligence scan settings for a single kDrive.
+    public static func updateAISettings(
+        driveId: Int,
+        options: UpdateKDriveAISettingsOptions
+    ) throws -> APIRequest<InfomaniakResponse<Bool>> {
+        let body = try JSONEncoder().encode(options)
+
+        return APIRequest(
+            method: .put,
+            path: "/2/drive/\(driveId)/settings/ai",
+            body: body
+        )
+    }
+
+    /// Creates a request that updates share-link customization settings for a single kDrive.
+    public static func updateShareLinkSettings(
+        driveId: Int,
+        options: UpdateKDriveShareLinkSettingsOptions
+    ) throws -> APIRequest<InfomaniakResponse<Bool>> {
+        let body = try JSONEncoder().encode(options)
+
+        return APIRequest(
+            method: .put,
+            path: "/2/drive/\(driveId)/settings/link",
+            body: body
+        )
+    }
+
+    /// Creates a request that updates office document integration settings for a single kDrive.
+    public static func updateOfficeSettings(
+        driveId: Int,
+        options: UpdateKDriveOfficeSettingsOptions
+    ) throws -> APIRequest<InfomaniakResponse<Bool>> {
+        let body = try JSONEncoder().encode(options)
+
+        return APIRequest(
+            method: .put,
+            path: "/2/drive/\(driveId)/settings/office",
+            body: body
+        )
+    }
+
     /// Creates a request that lists categories configured on a kDrive.
     public static func listCategories(
         driveId: Int
@@ -1516,6 +1953,17 @@ public enum KDriveRequests {
             method: .get,
             path: "/2/drive/\(driveId)/files/\(fileId)/versions",
             queryParameters: queryParameters
+        )
+    }
+
+    /// Creates a request that deletes all versions for a kDrive file using the deprecated v2 endpoint.
+    public static func deleteFileVersionsV2(
+        driveId: Int,
+        fileId: Int
+    ) -> APIRequest<InfomaniakResponse<Bool>> {
+        APIRequest(
+            method: .delete,
+            path: "/2/drive/\(driveId)/files/\(fileId)/versions"
         )
     }
 
@@ -1880,6 +2328,29 @@ public enum KDriveRequests {
         )
     }
 
+    /// Creates a request that gets a generated kDrive activity report.
+    public static func getActivityReport(
+        driveId: Int,
+        reportId: Int
+    ) -> APIRequest<InfomaniakResponse<KDriveActivityReport>> {
+        APIRequest(
+            method: .get,
+            path: "/2/drive/\(driveId)/activities/reports/\(reportId)"
+        )
+    }
+
+    /// Creates a request that exports a generated kDrive activity report as CSV data.
+    public static func exportActivityReport(
+        driveId: Int,
+        reportId: Int
+    ) -> APIRequest<Data> {
+        APIRequest(
+            method: .get,
+            path: "/2/drive/\(driveId)/activities/reports/\(reportId)/export",
+            headers: [HTTPHeader(name: "Accept", value: "text/csv")]
+        )
+    }
+
     /// Creates a request that lists external imports for a kDrive.
     public static func listImports(
         driveId: Int,
@@ -2000,6 +2471,19 @@ public enum KDriveRequests {
             method: .get,
             path: "/2/drive/preferences",
             queryParameters: queryParameters
+        )
+    }
+
+    /// Creates a request that updates preferences for the authenticated kDrive user.
+    public static func setUserPreferences(
+        options: SetKDriveUserPreferencesOptions
+    ) throws -> APIRequest<InfomaniakResponse<Bool>> {
+        let body = try JSONEncoder().encode(options)
+
+        return APIRequest(
+            method: .patch,
+            path: "/2/drive/preferences",
+            body: body
         )
     }
 
@@ -2138,6 +2622,54 @@ public enum KDriveRequests {
         )
     }
 
+    /// Creates a request that moves a kDrive file or directory into another directory.
+    public static func moveFileV3(
+        driveId: Int,
+        fileId: Int,
+        destinationDirectoryId: Int,
+        body: Data
+    ) -> APIRequest<InfomaniakResponse<KDriveCancelResource>> {
+        APIRequest(
+            method: .post,
+            path: "/3/drive/\(driveId)/files/\(fileId)/move/\(destinationDirectoryId)",
+            body: body
+        )
+    }
+
+    /// Creates a request that duplicates a kDrive file or directory in place.
+    public static func duplicateFileV3(
+        driveId: Int,
+        fileId: Int,
+        with includedResources: String? = nil,
+        body: Data
+    ) -> APIRequest<InfomaniakResponse<KDriveFileItem>> {
+        var queryParameters: [QueryParameter] = []
+
+        if let includedResources {
+            queryParameters.append(QueryParameter(name: "with", value: .string(includedResources)))
+        }
+
+        return APIRequest(
+            method: .post,
+            path: "/3/drive/\(driveId)/files/\(fileId)/duplicate",
+            queryParameters: queryParameters,
+            body: body
+        )
+    }
+
+    /// Creates a request that updates the modification date of a kDrive file.
+    public static func updateFileLastModified(
+        driveId: Int,
+        fileId: Int,
+        body: Data
+    ) -> APIRequest<InfomaniakResponse<Bool>> {
+        APIRequest(
+            method: .post,
+            path: "/3/drive/\(driveId)/files/\(fileId)/last-modified",
+            body: body
+        )
+    }
+
     /// Creates a request that moves a kDrive file to trash using the v2 endpoint.
     public static func trashFileV2(
         driveId: Int,
@@ -2146,6 +2678,64 @@ public enum KDriveRequests {
         APIRequest(
             method: .delete,
             path: "/2/drive/\(driveId)/files/\(fileId)"
+        )
+    }
+
+    /// Creates a request that permanently removes a kDrive file or directory from trash using the v2 endpoint.
+    public static func removeTrashedFile(
+        driveId: Int,
+        fileId: Int
+    ) -> APIRequest<InfomaniakResponse<Bool>> {
+        APIRequest(
+            method: .delete,
+            path: "/2/drive/\(driveId)/trash/\(fileId)"
+        )
+    }
+
+    /// Creates a request that undoes a cancellable kDrive action using the v2 endpoint.
+    public static func undoAction(
+        driveId: Int,
+        body: Data
+    ) -> APIRequest<InfomaniakResponse<KDriveUndoActionResult>> {
+        APIRequest(
+            method: .post,
+            path: "/2/drive/\(driveId)/cancel",
+            body: body
+        )
+    }
+
+    /// Creates a request that restores a kDrive file or directory from trash using the v2 endpoint.
+    public static func restoreTrashedFile(
+        driveId: Int,
+        fileId: Int,
+        body: Data
+    ) -> APIRequest<InfomaniakResponse<KDriveRestoreTrashedFileResult>> {
+        APIRequest(
+            method: .post,
+            path: "/2/drive/\(driveId)/trash/\(fileId)/restore",
+            body: body
+        )
+    }
+
+    /// Creates a request that marks a kDrive file or directory as favorite using the v2 endpoint.
+    public static func favoriteFile(
+        driveId: Int,
+        fileId: Int
+    ) -> APIRequest<InfomaniakResponse<Bool>> {
+        APIRequest(
+            method: .post,
+            path: "/2/drive/\(driveId)/files/\(fileId)/favorite"
+        )
+    }
+
+    /// Creates a request that removes a kDrive file or directory from favorites using the v2 endpoint.
+    public static func unfavoriteFile(
+        driveId: Int,
+        fileId: Int
+    ) -> APIRequest<InfomaniakResponse<Bool>> {
+        APIRequest(
+            method: .delete,
+            path: "/2/drive/\(driveId)/files/\(fileId)/favorite"
         )
     }
 

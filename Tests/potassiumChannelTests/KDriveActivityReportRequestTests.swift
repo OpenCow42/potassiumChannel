@@ -24,6 +24,83 @@ struct KDriveActivityReportRequestTests {
         #expect(queryItems.contains(URLQueryItem(name: "per_page", value: "25")))
     }
 
+    @Test("kDrive activity report request matches the OpenAPI path")
+    func kDriveActivityReportRequestMatchesOpenAPIShape() async throws {
+        let client = InfomaniakAPIClient(
+            configuration: APIClientConfiguration(
+                baseURL: URL(string: "https://api.infomaniak.com")!,
+                bearerToken: "test-token"
+            )
+        )
+        let request = KDriveRequests.getActivityReport(driveId: 100, reportId: 42)
+
+        let urlRequest = try await client.makeURLRequest(for: request)
+
+        #expect(urlRequest.httpMethod == "GET")
+        #expect(urlRequest.value(forHTTPHeaderField: "Authorization") == "Bearer test-token")
+        #expect(urlRequest.url?.path == "/2/drive/100/activities/reports/42")
+        #expect(URLComponents(url: try #require(urlRequest.url), resolvingAgainstBaseURL: false)?.queryItems == [])
+    }
+
+    @Test("kDrive export activity report request matches the OpenAPI path and CSV accept header")
+    func kDriveExportActivityReportRequestMatchesOpenAPIShape() async throws {
+        let client = InfomaniakAPIClient(
+            configuration: APIClientConfiguration(
+                baseURL: URL(string: "https://api.infomaniak.com")!,
+                bearerToken: "test-token"
+            )
+        )
+        let request = KDriveRequests.exportActivityReport(driveId: 100, reportId: 42)
+
+        let urlRequest = try await client.makeURLRequest(for: request)
+
+        #expect(urlRequest.httpMethod == "GET")
+        #expect(urlRequest.value(forHTTPHeaderField: "Authorization") == "Bearer test-token")
+        #expect(urlRequest.value(forHTTPHeaderField: "Accept") == "text/csv")
+        #expect(urlRequest.url?.path == "/2/drive/100/activities/reports/42/export")
+        #expect(URLComponents(url: try #require(urlRequest.url), resolvingAgainstBaseURL: false)?.queryItems == [])
+    }
+
+    @Test("kDrive activity report required path parameters are encoded into the URL")
+    func kDriveActivityReportRequiredParametersAreNotOmitted() async throws {
+        let client = InfomaniakAPIClient(
+            configuration: APIClientConfiguration(
+                baseURL: URL(string: "https://api.infomaniak.com")!,
+                bearerToken: "test-token"
+            )
+        )
+        let request = KDriveRequests.getActivityReport(driveId: 123, reportId: 456)
+
+        let urlRequest = try await client.makeURLRequest(for: request)
+        let path = try #require(urlRequest.url?.path)
+
+        #expect(path == "/2/drive/123/activities/reports/456")
+        #expect(!path.contains("{drive_id}"))
+        #expect(!path.contains("{report_id}"))
+        #expect(urlRequest.url?.pathComponents.contains("123") == true)
+        #expect(urlRequest.url?.pathComponents.contains("456") == true)
+    }
+
+    @Test("kDrive export activity report required path parameters are encoded into the URL")
+    func kDriveExportActivityReportRequiredParametersAreNotOmitted() async throws {
+        let client = InfomaniakAPIClient(
+            configuration: APIClientConfiguration(
+                baseURL: URL(string: "https://api.infomaniak.com")!,
+                bearerToken: "test-token"
+            )
+        )
+        let request = KDriveRequests.exportActivityReport(driveId: 123, reportId: 456)
+
+        let urlRequest = try await client.makeURLRequest(for: request)
+        let path = try #require(urlRequest.url?.path)
+
+        #expect(path == "/2/drive/123/activities/reports/456/export")
+        #expect(!path.contains("{drive_id}"))
+        #expect(!path.contains("{report_id}"))
+        #expect(urlRequest.url?.pathComponents.contains("123") == true)
+        #expect(urlRequest.url?.pathComponents.contains("456") == true)
+    }
+
     @Test("kDrive activity reports response decodes using Swift API names")
     func kDriveActivityReportsResponseDecodes() throws {
         let json = """
@@ -65,5 +142,42 @@ struct KDriveActivityReportRequestTests {
         #expect(response.data.first?.status == "done")
         #expect(response.data.first?.generatedBy.displayName == "Ada Lovelace")
         #expect(response.data.first?.downloadUrl == "https://example.com/report.csv")
+    }
+
+    @Test("kDrive activity report response decodes using Swift API names")
+    func kDriveActivityReportResponseDecodes() throws {
+        let json = """
+        {
+          "result": "success",
+          "data": {
+            "id": 1,
+            "status": "done",
+            "size": "2048",
+            "generated_by": {
+              "id": 42,
+              "display_name": "Ada Lovelace",
+              "first_name": "Ada",
+              "last_name": "Lovelace",
+              "email": "ada@example.com",
+              "is_sso": false,
+              "avatar": null,
+              "deleted_at": null
+            },
+            "download_url": "https://example.com/report.csv",
+            "created_at": 1710000000,
+            "updated_at": 1710000100
+          }
+        }
+        """.data(using: .utf8)!
+        let decoder = JSONDecoder()
+        decoder.keyDecodingStrategy = .convertFromSnakeCase
+
+        let response = try decoder.decode(InfomaniakResponse<KDriveActivityReport>.self, from: json)
+
+        #expect(response.result == "success")
+        #expect(response.data.id == 1)
+        #expect(response.data.status == "done")
+        #expect(response.data.generatedBy.displayName == "Ada Lovelace")
+        #expect(response.data.downloadUrl == "https://example.com/report.csv")
     }
 }
