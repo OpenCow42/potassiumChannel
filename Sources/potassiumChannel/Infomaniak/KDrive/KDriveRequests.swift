@@ -1787,6 +1787,20 @@ public enum KDriveRequests {
         )
     }
 
+    /// Creates a request that updates office document integration settings for a single kDrive.
+    public static func updateOfficeSettings(
+        driveId: Int,
+        options: UpdateKDriveOfficeSettingsOptions
+    ) throws -> APIRequest<InfomaniakResponse<Bool>> {
+        let body = try JSONEncoder().encode(options)
+
+        return APIRequest(
+            method: .put,
+            path: "/2/drive/\(driveId)/settings/office",
+            body: body
+        )
+    }
+
     /// Creates a request that lists categories configured on a kDrive.
     public static func listCategories(
         driveId: Int

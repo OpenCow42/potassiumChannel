@@ -1,3 +1,10 @@
+## 2026-05-08 — kDrive v2 update office settings route
+
+- Added shared support for drive-level mutation `PUT /2/drive/{drive_id}/settings/office` via `KDriveRequests.updateOfficeSettings` and `KDriveService.updateOfficeSettings`, returning `InfomaniakResponse<Bool>`.
+- Added `UpdateKDriveOfficeSettingsOptions(form:presentation:spreadsheet:text:)` with optional JSON fields for `365`/`onlyoffice` office app selections.
+- Added request/response coverage for PUT method, exact OpenAPI path, auth/JSON headers, empty query, optional body field encoding, required path parameters, and boolean success decoding.
+- Validation: `swift test --filter KDriveUpdateOfficeSettingsRequestTests` passed (4 tests).
+
 ## 2026-05-08 — kDrive v2 update trash settings route
 
 - Added shared support for drive-level mutation `PUT /2/drive/{drive_id}/settings/trash` via `KDriveRequests.updateTrashSettings` and `KDriveService.updateTrashSettings`, returning `InfomaniakResponse<Bool>`.

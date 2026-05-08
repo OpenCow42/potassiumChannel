@@ -1902,6 +1902,29 @@ public struct UpdateKDriveTrashSettingsOptions: Encodable, Equatable, Sendable {
     }
 }
 
+/// JSON body accepted by the endpoint that updates kDrive office document integration settings.
+public struct UpdateKDriveOfficeSettingsOptions: Encodable, Equatable, Sendable {
+    /// Default application for forms.
+    public let form: String?
+
+    /// Default application for presentations.
+    public let presentation: String?
+
+    /// Default application for spreadsheets.
+    public let spreadsheet: String?
+
+    /// Default application for text documents.
+    public let text: String?
+
+    /// Creates options for updating office document integration settings.
+    public init(form: String? = nil, presentation: String? = nil, spreadsheet: String? = nil, text: String? = nil) {
+        self.form = form
+        self.presentation = presentation
+        self.spreadsheet = spreadsheet
+        self.text = text
+    }
+}
+
 /// Office document integration settings for a kDrive.
 public struct KDriveOfficeSettings: Codable, Equatable, Sendable {
     /// Default application for presentations.

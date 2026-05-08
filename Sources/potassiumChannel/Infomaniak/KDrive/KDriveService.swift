@@ -895,6 +895,19 @@ public struct KDriveService: Sendable {
         )
     }
 
+    /// Updates office document integration settings for a single kDrive.
+    public func updateOfficeSettings(
+        driveId: Int,
+        options: UpdateKDriveOfficeSettingsOptions
+    ) async throws -> InfomaniakResponse<Bool> {
+        try await client.send(
+            KDriveRequests.updateOfficeSettings(
+                driveId: driveId,
+                options: options
+            )
+        )
+    }
+
     /// Lists categories configured on a kDrive.
     public func listCategories(
         driveId: Int
