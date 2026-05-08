@@ -403,6 +403,21 @@ public struct KDriveService: Sendable {
         )
     }
 
+    /// Likes a kDrive file comment.
+    public func likeFileComment(
+        driveId: Int,
+        fileId: Int,
+        commentId: String
+    ) async throws -> InfomaniakResponse<Bool> {
+        try await client.send(
+            KDriveRequests.likeFileComment(
+                driveId: driveId,
+                fileId: fileId,
+                commentId: commentId
+            )
+        )
+    }
+
     /// Lists replies to a kDrive file comment.
     public func listFileCommentReplies(
         driveId: Int,

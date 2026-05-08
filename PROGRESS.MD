@@ -1,3 +1,9 @@
+## 2026-05-08 — kDrive v2 like file comment route
+
+- Added shared support for mutation `POST /2/drive/{drive_id}/files/{file_id}/comments/{comment_id}/like` via `KDriveRequests.likeFileComment` and `KDriveService.likeFileComment`, returning `InfomaniakResponse<Bool>`.
+- Added request/response coverage for POST method, exact OpenAPI path with `/like`, auth header, no body/query behavior, required path substitution, and boolean response decoding.
+- Validation: `swift test --filter KDriveLikeFileCommentRequestTests` passed (3 tests).
+
 ## 2026-05-08 — kDrive v2 delete file comment route
 
 - Added shared support for mutation `DELETE /2/drive/{drive_id}/files/{file_id}/comments/{comment_id}` via `KDriveRequests.deleteFileComment` and `KDriveService.deleteFileComment`, returning `InfomaniakResponse<Bool>`.
