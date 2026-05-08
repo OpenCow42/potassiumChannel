@@ -1,3 +1,10 @@
+## 2026-05-08 — kDrive root file activities v3 route
+
+- Added shared support for non-destructive `GET /3/drive/{drive_id}/files/activities` via `KDriveRequests.listRootFileActivitiesV3` and `KDriveService.listRootFileActivitiesV3`, reusing `KDriveDriveActivity` and `CursorPaginatedInfomaniakResponse`.
+- Added `ListKDriveRootFileActivitiesV3Options` for root activity filters including `with`, cursor/limit, repeated `order_by`, `actions`, `users`, `order_for[...]`, depth, terms, and date bounds.
+- Added request/decoding coverage for method, OpenAPI path, auth header, representative repeated query encoding, and response decoding.
+- Validation: `swift test --filter KDriveRootFileActivityV3RequestTests` passed (2 tests); full `swift test` passed.
+
 ## 2026-05-08 — kDrive v2 file preview route
 
 - Added shared raw-data support for `GET /2/drive/{drive_id}/files/{file_id}/preview` via `KDriveRequests.getFilePreview` and `KDriveService.getFilePreview`, with optional `as`, `height`, `quality`, `width`, and `x-kdrive-file-password` support plus `Accept: image/*`.

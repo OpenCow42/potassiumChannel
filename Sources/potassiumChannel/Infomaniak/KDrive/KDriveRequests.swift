@@ -817,6 +817,69 @@ public enum KDriveRequests {
         )
     }
 
+    /// Creates a request that lists activities for the root of a kDrive.
+    public static func listRootFileActivitiesV3(
+        driveId: Int,
+        with includedResources: String? = nil,
+        options: ListKDriveRootFileActivitiesV3Options = ListKDriveRootFileActivitiesV3Options()
+    ) -> APIRequest<CursorPaginatedInfomaniakResponse<[KDriveDriveActivity]>> {
+        var queryParameters: [QueryParameter] = []
+
+        if let includedResources {
+            queryParameters.append(QueryParameter(name: "with", value: .string(includedResources)))
+        }
+
+        if let cursor = options.cursor {
+            queryParameters.append(QueryParameter(name: "cursor", value: .string(cursor)))
+        }
+
+        if let limit = options.limit {
+            queryParameters.append(QueryParameter(name: "limit", value: .integer(limit)))
+        }
+
+        if !options.orderBy.isEmpty {
+            queryParameters.append(QueryParameter(name: "order_by", value: .strings(options.orderBy)))
+        }
+
+        if let order = options.order {
+            queryParameters.append(QueryParameter(name: "order", value: .string(order)))
+        }
+
+        for (field, direction) in options.orderFor.sorted(by: { $0.key < $1.key }) {
+            queryParameters.append(QueryParameter(name: "order_for[\(field)]", value: .string(direction)))
+        }
+
+        if !options.actions.isEmpty {
+            queryParameters.append(QueryParameter(name: "actions", value: .strings(options.actions)))
+        }
+
+        if let depth = options.depth {
+            queryParameters.append(QueryParameter(name: "depth", value: .string(depth)))
+        }
+
+        if let from = options.from {
+            queryParameters.append(QueryParameter(name: "from", value: .integer(from)))
+        }
+
+        if let terms = options.terms {
+            queryParameters.append(QueryParameter(name: "terms", value: .string(terms)))
+        }
+
+        if let until = options.until {
+            queryParameters.append(QueryParameter(name: "until", value: .integer(until)))
+        }
+
+        if !options.users.isEmpty {
+            queryParameters.append(QueryParameter(name: "users", value: .integers(options.users)))
+        }
+
+        return APIRequest(
+            method: .get,
+            path: "/3/drive/\(driveId)/files/activities",
+            queryParameters: queryParameters
+        )
+    }
+
     /// Creates a request that lists activities for a kDrive file or directory.
     public static func listFileActivities(
         driveId: Int,

@@ -276,6 +276,21 @@ public struct KDriveService: Sendable {
         )
     }
 
+    /// Lists activities for the root of a kDrive.
+    public func listRootFileActivitiesV3(
+        driveId: Int,
+        with includedResources: String? = nil,
+        options: ListKDriveRootFileActivitiesV3Options = ListKDriveRootFileActivitiesV3Options()
+    ) async throws -> CursorPaginatedInfomaniakResponse<[KDriveDriveActivity]> {
+        try await client.send(
+            KDriveRequests.listRootFileActivitiesV3(
+                driveId: driveId,
+                with: includedResources,
+                options: options
+            )
+        )
+    }
+
     /// Lists activities for a kDrive file or directory.
     public func listFileActivities(
         driveId: Int,
