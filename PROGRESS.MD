@@ -1,3 +1,10 @@
+## 2026-05-08 — kDrive v2 file multi-access route
+
+- Added shared support for non-destructive `GET /2/drive/{drive_id}/files/{file_id}/access` via `KDriveRequests.getFileMultiAccess` and `KDriveService.getFileMultiAccess`.
+- Added `KDriveFileMultiAccess` with a lossless `KDriveJSONValue` payload so the varying access sections round-trip without dropping unknown access-type fields.
+- Added request/decoding coverage for method, exact OpenAPI path, auth header, no-query behavior, required path substitution, and representative variable access payload decoding.
+- Validation: `swift test --filter KDriveFileMultiAccessRequestTests` passed (3 tests).
+
 ## 2026-05-08 — kDrive root file activities v3 route
 
 - Added shared support for non-destructive `GET /3/drive/{drive_id}/files/activities` via `KDriveRequests.listRootFileActivitiesV3` and `KDriveService.listRootFileActivitiesV3`, reusing `KDriveDriveActivity` and `CursorPaginatedInfomaniakResponse`.
