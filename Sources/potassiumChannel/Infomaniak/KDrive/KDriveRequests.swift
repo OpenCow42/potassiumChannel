@@ -828,6 +828,17 @@ public enum KDriveRequests {
         )
     }
 
+    /// Creates a request that lists user access entries for a kDrive file or directory.
+    public static func listFileAccessUsers(
+        driveId: Int,
+        fileId: Int
+    ) -> APIRequest<InfomaniakResponse<[KDriveFileAccessUser]>> {
+        APIRequest(
+            method: .get,
+            path: "/2/drive/\(driveId)/files/\(fileId)/access/users"
+        )
+    }
+
     /// Creates a request that lists team access entries for a kDrive file or directory.
     public static func listFileAccessTeams(
         driveId: Int,

@@ -294,6 +294,16 @@ public struct KDriveService: Sendable {
         )
     }
 
+    /// Lists user access entries for a kDrive file or directory.
+    public func listFileAccessUsers(
+        driveId: Int,
+        fileId: Int
+    ) async throws -> InfomaniakResponse<[KDriveFileAccessUser]> {
+        try await client.send(
+            KDriveRequests.listFileAccessUsers(driveId: driveId, fileId: fileId)
+        )
+    }
+
     /// Lists team access entries for a kDrive file or directory.
     public func listFileAccessTeams(
         driveId: Int,
