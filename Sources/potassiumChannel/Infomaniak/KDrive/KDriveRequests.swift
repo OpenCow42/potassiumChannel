@@ -936,6 +936,18 @@ public enum KDriveRequests {
         )
     }
 
+    /// Creates a request that deletes a kDrive file comment.
+    public static func deleteFileComment(
+        driveId: Int,
+        fileId: Int,
+        commentId: String
+    ) -> APIRequest<InfomaniakResponse<Bool>> {
+        APIRequest(
+            method: .delete,
+            path: "/2/drive/\(driveId)/files/\(fileId)/comments/\(commentId)"
+        )
+    }
+
     /// Creates a request that lists replies to a kDrive file comment.
     public static func listFileCommentReplies(
         driveId: Int,

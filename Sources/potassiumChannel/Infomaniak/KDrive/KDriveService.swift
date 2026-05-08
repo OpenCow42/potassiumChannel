@@ -388,6 +388,21 @@ public struct KDriveService: Sendable {
         )
     }
 
+    /// Deletes a kDrive file comment.
+    public func deleteFileComment(
+        driveId: Int,
+        fileId: Int,
+        commentId: String
+    ) async throws -> InfomaniakResponse<Bool> {
+        try await client.send(
+            KDriveRequests.deleteFileComment(
+                driveId: driveId,
+                fileId: fileId,
+                commentId: commentId
+            )
+        )
+    }
+
     /// Lists replies to a kDrive file comment.
     public func listFileCommentReplies(
         driveId: Int,
