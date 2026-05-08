@@ -946,3 +946,18 @@ not started
 - Added typed support for `POST /2/drive/{drive_id}/files/exists` as `KDriveRequests.checkFilesExistence(driveId:fileIds:)` and `KDriveService.checkFilesExistence(driveId:fileIds:)`.
 - Added `KDriveFilesExistenceRequestBody` and `KDriveFilesExistenceResult` models for the required `ids` JSON body and per-id existence response rows.
 - Added unit coverage for method/path/auth/JSON headers, required body encoding, empty query parameters, and response decoding.
+
+## 2026-05-08 — Infomaniak Mail mailboxes route
+
+- Branch: `feat/mail`.
+- Added Mail networking support for `GET /1/mail_hostings/{mail_hosting_id}/mailboxes` as `MailRequests.listMailboxes` and `MailService.listMailboxes`.
+- Added `MailMailbox` as a lossless mailbox payload wrapper and `ListMailboxesOptions` for search, filtering, includes, projection, pagination, and ordering query parameters.
+- Added unit coverage for OpenAPI path, authorization, query encoding, required path interpolation, and paginated response decoding.
+- Verified with `swift test --filter MailListMailboxesRequestTests`.
+
+## 2026-05-08 — Mail mailbox discovery routes
+
+- Added request/service support for current-user Mail discovery via `GET https://mail.infomaniak.com/api/mailbox?with=unseen,aliases`.
+- Added request/service support for current my kSuite mailbox details via `GET /1/my_ksuite/current?with=mail`.
+- Added flexible response wrappers and unit coverage for request construction and response decoding.
+- Verified with `swift test --filter Mail`.
