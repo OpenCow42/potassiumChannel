@@ -331,6 +331,24 @@ public struct KDriveService: Sendable {
         )
     }
 
+    /// Adds a comment to a kDrive file or directory.
+    public func addFileComment(
+        driveId: Int,
+        fileId: Int,
+        body: String,
+        with includedResources: String? = nil
+    ) async throws -> InfomaniakResponse<KDriveFileComment> {
+        let requestBody = try JSONEncoder().encode(AddKDriveFileCommentOptions(body: body))
+        return try await client.send(
+            KDriveRequests.addFileComment(
+                driveId: driveId,
+                fileId: fileId,
+                with: includedResources,
+                body: requestBody
+            )
+        )
+    }
+
     /// Gets dropbox metadata for a kDrive file or directory.
     public func getFileDropbox(
         driveId: Int,
