@@ -1,3 +1,9 @@
+## 2026-05-08 — kDrive v2 update trash settings route
+
+- Added shared support for drive-level mutation `PUT /2/drive/{drive_id}/settings/trash` via `KDriveRequests.updateTrashSettings` and `KDriveService.updateTrashSettings`, returning `InfomaniakResponse<Bool>`.
+- Added `UpdateKDriveTrashSettingsOptions(maxDuration:)` encoding the required JSON body field `max_duration`.
+- Added request/response coverage for PUT method, exact OpenAPI path, auth/JSON headers, empty query, snake-case body encoding, required path parameters, and boolean success decoding.
+
 ## 2026-05-08 — kDrive v2 delete all file versions route
 
 - Added shared support for destructive mutation `DELETE /2/drive/{drive_id}/files/{file_id}/versions` via `KDriveRequests.deleteFileVersionsV2` and `KDriveService.deleteFileVersionsV2`, returning `InfomaniakResponse<Bool>`.

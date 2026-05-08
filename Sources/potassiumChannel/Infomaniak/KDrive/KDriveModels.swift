@@ -1887,6 +1887,21 @@ public struct KDriveTrashSettings: Codable, Equatable, Sendable {
     }
 }
 
+/// JSON body accepted by the endpoint that updates kDrive trash retention settings.
+public struct UpdateKDriveTrashSettingsOptions: Encodable, Equatable, Sendable {
+    /// Number of days files are kept in trash.
+    public let maxDuration: Int
+
+    public enum CodingKeys: String, CodingKey {
+        case maxDuration = "max_duration"
+    }
+
+    /// Creates options for updating trash retention settings.
+    public init(maxDuration: Int) {
+        self.maxDuration = maxDuration
+    }
+}
+
 /// Office document integration settings for a kDrive.
 public struct KDriveOfficeSettings: Codable, Equatable, Sendable {
     /// Default application for presentations.
