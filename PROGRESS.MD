@@ -1,3 +1,10 @@
+## 2026-05-08 — kDrive v2 update AI settings route
+
+- Added shared support for drive-level mutation `PUT /2/drive/{drive_id}/settings/ai` via `KDriveRequests.updateAISettings` and `KDriveService.updateAISettings`, returning `InfomaniakResponse<Bool>`.
+- Added `UpdateKDriveAISettingsOptions(hasApproved:hasApprovedAiCategories:hasApprovedContentSearch:)` with optional booleans encoded as `has_approved`, `has_approved_ai_categories`, and `has_approved_content_search`.
+- Added request/response coverage for PUT method, exact OpenAPI path, auth/JSON headers, empty query, optional body field encoding, required path parameters, and boolean success decoding.
+- Validation: `swift test --filter KDriveUpdateAISettingsRequestTests` passed (4 tests).
+
 ## 2026-05-08 — kDrive v2 update office settings route
 
 - Added shared support for drive-level mutation `PUT /2/drive/{drive_id}/settings/office` via `KDriveRequests.updateOfficeSettings` and `KDriveService.updateOfficeSettings`, returning `InfomaniakResponse<Bool>`.
