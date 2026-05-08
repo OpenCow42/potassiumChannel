@@ -1,3 +1,10 @@
+## 2026-05-08 — kDrive v2 file dropbox route
+
+- Added shared support for non-destructive `GET /2/drive/{drive_id}/files/{file_id}/dropbox` via `KDriveRequests.getFileDropbox` and `KDriveService.getFileDropbox`.
+- Added `KDriveFileDropbox` with a lossless `KDriveJSONValue` payload and nullable response support because the API can return `data: null` for files without dropbox metadata.
+- Added request/decoding coverage for method, exact OpenAPI path, auth header, no-query behavior, required path substitution, null data, and representative variable dropbox payload decoding.
+- Validation: `swift test --filter KDriveFileDropboxRequestTests` passed (4 tests).
+
 ## 2026-05-08 — kDrive v2 file comments route
 
 - Added shared support for non-destructive `GET /2/drive/{drive_id}/files/{file_id}/comments` via `KDriveRequests.listFileComments` and `KDriveService.listFileComments`.
@@ -201,6 +208,7 @@ kDrive request factories, and `KDriveService` wrappers moved from Potassium.
 | GET | `/3/drive/{drive_id}/files/search/shared_with_me` | `KDriveRequests.searchSharedWithMe` |
 | GET | `/3/drive/{drive_id}/trash` | `KDriveRequests.listTrashFiles` |
 | GET | `/3/drive/{drive_id}/files/{file_id}` | `KDriveRequests.getFile` |
+| GET | `/2/drive/{drive_id}/files/{file_id}/dropbox` | `KDriveRequests.getFileDropbox` |
 | GET | `/3/drive/{drive_id}/files/{file_id}/name` | `KDriveRequests.getFileByName` |
 | GET | `/3/drive/{drive_id}/files/{file_id}/activities` | `KDriveRequests.listFileActivities` |
 | GET | `/3/drive/{drive_id}/files/{file_id}/files` | `KDriveRequests.listDirectoryFiles` |

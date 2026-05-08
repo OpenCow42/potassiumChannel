@@ -861,6 +861,17 @@ public enum KDriveRequests {
         )
     }
 
+    /// Creates a request that gets dropbox metadata for a kDrive file or directory.
+    public static func getFileDropbox(
+        driveId: Int,
+        fileId: Int
+    ) -> APIRequest<InfomaniakResponse<KDriveFileDropbox?>> {
+        APIRequest(
+            method: .get,
+            path: "/2/drive/\(driveId)/files/\(fileId)/dropbox"
+        )
+    }
+
     /// Creates a request that gets a child kDrive file or directory by name.
     public static func getFileByName(
         driveId: Int,
