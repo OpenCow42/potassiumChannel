@@ -2410,6 +2410,20 @@ public enum KDriveRequests {
         )
     }
 
+    /// Creates a request that moves a kDrive file or directory into another directory.
+    public static func moveFileV3(
+        driveId: Int,
+        fileId: Int,
+        destinationDirectoryId: Int,
+        body: Data
+    ) -> APIRequest<InfomaniakResponse<KDriveCancelResource>> {
+        APIRequest(
+            method: .post,
+            path: "/3/drive/\(driveId)/files/\(fileId)/move/\(destinationDirectoryId)",
+            body: body
+        )
+    }
+
     /// Creates a request that duplicates a kDrive file or directory in place.
     public static func duplicateFileV3(
         driveId: Int,

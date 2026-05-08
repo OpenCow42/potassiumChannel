@@ -586,6 +586,24 @@ public struct KDriveService: Sendable {
         )
     }
 
+    /// Moves a kDrive file or directory into another directory.
+    public func moveFile(
+        driveId: Int,
+        fileId: Int,
+        destinationDirectoryId: Int,
+        options: MoveKDriveFileOptions = MoveKDriveFileOptions()
+    ) async throws -> InfomaniakResponse<KDriveCancelResource> {
+        let body = try JSONEncoder().encode(options)
+        return try await client.send(
+            KDriveRequests.moveFileV3(
+                driveId: driveId,
+                fileId: fileId,
+                destinationDirectoryId: destinationDirectoryId,
+                body: body
+            )
+        )
+    }
+
     /// Duplicates a kDrive file or directory in place.
     public func duplicateFile(
         driveId: Int,
