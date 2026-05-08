@@ -46,6 +46,15 @@ public struct MailService: Sendable {
         try await client.send(MailRequests.listFolders(mailboxUUID: mailboxUUID, includedResources: includedResources))
     }
 
+    /// Lists threads/messages for a mailbox folder.
+    public func listThreads(
+        mailboxUUID: String,
+        folderId: String,
+        options: ListMailThreadsOptions = ListMailThreadsOptions()
+    ) async throws -> InfomaniakResponse<MailThreadList> {
+        try await client.send(MailRequests.listThreads(mailboxUUID: mailboxUUID, folderId: folderId, options: options))
+    }
+
     /// Reads the current my kSuite with optional mailbox details.
     public func currentMyKSuite(includedResources: String? = "mail") async throws -> InfomaniakResponse<CurrentMyKSuite> {
         try await client.send(MailRequests.currentMyKSuite(includedResources: includedResources))

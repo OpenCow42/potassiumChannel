@@ -968,3 +968,9 @@ not started
 - Added a flexible `MailFolder` response wrapper and unit coverage for request construction and folder decoding.
 - Confirmed `GET https://mail.infomaniak.com/api/mail/{mailbox_uuid}` redirects to login for the current token; mailbox profile data remains sourced from `/api/mailbox`.
 - Verified with `swift test --filter Mail`.
+
+## 2026-05-08 — Mail folder threads route
+
+- Added support for `GET https://mail.infomaniak.com/api/mail/{mailbox_uuid}/folder/{folder_id}/message`.
+- Added flexible thread-list response handling and tests for request construction, response decoding, and live folder thread listing.
+- Verified with `swift test --filter Mail`.
