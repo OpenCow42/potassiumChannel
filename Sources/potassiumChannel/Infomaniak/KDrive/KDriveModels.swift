@@ -1838,6 +1838,31 @@ public struct KDriveAISettings: Codable, Equatable, Sendable {
     }
 }
 
+/// JSON body accepted by the endpoint that updates kDrive artificial-intelligence scan settings.
+public struct UpdateKDriveAISettingsOptions: Encodable, Equatable, Sendable {
+    /// Whether AI file scanning has been approved.
+    public let hasApproved: Bool?
+
+    /// Whether automatic AI categories have been approved.
+    public let hasApprovedAiCategories: Bool?
+
+    /// Whether content search has been approved.
+    public let hasApprovedContentSearch: Bool?
+
+    public enum CodingKeys: String, CodingKey {
+        case hasApproved = "has_approved"
+        case hasApprovedAiCategories = "has_approved_ai_categories"
+        case hasApprovedContentSearch = "has_approved_content_search"
+    }
+
+    /// Creates options for updating AI scan settings.
+    public init(hasApproved: Bool? = nil, hasApprovedAiCategories: Bool? = nil, hasApprovedContentSearch: Bool? = nil) {
+        self.hasApproved = hasApproved
+        self.hasApprovedAiCategories = hasApprovedAiCategories
+        self.hasApprovedContentSearch = hasApprovedContentSearch
+    }
+}
+
 /// Share-link customization settings for a kDrive.
 public struct KDriveSharedLinkSettings: Codable, Equatable, Sendable {
     /// Whether custom share-link styling is active.

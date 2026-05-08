@@ -895,6 +895,19 @@ public struct KDriveService: Sendable {
         )
     }
 
+    /// Updates artificial-intelligence scan settings for a single kDrive.
+    public func updateAISettings(
+        driveId: Int,
+        options: UpdateKDriveAISettingsOptions
+    ) async throws -> InfomaniakResponse<Bool> {
+        try await client.send(
+            KDriveRequests.updateAISettings(
+                driveId: driveId,
+                options: options
+            )
+        )
+    }
+
     /// Updates office document integration settings for a single kDrive.
     public func updateOfficeSettings(
         driveId: Int,
