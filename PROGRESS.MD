@@ -1,3 +1,6 @@
+- Added shared support for mutation `POST /2/drive/{drive_id}/cancel` via `KDriveRequests.undoAction` and `KDriveService.undoAction`, returning flexible `KDriveUndoActionResult` for single or array UUID feedback resources.
+- Added unit coverage for undo-action request shape and both response payload variants.
+
 ## 2026-05-08 — kDrive v2 restore trashed file route
 
 - Added shared support for mutation `POST /2/drive/{drive_id}/trash/{file_id}/restore` via `KDriveRequests.restoreTrashedFile` and `KDriveService.restoreTrashedFile`.
@@ -368,6 +371,7 @@ kDrive request factories, and `KDriveService` wrappers moved from Potassium.
 | POST | `/2/drive/{drive_id}/files/{file_id}/rename` | `KDriveRequests.renameFileV2` |
 | POST | `/3/drive/{drive_id}/files/{file_id}/copy/{destination_directory_id}` | `KDriveRequests.copyFileToDirectoryV3` |
 | DELETE | `/2/drive/{drive_id}/files/{file_id}` | `KDriveRequests.trashFileV2` |
+| POST | `/2/drive/{drive_id}/cancel` | `KDriveRequests.undoAction` |
 
 #### Mail
 

@@ -441,6 +441,80 @@ public struct KDriveFilesExistenceResult: Codable, Equatable, Sendable {
     }
 }
 
+/// JSON body accepted by the kDrive undo-action endpoint.
+public struct UndoKDriveActionOptions: Encodable, Equatable, Sendable {
+    /// Single cancellation identifier to undo.
+    public let cancelId: String?
+
+    /// Multiple cancellation identifiers to undo.
+    public let cancelIds: [String]?
+
+    public enum CodingKeys: String, CodingKey {
+        case cancelId = "cancel_id"
+        case cancelIds = "cancel_ids"
+    }
+
+    /// Creates options for undoing one or more cancellable kDrive actions.
+    public init(cancelId: String? = nil, cancelIds: [String]? = nil) {
+        self.cancelId = cancelId
+        self.cancelIds = cancelIds
+    }
+}
+
+/// A UUID feedback resource returned by kDrive undo-action responses.
+public struct KDriveUUIDFeedbackResource: Codable, Equatable, Sendable {
+    /// Identifier of the action feedback resource.
+    public let id: String
+
+    /// Whether the undo operation succeeded for this identifier.
+    public let result: Bool
+
+    /// Optional API message, usually present when `result` is false.
+    public let message: String?
+
+    /// Creates a UUID feedback resource value.
+    public init(id: String, result: Bool, message: String? = nil) {
+        self.id = id
+        self.result = result
+        self.message = message
+    }
+}
+
+/// Result returned after undoing one or more cancellable kDrive actions.
+public enum KDriveUndoActionResult: Codable, Equatable, Sendable {
+    /// The API returned a single feedback resource.
+    case feedbackResource(KDriveUUIDFeedbackResource)
+
+    /// The API returned multiple feedback resources.
+    case feedbackResources([KDriveUUIDFeedbackResource])
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.singleValueContainer()
+
+        if let value = try? container.decode(KDriveUUIDFeedbackResource.self) {
+            self = .feedbackResource(value)
+        } else if let values = try? container.decode([KDriveUUIDFeedbackResource].self) {
+            self = .feedbackResources(values)
+        } else {
+            throw DecodingError.dataCorruptedError(
+                in: container,
+                debugDescription: "Expected a kDrive UUID feedback resource or an array of feedback resources"
+            )
+        }
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.singleValueContainer()
+
+        switch self {
+        case let .feedbackResource(value):
+            try container.encode(value)
+        case let .feedbackResources(values):
+            try container.encode(values)
+        }
+    }
+}
+
 /// Query parameters and headers accepted by the kDrive single-request upload endpoint.
 public struct UploadKDriveFileOptions: Equatable, Sendable {
     /// Optional related resources to include in the response.

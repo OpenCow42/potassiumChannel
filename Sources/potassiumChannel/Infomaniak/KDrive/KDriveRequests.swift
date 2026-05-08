@@ -2625,6 +2625,18 @@ public enum KDriveRequests {
         )
     }
 
+    /// Creates a request that undoes a cancellable kDrive action using the v2 endpoint.
+    public static func undoAction(
+        driveId: Int,
+        body: Data
+    ) -> APIRequest<InfomaniakResponse<KDriveUndoActionResult>> {
+        APIRequest(
+            method: .post,
+            path: "/2/drive/\(driveId)/cancel",
+            body: body
+        )
+    }
+
     /// Creates a request that restores a kDrive file or directory from trash using the v2 endpoint.
     public static func restoreTrashedFile(
         driveId: Int,
