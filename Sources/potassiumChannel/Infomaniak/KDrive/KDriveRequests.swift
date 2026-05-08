@@ -948,6 +948,18 @@ public enum KDriveRequests {
         )
     }
 
+    /// Creates a request that likes a kDrive file comment.
+    public static func likeFileComment(
+        driveId: Int,
+        fileId: Int,
+        commentId: String
+    ) -> APIRequest<InfomaniakResponse<Bool>> {
+        APIRequest(
+            method: .post,
+            path: "/2/drive/\(driveId)/files/\(fileId)/comments/\(commentId)/like"
+        )
+    }
+
     /// Creates a request that lists replies to a kDrive file comment.
     public static func listFileCommentReplies(
         driveId: Int,
