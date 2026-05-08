@@ -284,6 +284,16 @@ public struct KDriveService: Sendable {
         )
     }
 
+    /// Lists invitation access entries for a kDrive file or directory.
+    public func listFileAccessInvitations(
+        driveId: Int,
+        fileId: Int
+    ) async throws -> InfomaniakResponse<[KDriveFileAccessInvitation]> {
+        try await client.send(
+            KDriveRequests.listFileAccessInvitations(driveId: driveId, fileId: fileId)
+        )
+    }
+
     /// Gets a child kDrive file or directory by name.
     public func getFileByName(
         driveId: Int,

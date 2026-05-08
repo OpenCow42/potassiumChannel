@@ -1,3 +1,10 @@
+## 2026-05-08 — kDrive v2 file access invitations route
+
+- Added shared support for non-destructive `GET /2/drive/{drive_id}/files/{file_id}/access/invitations` via `KDriveRequests.listFileAccessInvitations` and `KDriveService.listFileAccessInvitations`.
+- Added `KDriveFileAccessInvitation` with a lossless `KDriveJSONValue` payload so invitation entries round-trip without dropping unknown fields.
+- Added request/decoding coverage for method, exact OpenAPI path, auth header, no-query behavior, required path substitution, empty arrays, and representative variable invitation payload decoding.
+- Validation: `swift test --filter KDriveFileAccessInvitationRequestTests` passed (4 tests).
+
 ## 2026-05-08 — kDrive v2 file access requests route
 
 - Added shared support for non-destructive `GET /2/drive/{drive_id}/files/{file_id}/access/requests` via `KDriveRequests.listFileAccessRequests` and `KDriveService.listFileAccessRequests`.

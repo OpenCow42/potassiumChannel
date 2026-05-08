@@ -94,6 +94,26 @@ public struct KDriveFileAccessRequest: Codable, Equatable, Sendable {
     }
 }
 
+/// An invitation access entry for a kDrive file or directory.
+public struct KDriveFileAccessInvitation: Codable, Equatable, Sendable {
+    /// Raw invitation payload returned by the API.
+    public let values: [String: KDriveJSONValue]
+
+    public init(values: [String: KDriveJSONValue]) {
+        self.values = values
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.singleValueContainer()
+        self.values = try container.decode([String: KDriveJSONValue].self)
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.singleValueContainer()
+        try container.encode(values)
+    }
+}
+
 /// A cancellation token returned after a file is moved to kDrive trash.
 public struct KDriveCancelResource: Codable, Equatable, Sendable {
     /// Identifier that can be used by Infomaniak APIs to cancel the action while it remains valid.
