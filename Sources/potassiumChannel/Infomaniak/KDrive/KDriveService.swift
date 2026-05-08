@@ -324,6 +324,16 @@ public struct KDriveService: Sendable {
         )
     }
 
+    /// Gets dropbox metadata for a kDrive file or directory.
+    public func getFileDropbox(
+        driveId: Int,
+        fileId: Int
+    ) async throws -> InfomaniakResponse<KDriveFileDropbox?> {
+        try await client.send(
+            KDriveRequests.getFileDropbox(driveId: driveId, fileId: fileId)
+        )
+    }
+
     /// Gets a child kDrive file or directory by name.
     public func getFileByName(
         driveId: Int,
