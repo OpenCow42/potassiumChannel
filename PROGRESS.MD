@@ -974,3 +974,9 @@ not started
 - Added support for `GET https://mail.infomaniak.com/api/mail/{mailbox_uuid}/folder/{folder_id}/message`.
 - Added flexible thread-list response handling and tests for request construction, response decoding, and live folder thread listing.
 - Verified with `swift test --filter Mail`.
+
+## 2026-05-09 — Mail message resource route
+
+- Added support for reading a Mail message from the `resource` URL returned by folder thread/message listing.
+- Added flexible message response handling and tests.
+- Verified with `swift test --filter Mail`.

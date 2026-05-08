@@ -53,6 +53,26 @@ extension MailRequests {
         )
     }
 
+    /// Creates a request that reads a message from a returned message resource path.
+    public static func getMessage(
+        resource: String,
+        options: GetMailMessageOptions = GetMailMessageOptions()
+    ) -> APIRequest<InfomaniakResponse<MailMessage>> {
+        var queryParameters: [QueryParameter] = []
+        if let preferredFormat = options.preferredFormat {
+            queryParameters.append(QueryParameter(name: "prefered_format", value: .string(preferredFormat)))
+        }
+        if let includedResources = options.includedResources {
+            queryParameters.append(QueryParameter(name: "with", value: .string(includedResources)))
+        }
+
+        return APIRequest(
+            method: .get,
+            path: resource,
+            queryParameters: queryParameters
+        )
+    }
+
     /// Creates a request that reads the current my kSuite with optional mailbox details.
     public static func currentMyKSuite(includedResources: String? = "mail") -> APIRequest<InfomaniakResponse<CurrentMyKSuite>> {
         var queryParameters: [QueryParameter] = []
