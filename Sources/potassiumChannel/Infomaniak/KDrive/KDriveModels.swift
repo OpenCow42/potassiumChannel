@@ -2082,6 +2082,9 @@ public struct ListKDriveFileActivitiesOptions: Equatable, Sendable {
     }
 }
 
+/// Query parameters accepted by the kDrive root file activity listing endpoint.
+public typealias ListKDriveRootFileActivitiesV3Options = ListKDriveFileActivitiesOptions
+
 /// Query parameters accepted by the kDrive directory file listing endpoint.
 public struct ListKDriveDirectoryFilesOptions: Equatable, Sendable {
     /// Cursor marker used to fetch the next batch of results.
