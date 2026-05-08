@@ -1,3 +1,8 @@
+## 2026-05-08 — kDrive v2 delete all file versions route
+
+- Added shared support for destructive mutation `DELETE /2/drive/{drive_id}/files/{file_id}/versions` via `KDriveRequests.deleteFileVersionsV2` and `KDriveService.deleteFileVersionsV2`, returning `InfomaniakResponse<Bool>`.
+- Added request/response coverage for DELETE method, exact OpenAPI versions path, auth header, empty query/body behavior, required path parameters, and boolean success decoding.
+
 - Added shared support for mutation `POST /2/drive/{drive_id}/cancel` via `KDriveRequests.undoAction` and `KDriveService.undoAction`, returning flexible `KDriveUndoActionResult` for single or array UUID feedback resources.
 - Added unit coverage for undo-action request shape and both response payload variants.
 
