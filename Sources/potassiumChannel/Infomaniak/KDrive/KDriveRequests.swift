@@ -1005,6 +1005,43 @@ public enum KDriveRequests {
         )
     }
 
+    /// Creates a request that gets a kDrive file preview using the v2 endpoint.
+    public static func getFilePreview(
+        driveId: Int,
+        fileId: Int,
+        options: GetKDriveFilePreviewOptions = GetKDriveFilePreviewOptions()
+    ) -> APIRequest<KDriveBinaryResponse> {
+        var queryParameters: [QueryParameter] = []
+        var headers: [HTTPHeader] = [HTTPHeader(name: "Accept", value: "image/*")]
+
+        if let conversionFormat = options.conversionFormat {
+            queryParameters.append(QueryParameter(name: "as", value: .string(conversionFormat)))
+        }
+
+        if let height = options.height {
+            queryParameters.append(QueryParameter(name: "height", value: .integer(height)))
+        }
+
+        if let quality = options.quality {
+            queryParameters.append(QueryParameter(name: "quality", value: .integer(quality)))
+        }
+
+        if let width = options.width {
+            queryParameters.append(QueryParameter(name: "width", value: .integer(width)))
+        }
+
+        if let password = options.password {
+            headers.append(HTTPHeader(name: "x-kdrive-file-password", value: password))
+        }
+
+        return APIRequest(
+            method: .get,
+            path: "/2/drive/\(driveId)/files/\(fileId)/preview",
+            queryParameters: queryParameters,
+            headers: headers
+        )
+    }
+
     /// Creates a request that uploads a file to kDrive using the v3 single-request endpoint.
     public static func uploadFile(
         driveId: Int,

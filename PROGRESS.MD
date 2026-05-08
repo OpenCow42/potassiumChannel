@@ -1,3 +1,9 @@
+## 2026-05-08 — kDrive v2 file preview route
+
+- Added shared raw-data support for `GET /2/drive/{drive_id}/files/{file_id}/preview` via `KDriveRequests.getFilePreview` and `KDriveService.getFilePreview`, with optional `as`, `height`, `quality`, `width`, and `x-kdrive-file-password` support plus `Accept: image/*`.
+- Added request coverage for the exact OpenAPI v2 file-preview path, auth/image headers, query encoding, and password header handling using static test data only.
+- Validation: `swift test --filter KDriveFilePreviewRequestTests` passes.
+
 ## 2026-05-08 — kDrive user preferences patch route
 
 - Added shared support for `PATCH /2/drive/preferences` via `KDriveRequests.setUserPreferences` and `KDriveService.setUserPreferences`, returning `InfomaniakResponse<Bool>`.
@@ -152,6 +158,7 @@ kDrive request factories, and `KDriveService` wrappers moved from Potassium.
 | GET | `/3/drive/{drive_id}/trash/{file_id}` | `KDriveRequests.getTrashedFile` |
 | GET | `/2/drive/{drive_id}/files/{file_id}/download` | `KDriveRequests.downloadFile` |
 | GET | `/2/drive/{drive_id}/files/{file_id}/thumbnail` | `KDriveRequests.getFileThumbnail` |
+| GET | `/2/drive/{drive_id}/files/{file_id}/preview` | `KDriveRequests.getFilePreview` |
 | POST | `/3/drive/{drive_id}/upload` | `KDriveRequests.uploadFile` |
 | GET | `/2/drive/{drive_id}/trash/{file_id}/thumbnail` | `KDriveRequests.getV2TrashedItemThumbnail` |
 | GET | `/2/drive/{drive_id}/trash/{file_id}/count` | `KDriveRequests.getV2TrashedItemCount` |

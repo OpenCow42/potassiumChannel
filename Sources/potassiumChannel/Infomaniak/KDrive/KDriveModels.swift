@@ -61,6 +61,39 @@ public struct GetKDriveFileThumbnailOptions: Equatable, Sendable {
     }
 }
 
+/// Query parameters and headers accepted by the kDrive file preview endpoint.
+public struct GetKDriveFilePreviewOptions: Equatable, Sendable {
+    /// Optional conversion format before preview rendering, such as `jpg` or `png`.
+    public let conversionFormat: String?
+
+    /// Optional preview height in pixels.
+    public let height: Int?
+
+    /// Optional preview quality.
+    public let quality: Int?
+
+    /// Optional preview width in pixels.
+    public let width: Int?
+
+    /// Password for protected files when preview generation needs it.
+    public let password: String?
+
+    /// Creates options for requesting a kDrive file preview.
+    public init(
+        conversionFormat: String? = nil,
+        height: Int? = nil,
+        quality: Int? = nil,
+        width: Int? = nil,
+        password: String? = nil
+    ) {
+        self.conversionFormat = conversionFormat
+        self.height = height
+        self.quality = quality
+        self.width = width
+        self.password = password
+    }
+}
+
 /// Query parameters and headers accepted by the kDrive single-request upload endpoint.
 public struct UploadKDriveFileOptions: Equatable, Sendable {
     /// Optional related resources to include in the response.
