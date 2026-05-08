@@ -1,3 +1,9 @@
+## 2026-05-08 — kDrive v2 delete file comment route
+
+- Added shared support for mutation `DELETE /2/drive/{drive_id}/files/{file_id}/comments/{comment_id}` via `KDriveRequests.deleteFileComment` and `KDriveService.deleteFileComment`, returning `InfomaniakResponse<Bool>`.
+- Added request/response coverage for DELETE method, exact OpenAPI path, auth header, empty query/body behavior, path interpolation, and boolean data decoding.
+- Validation: `swift test --filter KDriveDeleteFileCommentRequestTests` passed (3 tests).
+
 ## 2026-05-08 — kDrive v2 modify file comment route
 
 - Added shared support for mutation `PUT /2/drive/{drive_id}/files/{file_id}/comments/{comment_id}` via `KDriveRequests.modifyFileComment` and `KDriveService.modifyFileComment`, returning `InfomaniakResponse<Bool>`.
