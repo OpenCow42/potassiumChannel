@@ -369,6 +369,23 @@ public struct KDriveService: Sendable {
         )
     }
 
+    /// Lists replies to a kDrive file comment.
+    public func listFileCommentReplies(
+        driveId: Int,
+        fileId: Int,
+        commentId: String,
+        options: ListKDriveFileCommentRepliesOptions = ListKDriveFileCommentRepliesOptions()
+    ) async throws -> PaginatedInfomaniakResponse<[KDriveFileComment]> {
+        try await client.send(
+            KDriveRequests.listFileCommentReplies(
+                driveId: driveId,
+                fileId: fileId,
+                commentId: commentId,
+                options: options
+            )
+        )
+    }
+
     /// Gets dropbox metadata for a kDrive file or directory.
     public func getFileDropbox(
         driveId: Int,
