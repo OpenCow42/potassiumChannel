@@ -1,3 +1,10 @@
+## 2026-05-08 — kDrive v2 modify file comment route
+
+- Added shared support for mutation `PUT /2/drive/{drive_id}/files/{file_id}/comments/{comment_id}` via `KDriveRequests.modifyFileComment` and `KDriveService.modifyFileComment`, returning `InfomaniakResponse<Bool>`.
+- Added `ModifyKDriveFileCommentOptions` with optional JSON body fields `body` and `is_resolved`, plus optional `with` query support.
+- Added request/response coverage for PUT method, exact OpenAPI path, auth/JSON headers, body forwarding, option encoding, and boolean data decoding.
+- Validation: `swift test --filter KDriveModifyFileCommentRequestTests` passed (4 tests).
+
 ## 2026-05-08 — kDrive v2 file comment replies route
 
 - Added shared support for read endpoint `GET /2/drive/{drive_id}/files/{file_id}/comments/{comment_id}` via `KDriveRequests.listFileCommentReplies` and `KDriveService.listFileCommentReplies`, returning `PaginatedInfomaniakResponse<[KDriveFileComment]>`.
