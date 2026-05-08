@@ -174,6 +174,17 @@ public struct KDriveFileComment: Codable, Equatable, Sendable {
     }
 }
 
+/// JSON body accepted by the kDrive add file comment endpoint.
+public struct AddKDriveFileCommentOptions: Encodable, Equatable, Sendable {
+    /// Comment body text.
+    public let body: String
+
+    /// Creates options for adding a comment to a kDrive file or directory.
+    public init(body: String) {
+        self.body = body
+    }
+}
+
 /// Dropbox metadata for a kDrive file or directory.
 public struct KDriveFileDropbox: Codable, Equatable, Sendable {
     /// Raw dropbox payload returned by the API.

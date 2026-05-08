@@ -871,6 +871,27 @@ public enum KDriveRequests {
         )
     }
 
+    /// Creates a request that adds a comment to a kDrive file or directory.
+    public static func addFileComment(
+        driveId: Int,
+        fileId: Int,
+        with includedResources: String? = nil,
+        body: Data
+    ) -> APIRequest<InfomaniakResponse<KDriveFileComment>> {
+        var queryParameters: [QueryParameter] = []
+
+        if let includedResources {
+            queryParameters.append(QueryParameter(name: "with", value: .string(includedResources)))
+        }
+
+        return APIRequest(
+            method: .post,
+            path: "/2/drive/\(driveId)/files/\(fileId)/comments",
+            queryParameters: queryParameters,
+            body: body
+        )
+    }
+
     /// Creates a request that gets dropbox metadata for a kDrive file or directory.
     public static func getFileDropbox(
         driveId: Int,

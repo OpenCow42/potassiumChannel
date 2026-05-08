@@ -1,3 +1,10 @@
+## 2026-05-08 — kDrive v2 add file comment route
+
+- Added shared support for mutation `POST /2/drive/{drive_id}/files/{file_id}/comments` via `KDriveRequests.addFileComment` and `KDriveService.addFileComment`, returning `InfomaniakResponse<KDriveFileComment>`.
+- Added `AddKDriveFileCommentOptions` with required JSON body field `body`, plus optional `with` query support.
+- Added request/response coverage for POST method, exact OpenAPI path, auth/JSON headers, body forwarding, option encoding, and variable comment payload decoding.
+- Validation: `swift test --filter KDriveAddFileCommentRequestTests` passed (3 tests).
+
 ## 2026-05-08 — kDrive v3 move file route
 
 - Added shared support for mutation `POST /3/drive/{drive_id}/files/{file_id}/move/{destination_directory_id}` via `KDriveRequests.moveFileV3` and `KDriveService.moveFile`, returning `InfomaniakResponse<KDriveCancelResource>`.
