@@ -541,6 +541,29 @@ public struct KDriveService: Sendable {
         )
     }
 
+    /// Undoes a cancellable kDrive action using the v2 endpoint.
+    public func undoAction(
+        driveId: Int,
+        cancelId: String
+    ) async throws -> InfomaniakResponse<KDriveUndoActionResult> {
+        try await undoAction(driveId: driveId, cancelIds: [cancelId])
+    }
+
+    /// Undoes one or more cancellable kDrive actions using the v2 endpoint.
+    public func undoAction(
+        driveId: Int,
+        cancelIds: [String]
+    ) async throws -> InfomaniakResponse<KDriveUndoActionResult> {
+        let body = try JSONEncoder().encode(
+            cancelIds.count == 1
+                ? UndoKDriveActionOptions(cancelId: cancelIds[0])
+                : UndoKDriveActionOptions(cancelIds: cancelIds)
+        )
+        return try await client.send(
+            KDriveRequests.undoAction(driveId: driveId, body: body)
+        )
+    }
+
     /// Restores a kDrive file or directory from trash using the v2 endpoint.
     public func restoreTrashedFile(
         driveId: Int,
