@@ -145,6 +145,54 @@ struct MailMailboxDiscoveryRequestTests {
         #expect(response.data.values["threads"] != nil)
     }
 
+    @Test("Mailbox quota request encodes discovered mailbox fields")
+    func mailboxQuotaRequestEncodesDiscoveredFields() async throws {
+        let client = InfomaniakAPIClient(
+            configuration: APIClientConfiguration(
+                baseURL: APIClientConfiguration.defaultMailBaseURL,
+                bearerToken: "test-token"
+            )
+        )
+        let request = MailRequests.getMailboxQuota(
+            mailbox: "user@example.com",
+            productId: 123456,
+            options: GetMailboxQuotaOptions(unit: "MB")
+        )
+
+        let urlRequest = try await client.makeURLRequest(for: request)
+        let url = try #require(urlRequest.url)
+        let queryItems = try #require(URLComponents(url: url, resolvingAgainstBaseURL: false)?.queryItems)
+        let pairs = Set(queryItems.map { "\($0.name)=\($0.value ?? "")" })
+
+        #expect(urlRequest.httpMethod == "GET")
+        #expect(url.host == "mail.infomaniak.com")
+        #expect(url.path == "/api/mailbox/quotas")
+        #expect(pairs.contains("mailbox=user@example.com"))
+        #expect(pairs.contains("product_id=123456"))
+        #expect(pairs.contains("unit=MB"))
+    }
+
+    @Test("Mailbox quota response decodes flexible quota payload")
+    func mailboxQuotaResponseDecodesFlexiblePayload() throws {
+        let json = """
+        {
+          "result": "success",
+          "data": {
+            "size": 6341993,
+            "size_checked_at": 1778277659
+          }
+        }
+        """.data(using: .utf8)!
+        let decoder = JSONDecoder()
+        decoder.keyDecodingStrategy = .convertFromSnakeCase
+
+        let response = try decoder.decode(InfomaniakResponse<MailboxQuota>.self, from: json)
+
+        #expect(response.result == "success")
+        #expect(response.data.values["size"] == .number(6341993))
+        #expect(response.data.values["size_checked_at"] == .number(1778277659))
+    }
+
     @Test("Mail message request uses returned resource path")
     func mailMessageRequestMatchesAPIShape() async throws {
         let client = InfomaniakAPIClient(

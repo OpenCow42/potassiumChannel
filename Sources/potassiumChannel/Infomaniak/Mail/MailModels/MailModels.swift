@@ -236,3 +236,34 @@ public struct GetMailMessageOptions: Equatable, Sendable {
         self.includedResources = includedResources
     }
 }
+
+/// Quota payload returned for a mailbox.
+public struct MailboxQuota: Codable, Equatable, Sendable {
+    /// Raw quota payload returned by the API.
+    public let values: [String: KDriveJSONValue]
+
+    /// Creates a quota wrapper around a raw JSON payload.
+    public init(values: [String: KDriveJSONValue]) {
+        self.values = values
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.singleValueContainer()
+        self.values = try container.decode([String: KDriveJSONValue].self)
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.singleValueContainer()
+        try container.encode(values)
+    }
+}
+
+/// Query options accepted when reading mailbox quota.
+public struct GetMailboxQuotaOptions: Equatable, Sendable {
+    /// Unit used for quota sizes. The Mail API currently accepts B, kB, or MB.
+    public let unit: String?
+
+    public init(unit: String? = "B") {
+        self.unit = unit
+    }
+}

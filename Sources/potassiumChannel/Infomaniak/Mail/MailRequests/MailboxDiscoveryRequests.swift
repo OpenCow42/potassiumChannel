@@ -53,6 +53,27 @@ extension MailRequests {
         )
     }
 
+    /// Creates a request that reads quota information for a discovered mailbox.
+    public static func getMailboxQuota(
+        mailbox: String,
+        productId: Int,
+        options: GetMailboxQuotaOptions = GetMailboxQuotaOptions()
+    ) -> APIRequest<InfomaniakResponse<MailboxQuota>> {
+        var queryParameters: [QueryParameter] = [
+            QueryParameter(name: "mailbox", value: .string(mailbox)),
+            QueryParameter(name: "product_id", value: .integer(productId)),
+        ]
+        if let unit = options.unit {
+            queryParameters.append(QueryParameter(name: "unit", value: .string(unit)))
+        }
+
+        return APIRequest(
+            method: .get,
+            path: "/api/mailbox/quotas",
+            queryParameters: queryParameters
+        )
+    }
+
     /// Creates a request that reads a message from a returned message resource path.
     public static func getMessage(
         resource: String,

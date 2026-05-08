@@ -55,6 +55,15 @@ public struct MailService: Sendable {
         try await client.send(MailRequests.listThreads(mailboxUUID: mailboxUUID, folderId: folderId, options: options))
     }
 
+    /// Reads quota information for a discovered mailbox.
+    public func getMailboxQuota(
+        mailbox: String,
+        productId: Int,
+        options: GetMailboxQuotaOptions = GetMailboxQuotaOptions()
+    ) async throws -> InfomaniakResponse<MailboxQuota> {
+        try await client.send(MailRequests.getMailboxQuota(mailbox: mailbox, productId: productId, options: options))
+    }
+
     /// Reads a message from a returned message resource path.
     public func getMessage(
         resource: String,
