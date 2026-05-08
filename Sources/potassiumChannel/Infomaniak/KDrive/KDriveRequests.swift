@@ -2410,6 +2410,27 @@ public enum KDriveRequests {
         )
     }
 
+    /// Creates a request that duplicates a kDrive file or directory in place.
+    public static func duplicateFileV3(
+        driveId: Int,
+        fileId: Int,
+        with includedResources: String? = nil,
+        body: Data
+    ) -> APIRequest<InfomaniakResponse<KDriveFileItem>> {
+        var queryParameters: [QueryParameter] = []
+
+        if let includedResources {
+            queryParameters.append(QueryParameter(name: "with", value: .string(includedResources)))
+        }
+
+        return APIRequest(
+            method: .post,
+            path: "/3/drive/\(driveId)/files/\(fileId)/duplicate",
+            queryParameters: queryParameters,
+            body: body
+        )
+    }
+
     /// Creates a request that moves a kDrive file to trash using the v2 endpoint.
     public static func trashFileV2(
         driveId: Int,

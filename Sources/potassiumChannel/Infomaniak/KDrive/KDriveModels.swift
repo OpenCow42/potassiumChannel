@@ -2200,6 +2200,17 @@ public struct CopyKDriveFileOptions: Encodable, Equatable, Sendable {
     }
 }
 
+/// JSON body accepted by the kDrive file duplicate endpoint.
+public struct DuplicateKDriveFileOptions: Encodable, Equatable, Sendable {
+    /// Optional name for the duplicated file or directory.
+    public let name: String?
+
+    /// Creates options for duplicating a kDrive file or directory.
+    public init(name: String? = nil) {
+        self.name = name
+    }
+}
+
 /// Query parameters accepted by the kDrive trash listing endpoint.
 public struct ListKDriveTrashOptions: Equatable, Sendable {
     /// Cursor marker used to fetch the next batch of results.
