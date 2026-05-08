@@ -405,6 +405,16 @@ public struct KDriveService: Sendable {
         )
     }
 
+    /// Marks a kDrive file or directory as favorite using the v2 endpoint.
+    public func favoriteFile(
+        driveId: Int,
+        fileId: Int
+    ) async throws -> InfomaniakResponse<Bool> {
+        try await client.send(
+            KDriveRequests.favoriteFile(driveId: driveId, fileId: fileId)
+        )
+    }
+
     /// Gets a single file or directory from kDrive trash.
     public func getTrashedFile(
         driveId: Int,
