@@ -418,6 +418,21 @@ public struct KDriveService: Sendable {
         )
     }
 
+    /// Unlikes a kDrive file comment.
+    public func unlikeFileComment(
+        driveId: Int,
+        fileId: Int,
+        commentId: String
+    ) async throws -> InfomaniakResponse<Bool> {
+        try await client.send(
+            KDriveRequests.unlikeFileComment(
+                driveId: driveId,
+                fileId: fileId,
+                commentId: commentId
+            )
+        )
+    }
+
     /// Lists replies to a kDrive file comment.
     public func listFileCommentReplies(
         driveId: Int,

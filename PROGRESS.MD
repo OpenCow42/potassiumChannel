@@ -1,3 +1,9 @@
+## 2026-05-08 — kDrive v2 unlike file comment route
+
+- Added shared support for mutation `POST /2/drive/{drive_id}/files/{file_id}/comments/{comment_id}/unlike` via `KDriveRequests.unlikeFileComment` and `KDriveService.unlikeFileComment`, returning `InfomaniakResponse<Bool>`.
+- Added request/response coverage for POST method, exact OpenAPI path with `/unlike`, auth header, no body/query behavior, required path substitution, and boolean response decoding.
+- Validation: `swift test --filter KDriveUnlikeFileCommentRequestTests` passed (3 tests).
+
 ## 2026-05-08 — kDrive v2 like file comment route
 
 - Added shared support for mutation `POST /2/drive/{drive_id}/files/{file_id}/comments/{comment_id}/like` via `KDriveRequests.likeFileComment` and `KDriveService.likeFileComment`, returning `InfomaniakResponse<Bool>`.
