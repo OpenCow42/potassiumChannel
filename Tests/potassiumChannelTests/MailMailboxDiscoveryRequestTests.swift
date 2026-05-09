@@ -226,7 +226,7 @@ struct MailMailboxDiscoveryRequestTests {
         #expect(object["body"] as? String == "<p>Hello from tests</p>")
         #expect(object["subject"] as? String == "Draft subject")
         #expect(object["action"] as? String == "save")
-        #expect(object["mimeType"] as? String == "text/html")
+        #expect(object["mime_type"] as? String == "text/html")
         #expect(firstRecipient["email"] as? String == "recipient@example.com")
         #expect(firstRecipient["name"] as? String == "Recipient")
     }

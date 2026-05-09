@@ -147,4 +147,42 @@ extension MailListMailboxesRequestTests {
         #expect(response.data.values["mail"] == .string("user@example.com"))
         #expect(response.data.values["mailbox_id"] == .number(42))
     }
+
+    @Test("Mail add mailbox alias request encodes alias payload")
+    func addMailboxAliasRequestEncodesAliasPayload() async throws {
+        let client = InfomaniakAPIClient(configuration: APIClientConfiguration(bearerToken: "test-token"))
+        let request = try MailRequests.addMailboxAlias(
+            mailHostingId: 123456,
+            mailboxName: "user@example.com",
+            alias: "potassium-disposable-alias"
+        )
+
+        let urlRequest = try await client.makeURLRequest(for: request)
+        let url = try #require(urlRequest.url)
+        let body = try #require(urlRequest.httpBody)
+        let payload = try JSONDecoder().decode(AddMailboxAliasPayload.self, from: body)
+
+        #expect(urlRequest.httpMethod == "POST")
+        #expect(urlRequest.value(forHTTPHeaderField: "Authorization") == "Bearer test-token")
+        #expect(urlRequest.value(forHTTPHeaderField: "Content-Type") == "application/json")
+        #expect(url.path == "/1/mail_hostings/123456/mailboxes/user@example.com/aliases")
+        #expect(payload.alias == "potassium-disposable-alias")
+    }
+
+    @Test("Mail add mailbox alias response decodes boolean success")
+    func addMailboxAliasResponseDecodesBooleanSuccess() throws {
+        let json = """
+        {
+          "result": "success",
+          "data": true
+        }
+        """.data(using: .utf8)!
+        let decoder = JSONDecoder()
+        decoder.keyDecodingStrategy = .convertFromSnakeCase
+
+        let response = try decoder.decode(InfomaniakResponse<Bool>.self, from: json)
+
+        #expect(response.result == "success")
+        #expect(response.data == true)
+    }
 }
