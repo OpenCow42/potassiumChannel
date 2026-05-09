@@ -267,3 +267,110 @@ public struct GetMailboxQuotaOptions: Equatable, Sendable {
         self.unit = unit
     }
 }
+
+/// A recipient used when creating or updating a Mail draft.
+public struct MailDraftRecipient: Codable, Equatable, Sendable {
+    /// Recipient email address.
+    public let email: String
+
+    /// Display name sent to the Mail API. Empty strings are accepted for address-only recipients.
+    public let name: String
+
+    public init(email: String, name: String = "") {
+        self.email = email
+        self.name = name
+    }
+}
+
+/// Payload accepted by the Mail draft creation/update endpoints.
+public struct MailDraftPayload: Codable, Equatable, Sendable {
+    public let body: String
+    public let to: [MailDraftRecipient]
+    public let cc: [MailDraftRecipient]
+    public let bcc: [MailDraftRecipient]
+    public let subject: String
+    public let ackRequest: Bool
+    public let priority: String
+    public let attachments: [KDriveJSONValue]
+    public let action: String?
+    public let mimeType: String
+
+    public init(
+        body: String,
+        to: [MailDraftRecipient],
+        cc: [MailDraftRecipient] = [],
+        bcc: [MailDraftRecipient] = [],
+        subject: String = "",
+        ackRequest: Bool = false,
+        priority: String = "normal",
+        attachments: [KDriveJSONValue] = [],
+        action: String? = "save",
+        mimeType: String = "text/html"
+    ) {
+        self.body = body
+        self.to = to
+        self.cc = cc
+        self.bcc = bcc
+        self.subject = subject
+        self.ackRequest = ackRequest
+        self.priority = priority
+        self.attachments = attachments
+        self.action = action
+        self.mimeType = mimeType
+    }
+}
+
+/// Draft payload returned by the Mail draft endpoints.
+public struct MailDraft: Codable, Equatable, Sendable {
+    /// Raw draft payload returned by the API.
+    public let values: [String: KDriveJSONValue]
+
+    /// Creates a draft wrapper around a raw JSON payload.
+    public init(values: [String: KDriveJSONValue]) {
+        self.values = values
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.singleValueContainer()
+        self.values = try container.decode([String: KDriveJSONValue].self)
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.singleValueContainer()
+        try container.encode(values)
+    }
+}
+
+/// Payload accepted by the Mail draft schedule endpoint.
+public struct MailDraftSchedulePayload: Codable, Equatable, Sendable {
+    public let scheduleDate: String
+
+    public enum CodingKeys: String, CodingKey {
+        case scheduleDate = "schedule_date"
+    }
+
+    public init(scheduleDate: String) {
+        self.scheduleDate = scheduleDate
+    }
+}
+
+/// Schedule payload returned by the Mail schedule endpoint.
+public struct MailDraftSchedule: Codable, Equatable, Sendable {
+    /// Raw schedule payload returned by the API.
+    public let values: [String: KDriveJSONValue]
+
+    /// Creates a schedule wrapper around a raw JSON payload.
+    public init(values: [String: KDriveJSONValue]) {
+        self.values = values
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.singleValueContainer()
+        self.values = try container.decode([String: KDriveJSONValue].self)
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.singleValueContainer()
+        try container.encode(values)
+    }
+}

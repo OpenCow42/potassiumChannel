@@ -51,4 +51,12 @@ extension MailRequests {
             queryParameters: queryParameters
         )
     }
+
+    /// Creates a request that reads one mailbox settings payload for a mail hosting service.
+    public static func getMailbox(mailHostingId: Int, mailboxName: String) -> APIRequest<InfomaniakResponse<MailMailbox>> {
+        APIRequest(
+            method: .get,
+            path: "/1/mail_hostings/\(mailHostingId)/mailboxes/\(mailboxName)"
+        )
+    }
 }

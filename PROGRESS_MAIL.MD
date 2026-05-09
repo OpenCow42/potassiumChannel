@@ -14,11 +14,11 @@ The usable discovery path for the configured account is current-user scoped, not
 4. [x] `GET https://mail.infomaniak.com/api/mail/{mailbox_uuid}/folder?with=ik-static` — list folders.
 5. [x] `GET https://mail.infomaniak.com/api/mail/{mailbox_uuid}/folder/{folder_id}/message` — list folder threads/messages.
 6. [x] `GET {message_resource}` — read a message from a returned resource URL.
-7. [ ] `GET https://mail.infomaniak.com/api/mailbox/quotas?mailbox={mailbox_name}&product_id={hosting_id}&unit=B` — read mailbox quota.
-8. [ ] `POST https://mail.infomaniak.com/api/mail/{mailbox_uuid}/draft` — create/send draft payload.
-9. [ ] `PUT https://mail.infomaniak.com/api/mail/{mailbox_uuid}/draft/{draft_uuid}` — update/send draft payload.
-10. [ ] `GET https://mail.infomaniak.com/api/mail/{mailbox_uuid}/draft/{draft_uuid}` or returned draft resource — read draft state.
-11. [ ] `DELETE https://mail.infomaniak.com/api/mail/{mailbox_uuid}/draft/{draft_uuid}` — cleanup draft fixture.
+7. [x] `GET https://mail.infomaniak.com/api/mailbox/quotas?mailbox={mailbox_name}&product_id={hosting_id}&unit=B` — read mailbox quota.
+8. [x] `POST https://mail.infomaniak.com/api/mail/{mailbox_uuid}/draft` — create/send draft payload.
+9. [x] `PUT https://mail.infomaniak.com/api/mail/{mailbox_uuid}/draft/{draft_uuid}` — update/send draft payload.
+10. [x] `GET https://mail.infomaniak.com/api/mail/{mailbox_uuid}/draft/{draft_uuid}` or returned draft resource — read draft state.
+11. [x] `DELETE https://mail.infomaniak.com/api/mail/{mailbox_uuid}/draft/{draft_uuid}` — cleanup draft fixture.
 12. [ ] `GET /1/mail_hostings/{mail_hosting_id}/mailboxes/{mailbox_name}` — read hosting-specific mailbox settings using discovered fields.
 13. [ ] `GET /1/mail_hostings/{mail_hosting_id}/mailboxes/{mailbox_name}/aliases` — read aliases/settings if authorized.
 14. [ ] `GET /1/mail_hostings/{mail_hosting_id}/mailboxes/{mailbox_name}/forwarding_addresses` — read forwarding settings if authorized.
@@ -68,4 +68,34 @@ The usable discovery path for the configured account is current-user scoped, not
 - Added mailbox quota reading via `GET https://mail.infomaniak.com/api/mailbox/quotas?mailbox={mailbox_name}&product_id={hosting_id}&unit=B`.
 - Confirmed live API accepts `B`; the Mail OpenAPI spec documents storage units as `B`, `MB`, and `kB` on mailbox quota/settings-related parameters.
 - Added CLI support: `potassium mail quota --mailbox <mailbox-name> --product-id <hosting-id> [--unit B|kB|MB]`.
+- Verified with `swift test --filter Mail`.
+
+## Mail draft CRUD update
+
+- Added draft creation/update/read/delete support for `POST|PUT|GET|DELETE https://mail.infomaniak.com/api/mail/{mailbox_uuid}/draft[/draft_uuid]`.
+- Added flexible draft payload/response handling in `potassiumChannel` and CLI support in `potassium`:
+  - `potassium mail draft-create ...`
+  - `potassium mail draft-update ...`
+  - `potassium mail draft ...`
+  - `potassium mail draft-delete ...`
+- Live draft creation is intentionally opt-in only (`MAIL_DRAFT_LIVE_TESTS=1` + `MAIL_DRAFT_RECIPIENT`) to avoid silently creating remote draft objects.
+- Verified with `swift test --filter Mail` in both repositories.
+
+## Mail draft schedule/cancel update
+
+- Added schedule, delete-schedule, and cancel-send support:
+  - `PUT {draft_resource}/schedule`
+  - `DELETE {schedule_action}`
+  - `PUT {cancel_send_resource}`
+- Added flexible schedule response handling in `potassiumChannel` and CLI support in `potassium`:
+  - `potassium mail draft-schedule ...`
+  - `potassium mail schedule-delete ...`
+  - `potassium mail cancel-send ...`
+- Schedule/send live execution remains fixture/opt-in policy territory; unit request/CLI coverage is in place.
+- Verified with `swift test --filter Mail` in both repositories, plus `swift test --filter CommandLineTests` in `potassium`.
+
+## Mail mailbox settings update
+
+- Added `GET /1/mail_hostings/{mail_hosting_id}/mailboxes/{mailbox_name}` for mailbox settings/capabilities using discovered hosting id and mailbox name.
+- Added CLI support: `potassium mail mailbox --mail-hosting-id <id> --mailbox <mailbox-name>`.
 - Verified with `swift test --filter Mail`.

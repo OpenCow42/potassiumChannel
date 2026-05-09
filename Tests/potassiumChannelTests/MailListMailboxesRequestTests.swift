@@ -110,3 +110,41 @@ struct MailListMailboxesRequestTests {
         #expect(mailbox.values["quota"] == .null)
     }
 }
+
+extension MailListMailboxesRequestTests {
+    @Test("Mail get mailbox request encodes mailbox settings path")
+    func getMailboxRequestEncodesSettingsPath() async throws {
+        let client = InfomaniakAPIClient(
+            configuration: APIClientConfiguration(bearerToken: "test-token")
+        )
+        let request = MailRequests.getMailbox(mailHostingId: 123456, mailboxName: "user@example.com")
+
+        let urlRequest = try await client.makeURLRequest(for: request)
+        let url = try #require(urlRequest.url)
+
+        #expect(urlRequest.httpMethod == "GET")
+        #expect(url.path == "/1/mail_hostings/123456/mailboxes/user@example.com")
+    }
+
+    @Test("Mail get mailbox response decodes flexible settings payload")
+    func getMailboxResponseDecodesFlexibleSettingsPayload() throws {
+        let json = """
+        {
+          "result": "success",
+          "data": {
+            "mail": "user@example.com",
+            "mailbox_id": 42,
+            "quota": null
+          }
+        }
+        """.data(using: .utf8)!
+        let decoder = JSONDecoder()
+        decoder.keyDecodingStrategy = .convertFromSnakeCase
+
+        let response = try decoder.decode(InfomaniakResponse<MailMailbox>.self, from: json)
+
+        #expect(response.result == "success")
+        #expect(response.data.values["mail"] == .string("user@example.com"))
+        #expect(response.data.values["mailbox_id"] == .number(42))
+    }
+}
