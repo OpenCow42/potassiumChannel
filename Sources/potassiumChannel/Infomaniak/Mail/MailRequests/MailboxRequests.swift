@@ -129,4 +129,16 @@ extension MailRequests {
             path: "/1/mail_hostings/\(mailHostingId)/mailboxes/\(mailboxName)/aliases/\(alias)"
         )
     }
+
+    /// Creates a request that removes one forwarding address from a mailbox for a mail hosting service.
+    public static func deleteMailboxForwarding(
+        mailHostingId: Int,
+        mailboxName: String,
+        redirectAddress: String
+    ) -> APIRequest<InfomaniakResponse<Bool>> {
+        APIRequest(
+            method: .delete,
+            path: "/1/mail_hostings/\(mailHostingId)/mailboxes/\(mailboxName)/forwarding_addresses/\(redirectAddress)"
+        )
+    }
 }

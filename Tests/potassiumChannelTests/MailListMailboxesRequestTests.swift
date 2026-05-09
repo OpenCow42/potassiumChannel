@@ -368,4 +368,39 @@ extension MailListMailboxesRequestTests {
         #expect(response.result == "success")
         #expect(response.data == true)
     }
+
+    @Test("Mail delete mailbox forwarding request encodes forwarding address path")
+    func deleteMailboxForwardingRequestEncodesForwardingAddressPath() async throws {
+        let client = InfomaniakAPIClient(configuration: APIClientConfiguration(bearerToken: "test-token"))
+        let request = MailRequests.deleteMailboxForwarding(
+            mailHostingId: 123456,
+            mailboxName: "user@example.com",
+            redirectAddress: "potassium-disposable-forward@example.net"
+        )
+
+        let urlRequest = try await client.makeURLRequest(for: request)
+        let url = try #require(urlRequest.url)
+
+        #expect(urlRequest.httpMethod == "DELETE")
+        #expect(urlRequest.value(forHTTPHeaderField: "Authorization") == "Bearer test-token")
+        #expect(urlRequest.httpBody == nil)
+        #expect(url.path == "/1/mail_hostings/123456/mailboxes/user@example.com/forwarding_addresses/potassium-disposable-forward@example.net")
+    }
+
+    @Test("Mail delete mailbox forwarding response decodes boolean success")
+    func deleteMailboxForwardingResponseDecodesBooleanSuccess() throws {
+        let json = """
+        {
+          "result": "success",
+          "data": true
+        }
+        """.data(using: .utf8)!
+        let decoder = JSONDecoder()
+        decoder.keyDecodingStrategy = .convertFromSnakeCase
+
+        let response = try decoder.decode(InfomaniakResponse<Bool>.self, from: json)
+
+        #expect(response.result == "success")
+        #expect(response.data == true)
+    }
 }
