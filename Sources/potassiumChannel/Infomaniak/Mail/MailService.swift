@@ -36,6 +36,11 @@ public struct MailService: Sendable {
         try await client.send(MailRequests.listMailboxes(mailHostingId: mailHostingId, options: options))
     }
 
+    /// Lists account names for a mail hosting service.
+    public func listMailHostingAccounts(mailHostingId: Int) async throws -> InfomaniakResponse<MailHostingAccounts> {
+        try await client.send(MailRequests.listMailHostingAccounts(mailHostingId: mailHostingId))
+    }
+
     /// Reads one mailbox settings payload for a mail hosting service.
     public func getMailbox(mailHostingId: Int, mailboxName: String) async throws -> InfomaniakResponse<MailMailbox> {
         try await client.send(MailRequests.getMailbox(mailHostingId: mailHostingId, mailboxName: mailboxName))

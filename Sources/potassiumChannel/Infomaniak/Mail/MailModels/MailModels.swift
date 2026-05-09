@@ -21,6 +21,27 @@ public struct MailMailbox: Codable, Equatable, Sendable {
     }
 }
 
+/// Account-list payload returned for a Mail hosting service.
+public struct MailHostingAccounts: Codable, Equatable, Sendable {
+    /// Raw accounts payload returned by the API.
+    public let values: [String: KDriveJSONValue]
+
+    /// Creates an accounts wrapper around a raw JSON payload.
+    public init(values: [String: KDriveJSONValue]) {
+        self.values = values
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.singleValueContainer()
+        self.values = try container.decode([String: KDriveJSONValue].self)
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.singleValueContainer()
+        try container.encode(values)
+    }
+}
+
 /// Alias settings payload returned for a Mail mailbox.
 public struct MailboxAliases: Codable, Equatable, Sendable {
     /// Raw aliases payload returned by the API.

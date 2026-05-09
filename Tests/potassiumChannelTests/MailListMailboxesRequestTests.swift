@@ -112,6 +112,38 @@ struct MailListMailboxesRequestTests {
 }
 
 extension MailListMailboxesRequestTests {
+    @Test("Mail list hosting accounts request encodes accounts path")
+    func listMailHostingAccountsRequestEncodesAccountsPath() async throws {
+        let client = InfomaniakAPIClient(configuration: APIClientConfiguration(bearerToken: "test-token"))
+        let request = MailRequests.listMailHostingAccounts(mailHostingId: 123456)
+
+        let urlRequest = try await client.makeURLRequest(for: request)
+        let url = try #require(urlRequest.url)
+
+        #expect(urlRequest.httpMethod == "GET")
+        #expect(urlRequest.value(forHTTPHeaderField: "Authorization") == "Bearer test-token")
+        #expect(url.path == "/1/mail_hostings/123456/accounts")
+    }
+
+    @Test("Mail list hosting accounts response decodes flexible accounts payload")
+    func listMailHostingAccountsResponseDecodesFlexiblePayload() throws {
+        let json = """
+        {
+          "result": "success",
+          "data": {
+            "accounts": ["user@example.com", "other@example.com"]
+          }
+        }
+        """.data(using: .utf8)!
+        let decoder = JSONDecoder()
+        decoder.keyDecodingStrategy = .convertFromSnakeCase
+
+        let response = try decoder.decode(InfomaniakResponse<MailHostingAccounts>.self, from: json)
+
+        #expect(response.result == "success")
+        #expect(response.data.values["accounts"] == .array([.string("user@example.com"), .string("other@example.com")]))
+    }
+
     @Test("Mail get mailbox request encodes mailbox settings path")
     func getMailboxRequestEncodesSettingsPath() async throws {
         let client = InfomaniakAPIClient(

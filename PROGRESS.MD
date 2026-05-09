@@ -1,3 +1,9 @@
+## 2026-05-09 — Mail hosting accounts route
+
+- Added shared support for `GET /1/mail_hostings/{service_mail}/accounts` via `MailRequests.listMailHostingAccounts` and `MailService.listMailHostingAccounts`, returning flexible `MailHostingAccounts` payloads.
+- Added request/response coverage for GET method, exact OpenAPI path, auth header, and account-list payload decoding.
+- Validation: `swift test --filter MailListMailboxesRequestTests` passed (16 tests); `swift test --filter Mail` passed (33 tests).
+
 ## 2026-05-09 — Mail list mailbox forwarding route
 
 - Added shared support for read route `GET /1/mail_hostings/{mail_hosting_id}/mailboxes/{mailbox_name}/forwarding_addresses` via `MailRequests.listMailboxForwarding` and `MailService.listMailboxForwarding`, returning flexible `MailboxForwarding` payloads.
