@@ -295,6 +295,19 @@ public struct MailDraftPayload: Codable, Equatable, Sendable {
     public let action: String?
     public let mimeType: String
 
+    public enum CodingKeys: String, CodingKey {
+        case body
+        case to
+        case cc
+        case bcc
+        case subject
+        case ackRequest = "ack_request"
+        case priority
+        case attachments
+        case action
+        case mimeType = "mime_type"
+    }
+
     public init(
         body: String,
         to: [MailDraftRecipient],
@@ -317,6 +330,24 @@ public struct MailDraftPayload: Codable, Equatable, Sendable {
         self.attachments = attachments
         self.action = action
         self.mimeType = mimeType
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encode(body, forKey: .body)
+        try container.encode(to, forKey: .to)
+        if !cc.isEmpty {
+            try container.encode(cc, forKey: .cc)
+        }
+        if !bcc.isEmpty {
+            try container.encode(bcc, forKey: .bcc)
+        }
+        try container.encode(subject, forKey: .subject)
+        try container.encode(ackRequest, forKey: .ackRequest)
+        try container.encode(priority, forKey: .priority)
+        try container.encode(attachments, forKey: .attachments)
+        try container.encodeIfPresent(action, forKey: .action)
+        try container.encode(mimeType, forKey: .mimeType)
     }
 }
 
