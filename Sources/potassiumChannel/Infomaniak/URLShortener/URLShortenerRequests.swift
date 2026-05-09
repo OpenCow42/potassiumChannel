@@ -29,4 +29,14 @@ public enum URLShortenerRequests {
             body: body
         )
     }
+
+    /// Creates a request that creates one short URL for the authenticated user using the v2 endpoint.
+    public static func createShortURLV2(url: String, expirationDate: Int? = nil) throws -> APIRequest<InfomaniakResponse<ShortURL>> {
+        let body = try JSONEncoder().encode(CreateShortURLPayload(url: url, expirationDate: expirationDate))
+        return APIRequest(
+            method: .post,
+            path: "/2/url-shortener",
+            body: body
+        )
+    }
 }
