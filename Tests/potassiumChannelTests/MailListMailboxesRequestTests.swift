@@ -148,6 +148,40 @@ extension MailListMailboxesRequestTests {
         #expect(response.data.values["mailbox_id"] == .number(42))
     }
 
+    @Test("Mail list mailbox aliases request encodes aliases path")
+    func listMailboxAliasesRequestEncodesAliasesPath() async throws {
+        let client = InfomaniakAPIClient(configuration: APIClientConfiguration(bearerToken: "test-token"))
+        let request = MailRequests.listMailboxAliases(mailHostingId: 123456, mailboxName: "user@example.com")
+
+        let urlRequest = try await client.makeURLRequest(for: request)
+        let url = try #require(urlRequest.url)
+
+        #expect(urlRequest.httpMethod == "GET")
+        #expect(urlRequest.value(forHTTPHeaderField: "Authorization") == "Bearer test-token")
+        #expect(url.path == "/1/mail_hostings/123456/mailboxes/user@example.com/aliases")
+    }
+
+    @Test("Mail list mailbox aliases response decodes flexible aliases payload")
+    func listMailboxAliasesResponseDecodesFlexiblePayload() throws {
+        let json = """
+        {
+          "result": "success",
+          "data": {
+            "enabled_alias": 1,
+            "aliases": ["alias@example.com"]
+          }
+        }
+        """.data(using: .utf8)!
+        let decoder = JSONDecoder()
+        decoder.keyDecodingStrategy = .convertFromSnakeCase
+
+        let response = try decoder.decode(InfomaniakResponse<MailboxAliases>.self, from: json)
+
+        #expect(response.result == "success")
+        #expect(response.data.values["enabled_alias"] == .number(1))
+        #expect(response.data.values["aliases"] == .array([.string("alias@example.com")]))
+    }
+
     @Test("Mail add mailbox alias request encodes alias payload")
     func addMailboxAliasRequestEncodesAliasPayload() async throws {
         let client = InfomaniakAPIClient(configuration: APIClientConfiguration(bearerToken: "test-token"))
