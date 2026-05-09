@@ -9,4 +9,14 @@ public enum URLShortenerRequests {
             path: "/1/url-shortener"
         )
     }
+
+    /// Creates a request that creates one short URL for the authenticated user.
+    public static func createShortURL(url: String, expirationDate: Int? = nil) throws -> APIRequest<InfomaniakResponse<ShortURL>> {
+        let body = try JSONEncoder().encode(CreateShortURLPayload(url: url, expirationDate: expirationDate))
+        return APIRequest(
+            method: .post,
+            path: "/1/url-shortener",
+            body: body
+        )
+    }
 }

@@ -1,5 +1,25 @@
 import Foundation
 
+/// A payload that creates a short URL.
+public struct CreateShortURLPayload: Codable, Equatable, Sendable {
+    /// The target URL to shorten.
+    public let url: String
+
+    /// Optional expiration date as a Unix timestamp.
+    public let expirationDate: Int?
+
+    /// Creates a short URL creation payload.
+    public init(url: String, expirationDate: Int? = nil) {
+        self.url = url
+        self.expirationDate = expirationDate
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case url
+        case expirationDate = "expiration_date"
+    }
+}
+
 /// A short URL returned by Infomaniak URL shortener APIs.
 public struct ShortURL: Codable, Equatable, Sendable {
     /// The short URL code.
