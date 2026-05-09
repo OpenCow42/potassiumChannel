@@ -185,4 +185,39 @@ extension MailListMailboxesRequestTests {
         #expect(response.result == "success")
         #expect(response.data == true)
     }
+
+    @Test("Mail delete mailbox alias request encodes alias path")
+    func deleteMailboxAliasRequestEncodesAliasPath() async throws {
+        let client = InfomaniakAPIClient(configuration: APIClientConfiguration(bearerToken: "test-token"))
+        let request = MailRequests.deleteMailboxAlias(
+            mailHostingId: 123456,
+            mailboxName: "user@example.com",
+            alias: "potassium-disposable-alias"
+        )
+
+        let urlRequest = try await client.makeURLRequest(for: request)
+        let url = try #require(urlRequest.url)
+
+        #expect(urlRequest.httpMethod == "DELETE")
+        #expect(urlRequest.value(forHTTPHeaderField: "Authorization") == "Bearer test-token")
+        #expect(urlRequest.httpBody == nil)
+        #expect(url.path == "/1/mail_hostings/123456/mailboxes/user@example.com/aliases/potassium-disposable-alias")
+    }
+
+    @Test("Mail delete mailbox alias response decodes boolean success")
+    func deleteMailboxAliasResponseDecodesBooleanSuccess() throws {
+        let json = """
+        {
+          "result": "success",
+          "data": true
+        }
+        """.data(using: .utf8)!
+        let decoder = JSONDecoder()
+        decoder.keyDecodingStrategy = .convertFromSnakeCase
+
+        let response = try decoder.decode(InfomaniakResponse<Bool>.self, from: json)
+
+        #expect(response.result == "success")
+        #expect(response.data == true)
+    }
 }

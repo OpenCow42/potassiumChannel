@@ -23,7 +23,8 @@ The usable discovery path for the configured account is current-user scoped, not
 13. [ ] `GET /1/mail_hostings/{mail_hosting_id}/mailboxes/{mailbox_name}/aliases` — read aliases/settings if authorized.
 14. [ ] `GET /1/mail_hostings/{mail_hosting_id}/mailboxes/{mailbox_name}/forwarding_addresses` — read forwarding settings if authorized.
 15. [x] `POST /1/mail_hostings/{mail_hosting_id}/mailboxes/{mailbox_name}/aliases` — create a disposable alias fixture, gated by the CLI/live-test layer.
-16. [x] `GET /1/mail_hostings/{mail_hosting_id}/mailboxes` — implemented, but live hosting-wide listing is fixture-gated/disabled for the configured account.
+16. [x] `DELETE /1/mail_hostings/{mail_hosting_id}/mailboxes/{mailbox_name}/aliases/{alias}` — remove the disposable alias fixture.
+17. [x] `GET /1/mail_hostings/{mail_hosting_id}/mailboxes` — implemented, but live hosting-wide listing is fixture-gated/disabled for the configured account.
 
 ## Testing policy
 
@@ -101,8 +102,9 @@ The usable discovery path for the configured account is current-user scoped, not
 - Added CLI support: `potassium mail mailbox --mail-hosting-id <id> --mailbox <mailbox-name>`.
 - Verified with `swift test --filter Mail`.
 
-## Mail alias create update
+## Mail alias create/delete update
 
 - Added shared support for `POST /1/mail_hostings/{mail_hosting_id}/mailboxes/{mailbox_name}/aliases` via `MailRequests.addMailboxAlias` and `MailService.addMailboxAlias`, returning `InfomaniakResponse<Bool>`.
-- Added `AddMailboxAliasPayload(alias:)` and request/response coverage for method, path, auth/JSON headers, required body encoding, and boolean data decoding.
+- Added shared support for `DELETE /1/mail_hostings/{mail_hosting_id}/mailboxes/{mailbox_name}/aliases/{alias}` via `MailRequests.deleteMailboxAlias` and `MailService.deleteMailboxAlias`, returning `InfomaniakResponse<Bool>`.
+- Added `AddMailboxAliasPayload(alias:)` and request/response coverage for method, path, auth/JSON headers, required body encoding, no-body delete behavior, and boolean data decoding.
 - Verified with `swift test --filter Mail`.

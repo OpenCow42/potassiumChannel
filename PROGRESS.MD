@@ -1,3 +1,9 @@
+## 2026-05-09 — Mail delete mailbox alias route
+
+- Added shared support for cleanup mutation `DELETE /1/mail_hostings/{mail_hosting_id}/mailboxes/{mailbox_name}/aliases/{alias}` via `MailRequests.deleteMailboxAlias` and `MailService.deleteMailboxAlias`, returning `InfomaniakResponse<Bool>`.
+- Added request/response coverage for DELETE method, exact OpenAPI path, auth header, empty body behavior, required path parameters, and boolean success decoding.
+- Validation: `swift test --filter MailListMailboxesRequestTests` passed (10 tests); `swift test --filter Mail` passed.
+
 ## 2026-05-09 — Mail create mailbox alias route
 
 - Added shared support for destructive/admin mutation `POST /1/mail_hostings/{mail_hosting_id}/mailboxes/{mailbox_name}/aliases` via `MailRequests.addMailboxAlias` and `MailService.addMailboxAlias`, returning `InfomaniakResponse<Bool>`.

@@ -46,6 +46,11 @@ public struct MailService: Sendable {
         try await client.send(MailRequests.addMailboxAlias(mailHostingId: mailHostingId, mailboxName: mailboxName, alias: alias))
     }
 
+    /// Removes one alias from a mailbox for a mail hosting service.
+    public func deleteMailboxAlias(mailHostingId: Int, mailboxName: String, alias: String) async throws -> InfomaniakResponse<Bool> {
+        try await client.send(MailRequests.deleteMailboxAlias(mailHostingId: mailHostingId, mailboxName: mailboxName, alias: alias))
+    }
+
     /// Lists mailboxes available to the authenticated user.
     public func listUserMailboxes(includedResources: String? = "unseen,aliases") async throws -> InfomaniakResponse<[UserMailbox]> {
         try await client.send(MailRequests.listUserMailboxes(includedResources: includedResources))

@@ -73,4 +73,16 @@ extension MailRequests {
             body: body
         )
     }
+
+    /// Creates a request that removes one alias from a mailbox for a mail hosting service.
+    public static func deleteMailboxAlias(
+        mailHostingId: Int,
+        mailboxName: String,
+        alias: String
+    ) -> APIRequest<InfomaniakResponse<Bool>> {
+        APIRequest(
+            method: .delete,
+            path: "/1/mail_hostings/\(mailHostingId)/mailboxes/\(mailboxName)/aliases/\(alias)"
+        )
+    }
 }
