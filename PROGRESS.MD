@@ -1,3 +1,31 @@
+## 2026-05-09 — URL shortener update short URL route
+
+- Added shared support for `PUT /1/url-shortener/{short_url_code}` via `URLShortenerRequests.updateShortURL` and `URLShortenerService.updateShortURL`, returning `InfomaniakResponse<ShortURL>`.
+- Added `UpdateShortURLPayload(expirationDate:)` for the required `expiration_date` JSON body field.
+- Added request/response coverage for PUT method, exact v1 path, auth/JSON headers, empty query behavior, required path/body parameters, path-segment encoding, and success response decoding.
+- Validation: `swift test --filter URLShortener` passed (16 tests); full `swift test` passed (470 tests / 161 suites).
+
+## 2026-05-09 — URL shortener v2 create short URL route
+
+- Added shared support for `POST /2/url-shortener` via `URLShortenerRequests.createShortURLV2` and `URLShortenerService.createShortURLV2`, returning `InfomaniakResponse<ShortURL>`.
+- Reused `CreateShortURLPayload(url:expirationDate:)` for the required `url` JSON body field and optional `expiration_date`.
+- Added request/response coverage for POST method, exact v2 path, auth/JSON headers, empty query behavior, required body encoding, optional expiration omission, and success response decoding.
+- Validation: `swift test --filter URLShortener` passed (12 tests).
+
+## 2026-05-09 — URL shortener create short URL route
+
+- Added shared support for `POST /1/url-shortener` via `URLShortenerRequests.createShortURL` and `URLShortenerService.createShortURL`, returning `InfomaniakResponse<ShortURL>`.
+- Added `CreateShortURLPayload(url:expirationDate:)` for the required `url` JSON body field and optional `expiration_date`.
+- Added request/response coverage for POST method, exact path, auth/JSON headers, empty query behavior, required body encoding, optional expiration omission, and success response decoding.
+- Validation: `swift test --filter URLShortenerCreateShortURLRequestTests` passed (3 tests).
+
+## 2026-05-09 — URL shortener list short URLs route
+
+- Added shared support for `GET /1/url-shortener` via `URLShortenerRequests.listShortURLs` and `URLShortenerService.listShortURLs`, returning typed `URLShortenerListResponse<[ShortURL]>` values.
+- Added flexible decoding for both the OpenAPI documented Laravel pagination shape and the live API `data`/`links`/`meta` pagination shape.
+- Added request/response coverage for GET method, exact path, auth/accept headers, empty query/body behavior, no required parameters, OpenAPI response decoding, and live pagination response decoding.
+- Validation: `swift test --filter URLShortenerListShortURLsRequestTests` passed (3 tests); full `swift test` passed (457 tests / 157 suites).
+
 ## 2026-05-09 — Mail delete mailbox forwarding route
 
 - Added shared support for cleanup mutation `DELETE /1/mail_hostings/{mail_hosting_id}/mailboxes/{mailbox_name}/forwarding_addresses/{redirect_addresses}` via `MailRequests.deleteMailboxForwarding` and `MailService.deleteMailboxForwarding`, returning `InfomaniakResponse<Bool>`.
@@ -1030,3 +1058,10 @@ not started
 - Added support for reading Mail mailbox quota from discovered mailbox name and hosting/product id.
 - Added flexible quota response handling plus request, parser, and live current-user tests.
 - Verified with `swift test --filter Mail`.
+
+## 2026-05-09 — URL shortener v2 list route
+
+- Added request/service support for `GET /2/url-shortener` as `URLShortenerRequests.listShortURLsV2` and `URLShortenerService.listShortURLsV2`.
+- Added v2 list option and response models for optional OpenAPI JSON body filters and the v2 paginated response shape.
+- Added unit coverage for the v2 path, authorization/default headers, explicit no-required-parameters behavior, optional body encoding, and response decoding.
+- Verified with `swift test --filter URLShortener`.
