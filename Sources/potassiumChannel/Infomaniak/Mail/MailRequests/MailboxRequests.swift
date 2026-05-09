@@ -71,6 +71,17 @@ extension MailRequests {
         )
     }
 
+    /// Creates a request that lists forwarding settings for a mailbox in a mail hosting service.
+    public static func listMailboxForwarding(
+        mailHostingId: Int,
+        mailboxName: String
+    ) -> APIRequest<InfomaniakResponse<MailboxForwarding>> {
+        APIRequest(
+            method: .get,
+            path: "/1/mail_hostings/\(mailHostingId)/mailboxes/\(mailboxName)/forwarding_addresses"
+        )
+    }
+
     /// Creates a request that adds one alias to a mailbox for a mail hosting service.
     public static func addMailboxAlias(
         mailHostingId: Int,

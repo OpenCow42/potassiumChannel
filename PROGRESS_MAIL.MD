@@ -21,7 +21,7 @@ The usable discovery path for the configured account is current-user scoped, not
 11. [x] `DELETE https://mail.infomaniak.com/api/mail/{mailbox_uuid}/draft/{draft_uuid}` — cleanup draft fixture.
 12. [ ] `GET /1/mail_hostings/{mail_hosting_id}/mailboxes/{mailbox_name}` — read hosting-specific mailbox settings using discovered fields.
 13. [x] `GET /1/mail_hostings/{mail_hosting_id}/mailboxes/{mailbox_name}/aliases` — read aliases/settings if authorized.
-14. [ ] `GET /1/mail_hostings/{mail_hosting_id}/mailboxes/{mailbox_name}/forwarding_addresses` — read forwarding settings if authorized.
+14. [x] `GET /1/mail_hostings/{mail_hosting_id}/mailboxes/{mailbox_name}/forwarding_addresses` — read forwarding settings if authorized.
 15. [x] `POST /1/mail_hostings/{mail_hosting_id}/mailboxes/{mailbox_name}/aliases` — create a disposable alias fixture, gated by the CLI/live-test layer.
 16. [x] `DELETE /1/mail_hostings/{mail_hosting_id}/mailboxes/{mailbox_name}/aliases/{alias}` — remove the disposable alias fixture.
 17. [x] `GET /1/mail_hostings/{mail_hosting_id}/mailboxes` — implemented, but live hosting-wide listing is fixture-gated/disabled for the configured account.
