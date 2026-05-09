@@ -5,6 +5,9 @@ public struct APIClientConfiguration: Sendable {
     /// The default Infomaniak API base URL.
     public static let defaultBaseURL = URL(string: "https://api.infomaniak.com")!
 
+    /// The default Infomaniak Mail application API base URL.
+    public static let defaultMailBaseURL = URL(string: "https://mail.infomaniak.com")!
+
     /// The base URL used to build API requests.
     public let baseURL: URL
 
