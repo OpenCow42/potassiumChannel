@@ -52,6 +52,14 @@ extension MailRequests {
         )
     }
 
+    /// Creates a request that lists account names for a mail hosting service.
+    public static func listMailHostingAccounts(mailHostingId: Int) -> APIRequest<InfomaniakResponse<MailHostingAccounts>> {
+        APIRequest(
+            method: .get,
+            path: "/1/mail_hostings/\(mailHostingId)/accounts"
+        )
+    }
+
     /// Creates a request that reads one mailbox settings payload for a mail hosting service.
     public static func getMailbox(mailHostingId: Int, mailboxName: String) -> APIRequest<InfomaniakResponse<MailMailbox>> {
         APIRequest(
