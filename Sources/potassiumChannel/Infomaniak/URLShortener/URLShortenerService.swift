@@ -35,4 +35,9 @@ public struct URLShortenerService: Sendable {
     public func createShortURLV2(url: String, expirationDate: Int? = nil) async throws -> InfomaniakResponse<ShortURL> {
         try await client.send(URLShortenerRequests.createShortURLV2(url: url, expirationDate: expirationDate))
     }
+
+    /// Updates one short URL for the authenticated user.
+    public func updateShortURL(shortURLCode: String, expirationDate: Int) async throws -> InfomaniakResponse<ShortURL> {
+        try await client.send(URLShortenerRequests.updateShortURL(shortURLCode: shortURLCode, expirationDate: expirationDate))
+    }
 }

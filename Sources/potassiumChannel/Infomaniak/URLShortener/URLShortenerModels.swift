@@ -20,6 +20,21 @@ public struct CreateShortURLPayload: Codable, Equatable, Sendable {
     }
 }
 
+/// A payload that updates a short URL.
+public struct UpdateShortURLPayload: Codable, Equatable, Sendable {
+    /// Expiration date as a Unix timestamp.
+    public let expirationDate: Int
+
+    /// Creates a short URL update payload.
+    public init(expirationDate: Int) {
+        self.expirationDate = expirationDate
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case expirationDate = "expiration_date"
+    }
+}
+
 /// Optional filters and pagination controls for the v2 URL shortener list route.
 public struct ListShortURLsV2Options: Codable, Equatable, Sendable {
     /// Field used to order returned short URLs.

@@ -39,4 +39,21 @@ public enum URLShortenerRequests {
             body: body
         )
     }
+
+    /// Creates a request that updates one short URL for the authenticated user.
+    public static func updateShortURL(shortURLCode: String, expirationDate: Int) throws -> APIRequest<InfomaniakResponse<ShortURL>> {
+        let body = try JSONEncoder().encode(UpdateShortURLPayload(expirationDate: expirationDate))
+        return APIRequest(
+            method: .put,
+            path: "/1/url-shortener/\(percentEncodePathSegment(shortURLCode))",
+            body: body
+        )
+    }
+
+    private static func percentEncodePathSegment(_ segment: String) -> String {
+        var allowedCharacters = CharacterSet.urlPathAllowed
+        allowedCharacters.remove(charactersIn: "/?#%")
+
+        return segment.addingPercentEncoding(withAllowedCharacters: allowedCharacters) ?? segment
+    }
 }

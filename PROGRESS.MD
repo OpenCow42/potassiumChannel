@@ -1,3 +1,10 @@
+## 2026-05-09 — URL shortener update short URL route
+
+- Added shared support for `PUT /1/url-shortener/{short_url_code}` via `URLShortenerRequests.updateShortURL` and `URLShortenerService.updateShortURL`, returning `InfomaniakResponse<ShortURL>`.
+- Added `UpdateShortURLPayload(expirationDate:)` for the required `expiration_date` JSON body field.
+- Added request/response coverage for PUT method, exact v1 path, auth/JSON headers, empty query behavior, required path/body parameters, path-segment encoding, and success response decoding.
+- Validation: `swift test --filter URLShortener` passed (16 tests); full `swift test` passed (470 tests / 161 suites).
+
 ## 2026-05-09 — URL shortener v2 create short URL route
 
 - Added shared support for `POST /2/url-shortener` via `URLShortenerRequests.createShortURLV2` and `URLShortenerService.createShortURLV2`, returning `InfomaniakResponse<ShortURL>`.
