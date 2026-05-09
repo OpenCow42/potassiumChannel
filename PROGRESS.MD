@@ -1044,3 +1044,10 @@ not started
 - Added support for reading Mail mailbox quota from discovered mailbox name and hosting/product id.
 - Added flexible quota response handling plus request, parser, and live current-user tests.
 - Verified with `swift test --filter Mail`.
+
+## 2026-05-09 — URL shortener v2 list route
+
+- Added request/service support for `GET /2/url-shortener` as `URLShortenerRequests.listShortURLsV2` and `URLShortenerService.listShortURLsV2`.
+- Added v2 list option and response models for optional OpenAPI JSON body filters and the v2 paginated response shape.
+- Added unit coverage for the v2 path, authorization/default headers, explicit no-required-parameters behavior, optional body encoding, and response decoding.
+- Verified with `swift test --filter URLShortener`.
