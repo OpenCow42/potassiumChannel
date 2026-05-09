@@ -1,3 +1,47 @@
+## 2026-05-09 — Mail delete mailbox forwarding route
+
+- Added shared support for cleanup mutation `DELETE /1/mail_hostings/{mail_hosting_id}/mailboxes/{mailbox_name}/forwarding_addresses/{redirect_addresses}` via `MailRequests.deleteMailboxForwarding` and `MailService.deleteMailboxForwarding`, returning `InfomaniakResponse<Bool>`.
+- Added request/response coverage for DELETE method, exact OpenAPI path, auth header, empty body behavior, required path parameters, and boolean success decoding.
+- Validation: `swift test --filter MailListMailboxesRequestTests` passed (20 tests); `swift test --filter Mail` passed (37 tests).
+
+## 2026-05-09 — Mail create mailbox forwarding route
+
+- Added shared support for destructive/admin mutation `POST /1/mail_hostings/{mail_hosting_id}/mailboxes/{mailbox_name}/forwarding_addresses` via `MailRequests.addMailboxForwarding` and `MailService.addMailboxForwarding`, returning flexible `CreatedMailboxForwarding` payloads.
+- Added `AddMailboxForwardingPayload(redirectAddress:)` for the required JSON body field `redirect_address`.
+- Added request/response coverage for POST method, exact OpenAPI path, auth/JSON headers, required body encoding, and flexible created-forwarding payload decoding.
+- Validation: `swift test --filter MailListMailboxesRequestTests` passed (18 tests); `swift test --filter Mail` passed.
+
+## 2026-05-09 — Mail hosting accounts route
+
+- Added shared support for `GET /1/mail_hostings/{service_mail}/accounts` via `MailRequests.listMailHostingAccounts` and `MailService.listMailHostingAccounts`, returning flexible `MailHostingAccounts` payloads.
+- Added request/response coverage for GET method, exact OpenAPI path, auth header, and account-list payload decoding.
+- Validation: `swift test --filter MailListMailboxesRequestTests` passed (16 tests); `swift test --filter Mail` passed (33 tests).
+
+## 2026-05-09 — Mail list mailbox forwarding route
+
+- Added shared support for read route `GET /1/mail_hostings/{mail_hosting_id}/mailboxes/{mailbox_name}/forwarding_addresses` via `MailRequests.listMailboxForwarding` and `MailService.listMailboxForwarding`, returning flexible `MailboxForwarding` payloads.
+- Added request/response coverage for GET method, exact OpenAPI path, auth header, and representative forwarding payload decoding, including the OpenAPI response spelling `redirect_adresses`.
+- Validation: `swift test --filter MailListMailboxesRequestTests` passed (14 tests); `swift test --filter Mail` passed (31 tests).
+
+## 2026-05-09 — Mail list mailbox aliases route
+
+- Added shared support for read route `GET /1/mail_hostings/{mail_hosting_id}/mailboxes/{mailbox_name}/aliases` via `MailRequests.listMailboxAliases` and `MailService.listMailboxAliases`, returning flexible `MailboxAliases` payloads.
+- Added request/response coverage for GET method, exact OpenAPI path, auth header, no-query/no-body behavior, required path parameters, and representative aliases payload decoding.
+- Validation: `swift test --filter MailListMailboxesRequestTests` passed (12 tests); `swift test --filter Mail` passed (29 tests).
+
+## 2026-05-09 — Mail delete mailbox alias route
+
+- Added shared support for cleanup mutation `DELETE /1/mail_hostings/{mail_hosting_id}/mailboxes/{mailbox_name}/aliases/{alias}` via `MailRequests.deleteMailboxAlias` and `MailService.deleteMailboxAlias`, returning `InfomaniakResponse<Bool>`.
+- Added request/response coverage for DELETE method, exact OpenAPI path, auth header, empty body behavior, required path parameters, and boolean success decoding.
+- Validation: `swift test --filter MailListMailboxesRequestTests` passed (10 tests); `swift test --filter Mail` passed.
+
+## 2026-05-09 — Mail create mailbox alias route
+
+- Added shared support for destructive/admin mutation `POST /1/mail_hostings/{mail_hosting_id}/mailboxes/{mailbox_name}/aliases` via `MailRequests.addMailboxAlias` and `MailService.addMailboxAlias`, returning `InfomaniakResponse<Bool>`.
+- Added `AddMailboxAliasPayload(alias:)` for the required JSON body.
+- Added request/response coverage for POST method, exact OpenAPI path, auth and JSON headers, body encoding, required path parameters, and boolean success decoding.
+- Validation: `swift test --filter MailListMailboxesRequestTests` passed (8 tests); `swift test --filter Mail` passed.
+
 ## 2026-05-08 — kDrive v2 update share-link settings route
 
 - Added shared support for drive-level mutation `PUT /2/drive/{drive_id}/settings/link` via `KDriveRequests.updateShareLinkSettings` and `KDriveService.updateShareLinkSettings`, returning `InfomaniakResponse<Bool>`.
@@ -946,3 +990,43 @@ not started
 - Added typed support for `POST /2/drive/{drive_id}/files/exists` as `KDriveRequests.checkFilesExistence(driveId:fileIds:)` and `KDriveService.checkFilesExistence(driveId:fileIds:)`.
 - Added `KDriveFilesExistenceRequestBody` and `KDriveFilesExistenceResult` models for the required `ids` JSON body and per-id existence response rows.
 - Added unit coverage for method/path/auth/JSON headers, required body encoding, empty query parameters, and response decoding.
+
+## 2026-05-08 — Infomaniak Mail mailboxes route
+
+- Branch: `feat/mail`.
+- Added Mail networking support for `GET /1/mail_hostings/{mail_hosting_id}/mailboxes` as `MailRequests.listMailboxes` and `MailService.listMailboxes`.
+- Added `MailMailbox` as a lossless mailbox payload wrapper and `ListMailboxesOptions` for search, filtering, includes, projection, pagination, and ordering query parameters.
+- Added unit coverage for OpenAPI path, authorization, query encoding, required path interpolation, and paginated response decoding.
+- Verified with `swift test --filter MailListMailboxesRequestTests`.
+
+## 2026-05-08 — Mail mailbox discovery routes
+
+- Added request/service support for current-user Mail discovery via `GET https://mail.infomaniak.com/api/mailbox?with=unseen,aliases`.
+- Added request/service support for current my kSuite mailbox details via `GET /1/my_ksuite/current?with=mail`.
+- Added flexible response wrappers and unit coverage for request construction and response decoding.
+- Verified with `swift test --filter Mail`.
+
+## 2026-05-08 — Mail folders route
+
+- Added request/service support for `GET https://mail.infomaniak.com/api/mail/{mailbox_uuid}/folder?with=ik-static`.
+- Added a flexible `MailFolder` response wrapper and unit coverage for request construction and folder decoding.
+- Confirmed `GET https://mail.infomaniak.com/api/mail/{mailbox_uuid}` redirects to login for the current token; mailbox profile data remains sourced from `/api/mailbox`.
+- Verified with `swift test --filter Mail`.
+
+## 2026-05-08 — Mail folder threads route
+
+- Added support for `GET https://mail.infomaniak.com/api/mail/{mailbox_uuid}/folder/{folder_id}/message`.
+- Added flexible thread-list response handling and tests for request construction, response decoding, and live folder thread listing.
+- Verified with `swift test --filter Mail`.
+
+## 2026-05-09 — Mail message resource route
+
+- Added support for reading a Mail message from the `resource` URL returned by folder thread/message listing.
+- Added flexible message response handling and tests.
+- Verified with `swift test --filter Mail`.
+
+## 2026-05-09 — Mail mailbox quota route
+
+- Added support for reading Mail mailbox quota from discovered mailbox name and hosting/product id.
+- Added flexible quota response handling plus request, parser, and live current-user tests.
+- Verified with `swift test --filter Mail`.
