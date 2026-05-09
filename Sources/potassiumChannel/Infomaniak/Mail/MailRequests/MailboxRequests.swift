@@ -59,4 +59,18 @@ extension MailRequests {
             path: "/1/mail_hostings/\(mailHostingId)/mailboxes/\(mailboxName)"
         )
     }
+
+    /// Creates a request that adds one alias to a mailbox for a mail hosting service.
+    public static func addMailboxAlias(
+        mailHostingId: Int,
+        mailboxName: String,
+        alias: String
+    ) throws -> APIRequest<InfomaniakResponse<Bool>> {
+        let body = try JSONEncoder().encode(AddMailboxAliasPayload(alias: alias))
+        return APIRequest(
+            method: .post,
+            path: "/1/mail_hostings/\(mailHostingId)/mailboxes/\(mailboxName)/aliases",
+            body: body
+        )
+    }
 }

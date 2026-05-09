@@ -21,6 +21,16 @@ public struct MailMailbox: Codable, Equatable, Sendable {
     }
 }
 
+/// Payload accepted when adding one alias to a Mail mailbox.
+public struct AddMailboxAliasPayload: Codable, Equatable, Sendable {
+    /// Alias username to add to the mailbox.
+    public let alias: String
+
+    public init(alias: String) {
+        self.alias = alias
+    }
+}
+
 /// Query options accepted by the Mail mailbox listing endpoint.
 public struct ListMailboxesOptions: Equatable, Sendable {
     /// Text searched by the API.
