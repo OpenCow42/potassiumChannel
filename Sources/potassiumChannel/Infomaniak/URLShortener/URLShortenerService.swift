@@ -21,6 +21,11 @@ public struct URLShortenerService: Sendable {
         try await client.send(URLShortenerRequests.listShortURLs())
     }
 
+    /// Lists short URLs for the authenticated user using the v2 endpoint.
+    public func listShortURLsV2(options: ListShortURLsV2Options = .init()) async throws -> URLShortenerV2ListResponse<[ShortURL]> {
+        try await client.send(URLShortenerRequests.listShortURLsV2(options: options))
+    }
+
     /// Creates one short URL for the authenticated user.
     public func createShortURL(url: String, expirationDate: Int? = nil) async throws -> InfomaniakResponse<ShortURL> {
         try await client.send(URLShortenerRequests.createShortURL(url: url, expirationDate: expirationDate))

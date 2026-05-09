@@ -20,6 +20,58 @@ public struct CreateShortURLPayload: Codable, Equatable, Sendable {
     }
 }
 
+/// Optional filters and pagination controls for the v2 URL shortener list route.
+public struct ListShortURLsV2Options: Codable, Equatable, Sendable {
+    /// Field used to order returned short URLs.
+    public enum OrderBy: String, Codable, Sendable {
+        case code
+        case url
+        case createdAt = "created_at"
+        case expirationDate = "expiration_date"
+    }
+
+    /// Sort direction used by the API.
+    public enum OrderDirection: String, Codable, Sendable {
+        case ascending = "ASC"
+        case descending = "DESC"
+    }
+
+    /// Field used to order returned short URLs.
+    public let orderBy: OrderBy?
+
+    /// Sort direction used by the API.
+    public let orderDirection: OrderDirection?
+
+    /// Search text used by the API.
+    public let search: String?
+
+    /// Number of items per page, constrained by Infomaniak to 1...500.
+    public let perPage: Int?
+
+    /// Creates v2 URL shortener list options.
+    public init(orderBy: OrderBy? = nil, orderDirection: OrderDirection? = nil, search: String? = nil, perPage: Int? = nil) {
+        self.orderBy = orderBy
+        self.orderDirection = orderDirection
+        self.search = search
+        self.perPage = perPage
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case orderBy = "order_by"
+        case orderDirection = "order_direction"
+        case search
+        case perPage = "per_page"
+    }
+
+    func encodedBodyIfNeeded() throws -> Data? {
+        guard orderBy != nil || orderDirection != nil || search != nil || perPage != nil else {
+            return nil
+        }
+
+        return try JSONEncoder().encode(self)
+    }
+}
+
 /// A short URL returned by Infomaniak URL shortener APIs.
 public struct ShortURL: Codable, Equatable, Sendable {
     /// The short URL code.
@@ -198,3 +250,36 @@ extension URLShortenerListResponse: Encodable {
 }
 
 extension URLShortenerListResponse: Equatable where Payload: Equatable {}
+
+/// The v2 URL shortener list response returned by Infomaniak.
+public struct URLShortenerV2ListResponse<Payload: Codable & Sendable>: Codable, Sendable {
+    /// Result of the HTTP request.
+    public let result: String
+
+    /// Total number of matching short URLs.
+    public let total: Int
+
+    /// Current page number.
+    public let page: Int
+
+    /// Number of returned pages.
+    public let pages: Int
+
+    /// Number of items per page.
+    public let itemsPerPage: Int
+
+    /// Decoded page payload.
+    public let data: Payload
+
+    /// Creates a v2 URL shortener list response.
+    public init(result: String, total: Int, page: Int, pages: Int, itemsPerPage: Int, data: Payload) {
+        self.result = result
+        self.total = total
+        self.page = page
+        self.pages = pages
+        self.itemsPerPage = itemsPerPage
+        self.data = data
+    }
+}
+
+extension URLShortenerV2ListResponse: Equatable where Payload: Equatable {}
