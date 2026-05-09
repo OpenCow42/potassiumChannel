@@ -61,6 +61,15 @@ public struct MailService: Sendable {
         try await client.send(MailRequests.addMailboxAlias(mailHostingId: mailHostingId, mailboxName: mailboxName, alias: alias))
     }
 
+    /// Adds one forwarding address to a mailbox for a mail hosting service.
+    public func addMailboxForwarding(
+        mailHostingId: Int,
+        mailboxName: String,
+        redirectAddress: String
+    ) async throws -> InfomaniakResponse<CreatedMailboxForwarding> {
+        try await client.send(MailRequests.addMailboxForwarding(mailHostingId: mailHostingId, mailboxName: mailboxName, redirectAddress: redirectAddress))
+    }
+
     /// Removes one alias from a mailbox for a mail hosting service.
     public func deleteMailboxAlias(mailHostingId: Int, mailboxName: String, alias: String) async throws -> InfomaniakResponse<Bool> {
         try await client.send(MailRequests.deleteMailboxAlias(mailHostingId: mailHostingId, mailboxName: mailboxName, alias: alias))

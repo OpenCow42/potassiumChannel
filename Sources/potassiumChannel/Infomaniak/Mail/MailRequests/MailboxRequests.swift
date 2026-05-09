@@ -104,6 +104,20 @@ extension MailRequests {
         )
     }
 
+    /// Creates a request that adds one forwarding address to a mailbox for a mail hosting service.
+    public static func addMailboxForwarding(
+        mailHostingId: Int,
+        mailboxName: String,
+        redirectAddress: String
+    ) throws -> APIRequest<InfomaniakResponse<CreatedMailboxForwarding>> {
+        let body = try JSONEncoder().encode(AddMailboxForwardingPayload(redirectAddress: redirectAddress))
+        return APIRequest(
+            method: .post,
+            path: "/1/mail_hostings/\(mailHostingId)/mailboxes/\(mailboxName)/forwarding_addresses",
+            body: body
+        )
+    }
+
     /// Creates a request that removes one alias from a mailbox for a mail hosting service.
     public static func deleteMailboxAlias(
         mailHostingId: Int,

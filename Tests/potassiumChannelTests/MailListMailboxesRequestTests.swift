@@ -292,6 +292,48 @@ extension MailListMailboxesRequestTests {
         #expect(response.data == true)
     }
 
+    @Test("Mail add mailbox forwarding request encodes forwarding payload")
+    func addMailboxForwardingRequestEncodesForwardingPayload() async throws {
+        let client = InfomaniakAPIClient(configuration: APIClientConfiguration(bearerToken: "test-token"))
+        let request = try MailRequests.addMailboxForwarding(
+            mailHostingId: 123456,
+            mailboxName: "user@example.com",
+            redirectAddress: "forward@example.net"
+        )
+
+        let urlRequest = try await client.makeURLRequest(for: request)
+        let url = try #require(urlRequest.url)
+        let body = try #require(urlRequest.httpBody)
+        let payload = try JSONDecoder().decode(AddMailboxForwardingPayload.self, from: body)
+
+        #expect(urlRequest.httpMethod == "POST")
+        #expect(urlRequest.value(forHTTPHeaderField: "Authorization") == "Bearer test-token")
+        #expect(urlRequest.value(forHTTPHeaderField: "Content-Type") == "application/json")
+        #expect(url.path == "/1/mail_hostings/123456/mailboxes/user@example.com/forwarding_addresses")
+        #expect(payload.redirectAddress == "forward@example.net")
+    }
+
+    @Test("Mail add mailbox forwarding response decodes created forwarding payload")
+    func addMailboxForwardingResponseDecodesCreatedPayload() throws {
+        let json = """
+        {
+          "result": "success",
+          "data": {
+            "redirect_address": "forward@example.net",
+            "is_enabled": true
+          }
+        }
+        """.data(using: .utf8)!
+        let decoder = JSONDecoder()
+        decoder.keyDecodingStrategy = .convertFromSnakeCase
+
+        let response = try decoder.decode(InfomaniakResponse<CreatedMailboxForwarding>.self, from: json)
+
+        #expect(response.result == "success")
+        #expect(response.data.values["redirect_address"] == .string("forward@example.net"))
+        #expect(response.data.values["is_enabled"] == .bool(true))
+    }
+
     @Test("Mail delete mailbox alias request encodes alias path")
     func deleteMailboxAliasRequestEncodesAliasPath() async throws {
         let client = InfomaniakAPIClient(configuration: APIClientConfiguration(bearerToken: "test-token"))
