@@ -1,3 +1,10 @@
+## 2026-05-09 — URL shortener v2 create short URL route
+
+- Added shared support for `POST /2/url-shortener` via `URLShortenerRequests.createShortURLV2` and `URLShortenerService.createShortURLV2`, returning `InfomaniakResponse<ShortURL>`.
+- Reused `CreateShortURLPayload(url:expirationDate:)` for the required `url` JSON body field and optional `expiration_date`.
+- Added request/response coverage for POST method, exact v2 path, auth/JSON headers, empty query behavior, required body encoding, optional expiration omission, and success response decoding.
+- Validation: `swift test --filter URLShortener` passed (12 tests).
+
 ## 2026-05-09 — URL shortener create short URL route
 
 - Added shared support for `POST /1/url-shortener` via `URLShortenerRequests.createShortURL` and `URLShortenerService.createShortURL`, returning `InfomaniakResponse<ShortURL>`.
