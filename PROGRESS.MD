@@ -1,3 +1,9 @@
+## 2026-05-09 — Mail list mailbox aliases route
+
+- Added shared support for read route `GET /1/mail_hostings/{mail_hosting_id}/mailboxes/{mailbox_name}/aliases` via `MailRequests.listMailboxAliases` and `MailService.listMailboxAliases`, returning flexible `MailboxAliases` payloads.
+- Added request/response coverage for GET method, exact OpenAPI path, auth header, no-query/no-body behavior, required path parameters, and representative aliases payload decoding.
+- Validation: `swift test --filter MailListMailboxesRequestTests` passed (12 tests); `swift test --filter Mail` passed (29 tests).
+
 ## 2026-05-09 — Mail delete mailbox alias route
 
 - Added shared support for cleanup mutation `DELETE /1/mail_hostings/{mail_hosting_id}/mailboxes/{mailbox_name}/aliases/{alias}` via `MailRequests.deleteMailboxAlias` and `MailService.deleteMailboxAlias`, returning `InfomaniakResponse<Bool>`.

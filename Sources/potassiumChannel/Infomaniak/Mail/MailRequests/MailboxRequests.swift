@@ -60,6 +60,17 @@ extension MailRequests {
         )
     }
 
+    /// Creates a request that lists aliases for a mailbox in a mail hosting service.
+    public static func listMailboxAliases(
+        mailHostingId: Int,
+        mailboxName: String
+    ) -> APIRequest<InfomaniakResponse<MailboxAliases>> {
+        APIRequest(
+            method: .get,
+            path: "/1/mail_hostings/\(mailHostingId)/mailboxes/\(mailboxName)/aliases"
+        )
+    }
+
     /// Creates a request that adds one alias to a mailbox for a mail hosting service.
     public static func addMailboxAlias(
         mailHostingId: Int,
