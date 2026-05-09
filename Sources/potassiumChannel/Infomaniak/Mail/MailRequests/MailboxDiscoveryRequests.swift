@@ -74,6 +74,70 @@ extension MailRequests {
         )
     }
 
+
+
+    /// Creates a request that saves a new draft for a mailbox.
+    public static func createDraft(mailboxUUID: String, payload: MailDraftPayload) throws -> APIRequest<InfomaniakResponse<MailDraft>> {
+        let body = try JSONEncoder().encode(payload)
+        return APIRequest(
+            method: .post,
+            path: "/api/mail/\(mailboxUUID)/draft",
+            body: body
+        )
+    }
+
+    /// Creates a request that updates or sends an existing draft for a mailbox.
+    public static func updateDraft(mailboxUUID: String, draftUUID: String, payload: MailDraftPayload) throws -> APIRequest<InfomaniakResponse<MailDraft>> {
+        let body = try JSONEncoder().encode(payload)
+        return APIRequest(
+            method: .put,
+            path: "/api/mail/\(mailboxUUID)/draft/\(draftUUID)",
+            body: body
+        )
+    }
+
+    /// Creates a request that reads a saved draft for a mailbox.
+    public static func getDraft(mailboxUUID: String, draftUUID: String) -> APIRequest<InfomaniakResponse<MailDraft>> {
+        APIRequest(
+            method: .get,
+            path: "/api/mail/\(mailboxUUID)/draft/\(draftUUID)"
+        )
+    }
+
+    /// Creates a request that deletes a saved draft for a mailbox.
+    public static func deleteDraft(mailboxUUID: String, draftUUID: String) -> APIRequest<InfomaniakResponse<KDriveJSONValue>> {
+        APIRequest(
+            method: .delete,
+            path: "/api/mail/\(mailboxUUID)/draft/\(draftUUID)"
+        )
+    }
+
+    /// Creates a request that schedules a saved draft resource.
+    public static func scheduleDraft(draftResource: String, scheduleDate: String) throws -> APIRequest<InfomaniakResponse<MailDraftSchedule>> {
+        let body = try JSONEncoder().encode(MailDraftSchedulePayload(scheduleDate: scheduleDate))
+        return APIRequest(
+            method: .put,
+            path: draftResource.appending("/schedule"),
+            body: body
+        )
+    }
+
+    /// Creates a request that removes a scheduled send and moves it back to drafts.
+    public static func deleteSchedule(scheduleAction: String) -> APIRequest<InfomaniakResponse<KDriveJSONValue>> {
+        APIRequest(
+            method: .delete,
+            path: scheduleAction
+        )
+    }
+
+    /// Creates a request that cancels a delayed send action.
+    public static func cancelSend(cancelSendResource: String) -> APIRequest<InfomaniakResponse<KDriveJSONValue>> {
+        APIRequest(
+            method: .put,
+            path: cancelSendResource
+        )
+    }
+
     /// Creates a request that reads a message from a returned message resource path.
     public static func getMessage(
         resource: String,

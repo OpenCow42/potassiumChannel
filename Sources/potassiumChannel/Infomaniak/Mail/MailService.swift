@@ -36,6 +36,11 @@ public struct MailService: Sendable {
         try await client.send(MailRequests.listMailboxes(mailHostingId: mailHostingId, options: options))
     }
 
+    /// Reads one mailbox settings payload for a mail hosting service.
+    public func getMailbox(mailHostingId: Int, mailboxName: String) async throws -> InfomaniakResponse<MailMailbox> {
+        try await client.send(MailRequests.getMailbox(mailHostingId: mailHostingId, mailboxName: mailboxName))
+    }
+
     /// Lists mailboxes available to the authenticated user.
     public func listUserMailboxes(includedResources: String? = "unseen,aliases") async throws -> InfomaniakResponse<[UserMailbox]> {
         try await client.send(MailRequests.listUserMailboxes(includedResources: includedResources))
@@ -62,6 +67,43 @@ public struct MailService: Sendable {
         options: GetMailboxQuotaOptions = GetMailboxQuotaOptions()
     ) async throws -> InfomaniakResponse<MailboxQuota> {
         try await client.send(MailRequests.getMailboxQuota(mailbox: mailbox, productId: productId, options: options))
+    }
+
+
+
+    /// Saves a new draft for a mailbox.
+    public func createDraft(mailboxUUID: String, payload: MailDraftPayload) async throws -> InfomaniakResponse<MailDraft> {
+        try await client.send(MailRequests.createDraft(mailboxUUID: mailboxUUID, payload: payload))
+    }
+
+    /// Updates or sends an existing draft for a mailbox.
+    public func updateDraft(mailboxUUID: String, draftUUID: String, payload: MailDraftPayload) async throws -> InfomaniakResponse<MailDraft> {
+        try await client.send(MailRequests.updateDraft(mailboxUUID: mailboxUUID, draftUUID: draftUUID, payload: payload))
+    }
+
+    /// Reads a saved draft for a mailbox.
+    public func getDraft(mailboxUUID: String, draftUUID: String) async throws -> InfomaniakResponse<MailDraft> {
+        try await client.send(MailRequests.getDraft(mailboxUUID: mailboxUUID, draftUUID: draftUUID))
+    }
+
+    /// Deletes a saved draft for a mailbox.
+    public func deleteDraft(mailboxUUID: String, draftUUID: String) async throws -> InfomaniakResponse<KDriveJSONValue> {
+        try await client.send(MailRequests.deleteDraft(mailboxUUID: mailboxUUID, draftUUID: draftUUID))
+    }
+
+    /// Schedules a saved draft resource.
+    public func scheduleDraft(draftResource: String, scheduleDate: String) async throws -> InfomaniakResponse<MailDraftSchedule> {
+        try await client.send(MailRequests.scheduleDraft(draftResource: draftResource, scheduleDate: scheduleDate))
+    }
+
+    /// Removes a scheduled send and moves it back to drafts.
+    public func deleteSchedule(scheduleAction: String) async throws -> InfomaniakResponse<KDriveJSONValue> {
+        try await client.send(MailRequests.deleteSchedule(scheduleAction: scheduleAction))
+    }
+
+    /// Cancels a delayed send action.
+    public func cancelSend(cancelSendResource: String) async throws -> InfomaniakResponse<KDriveJSONValue> {
+        try await client.send(MailRequests.cancelSend(cancelSendResource: cancelSendResource))
     }
 
     /// Reads a message from a returned message resource path.

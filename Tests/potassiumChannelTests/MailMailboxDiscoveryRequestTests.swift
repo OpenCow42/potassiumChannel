@@ -193,6 +193,159 @@ struct MailMailboxDiscoveryRequestTests {
         #expect(response.data.values["size_checked_at"] == .number(1778277659))
     }
 
+
+    @Test("Create draft request encodes mailbox path and JSON payload")
+    func createDraftRequestEncodesMailboxPathAndPayload() async throws {
+        let client = InfomaniakAPIClient(
+            configuration: APIClientConfiguration(
+                baseURL: APIClientConfiguration.defaultMailBaseURL,
+                bearerToken: "test-token"
+            )
+        )
+        let payload = MailDraftPayload(
+            body: "<p>Hello from tests</p>",
+            to: [MailDraftRecipient(email: "recipient@example.com", name: "Recipient")],
+            subject: "Draft subject"
+        )
+        let request = try MailRequests.createDraft(
+            mailboxUUID: "904443a9-fb09-3b09-b05a-6062dac0cbb6",
+            payload: payload
+        )
+
+        let urlRequest = try await client.makeURLRequest(for: request)
+        let url = try #require(urlRequest.url)
+        let body = try #require(urlRequest.httpBody)
+        let object = try #require(JSONSerialization.jsonObject(with: body) as? [String: Any])
+        let to = try #require(object["to"] as? [[String: Any]])
+        let firstRecipient = try #require(to.first)
+
+        #expect(urlRequest.httpMethod == "POST")
+        #expect(url.host == "mail.infomaniak.com")
+        #expect(url.path == "/api/mail/904443a9-fb09-3b09-b05a-6062dac0cbb6/draft")
+        #expect(urlRequest.value(forHTTPHeaderField: "Content-Type") == "application/json")
+        #expect(object["body"] as? String == "<p>Hello from tests</p>")
+        #expect(object["subject"] as? String == "Draft subject")
+        #expect(object["action"] as? String == "save")
+        #expect(object["mimeType"] as? String == "text/html")
+        #expect(firstRecipient["email"] as? String == "recipient@example.com")
+        #expect(firstRecipient["name"] as? String == "Recipient")
+    }
+
+
+    @Test("Draft follow-up requests use draft UUID path and expected methods")
+    func draftFollowUpRequestsUseDraftUUIDPathAndMethods() async throws {
+        let client = InfomaniakAPIClient(
+            configuration: APIClientConfiguration(
+                baseURL: APIClientConfiguration.defaultMailBaseURL,
+                bearerToken: "test-token"
+            )
+        )
+        let payload = MailDraftPayload(
+            body: "<p>Updated</p>",
+            to: [MailDraftRecipient(email: "recipient@example.com")],
+            subject: "Updated subject"
+        )
+
+        let update = try await client.makeURLRequest(for: MailRequests.updateDraft(
+            mailboxUUID: "mailbox-uuid",
+            draftUUID: "draft-uuid",
+            payload: payload
+        ))
+        let get = try await client.makeURLRequest(for: MailRequests.getDraft(mailboxUUID: "mailbox-uuid", draftUUID: "draft-uuid"))
+        let delete = try await client.makeURLRequest(for: MailRequests.deleteDraft(mailboxUUID: "mailbox-uuid", draftUUID: "draft-uuid"))
+
+        #expect(update.httpMethod == "PUT")
+        #expect(get.httpMethod == "GET")
+        #expect(delete.httpMethod == "DELETE")
+        #expect(update.url?.path == "/api/mail/mailbox-uuid/draft/draft-uuid")
+        #expect(get.url?.path == "/api/mail/mailbox-uuid/draft/draft-uuid")
+        #expect(delete.url?.path == "/api/mail/mailbox-uuid/draft/draft-uuid")
+        #expect(update.httpBody != nil)
+        #expect(get.httpBody == nil)
+        #expect(delete.httpBody == nil)
+    }
+
+
+    @Test("Draft schedule requests use resource actions and expected methods")
+    func draftScheduleRequestsUseResourceActionsAndExpectedMethods() async throws {
+        let client = InfomaniakAPIClient(
+            configuration: APIClientConfiguration(
+                baseURL: APIClientConfiguration.defaultMailBaseURL,
+                bearerToken: "test-token"
+            )
+        )
+
+        let schedule = try await client.makeURLRequest(for: MailRequests.scheduleDraft(
+            draftResource: "/api/mail/mailbox-uuid/draft/draft-uuid",
+            scheduleDate: "2026-05-10T08:00:00+02:00"
+        ))
+        let delete = try await client.makeURLRequest(for: MailRequests.deleteSchedule(
+            scheduleAction: "/api/mail/mailbox-uuid/draft/draft-uuid/schedule"
+        ))
+        let cancel = try await client.makeURLRequest(for: MailRequests.cancelSend(
+            cancelSendResource: "/api/mail/mailbox-uuid/draft/draft-uuid/cancel"
+        ))
+
+        #expect(schedule.httpMethod == "PUT")
+        #expect(delete.httpMethod == "DELETE")
+        #expect(cancel.httpMethod == "PUT")
+        #expect(schedule.url?.path == "/api/mail/mailbox-uuid/draft/draft-uuid/schedule")
+        #expect(delete.url?.path == "/api/mail/mailbox-uuid/draft/draft-uuid/schedule")
+        #expect(cancel.url?.path == "/api/mail/mailbox-uuid/draft/draft-uuid/cancel")
+        #expect(schedule.httpBody != nil)
+        #expect(delete.httpBody == nil)
+        #expect(cancel.httpBody == nil)
+
+        let decoded = try JSONDecoder().decode(MailDraftSchedulePayload.self, from: try #require(schedule.httpBody))
+        #expect(decoded.scheduleDate == "2026-05-10T08:00:00+02:00")
+    }
+
+    @Test("Draft schedule response decodes flexible payload")
+    func draftScheduleResponseDecodesFlexiblePayload() throws {
+        let json = """
+        {
+          "result": "success",
+          "data": {
+            "uuid": "schedule-uuid",
+            "uid": "123",
+            "schedule_action": "/api/mail/mailbox-uuid/draft/draft-uuid/schedule"
+          }
+        }
+        """.data(using: .utf8)!
+        let decoder = JSONDecoder()
+        decoder.keyDecodingStrategy = .convertFromSnakeCase
+
+        let response = try decoder.decode(InfomaniakResponse<MailDraftSchedule>.self, from: json)
+
+        #expect(response.result == "success")
+        #expect(response.data.values["uuid"] == .string("schedule-uuid"))
+        #expect(response.data.values["schedule_action"] == .string("/api/mail/mailbox-uuid/draft/draft-uuid/schedule"))
+    }
+
+    @Test("Create draft response decodes flexible draft payload")
+    func createDraftResponseDecodesFlexiblePayload() throws {
+        let json = """
+        {
+          "result": "success",
+          "data": {
+            "uuid": "draft-uuid",
+            "uid": "123",
+            "resource": "/api/mail/mailbox-uuid/draft/draft-uuid",
+            "subject": "Draft subject"
+          }
+        }
+        """.data(using: .utf8)!
+        let decoder = JSONDecoder()
+        decoder.keyDecodingStrategy = .convertFromSnakeCase
+
+        let response = try decoder.decode(InfomaniakResponse<MailDraft>.self, from: json)
+
+        #expect(response.result == "success")
+        #expect(response.data.values["uuid"] == .string("draft-uuid"))
+        #expect(response.data.values["resource"] == .string("/api/mail/mailbox-uuid/draft/draft-uuid"))
+        #expect(response.data.values["subject"] == .string("Draft subject"))
+    }
+
     @Test("Mail message request uses returned resource path")
     func mailMessageRequestMatchesAPIShape() async throws {
         let client = InfomaniakAPIClient(
