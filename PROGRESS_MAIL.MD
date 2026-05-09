@@ -24,8 +24,9 @@ The usable discovery path for the configured account is current-user scoped, not
 14. [x] `GET /1/mail_hostings/{mail_hosting_id}/mailboxes/{mailbox_name}/forwarding_addresses` — read forwarding settings if authorized.
 15. [x] `POST /1/mail_hostings/{mail_hosting_id}/mailboxes/{mailbox_name}/aliases` — create a disposable alias fixture, gated by the CLI/live-test layer.
 16. [x] `DELETE /1/mail_hostings/{mail_hosting_id}/mailboxes/{mailbox_name}/aliases/{alias}` — remove the disposable alias fixture.
-17. [x] `GET /1/mail_hostings/{mail_hosting_id}/mailboxes` — implemented, but live hosting-wide listing is fixture-gated/disabled for the configured account.
-18. [x] `GET /1/mail_hostings/{service_mail}/accounts` — implemented, but live account listing is fixture-gated/disabled until a true Mail Service/admin fixture is available.
+17. [x] `POST /1/mail_hostings/{mail_hosting_id}/mailboxes/{mailbox_name}/forwarding_addresses` — create a disposable forwarding fixture; live execution is blocked until delete-forwarding cleanup exists.
+18. [x] `GET /1/mail_hostings/{mail_hosting_id}/mailboxes` — implemented, but live hosting-wide listing is fixture-gated/disabled for the configured account.
+19. [x] `GET /1/mail_hostings/{service_mail}/accounts` — implemented, but live account listing is fixture-gated/disabled until a true Mail Service/admin fixture is available.
 
 ## Testing policy
 
@@ -109,4 +110,11 @@ The usable discovery path for the configured account is current-user scoped, not
 - Added shared support for `POST /1/mail_hostings/{mail_hosting_id}/mailboxes/{mailbox_name}/aliases` via `MailRequests.addMailboxAlias` and `MailService.addMailboxAlias`, returning `InfomaniakResponse<Bool>`.
 - Added shared support for `DELETE /1/mail_hostings/{mail_hosting_id}/mailboxes/{mailbox_name}/aliases/{alias}` via `MailRequests.deleteMailboxAlias` and `MailService.deleteMailboxAlias`, returning `InfomaniakResponse<Bool>`.
 - Added `AddMailboxAliasPayload(alias:)` and request/response coverage for method, path, auth/JSON headers, required body encoding, no-body delete behavior, alias payload decoding, and boolean data decoding.
+- Verified with `swift test --filter Mail`.
+
+## Mail forwarding create update
+
+- Added shared support for `POST /1/mail_hostings/{mail_hosting_id}/mailboxes/{mailbox_name}/forwarding_addresses` via `MailRequests.addMailboxForwarding` and `MailService.addMailboxForwarding`.
+- Added `AddMailboxForwardingPayload(redirectAddress:)` and flexible `CreatedMailboxForwarding` decoding.
+- Live execution remains a Potassium CLI/API-test concern and is blocked until delete-forwarding cleanup is implemented.
 - Verified with `swift test --filter Mail`.

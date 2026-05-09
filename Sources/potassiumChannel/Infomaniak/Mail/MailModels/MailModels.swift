@@ -94,6 +94,41 @@ public struct AddMailboxAliasPayload: Codable, Equatable, Sendable {
     }
 }
 
+/// Payload accepted when adding one forwarding address to a Mail mailbox.
+public struct AddMailboxForwardingPayload: Codable, Equatable, Sendable {
+    /// Destination email address to add as a mailbox forwarding target.
+    public let redirectAddress: String
+
+    public enum CodingKeys: String, CodingKey {
+        case redirectAddress = "redirect_address"
+    }
+
+    public init(redirectAddress: String) {
+        self.redirectAddress = redirectAddress
+    }
+}
+
+/// Created forwarding payload returned for a Mail mailbox.
+public struct CreatedMailboxForwarding: Codable, Equatable, Sendable {
+    /// Raw forwarding creation payload returned by the API.
+    public let values: [String: KDriveJSONValue]
+
+    /// Creates a forwarding creation wrapper around a raw JSON payload.
+    public init(values: [String: KDriveJSONValue]) {
+        self.values = values
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.singleValueContainer()
+        self.values = try container.decode([String: KDriveJSONValue].self)
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.singleValueContainer()
+        try container.encode(values)
+    }
+}
+
 /// Query options accepted by the Mail mailbox listing endpoint.
 public struct ListMailboxesOptions: Equatable, Sendable {
     /// Text searched by the API.

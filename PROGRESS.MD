@@ -1,3 +1,10 @@
+## 2026-05-09 — Mail create mailbox forwarding route
+
+- Added shared support for destructive/admin mutation `POST /1/mail_hostings/{mail_hosting_id}/mailboxes/{mailbox_name}/forwarding_addresses` via `MailRequests.addMailboxForwarding` and `MailService.addMailboxForwarding`, returning flexible `CreatedMailboxForwarding` payloads.
+- Added `AddMailboxForwardingPayload(redirectAddress:)` for the required JSON body field `redirect_address`.
+- Added request/response coverage for POST method, exact OpenAPI path, auth/JSON headers, required body encoding, and flexible created-forwarding payload decoding.
+- Validation: `swift test --filter MailListMailboxesRequestTests` passed (18 tests); `swift test --filter Mail` passed.
+
 ## 2026-05-09 — Mail hosting accounts route
 
 - Added shared support for `GET /1/mail_hostings/{service_mail}/accounts` via `MailRequests.listMailHostingAccounts` and `MailService.listMailHostingAccounts`, returning flexible `MailHostingAccounts` payloads.
