@@ -42,6 +42,27 @@ public struct MailboxAliases: Codable, Equatable, Sendable {
     }
 }
 
+/// Forwarding settings payload returned for a Mail mailbox.
+public struct MailboxForwarding: Codable, Equatable, Sendable {
+    /// Raw forwarding payload returned by the API.
+    public let values: [String: KDriveJSONValue]
+
+    /// Creates a forwarding wrapper around a raw JSON payload.
+    public init(values: [String: KDriveJSONValue]) {
+        self.values = values
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.singleValueContainer()
+        self.values = try container.decode([String: KDriveJSONValue].self)
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.singleValueContainer()
+        try container.encode(values)
+    }
+}
+
 /// Payload accepted when adding one alias to a Mail mailbox.
 public struct AddMailboxAliasPayload: Codable, Equatable, Sendable {
     /// Alias username to add to the mailbox.

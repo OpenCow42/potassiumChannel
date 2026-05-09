@@ -182,6 +182,46 @@ extension MailListMailboxesRequestTests {
         #expect(response.data.values["aliases"] == .array([.string("alias@example.com")]))
     }
 
+    @Test("Mail list mailbox forwarding request encodes forwarding path")
+    func listMailboxForwardingRequestEncodesForwardingPath() async throws {
+        let client = InfomaniakAPIClient(configuration: APIClientConfiguration(bearerToken: "test-token"))
+        let request = MailRequests.listMailboxForwarding(mailHostingId: 123456, mailboxName: "user@example.com")
+
+        let urlRequest = try await client.makeURLRequest(for: request)
+        let url = try #require(urlRequest.url)
+
+        #expect(urlRequest.httpMethod == "GET")
+        #expect(urlRequest.value(forHTTPHeaderField: "Authorization") == "Bearer test-token")
+        #expect(url.path == "/1/mail_hostings/123456/mailboxes/user@example.com/forwarding_addresses")
+    }
+
+    @Test("Mail list mailbox forwarding response decodes flexible forwarding payload")
+    func listMailboxForwardingResponseDecodesFlexiblePayload() throws {
+        let json = """
+        {
+          "result": "success",
+          "data": {
+            "is_enabled": "1",
+            "has_dont_deliver": "0",
+            "has_forward_spam": "1",
+            "redirect_adresses": [
+              { "email": "forward@example.com", "email_idn": "forward@example.com" }
+            ]
+          }
+        }
+        """.data(using: .utf8)!
+        let decoder = JSONDecoder()
+        decoder.keyDecodingStrategy = .convertFromSnakeCase
+
+        let response = try decoder.decode(InfomaniakResponse<MailboxForwarding>.self, from: json)
+
+        #expect(response.result == "success")
+        #expect(response.data.values["is_enabled"] == .string("1"))
+        #expect(response.data.values["redirect_adresses"] == .array([
+            .object(["email": .string("forward@example.com"), "email_idn": .string("forward@example.com")])
+        ]))
+    }
+
     @Test("Mail add mailbox alias request encodes alias payload")
     func addMailboxAliasRequestEncodesAliasPayload() async throws {
         let client = InfomaniakAPIClient(configuration: APIClientConfiguration(bearerToken: "test-token"))
