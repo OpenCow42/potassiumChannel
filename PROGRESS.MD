@@ -1,3 +1,10 @@
+## 2026-05-09 — URL shortener list short URLs route
+
+- Added shared support for `GET /1/url-shortener` via `URLShortenerRequests.listShortURLs` and `URLShortenerService.listShortURLs`, returning typed `URLShortenerListResponse<[ShortURL]>` values.
+- Added flexible decoding for both the OpenAPI documented Laravel pagination shape and the live API `data`/`links`/`meta` pagination shape.
+- Added request/response coverage for GET method, exact path, auth/accept headers, empty query/body behavior, no required parameters, OpenAPI response decoding, and live pagination response decoding.
+- Validation: `swift test --filter URLShortenerListShortURLsRequestTests` passed (3 tests); full `swift test` passed (457 tests / 157 suites).
+
 ## 2026-05-09 — Mail delete mailbox forwarding route
 
 - Added shared support for cleanup mutation `DELETE /1/mail_hostings/{mail_hosting_id}/mailboxes/{mailbox_name}/forwarding_addresses/{redirect_addresses}` via `MailRequests.deleteMailboxForwarding` and `MailService.deleteMailboxForwarding`, returning `InfomaniakResponse<Bool>`.
