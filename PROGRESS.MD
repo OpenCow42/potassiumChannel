@@ -1,3 +1,9 @@
+## 2026-05-09 — Mail delete mailbox forwarding route
+
+- Added shared support for cleanup mutation `DELETE /1/mail_hostings/{mail_hosting_id}/mailboxes/{mailbox_name}/forwarding_addresses/{redirect_addresses}` via `MailRequests.deleteMailboxForwarding` and `MailService.deleteMailboxForwarding`, returning `InfomaniakResponse<Bool>`.
+- Added request/response coverage for DELETE method, exact OpenAPI path, auth header, empty body behavior, required path parameters, and boolean success decoding.
+- Validation: `swift test --filter MailListMailboxesRequestTests` passed (20 tests); `swift test --filter Mail` passed (37 tests).
+
 ## 2026-05-09 — Mail create mailbox forwarding route
 
 - Added shared support for destructive/admin mutation `POST /1/mail_hostings/{mail_hosting_id}/mailboxes/{mailbox_name}/forwarding_addresses` via `MailRequests.addMailboxForwarding` and `MailService.addMailboxForwarding`, returning flexible `CreatedMailboxForwarding` payloads.
