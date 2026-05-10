@@ -23,7 +23,12 @@ let package = Package(
         // Targets are the basic building blocks of a package, defining a module or a test suite.
         // Targets can depend on other targets in this package and products from dependencies.
         .target(
-            name: "potassiumChannel"
+            name: "potassiumChannel",
+            swiftSettings: [
+                // Build the library as a resilient module so clients that enable
+                // library evolution do not warn when importing potassiumChannel.
+                .unsafeFlags(["-enable-library-evolution"]),
+            ]
         ),
         .testTarget(
             name: "potassiumChannelTests",

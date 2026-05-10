@@ -1,3 +1,10 @@
+## 2026-05-10 — Enable library evolution for package consumers
+
+- Enabled Swift library evolution for the `potassiumChannel` target so external framework targets that build with library evolution no longer warn that importing `potassiumChannel` can compromise binary compatibility.
+- Documented library-evolution-enabled builds in `README.md`.
+- Validation: `swift build` passed; `swift test` passed (470 tests / 161 suites); a temporary external SwiftPM consumer target built with `-enable-library-evolution` imported `potassiumChannel` without the binary-compatibility warning.
+- Note: MiniDeck's current checked-out remote dependency still warns until it resolves to this branch/commit; the local package validation proves the package-level setting fixes the consumer warning once adopted.
+
 ## 2026-05-09 — URL shortener update short URL route
 
 - Added shared support for `PUT /1/url-shortener/{short_url_code}` via `URLShortenerRequests.updateShortURL` and `URLShortenerService.updateShortURL`, returning `InfomaniakResponse<ShortURL>`.

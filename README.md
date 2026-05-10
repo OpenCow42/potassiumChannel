@@ -33,6 +33,7 @@ other Swift clients that need the same Infomaniak-oriented HTTP primitives.
   - watchOS 8+
   - visionOS 1+
 - Modern Swift concurrency and `Sendable`-friendly model types
+- Library-evolution-enabled builds so framework consumers can import the package from resilient modules without binary-compatibility warnings
 - Swift Testing for tests (`import Testing`), not XCTest
 
 ## Development
