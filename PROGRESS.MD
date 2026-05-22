@@ -1,3 +1,10 @@
+## 2026-05-22 — Infomaniak OAuth request helpers
+
+- Added shared OAuth helper support in `potassiumChannel` for apps that want to run Infomaniak OAuth themselves while keeping Potassium's CLI authentication explicit-token based.
+- Added documented endpoint defaults for `https://login.infomaniak.com/authorize` and `https://login.infomaniak.com/token`, authorization URL construction, authorization-code token exchange request construction, refresh-token request construction, PKCE challenge method values, token response decoding, and OAuth error response decoding.
+- Added request/model coverage for authorization query parameters, form-encoded token requests without bearer authorization, refresh scopes, snake-case token payloads, and standard OAuth error payloads.
+- Validation: `swift test --filter InfomaniakOAuth` passed (5 tests); full `swift test` passed (475 tests / 162 suites).
+
 ## 2026-05-09 — URL shortener update short URL route
 
 - Added shared support for `PUT /1/url-shortener/{short_url_code}` via `URLShortenerRequests.updateShortURL` and `URLShortenerService.updateShortURL`, returning `InfomaniakResponse<ShortURL>`.
