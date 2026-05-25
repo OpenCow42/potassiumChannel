@@ -1,3 +1,27 @@
+## 2026-05-25 — kDrive remaining read routes
+
+- Branch: `codex/url-shortener-quota`.
+- Added shared support for `GET /2/drive/{drive_id}/access/requests/{request_id}` via `KDriveRequests.getFileAccessRequest` and `KDriveService.getFileAccessRequest`, reusing the lossless `KDriveFileAccessRequest` DTO and supporting the optional `with` query.
+- Added shared support for `GET /2/drive/{drive_id}/users/invitation/{invitation_id}` via `KDriveRequests.getUserInvitation` and `KDriveService.getUserInvitation`, reusing `KDriveUserInvitation`.
+- Added shared raw-data support for `GET /2/drive/{drive_id}/files/{file_id}/versions/{version_id}/download` via `KDriveRequests.downloadFileVersionV2` and `KDriveService.downloadFileVersionV2`.
+- Validation: `swift test --filter KDriveFileAccessRequestTests`, `swift test --filter KDriveUserInvitationRequestTests`, and `swift test --filter KDriveFileVersionV2DetailRequestTests` passed; the Potassium CLI package using this checkout passed the matching parser/help/live read-only tests. Full `swift test` passed (487 tests).
+
+## 2026-05-25 — kDrive file share-link route
+
+- Branch: `codex/url-shortener-quota`.
+- Added shared support for `GET /2/drive/{drive_id}/files/{file_id}/link` via `KDriveRequests.getFileShareLink` and `KDriveService.getFileShareLink`, returning `InfomaniakResponse<KDriveShareLink>`.
+- Added typed `KDriveShareLink` and `KDriveShareLinkCapabilities` DTOs for the documented share-link payload fields.
+- Added request/response coverage for exact path, optional `with` query, GET method, auth/accept headers, empty body behavior, snake-case decoding, and nullable fields.
+- Validation: `swift test --filter KDriveFileShareLink` passed (2 tests); the Potassium CLI package using this checkout passed `swift test --filter KDriveFileShareLink` against the live read-only route.
+
+## 2026-05-24 — URL shortener quota routes
+
+- Branch: `codex/url-shortener-quota`.
+- Added shared support for `GET /1/url-shortener/quota` via `URLShortenerRequests.quota` and `URLShortenerService.quota`, returning flexible `URLShortenerQuotaResponse` values that decode either direct quota payloads or enveloped payloads.
+- Added shared support for `GET /2/url-shortener/quota` via `URLShortenerRequests.quotaV2` and `URLShortenerService.quotaV2`, returning `InfomaniakResponse<URLShortenerQuota>`.
+- Added request/response coverage for exact v1/v2 paths, GET method, auth/accept headers, empty query/body behavior, v2 success envelope decoding, and tolerant v1 direct/enveloped quota decoding.
+- Validation: `swift test --filter URLShortenerQuota` passed (5 tests); `swift test --filter URLShortener` passed in the Potassium CLI package using this checkout in SwiftPM edit mode.
+
 ## 2026-05-22 — Infomaniak OAuth request helpers
 
 - Added shared OAuth helper support in `potassiumChannel` for apps that want to run Infomaniak OAuth themselves while keeping Potassium's CLI authentication explicit-token based.

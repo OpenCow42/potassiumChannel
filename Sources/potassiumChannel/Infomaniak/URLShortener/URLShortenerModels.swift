@@ -35,6 +35,62 @@ public struct UpdateShortURLPayload: Codable, Equatable, Sendable {
     }
 }
 
+/// URL shortener quota usage returned by Infomaniak.
+public struct URLShortenerQuota: Codable, Equatable, Sendable {
+    /// Number of short URLs currently used.
+    public let quota: Int
+
+    /// Maximum number of short URLs allowed.
+    public let limit: Int
+
+    /// Creates a URL shortener quota value.
+    public init(quota: Int, limit: Int) {
+        self.quota = quota
+        self.limit = limit
+    }
+}
+
+/// A URL shortener quota response that accepts both direct and enveloped payloads.
+public struct URLShortenerQuotaResponse: Codable, Equatable, Sendable {
+    /// The server-side result marker when the API returns an envelope.
+    public let result: String?
+
+    /// Decoded quota payload.
+    public let data: URLShortenerQuota
+
+    /// Creates a URL shortener quota response.
+    public init(result: String? = nil, data: URLShortenerQuota) {
+        self.result = result
+        self.data = data
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case result
+        case data
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        if container.contains(.data) {
+            result = try container.decodeIfPresent(String.self, forKey: .result)
+            data = try container.decode(URLShortenerQuota.self, forKey: .data)
+        } else {
+            result = nil
+            data = try URLShortenerQuota(from: decoder)
+        }
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        if let result {
+            var container = encoder.container(keyedBy: CodingKeys.self)
+            try container.encode(result, forKey: .result)
+            try container.encode(data, forKey: .data)
+        } else {
+            try data.encode(to: encoder)
+        }
+    }
+}
+
 /// Optional filters and pagination controls for the v2 URL shortener list route.
 public struct ListShortURLsV2Options: Codable, Equatable, Sendable {
     /// Field used to order returned short URLs.

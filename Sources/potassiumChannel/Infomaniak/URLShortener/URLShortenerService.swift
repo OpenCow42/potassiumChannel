@@ -26,6 +26,16 @@ public struct URLShortenerService: Sendable {
         try await client.send(URLShortenerRequests.listShortURLsV2(options: options))
     }
 
+    /// Fetches URL shortener quota for the authenticated user.
+    public func quota() async throws -> URLShortenerQuotaResponse {
+        try await client.send(URLShortenerRequests.quota())
+    }
+
+    /// Fetches URL shortener quota for the authenticated user using the v2 endpoint.
+    public func quotaV2() async throws -> InfomaniakResponse<URLShortenerQuota> {
+        try await client.send(URLShortenerRequests.quotaV2())
+    }
+
     /// Creates one short URL for the authenticated user.
     public func createShortURL(url: String, expirationDate: Int? = nil) async throws -> InfomaniakResponse<ShortURL> {
         try await client.send(URLShortenerRequests.createShortURL(url: url, expirationDate: expirationDate))

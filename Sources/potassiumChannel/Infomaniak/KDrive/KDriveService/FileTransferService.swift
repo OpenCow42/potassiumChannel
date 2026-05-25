@@ -44,6 +44,17 @@ extension KDriveService {
         )
     }
 
+    /// Downloads raw data for a kDrive file version using the deprecated v2 endpoint.
+    public func downloadFileVersionV2(
+        driveId: Int,
+        fileId: Int,
+        versionId: Int
+    ) async throws -> Data {
+        try await client.sendData(
+            KDriveRequests.downloadFileVersionV2(driveId: driveId, fileId: fileId, versionId: versionId)
+        )
+    }
+
     /// Uploads raw file data to kDrive using the v3 single-request endpoint.
     public func uploadFile(
         driveId: Int,

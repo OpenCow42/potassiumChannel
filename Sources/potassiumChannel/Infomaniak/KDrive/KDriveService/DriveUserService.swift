@@ -97,6 +97,16 @@ extension KDriveService {
         )
     }
 
+    /// Gets a single user invitation for a kDrive.
+    public func getUserInvitation(
+        driveId: Int,
+        invitationId: Int
+    ) async throws -> InfomaniakResponse<KDriveUserInvitation> {
+        try await client.send(
+            KDriveRequests.getUserInvitation(driveId: driveId, invitationId: invitationId)
+        )
+    }
+
     /// Lists users associated with the authenticated user's accessible kDrives.
     public func listKDriveUsers(
         with includedResources: String? = nil,
