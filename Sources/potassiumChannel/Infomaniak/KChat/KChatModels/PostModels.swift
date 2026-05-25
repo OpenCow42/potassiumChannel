@@ -318,11 +318,23 @@ public struct KChatUserThreadParticipant: Codable, Equatable, Sendable {
         self.post = post
     }
 
+    private enum CodingKeys: String, CodingKey {
+        case id
+        case userId
+    }
+
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
         if let userId = try? container.decode(String.self) {
             self.userId = userId
             self.post = nil
+        } else if let userId = try? container.decode(Int64.self) {
+            self.userId = String(userId)
+            self.post = nil
+        } else if let keyedContainer = try? decoder.container(keyedBy: CodingKeys.self) {
+            self.userId = try Self.decodeStringOrNumberIfPresent(from: keyedContainer, forKey: .userId)
+                ?? Self.decodeStringOrNumberIfPresent(from: keyedContainer, forKey: .id)
+            self.post = try? KChatPost(from: decoder)
         } else {
             self.userId = nil
             self.post = try container.decode(KChatPost.self)
@@ -336,6 +348,21 @@ public struct KChatUserThreadParticipant: Codable, Equatable, Sendable {
         } else {
             try container.encode(post)
         }
+    }
+
+    private static func decodeStringOrNumberIfPresent(
+        from container: KeyedDecodingContainer<CodingKeys>,
+        forKey key: CodingKeys
+    ) throws -> String? {
+        if let string = try? container.decodeIfPresent(String.self, forKey: key) {
+            return string
+        }
+
+        if let integer = try? container.decodeIfPresent(Int64.self, forKey: key) {
+            return String(integer)
+        }
+
+        return nil
     }
 }
 

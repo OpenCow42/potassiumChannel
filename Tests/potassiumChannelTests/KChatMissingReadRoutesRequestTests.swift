@@ -221,13 +221,15 @@ struct KChatMissingReadRoutesRequestTests {
         #expect(sidebarObjectResponse.items.count == 1)
         #expect(sidebarArrayResponse.items.count == 1)
 
-        let threadJSON = #"{"total":1,"threads":[{"id":"thread-id","reply_count":3,"last_reply_at":4,"last_viewed_at":5,"participants":["user-id"],"post":{"id":"thread-id","message":"Hello"}}]}"#.data(using: .utf8)!
+        let threadJSON = #"{"total":1,"threads":[{"id":"thread-id","reply_count":3,"last_reply_at":4,"last_viewed_at":5,"participants":["user-id",42,{"user_id":43}],"post":{"id":"thread-id","message":"Hello"}}]}"#.data(using: .utf8)!
         let threads = try JSONDecoder.kChat.decode(KChatUserThreads.self, from: threadJSON)
 
         #expect(threads.total == 1)
         #expect(threads.threads?.first?.id == "thread-id")
         #expect(threads.threads?.first?.replyCount == 3)
         #expect(threads.threads?.first?.participants?.first?.userId == "user-id")
+        #expect(threads.threads?.first?.participants?[1].userId == "42")
+        #expect(threads.threads?.first?.participants?[2].userId == "43")
         #expect(threads.threads?.first?.post?.message == "Hello")
     }
 
