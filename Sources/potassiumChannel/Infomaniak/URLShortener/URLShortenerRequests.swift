@@ -20,6 +20,22 @@ public enum URLShortenerRequests {
         )
     }
 
+    /// Creates a request that fetches URL shortener quota for the authenticated user.
+    public static func quota() -> APIRequest<URLShortenerQuotaResponse> {
+        APIRequest(
+            method: .get,
+            path: "/1/url-shortener/quota"
+        )
+    }
+
+    /// Creates a request that fetches URL shortener quota for the authenticated user using the v2 endpoint.
+    public static func quotaV2() -> APIRequest<InfomaniakResponse<URLShortenerQuota>> {
+        APIRequest(
+            method: .get,
+            path: "/2/url-shortener/quota"
+        )
+    }
+
     /// Creates a request that creates one short URL for the authenticated user.
     public static func createShortURL(url: String, expirationDate: Int? = nil) throws -> APIRequest<InfomaniakResponse<ShortURL>> {
         let body = try JSONEncoder().encode(CreateShortURLPayload(url: url, expirationDate: expirationDate))

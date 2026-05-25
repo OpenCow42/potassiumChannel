@@ -827,6 +827,25 @@ public enum KDriveRequests {
         )
     }
 
+    /// Creates a request that gets a requested access entry by id for a kDrive.
+    public static func getFileAccessRequest(
+        driveId: Int,
+        requestId: Int,
+        with includedResources: String? = nil
+    ) -> APIRequest<InfomaniakResponse<KDriveFileAccessRequest>> {
+        var queryParameters: [QueryParameter] = []
+
+        if let includedResources {
+            queryParameters.append(QueryParameter(name: "with", value: .string(includedResources)))
+        }
+
+        return APIRequest(
+            method: .get,
+            path: "/2/drive/\(driveId)/access/requests/\(requestId)",
+            queryParameters: queryParameters
+        )
+    }
+
     /// Creates a request that lists invitation access entries for a kDrive file or directory.
     public static func listFileAccessInvitations(
         driveId: Int,
@@ -835,6 +854,25 @@ public enum KDriveRequests {
         APIRequest(
             method: .get,
             path: "/2/drive/\(driveId)/files/\(fileId)/access/invitations"
+        )
+    }
+
+    /// Creates a request that fetches share-link metadata for a kDrive file or directory.
+    public static func getFileShareLink(
+        driveId: Int,
+        fileId: Int,
+        with includedResources: String? = nil
+    ) -> APIRequest<InfomaniakResponse<KDriveShareLink>> {
+        var queryParameters: [QueryParameter] = []
+
+        if let includedResources {
+            queryParameters.append(QueryParameter(name: "with", value: .string(includedResources)))
+        }
+
+        return APIRequest(
+            method: .get,
+            path: "/2/drive/\(driveId)/files/\(fileId)/link",
+            queryParameters: queryParameters
         )
     }
 
@@ -1979,6 +2017,19 @@ public enum KDriveRequests {
         )
     }
 
+    /// Creates a request that downloads a single version for a kDrive file using the deprecated v2 endpoint.
+    public static func downloadFileVersionV2(
+        driveId: Int,
+        fileId: Int,
+        versionId: Int
+    ) -> APIRequest<KDriveBinaryResponse> {
+        APIRequest(
+            method: .get,
+            path: "/2/drive/\(driveId)/files/\(fileId)/versions/\(versionId)/download",
+            headers: [HTTPHeader(name: "Accept", value: "application/octet-stream")]
+        )
+    }
+
     /// Creates a request that lists versions for a kDrive file.
     public static func listFileVersions(
         driveId: Int,
@@ -2454,6 +2505,17 @@ public enum KDriveRequests {
             method: .get,
             path: "/2/drive/\(driveId)/users/invitation",
             queryParameters: queryParameters
+        )
+    }
+
+    /// Creates a request that gets a single user invitation for a kDrive.
+    public static func getUserInvitation(
+        driveId: Int,
+        invitationId: Int
+    ) -> APIRequest<InfomaniakResponse<KDriveUserInvitation>> {
+        APIRequest(
+            method: .get,
+            path: "/2/drive/\(driveId)/users/invitation/\(invitationId)"
         )
     }
 

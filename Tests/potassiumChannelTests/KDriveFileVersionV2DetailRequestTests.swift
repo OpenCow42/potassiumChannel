@@ -41,6 +41,26 @@ struct KDriveFileVersionV2DetailRequestTests {
         #expect(path.contains("{version_id}") == false)
     }
 
+    @Test("kDrive v2 file version download request matches the OpenAPI path")
+    func kDriveFileVersionV2DownloadRequestMatchesOpenAPIShape() async throws {
+        let client = InfomaniakAPIClient(
+            configuration: APIClientConfiguration(
+                baseURL: URL(string: "https://api.infomaniak.com")!,
+                bearerToken: "test-token"
+            )
+        )
+        let request = KDriveRequests.downloadFileVersionV2(driveId: 100, fileId: 42, versionId: 123)
+
+        let urlRequest = try await client.makeURLRequest(for: request)
+
+        #expect(urlRequest.httpMethod == "GET")
+        #expect(urlRequest.value(forHTTPHeaderField: "Authorization") == "Bearer test-token")
+        #expect(urlRequest.value(forHTTPHeaderField: "Accept") == "application/octet-stream")
+        #expect(urlRequest.url?.path == "/2/drive/100/files/42/versions/123/download")
+        #expect(urlRequest.url?.query?.isEmpty == true)
+        #expect(urlRequest.httpBody == nil)
+    }
+
     @Test("kDrive v2 file version detail response decodes using Swift API names")
     func kDriveFileVersionV2DetailResponseDecodes() throws {
         let json = """

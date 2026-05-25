@@ -21,6 +21,17 @@ extension KDriveService {
         )
     }
 
+    /// Gets a requested access entry by id for a kDrive.
+    public func getFileAccessRequest(
+        driveId: Int,
+        requestId: Int,
+        with includedResources: String? = nil
+    ) async throws -> InfomaniakResponse<KDriveFileAccessRequest> {
+        try await client.send(
+            KDriveRequests.getFileAccessRequest(driveId: driveId, requestId: requestId, with: includedResources)
+        )
+    }
+
     /// Lists invitation access entries for a kDrive file or directory.
     public func listFileAccessInvitations(
         driveId: Int,
@@ -28,6 +39,17 @@ extension KDriveService {
     ) async throws -> InfomaniakResponse<[KDriveFileAccessInvitation]> {
         try await client.send(
             KDriveRequests.listFileAccessInvitations(driveId: driveId, fileId: fileId)
+        )
+    }
+
+    /// Gets share-link metadata for a kDrive file or directory.
+    public func getFileShareLink(
+        driveId: Int,
+        fileId: Int,
+        with includedResources: String? = nil
+    ) async throws -> InfomaniakResponse<KDriveShareLink> {
+        try await client.send(
+            KDriveRequests.getFileShareLink(driveId: driveId, fileId: fileId, with: includedResources)
         )
     }
 
