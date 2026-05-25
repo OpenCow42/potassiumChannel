@@ -212,10 +212,14 @@ struct KChatMissingReadRoutesRequestTests {
     func kChatSidebarAndThreadDTOsDecodeSnakeCaseFields() throws {
         let sidebarJSON = #"{"order":["category-id"],"categories":[{"id":"category-id","user_id":"user-id","team_id":"team-id","display_name":"Favorites","type":"favorites","channel_ids":["channel-id"]}]}"#.data(using: .utf8)!
         let sidebar = try JSONDecoder.kChat.decode(KChatOrderedSidebarCategories.self, from: sidebarJSON)
+        let sidebarObjectResponse = try JSONDecoder.kChat.decode(KChatSidebarCategories.self, from: sidebarJSON)
+        let sidebarArrayResponse = try JSONDecoder.kChat.decode(KChatSidebarCategories.self, from: "[\(String(data: sidebarJSON, encoding: .utf8)!)]".data(using: .utf8)!)
 
         #expect(sidebar.order == ["category-id"])
         #expect(sidebar.categories?.first?.id == "category-id")
         #expect(sidebar.categories?.first?.channelIds == ["channel-id"])
+        #expect(sidebarObjectResponse.items.count == 1)
+        #expect(sidebarArrayResponse.items.count == 1)
 
         let threadJSON = #"{"total":1,"threads":[{"id":"thread-id","reply_count":3,"last_reply_at":4,"last_viewed_at":5,"participants":["user-id"],"post":{"id":"thread-id","message":"Hello"}}]}"#.data(using: .utf8)!
         let threads = try JSONDecoder.kChat.decode(KChatUserThreads.self, from: threadJSON)

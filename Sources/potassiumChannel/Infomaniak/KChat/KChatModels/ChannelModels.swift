@@ -454,3 +454,28 @@ public struct KChatOrderedSidebarCategories: Codable, Equatable, Sendable {
         self.categories = categories
     }
 }
+
+/// A flexible kChat sidebar categories response.
+public struct KChatSidebarCategories: Codable, Equatable, Sendable {
+    /// Ordered sidebar category pages returned by the API.
+    public let items: [KChatOrderedSidebarCategories]
+
+    /// Creates a kChat sidebar categories response.
+    public init(items: [KChatOrderedSidebarCategories]) {
+        self.items = items
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.singleValueContainer()
+        if let items = try? container.decode([KChatOrderedSidebarCategories].self) {
+            self.items = items
+        } else {
+            self.items = [try container.decode(KChatOrderedSidebarCategories.self)]
+        }
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.singleValueContainer()
+        try container.encode(items)
+    }
+}

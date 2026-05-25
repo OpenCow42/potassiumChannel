@@ -312,7 +312,7 @@ public struct KChatService: Sendable {
     }
 
     /// Gets a user's sidebar categories for a kChat team.
-    public func getSidebarCategoriesForTeamForUser(userId: String, teamId: String) async throws -> [KChatOrderedSidebarCategories] {
+    public func getSidebarCategoriesForTeamForUser(userId: String, teamId: String) async throws -> KChatSidebarCategories {
         try await client.send(KChatRequests.getSidebarCategoriesForTeamForUser(userId: userId, teamId: teamId))
     }
 

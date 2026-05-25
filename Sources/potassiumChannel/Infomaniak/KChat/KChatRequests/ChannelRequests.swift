@@ -237,7 +237,7 @@ extension KChatRequests {
     public static func getSidebarCategoriesForTeamForUser(
         userId: String,
         teamId: String
-    ) -> APIRequest<[KChatOrderedSidebarCategories]> {
+    ) -> APIRequest<KChatSidebarCategories> {
         APIRequest(
             method: .get,
             path: "/api/v4/users/\(percentEncodePathSegment(userId))/teams/\(percentEncodePathSegment(teamId))/channels/categories"
