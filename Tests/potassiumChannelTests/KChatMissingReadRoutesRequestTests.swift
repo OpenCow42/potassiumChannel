@@ -235,13 +235,17 @@ struct KChatMissingReadRoutesRequestTests {
     func kChatFlaggedPostsDecodeFlexibleShapes() throws {
         let arrayJSON = #"[{"order":["post-id"],"posts":{"post-id":{"id":"post-id","message":"Hello"}}}]"#.data(using: .utf8)!
         let objectJSON = #"{"order":["post-id"],"posts":{"post-id":{"id":"post-id","message":"Hello"}}}"#.data(using: .utf8)!
+        let postsArrayJSON = #"{"posts":[{"id":"post-id","message":"Hello"}]}"#.data(using: .utf8)!
 
         let arrayResponse = try JSONDecoder.kChat.decode(KChatFlaggedPosts.self, from: arrayJSON)
         let objectResponse = try JSONDecoder.kChat.decode(KChatFlaggedPosts.self, from: objectJSON)
+        let postsArrayResponse = try JSONDecoder.kChat.decode(KChatFlaggedPosts.self, from: postsArrayJSON)
 
         #expect(arrayResponse.postLists.count == 1)
         #expect(objectResponse.postLists.count == 1)
         #expect(objectResponse.postLists.first?.posts?["post-id"]?.message == "Hello")
+        #expect(postsArrayResponse.postLists.first?.order == ["post-id"])
+        #expect(postsArrayResponse.postLists.first?.posts?["post-id"]?.message == "Hello")
     }
 
     private func makeURLRequest<Response>(for request: APIRequest<Response>) async throws -> URLRequest {

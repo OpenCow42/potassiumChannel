@@ -169,6 +169,41 @@ public struct KChatPostList: Codable, Equatable, Sendable {
         self.prevPostId = prevPostId
         self.hasNext = hasNext
     }
+
+    private enum CodingKeys: String, CodingKey {
+        case order
+        case posts
+        case nextPostId
+        case prevPostId
+        case hasNext
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        let decodedOrder = try container.decodeIfPresent([String].self, forKey: .order)
+        nextPostId = try container.decodeIfPresent(String.self, forKey: .nextPostId)
+        prevPostId = try container.decodeIfPresent(String.self, forKey: .prevPostId)
+        hasNext = try container.decodeIfPresent(Bool.self, forKey: .hasNext)
+
+        if let postsById = try? container.decodeIfPresent([String: KChatPost].self, forKey: .posts) {
+            posts = postsById
+            order = decodedOrder
+            return
+        }
+
+        if let postRows = try? container.decodeIfPresent([KChatPost].self, forKey: .posts) {
+            posts = Dictionary(uniqueKeysWithValues: postRows.enumerated().map { index, post in
+                (post.id ?? String(index), post)
+            })
+            order = decodedOrder ?? postRows.enumerated().map { index, post in
+                post.id ?? String(index)
+            }
+            return
+        }
+
+        posts = nil
+        order = decodedOrder
+    }
 }
 
 /// A flexible response for kChat flagged posts.
