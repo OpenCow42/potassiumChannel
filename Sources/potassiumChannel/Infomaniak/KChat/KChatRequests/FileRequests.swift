@@ -17,6 +17,22 @@ extension KChatRequests {
         )
     }
 
+    /// Creates a request that gets a previously uploaded kChat file preview.
+    public static func getFilePreview(fileId: String) -> APIRequest<Data> {
+        APIRequest(
+            method: .get,
+            path: "/api/v4/files/\(percentEncodePathSegment(fileId))/preview"
+        )
+    }
+
+    /// Creates a request that gets a previously uploaded kChat file thumbnail.
+    public static func getFileThumbnail(fileId: String) -> APIRequest<Data> {
+        APIRequest(
+            method: .get,
+            path: "/api/v4/files/\(percentEncodePathSegment(fileId))/thumbnail"
+        )
+    }
+
     /// Creates a request that uploads a file to kChat.
     public static func uploadFile(channelId: String? = nil, filename: String? = nil, body: Data, contentType: String) -> APIRequest<KChatFileUploadResponse> {
         var queryParameters: [QueryParameter] = []

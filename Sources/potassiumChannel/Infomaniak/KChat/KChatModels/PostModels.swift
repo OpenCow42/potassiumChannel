@@ -49,6 +49,105 @@ public struct KChatPostFilesInfoOptions: Equatable, Sendable {
     }
 }
 
+/// Query parameters accepted by the kChat unread channel posts endpoint.
+public struct KChatPostsAroundLastUnreadOptions: Equatable, Sendable {
+    /// Number of posts to return before the oldest unread post.
+    public let limitBefore: Int?
+
+    /// Number of posts to return after the oldest unread post.
+    public let limitAfter: Int?
+
+    /// Whether the server should skip fetching thread data.
+    public let skipFetchThreads: Bool?
+
+    /// Whether collapsed thread data should be requested.
+    public let collapsedThreads: Bool?
+
+    /// Whether extended collapsed thread data should be requested.
+    public let collapsedThreadsExtended: Bool?
+
+    /// Creates kChat unread channel post query options.
+    public init(
+        limitBefore: Int? = nil,
+        limitAfter: Int? = nil,
+        skipFetchThreads: Bool? = nil,
+        collapsedThreads: Bool? = nil,
+        collapsedThreadsExtended: Bool? = nil
+    ) {
+        self.limitBefore = limitBefore
+        self.limitAfter = limitAfter
+        self.skipFetchThreads = skipFetchThreads
+        self.collapsedThreads = collapsedThreads
+        self.collapsedThreadsExtended = collapsedThreadsExtended
+    }
+}
+
+/// Query parameters accepted by the kChat flagged posts endpoint.
+public struct KChatFlaggedPostsOptions: Equatable, Sendable {
+    /// Restricts flagged posts to a team.
+    public let teamId: String?
+
+    /// Restricts flagged posts to a channel.
+    public let channelId: String?
+
+    /// The page to select.
+    public let page: Int?
+
+    /// The number of post pages per response.
+    public let perPage: Int?
+
+    /// Creates kChat flagged post query options.
+    public init(teamId: String? = nil, channelId: String? = nil, page: Int? = nil, perPage: Int? = nil) {
+        self.teamId = teamId
+        self.channelId = channelId
+        self.page = page
+        self.perPage = perPage
+    }
+}
+
+/// Query parameters accepted by the kChat user threads endpoint.
+public struct KChatUserThreadsOptions: Equatable, Sendable {
+    /// Selects threads updated after this Unix timestamp in milliseconds.
+    public let since: Int?
+
+    /// Whether deleted threads should be included.
+    public let deleted: Bool?
+
+    /// Whether extended thread participant data should be included.
+    public let extended: Bool?
+
+    /// The page to select.
+    public let page: Int?
+
+    /// The number of threads per page.
+    public let pageSize: Int?
+
+    /// Whether only totals should be returned.
+    public let totalsOnly: Bool?
+
+    /// Whether only thread rows should be returned.
+    public let threadsOnly: Bool?
+
+    /// Creates kChat user thread query options.
+    public init(
+        since: Int? = nil,
+        deleted: Bool? = nil,
+        extended: Bool? = nil,
+        page: Int? = nil,
+        pageSize: Int? = nil,
+        totalsOnly: Bool? = nil,
+        threadsOnly: Bool? = nil
+    ) {
+        self.since = since
+        self.deleted = deleted
+        self.extended = extended
+        self.page = page
+        self.pageSize = pageSize
+        self.totalsOnly = totalsOnly
+        self.threadsOnly = threadsOnly
+    }
+}
+
 /// A Mattermost-compatible kChat channel post list.
 public struct KChatPostList: Codable, Equatable, Sendable {
     public let order: [String]?
@@ -69,6 +168,139 @@ public struct KChatPostList: Codable, Equatable, Sendable {
         self.nextPostId = nextPostId
         self.prevPostId = prevPostId
         self.hasNext = hasNext
+    }
+}
+
+/// A flexible response for kChat flagged posts.
+public struct KChatFlaggedPosts: Codable, Equatable, Sendable {
+    /// Returned post-list pages.
+    public let postLists: [KChatPostList]
+
+    /// Creates a kChat flagged posts response.
+    public init(postLists: [KChatPostList]) {
+        self.postLists = postLists
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.singleValueContainer()
+        if let postLists = try? container.decode([KChatPostList].self) {
+            self.postLists = postLists
+        } else {
+            self.postLists = [try container.decode(KChatPostList.self)]
+        }
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.singleValueContainer()
+        try container.encode(postLists)
+    }
+}
+
+/// A Mattermost-compatible list of followed kChat threads for a user.
+public struct KChatUserThreads: Codable, Equatable, Sendable {
+    /// Total number of followed threads available.
+    public let total: Int?
+
+    /// Followed thread rows.
+    public let threads: [KChatUserThread]?
+
+    /// Creates a followed kChat threads response.
+    public init(total: Int? = nil, threads: [KChatUserThread]? = nil) {
+        self.total = total
+        self.threads = threads
+    }
+}
+
+/// A Mattermost-compatible kChat thread followed by a user.
+public struct KChatUserThread: Codable, Equatable, Sendable {
+    public let id: String?
+    public let replyCount: Int?
+    public let lastReplyAt: Int64?
+    public let lastViewedAt: Int64?
+    public let participants: [KChatUserThreadParticipant]?
+    public let post: KChatPost?
+
+    /// Creates a followed kChat thread.
+    public init(
+        id: String? = nil,
+        replyCount: Int? = nil,
+        lastReplyAt: Int64? = nil,
+        lastViewedAt: Int64? = nil,
+        participants: [KChatUserThreadParticipant]? = nil,
+        post: KChatPost? = nil
+    ) {
+        self.id = id
+        self.replyCount = replyCount
+        self.lastReplyAt = lastReplyAt
+        self.lastViewedAt = lastViewedAt
+        self.participants = participants
+        self.post = post
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case id
+        case replyCount
+        case lastReplyAt
+        case lastViewedAt
+        case participants
+        case capitalizedParticipants = "Participants"
+        case post
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        id = try container.decodeIfPresent(String.self, forKey: .id)
+        replyCount = try container.decodeIfPresent(Int.self, forKey: .replyCount)
+        lastReplyAt = try container.decodeIfPresent(Int64.self, forKey: .lastReplyAt)
+        lastViewedAt = try container.decodeIfPresent(Int64.self, forKey: .lastViewedAt)
+        participants = try container.decodeIfPresent([KChatUserThreadParticipant].self, forKey: .participants)
+            ?? container.decodeIfPresent([KChatUserThreadParticipant].self, forKey: .capitalizedParticipants)
+        post = try container.decodeIfPresent(KChatPost.self, forKey: .post)
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeIfPresent(id, forKey: .id)
+        try container.encodeIfPresent(replyCount, forKey: .replyCount)
+        try container.encodeIfPresent(lastReplyAt, forKey: .lastReplyAt)
+        try container.encodeIfPresent(lastViewedAt, forKey: .lastViewedAt)
+        try container.encodeIfPresent(participants, forKey: .participants)
+        try container.encodeIfPresent(post, forKey: .post)
+    }
+}
+
+/// A flexible kChat thread participant value.
+public struct KChatUserThreadParticipant: Codable, Equatable, Sendable {
+    /// Participant user id when the API returns compact participant ids.
+    public let userId: String?
+
+    /// Participant post/user object when the API returns extended values.
+    public let post: KChatPost?
+
+    /// Creates a kChat thread participant.
+    public init(userId: String? = nil, post: KChatPost? = nil) {
+        self.userId = userId
+        self.post = post
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.singleValueContainer()
+        if let userId = try? container.decode(String.self) {
+            self.userId = userId
+            self.post = nil
+        } else {
+            self.userId = nil
+            self.post = try container.decode(KChatPost.self)
+        }
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.singleValueContainer()
+        if let userId {
+            try container.encode(userId)
+        } else {
+            try container.encode(post)
+        }
     }
 }
 

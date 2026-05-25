@@ -193,4 +193,28 @@ extension KChatRequests {
             body: body
         )
     }
+
+    /// Creates a request that gets a kChat user's preferences.
+    public static func getPreferences(userId: String) -> APIRequest<[KChatPreference]> {
+        APIRequest(
+            method: .get,
+            path: "/api/v4/users/\(percentEncodePathSegment(userId))/preferences"
+        )
+    }
+
+    /// Creates a request that gets a kChat user's preferences by category.
+    public static func getPreferencesByCategory(userId: String, category: String) -> APIRequest<[KChatPreference]> {
+        APIRequest(
+            method: .get,
+            path: "/api/v4/users/\(percentEncodePathSegment(userId))/preferences/\(percentEncodePathSegment(category))"
+        )
+    }
+
+    /// Creates a request that gets one kChat user preference.
+    public static func getPreference(userId: String, category: String, preferenceName: String) -> APIRequest<KChatPreference> {
+        APIRequest(
+            method: .get,
+            path: "/api/v4/users/\(percentEncodePathSegment(userId))/preferences/\(percentEncodePathSegment(category))/name/\(percentEncodePathSegment(preferenceName))"
+        )
+    }
 }

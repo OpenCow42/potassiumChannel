@@ -98,6 +98,21 @@ public struct KChatDeletedChannelsForTeamOptions: Equatable, Sendable {
     }
 }
 
+/// Query options accepted by the kChat user channels endpoint.
+public struct KChatUserChannelsOptions: Equatable, Sendable {
+    /// Whether deleted channels should be included.
+    public let includeDeleted: Bool?
+
+    /// Filters deleted channels by deletion timestamp when `includeDeleted` is true.
+    public let lastDeleteAt: Int?
+
+    /// Creates kChat user channel listing options.
+    public init(includeDeleted: Bool? = nil, lastDeleteAt: Int? = nil) {
+        self.includeDeleted = includeDeleted
+        self.lastDeleteAt = lastDeleteAt
+    }
+}
+
 /// A Mattermost-compatible kChat channel statistics response.
 public struct KChatChannelStats: Codable, Equatable, Sendable {
     /// Channel identifier these statistics belong to.
@@ -110,6 +125,74 @@ public struct KChatChannelStats: Codable, Equatable, Sendable {
     public init(channelId: String? = nil, memberCount: Int? = nil) {
         self.channelId = channelId
         self.memberCount = memberCount
+    }
+}
+
+/// A Mattermost-compatible kChat channel unread count response.
+public struct KChatChannelUnread: Codable, Equatable, Sendable {
+    /// Team identifier for the channel unread counters.
+    public let teamId: String?
+
+    /// Channel identifier for the unread counters.
+    public let channelId: String?
+
+    /// Number of unread messages in the channel.
+    public let msgCount: Int?
+
+    /// Number of unread mentions in the channel.
+    public let mentionCount: Int?
+
+    /// Creates a kChat channel unread count.
+    public init(teamId: String? = nil, channelId: String? = nil, msgCount: Int? = nil, mentionCount: Int? = nil) {
+        self.teamId = teamId
+        self.channelId = channelId
+        self.msgCount = msgCount
+        self.mentionCount = mentionCount
+    }
+}
+
+/// Moderation flags for one kChat channel role group.
+public struct KChatChannelModeratedRole: Codable, Equatable, Sendable {
+    /// Whether moderation applies to this role.
+    public let value: Bool?
+
+    /// Whether this moderation option is enabled.
+    public let enabled: Bool?
+
+    /// Creates a kChat channel moderated role value.
+    public init(value: Bool? = nil, enabled: Bool? = nil) {
+        self.value = value
+        self.enabled = enabled
+    }
+}
+
+/// Role groups affected by a kChat channel moderation option.
+public struct KChatChannelModeratedRoles: Codable, Equatable, Sendable {
+    /// Moderation state for guests.
+    public let guests: KChatChannelModeratedRole?
+
+    /// Moderation state for members.
+    public let members: KChatChannelModeratedRole?
+
+    /// Creates kChat channel moderated role groups.
+    public init(guests: KChatChannelModeratedRole? = nil, members: KChatChannelModeratedRole? = nil) {
+        self.guests = guests
+        self.members = members
+    }
+}
+
+/// A Mattermost-compatible kChat channel moderation option.
+public struct KChatChannelModeration: Codable, Equatable, Sendable {
+    /// Moderation setting name.
+    public let name: String?
+
+    /// Role values for this moderation setting.
+    public let roles: KChatChannelModeratedRoles?
+
+    /// Creates a kChat channel moderation option.
+    public init(name: String? = nil, roles: KChatChannelModeratedRoles? = nil) {
+        self.name = name
+        self.roles = roles
     }
 }
 
@@ -309,5 +392,65 @@ public struct KChatChannel: Codable, Equatable, Sendable {
         self.teamName = teamName
         self.teamUpdateAt = teamUpdateAt
         self.policyId = policyId
+    }
+}
+
+/// A Mattermost-compatible kChat sidebar category.
+public struct KChatSidebarCategory: Codable, Equatable, Sendable {
+    public let id: String?
+    public let userId: String?
+    public let teamId: String?
+    public let displayName: String?
+    public let type: String?
+
+    /// Creates a kChat sidebar category.
+    public init(id: String? = nil, userId: String? = nil, teamId: String? = nil, displayName: String? = nil, type: String? = nil) {
+        self.id = id
+        self.userId = userId
+        self.teamId = teamId
+        self.displayName = displayName
+        self.type = type
+    }
+}
+
+/// A Mattermost-compatible kChat sidebar category with channel ids.
+public struct KChatSidebarCategoryWithChannels: Codable, Equatable, Sendable {
+    public let id: String?
+    public let userId: String?
+    public let teamId: String?
+    public let displayName: String?
+    public let type: String?
+    public let channelIds: [String]?
+
+    /// Creates a kChat sidebar category with channel ids.
+    public init(
+        id: String? = nil,
+        userId: String? = nil,
+        teamId: String? = nil,
+        displayName: String? = nil,
+        type: String? = nil,
+        channelIds: [String]? = nil
+    ) {
+        self.id = id
+        self.userId = userId
+        self.teamId = teamId
+        self.displayName = displayName
+        self.type = type
+        self.channelIds = channelIds
+    }
+}
+
+/// A Mattermost-compatible ordered sidebar category response.
+public struct KChatOrderedSidebarCategories: Codable, Equatable, Sendable {
+    /// Sidebar category ids in display order.
+    public let order: [String]?
+
+    /// Sidebar categories with their channel ids.
+    public let categories: [KChatSidebarCategoryWithChannels]?
+
+    /// Creates ordered kChat sidebar categories.
+    public init(order: [String]? = nil, categories: [KChatSidebarCategoryWithChannels]? = nil) {
+        self.order = order
+        self.categories = categories
     }
 }
