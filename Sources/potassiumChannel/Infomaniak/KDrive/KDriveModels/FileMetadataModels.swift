@@ -103,6 +103,47 @@ public struct KDriveFileDropbox: Codable, Equatable, Sendable {
     }
 }
 
+/// JSON body accepted by the kDrive create and update file Dropbox endpoints.
+public struct KDriveFileDropboxOptions: Encodable, Equatable, Sendable {
+    /// Alias of the Dropbox.
+    public let alias: String?
+
+    /// Whether kDrive should send an email when the Dropbox upload is finished.
+    public let emailWhenFinished: Bool?
+
+    /// Maximum accepted file size in bytes.
+    public let limitFileSize: Int?
+
+    /// Password used to protect the Dropbox.
+    public let password: String?
+
+    /// Maximum validity timestamp.
+    public let validUntil: Int?
+
+    public enum CodingKeys: String, CodingKey {
+        case alias
+        case emailWhenFinished = "email_when_finished"
+        case limitFileSize = "limit_file_size"
+        case password
+        case validUntil = "valid_until"
+    }
+
+    /// Creates options for creating or updating a kDrive file Dropbox.
+    public init(
+        alias: String? = nil,
+        emailWhenFinished: Bool? = nil,
+        limitFileSize: Int? = nil,
+        password: String? = nil,
+        validUntil: Int? = nil
+    ) {
+        self.alias = alias
+        self.emailWhenFinished = emailWhenFinished
+        self.limitFileSize = limitFileSize
+        self.password = password
+        self.validUntil = validUntil
+    }
+}
+
 /// A category configured on a kDrive.
 public struct KDriveCategory: Codable, Equatable, Sendable {
     /// The unique category identifier.

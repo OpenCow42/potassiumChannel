@@ -22,6 +22,38 @@ extension KDriveService {
         )
     }
 
+    /// Converts a kDrive directory into a Dropbox.
+    public func createFileDropbox(
+        driveId: Int,
+        fileId: Int,
+        options: KDriveFileDropboxOptions = KDriveFileDropboxOptions()
+    ) async throws -> InfomaniakResponse<KDriveFileDropbox> {
+        try await client.send(
+            KDriveRequests.createFileDropbox(driveId: driveId, fileId: fileId, options: options)
+        )
+    }
+
+    /// Updates Dropbox metadata for a kDrive directory.
+    public func updateFileDropbox(
+        driveId: Int,
+        fileId: Int,
+        options: KDriveFileDropboxOptions
+    ) async throws -> InfomaniakResponse<Bool> {
+        try await client.send(
+            KDriveRequests.updateFileDropbox(driveId: driveId, fileId: fileId, options: options)
+        )
+    }
+
+    /// Deletes Dropbox metadata from a kDrive directory.
+    public func deleteFileDropbox(
+        driveId: Int,
+        fileId: Int
+    ) async throws -> InfomaniakResponse<Bool> {
+        try await client.send(
+            KDriveRequests.deleteFileDropbox(driveId: driveId, fileId: fileId)
+        )
+    }
+
     /// Gets a child kDrive file or directory by name.
     public func getFileByName(
         driveId: Int,

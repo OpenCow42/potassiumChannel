@@ -1144,6 +1144,47 @@ public enum KDriveRequests {
         )
     }
 
+    /// Creates a request that converts a kDrive directory into a Dropbox.
+    public static func createFileDropbox(
+        driveId: Int,
+        fileId: Int,
+        options: KDriveFileDropboxOptions = KDriveFileDropboxOptions()
+    ) throws -> APIRequest<InfomaniakResponse<KDriveFileDropbox>> {
+        let body = try JSONEncoder().encode(options)
+
+        return APIRequest(
+            method: .post,
+            path: "/2/drive/\(driveId)/files/\(fileId)/dropbox",
+            body: body
+        )
+    }
+
+    /// Creates a request that updates Dropbox metadata for a kDrive directory.
+    public static func updateFileDropbox(
+        driveId: Int,
+        fileId: Int,
+        options: KDriveFileDropboxOptions
+    ) throws -> APIRequest<InfomaniakResponse<Bool>> {
+        let body = try JSONEncoder().encode(options)
+
+        return APIRequest(
+            method: .put,
+            path: "/2/drive/\(driveId)/files/\(fileId)/dropbox",
+            body: body
+        )
+    }
+
+    /// Creates a request that deletes Dropbox metadata from a kDrive directory.
+    public static func deleteFileDropbox(
+        driveId: Int,
+        fileId: Int
+    ) -> APIRequest<InfomaniakResponse<Bool>> {
+        APIRequest(
+            method: .delete,
+            path: "/2/drive/\(driveId)/files/\(fileId)/dropbox"
+        )
+    }
+
     /// Creates a request that gets a child kDrive file or directory by name.
     public static func getFileByName(
         driveId: Int,
