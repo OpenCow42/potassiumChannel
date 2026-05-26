@@ -857,6 +857,36 @@ public enum KDriveRequests {
         )
     }
 
+    /// Creates a request that checks a proposed access-right change for a kDrive file or directory.
+    public static func checkFileAccessChange(
+        driveId: Int,
+        fileId: Int,
+        options: CheckKDriveFileAccessChangeOptions
+    ) throws -> APIRequest<InfomaniakResponse<[KDriveFileAccessChangeFeedback]>> {
+        let body = try JSONEncoder().encode(options)
+
+        return APIRequest(
+            method: .post,
+            path: "/2/drive/\(driveId)/files/\(fileId)/access/check",
+            body: body
+        )
+    }
+
+    /// Creates a request that checks pending invitations for kDrive file access targets.
+    public static func checkFileAccessInvitations(
+        driveId: Int,
+        fileId: Int,
+        options: CheckKDriveFileAccessInvitationsOptions
+    ) throws -> APIRequest<InfomaniakResponse<[KDriveFileAccessPendingInvitationFeedback]>> {
+        let body = try JSONEncoder().encode(options)
+
+        return APIRequest(
+            method: .post,
+            path: "/2/drive/\(driveId)/files/\(fileId)/access/invitations/check",
+            body: body
+        )
+    }
+
     /// Creates a request that fetches share-link metadata for a kDrive file or directory.
     public static func getFileShareLink(
         driveId: Int,
