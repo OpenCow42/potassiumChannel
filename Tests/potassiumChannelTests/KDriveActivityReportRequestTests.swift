@@ -42,6 +42,49 @@ struct KDriveActivityReportRequestTests {
         #expect(URLComponents(url: try #require(urlRequest.url), resolvingAgainstBaseURL: false)?.queryItems == [])
     }
 
+    @Test("kDrive create activity report request matches the OpenAPI path and body")
+    func kDriveCreateActivityReportRequestMatchesOpenAPIShape() async throws {
+        let client = InfomaniakAPIClient(
+            configuration: APIClientConfiguration(
+                baseURL: URL(string: "https://api.infomaniak.com")!,
+                bearerToken: "test-token"
+            )
+        )
+        let request = try KDriveRequests.createActivityReport(
+            driveId: 100,
+            options: CreateKDriveActivityReportOptions(
+                actions: ["file_create", "file_update"],
+                depth: "file",
+                files: [123, 456],
+                from: 1_710_000_000,
+                language: "fr",
+                terms: "quarterly",
+                until: 1_710_086_400,
+                userId: 42,
+                users: [42, 43]
+            )
+        )
+
+        let urlRequest = try await client.makeURLRequest(for: request)
+        let body = try #require(urlRequest.httpBody)
+        let payload = try #require(JSONSerialization.jsonObject(with: body) as? [String: Any])
+
+        #expect(urlRequest.httpMethod == "POST")
+        #expect(urlRequest.value(forHTTPHeaderField: "Authorization") == "Bearer test-token")
+        #expect(urlRequest.value(forHTTPHeaderField: "Content-Type") == "application/json")
+        #expect(urlRequest.url?.path == "/2/drive/100/activities/reports")
+        #expect(URLComponents(url: try #require(urlRequest.url), resolvingAgainstBaseURL: false)?.queryItems == [])
+        #expect(payload["actions"] as? [String] == ["file_create", "file_update"])
+        #expect(payload["depth"] as? String == "file")
+        #expect(payload["files"] as? [Int] == [123, 456])
+        #expect(payload["from"] as? Int == 1_710_000_000)
+        #expect(payload["lang"] as? String == "fr")
+        #expect(payload["terms"] as? String == "quarterly")
+        #expect(payload["until"] as? Int == 1_710_086_400)
+        #expect(payload["user_id"] as? Int == 42)
+        #expect(payload["users"] as? [Int] == [42, 43])
+    }
+
     @Test("kDrive export activity report request matches the OpenAPI path and CSV accept header")
     func kDriveExportActivityReportRequestMatchesOpenAPIShape() async throws {
         let client = InfomaniakAPIClient(
@@ -61,6 +104,24 @@ struct KDriveActivityReportRequestTests {
         #expect(URLComponents(url: try #require(urlRequest.url), resolvingAgainstBaseURL: false)?.queryItems == [])
     }
 
+    @Test("kDrive delete activity report request matches the OpenAPI path")
+    func kDriveDeleteActivityReportRequestMatchesOpenAPIShape() async throws {
+        let client = InfomaniakAPIClient(
+            configuration: APIClientConfiguration(
+                baseURL: URL(string: "https://api.infomaniak.com")!,
+                bearerToken: "test-token"
+            )
+        )
+        let request = KDriveRequests.deleteActivityReport(driveId: 100, reportId: 42)
+
+        let urlRequest = try await client.makeURLRequest(for: request)
+
+        #expect(urlRequest.httpMethod == "DELETE")
+        #expect(urlRequest.value(forHTTPHeaderField: "Authorization") == "Bearer test-token")
+        #expect(urlRequest.url?.path == "/2/drive/100/activities/reports/42")
+        #expect(URLComponents(url: try #require(urlRequest.url), resolvingAgainstBaseURL: false)?.queryItems == [])
+    }
+
     @Test("kDrive activity report required path parameters are encoded into the URL")
     func kDriveActivityReportRequiredParametersAreNotOmitted() async throws {
         let client = InfomaniakAPIClient(
@@ -70,6 +131,26 @@ struct KDriveActivityReportRequestTests {
             )
         )
         let request = KDriveRequests.getActivityReport(driveId: 123, reportId: 456)
+
+        let urlRequest = try await client.makeURLRequest(for: request)
+        let path = try #require(urlRequest.url?.path)
+
+        #expect(path == "/2/drive/123/activities/reports/456")
+        #expect(!path.contains("{drive_id}"))
+        #expect(!path.contains("{report_id}"))
+        #expect(urlRequest.url?.pathComponents.contains("123") == true)
+        #expect(urlRequest.url?.pathComponents.contains("456") == true)
+    }
+
+    @Test("kDrive delete activity report required path parameters are encoded into the URL")
+    func kDriveDeleteActivityReportRequiredParametersAreNotOmitted() async throws {
+        let client = InfomaniakAPIClient(
+            configuration: APIClientConfiguration(
+                baseURL: URL(string: "https://api.infomaniak.com")!,
+                bearerToken: "test-token"
+            )
+        )
+        let request = KDriveRequests.deleteActivityReport(driveId: 123, reportId: 456)
 
         let urlRequest = try await client.makeURLRequest(for: request)
         let path = try #require(urlRequest.url?.path)
@@ -142,6 +223,32 @@ struct KDriveActivityReportRequestTests {
         #expect(response.data.first?.status == "done")
         #expect(response.data.first?.generatedBy.displayName == "Ada Lovelace")
         #expect(response.data.first?.downloadUrl == "https://example.com/report.csv")
+    }
+
+    @Test("kDrive create and delete activity report responses decode")
+    func kDriveCreateAndDeleteActivityReportResponsesDecode() throws {
+        let createJSON = """
+        {
+          "result": "success",
+          "data": 123
+        }
+        """.data(using: .utf8)!
+        let deleteJSON = """
+        {
+          "result": "success",
+          "data": true
+        }
+        """.data(using: .utf8)!
+        let decoder = JSONDecoder()
+        decoder.keyDecodingStrategy = .convertFromSnakeCase
+
+        let createResponse = try decoder.decode(InfomaniakResponse<Int>.self, from: createJSON)
+        let deleteResponse = try decoder.decode(InfomaniakResponse<Bool>.self, from: deleteJSON)
+
+        #expect(createResponse.result == "success")
+        #expect(createResponse.data == 123)
+        #expect(deleteResponse.result == "success")
+        #expect(deleteResponse.data == true)
     }
 
     @Test("kDrive activity report response decodes using Swift API names")

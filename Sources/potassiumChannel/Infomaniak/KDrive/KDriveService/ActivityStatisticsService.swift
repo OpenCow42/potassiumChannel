@@ -167,6 +167,16 @@ extension KDriveService {
         )
     }
 
+    /// Generates a new kDrive activity report.
+    public func createActivityReport(
+        driveId: Int,
+        options: CreateKDriveActivityReportOptions = CreateKDriveActivityReportOptions()
+    ) async throws -> InfomaniakResponse<Int> {
+        try await client.send(
+            KDriveRequests.createActivityReport(driveId: driveId, options: options)
+        )
+    }
+
     /// Gets a generated kDrive activity report.
     public func getActivityReport(
         driveId: Int,
@@ -184,6 +194,16 @@ extension KDriveService {
     ) async throws -> Data {
         try await client.sendData(
             KDriveRequests.exportActivityReport(driveId: driveId, reportId: reportId)
+        )
+    }
+
+    /// Deletes a generated kDrive activity report.
+    public func deleteActivityReport(
+        driveId: Int,
+        reportId: Int
+    ) async throws -> InfomaniakResponse<Bool> {
+        try await client.send(
+            KDriveRequests.deleteActivityReport(driveId: driveId, reportId: reportId)
         )
     }
 }

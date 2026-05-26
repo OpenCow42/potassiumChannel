@@ -370,6 +370,71 @@ public struct KDriveActivityReport: Codable, Equatable, Sendable {
     }
 }
 
+/// Options used to create a generated kDrive activity report.
+public struct CreateKDriveActivityReportOptions: Encodable, Equatable, Sendable {
+    /// Activity action filters included in the report.
+    public let actions: [String]
+
+    /// Depth filter for the reported activity scope.
+    public let depth: String?
+
+    /// File or directory identifiers included in the report.
+    public let files: [Int]
+
+    /// Start timestamp for the report period.
+    public let from: Int?
+
+    /// Language fallback used by the report generation.
+    public let language: String?
+
+    /// Text search terms included in the report.
+    public let terms: String?
+
+    /// End timestamp for the report period.
+    public let until: Int?
+
+    /// Single user identifier included in the report.
+    public let userId: Int?
+
+    /// User identifiers included in the report.
+    public let users: [Int]
+
+    public enum CodingKeys: String, CodingKey {
+        case actions
+        case depth
+        case files
+        case from
+        case language = "lang"
+        case terms
+        case until
+        case userId = "user_id"
+        case users
+    }
+
+    /// Creates options for a generated kDrive activity report.
+    public init(
+        actions: [String] = [],
+        depth: String? = nil,
+        files: [Int] = [],
+        from: Int? = nil,
+        language: String? = nil,
+        terms: String? = nil,
+        until: Int? = nil,
+        userId: Int? = nil,
+        users: [Int] = []
+    ) {
+        self.actions = actions
+        self.depth = depth
+        self.files = files
+        self.from = from
+        self.language = language
+        self.terms = terms
+        self.until = until
+        self.userId = userId
+        self.users = users
+    }
+}
+
 /// Query parameters accepted by the kDrive file activity listing endpoint.
 public struct ListKDriveFileActivitiesOptions: Equatable, Sendable {
     /// Cursor marker used to fetch the next batch of results.
