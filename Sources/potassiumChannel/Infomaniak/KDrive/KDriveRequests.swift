@@ -1959,6 +1959,21 @@ public enum KDriveRequests {
         )
     }
 
+    /// Creates a request that adds a category to multiple kDrive files or directories.
+    public static func addCategoryToFiles(
+        driveId: Int,
+        categoryId: Int,
+        options: KDriveFileCategoryBulkOptions
+    ) throws -> APIRequest<InfomaniakResponse<[KDriveFileCategoryFeedback]>> {
+        let body = try JSONEncoder().encode(options)
+
+        return APIRequest(
+            method: .post,
+            path: "/2/drive/\(driveId)/files/categories/\(categoryId)",
+            body: body
+        )
+    }
+
     /// Creates a request that removes a category from a kDrive file or directory.
     public static func removeCategoryFromFile(
         driveId: Int,
@@ -1968,6 +1983,32 @@ public enum KDriveRequests {
         APIRequest(
             method: .delete,
             path: "/2/drive/\(driveId)/files/\(fileId)/categories/\(categoryId)"
+        )
+    }
+
+    /// Creates a request that removes a category from multiple kDrive files or directories.
+    public static func removeCategoryFromFiles(
+        driveId: Int,
+        categoryId: Int,
+        options: KDriveFileCategoryBulkOptions
+    ) throws -> APIRequest<InfomaniakResponse<[KDriveFileCategoryFeedback]>> {
+        let body = try JSONEncoder().encode(options)
+
+        return APIRequest(
+            method: .delete,
+            path: "/2/drive/\(driveId)/files/categories/\(categoryId)",
+            body: body
+        )
+    }
+
+    /// Creates a request that removes every category from a kDrive file or directory.
+    public static func removeCategoriesFromFile(
+        driveId: Int,
+        fileId: Int
+    ) -> APIRequest<InfomaniakResponse<Bool>> {
+        APIRequest(
+            method: .delete,
+            path: "/2/drive/\(driveId)/files/\(fileId)/categories"
         )
     }
 

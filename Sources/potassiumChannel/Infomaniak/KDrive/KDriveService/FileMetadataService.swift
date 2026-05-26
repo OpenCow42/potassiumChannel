@@ -84,6 +84,17 @@ extension KDriveService {
         )
     }
 
+    /// Adds a category to multiple kDrive files or directories.
+    public func addCategoryToFiles(
+        driveId: Int,
+        categoryId: Int,
+        options: KDriveFileCategoryBulkOptions
+    ) async throws -> InfomaniakResponse<[KDriveFileCategoryFeedback]> {
+        try await client.send(
+            KDriveRequests.addCategoryToFiles(driveId: driveId, categoryId: categoryId, options: options)
+        )
+    }
+
     /// Removes a category from a kDrive file or directory.
     public func removeCategoryFromFile(
         driveId: Int,
@@ -92,6 +103,27 @@ extension KDriveService {
     ) async throws -> InfomaniakResponse<Bool> {
         try await client.send(
             KDriveRequests.removeCategoryFromFile(driveId: driveId, fileId: fileId, categoryId: categoryId)
+        )
+    }
+
+    /// Removes a category from multiple kDrive files or directories.
+    public func removeCategoryFromFiles(
+        driveId: Int,
+        categoryId: Int,
+        options: KDriveFileCategoryBulkOptions
+    ) async throws -> InfomaniakResponse<[KDriveFileCategoryFeedback]> {
+        try await client.send(
+            KDriveRequests.removeCategoryFromFiles(driveId: driveId, categoryId: categoryId, options: options)
+        )
+    }
+
+    /// Removes every category from a kDrive file or directory.
+    public func removeCategoriesFromFile(
+        driveId: Int,
+        fileId: Int
+    ) async throws -> InfomaniakResponse<Bool> {
+        try await client.send(
+            KDriveRequests.removeCategoriesFromFile(driveId: driveId, fileId: fileId)
         )
     }
 
