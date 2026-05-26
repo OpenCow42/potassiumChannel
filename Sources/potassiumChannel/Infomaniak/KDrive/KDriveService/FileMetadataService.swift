@@ -42,6 +42,59 @@ extension KDriveService {
         )
     }
 
+    /// Creates a category on a kDrive.
+    public func createCategory(
+        driveId: Int,
+        options: CreateKDriveCategoryOptions
+    ) async throws -> InfomaniakResponse<KDriveCategory> {
+        try await client.send(
+            KDriveRequests.createCategory(driveId: driveId, options: options)
+        )
+    }
+
+    /// Updates a category on a kDrive.
+    public func updateCategory(
+        driveId: Int,
+        categoryId: Int,
+        options: UpdateKDriveCategoryOptions
+    ) async throws -> InfomaniakResponse<KDriveCategory> {
+        try await client.send(
+            KDriveRequests.updateCategory(driveId: driveId, categoryId: categoryId, options: options)
+        )
+    }
+
+    /// Deletes a category from a kDrive.
+    public func deleteCategory(
+        driveId: Int,
+        categoryId: Int
+    ) async throws -> InfomaniakResponse<Bool> {
+        try await client.send(
+            KDriveRequests.deleteCategory(driveId: driveId, categoryId: categoryId)
+        )
+    }
+
+    /// Adds a category to a kDrive file or directory.
+    public func addCategoryToFile(
+        driveId: Int,
+        fileId: Int,
+        categoryId: Int
+    ) async throws -> InfomaniakResponse<KDriveFileCategoryFeedback> {
+        try await client.send(
+            KDriveRequests.addCategoryToFile(driveId: driveId, fileId: fileId, categoryId: categoryId)
+        )
+    }
+
+    /// Removes a category from a kDrive file or directory.
+    public func removeCategoryFromFile(
+        driveId: Int,
+        fileId: Int,
+        categoryId: Int
+    ) async throws -> InfomaniakResponse<Bool> {
+        try await client.send(
+            KDriveRequests.removeCategoryFromFile(driveId: driveId, fileId: fileId, categoryId: categoryId)
+        )
+    }
+
     /// Gets category rights for a kDrive.
     public func getCategoryRights(
         driveId: Int
