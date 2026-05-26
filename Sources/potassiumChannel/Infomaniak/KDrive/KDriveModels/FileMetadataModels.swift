@@ -138,6 +138,55 @@ public struct KDriveCategory: Codable, Equatable, Sendable {
     }
 }
 
+/// Options for creating a kDrive category.
+public struct CreateKDriveCategoryOptions: Encodable, Equatable, Sendable {
+    /// Category display name.
+    public let name: String
+
+    /// Display color as a hexadecimal string.
+    public let color: String?
+
+    /// Creates options for creating a kDrive category.
+    public init(name: String, color: String? = nil) {
+        self.name = name
+        self.color = color
+    }
+}
+
+/// Options for updating a kDrive category.
+public struct UpdateKDriveCategoryOptions: Encodable, Equatable, Sendable {
+    /// Category display name.
+    public let name: String?
+
+    /// Display color as a hexadecimal string.
+    public let color: String?
+
+    /// Creates options for updating a kDrive category.
+    public init(name: String? = nil, color: String? = nil) {
+        self.name = name
+        self.color = color
+    }
+}
+
+/// Feedback returned after applying a category operation to a kDrive file or directory.
+public struct KDriveFileCategoryFeedback: Codable, Equatable, Sendable {
+    /// File or directory identifier affected by the operation.
+    public let id: Int
+
+    /// Whether the operation succeeded for the item.
+    public let result: Bool
+
+    /// Optional API message, usually present when `result` is false.
+    public let message: String?
+
+    /// Creates category operation feedback.
+    public init(id: Int, result: Bool, message: String? = nil) {
+        self.id = id
+        self.result = result
+        self.message = message
+    }
+}
+
 /// Category permissions for the authenticated user on a kDrive.
 public struct KDriveCategoryRights: Codable, Equatable, Sendable {
     /// Whether the user can create categories.

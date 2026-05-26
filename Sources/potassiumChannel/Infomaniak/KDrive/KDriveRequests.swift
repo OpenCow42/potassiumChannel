@@ -1907,6 +1907,70 @@ public enum KDriveRequests {
         )
     }
 
+    /// Creates a request that creates a category on a kDrive.
+    public static func createCategory(
+        driveId: Int,
+        options: CreateKDriveCategoryOptions
+    ) throws -> APIRequest<InfomaniakResponse<KDriveCategory>> {
+        let body = try JSONEncoder().encode(options)
+
+        return APIRequest(
+            method: .post,
+            path: "/2/drive/\(driveId)/categories",
+            body: body
+        )
+    }
+
+    /// Creates a request that updates a category on a kDrive.
+    public static func updateCategory(
+        driveId: Int,
+        categoryId: Int,
+        options: UpdateKDriveCategoryOptions
+    ) throws -> APIRequest<InfomaniakResponse<KDriveCategory>> {
+        let body = try JSONEncoder().encode(options)
+
+        return APIRequest(
+            method: .put,
+            path: "/2/drive/\(driveId)/categories/\(categoryId)",
+            body: body
+        )
+    }
+
+    /// Creates a request that deletes a category from a kDrive.
+    public static func deleteCategory(
+        driveId: Int,
+        categoryId: Int
+    ) -> APIRequest<InfomaniakResponse<Bool>> {
+        APIRequest(
+            method: .delete,
+            path: "/2/drive/\(driveId)/categories/\(categoryId)"
+        )
+    }
+
+    /// Creates a request that adds a category to a kDrive file or directory.
+    public static func addCategoryToFile(
+        driveId: Int,
+        fileId: Int,
+        categoryId: Int
+    ) -> APIRequest<InfomaniakResponse<KDriveFileCategoryFeedback>> {
+        APIRequest(
+            method: .post,
+            path: "/2/drive/\(driveId)/files/\(fileId)/categories/\(categoryId)"
+        )
+    }
+
+    /// Creates a request that removes a category from a kDrive file or directory.
+    public static func removeCategoryFromFile(
+        driveId: Int,
+        fileId: Int,
+        categoryId: Int
+    ) -> APIRequest<InfomaniakResponse<Bool>> {
+        APIRequest(
+            method: .delete,
+            path: "/2/drive/\(driveId)/files/\(fileId)/categories/\(categoryId)"
+        )
+    }
+
     /// Creates a request that gets category rights for a kDrive.
     public static func getCategoryRights(
         driveId: Int
