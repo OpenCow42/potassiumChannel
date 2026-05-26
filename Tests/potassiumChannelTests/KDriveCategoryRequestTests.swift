@@ -109,6 +109,32 @@ struct KDriveCategoryRequestTests {
         #expect(urlRequest.httpBody == nil)
     }
 
+    @Test("kDrive add category to files request matches the OpenAPI path and body")
+    func kDriveAddCategoryToFilesRequestMatchesOpenAPIShape() async throws {
+        let client = InfomaniakAPIClient(
+            configuration: APIClientConfiguration(
+                baseURL: URL(string: "https://api.infomaniak.com")!,
+                bearerToken: "test-token"
+            )
+        )
+        let request = try KDriveRequests.addCategoryToFiles(
+            driveId: 100,
+            categoryId: 42,
+            options: KDriveFileCategoryBulkOptions(fileIds: [456, 789])
+        )
+
+        let urlRequest = try await client.makeURLRequest(for: request)
+        let body = try #require(urlRequest.httpBody)
+        let object = try #require(JSONSerialization.jsonObject(with: body) as? [String: Any])
+
+        #expect(urlRequest.httpMethod == "POST")
+        #expect(urlRequest.value(forHTTPHeaderField: "Authorization") == "Bearer test-token")
+        #expect(urlRequest.value(forHTTPHeaderField: "Content-Type") == "application/json")
+        #expect(urlRequest.url?.path == "/2/drive/100/files/categories/42")
+        #expect(object["file_ids"] as? [Int] == [456, 789])
+        #expect(object["fileIds"] == nil)
+    }
+
     @Test("kDrive remove category from file request matches the OpenAPI path")
     func kDriveRemoveCategoryFromFileRequestMatchesOpenAPIShape() async throws {
         let client = InfomaniakAPIClient(
@@ -124,6 +150,50 @@ struct KDriveCategoryRequestTests {
         #expect(urlRequest.httpMethod == "DELETE")
         #expect(urlRequest.value(forHTTPHeaderField: "Authorization") == "Bearer test-token")
         #expect(urlRequest.url?.path == "/2/drive/100/files/456/categories/42")
+        #expect(urlRequest.httpBody == nil)
+    }
+
+    @Test("kDrive remove category from files request matches the OpenAPI path and body")
+    func kDriveRemoveCategoryFromFilesRequestMatchesOpenAPIShape() async throws {
+        let client = InfomaniakAPIClient(
+            configuration: APIClientConfiguration(
+                baseURL: URL(string: "https://api.infomaniak.com")!,
+                bearerToken: "test-token"
+            )
+        )
+        let request = try KDriveRequests.removeCategoryFromFiles(
+            driveId: 100,
+            categoryId: 42,
+            options: KDriveFileCategoryBulkOptions(fileIds: [456, 789])
+        )
+
+        let urlRequest = try await client.makeURLRequest(for: request)
+        let body = try #require(urlRequest.httpBody)
+        let object = try #require(JSONSerialization.jsonObject(with: body) as? [String: Any])
+
+        #expect(urlRequest.httpMethod == "DELETE")
+        #expect(urlRequest.value(forHTTPHeaderField: "Authorization") == "Bearer test-token")
+        #expect(urlRequest.value(forHTTPHeaderField: "Content-Type") == "application/json")
+        #expect(urlRequest.url?.path == "/2/drive/100/files/categories/42")
+        #expect(object["file_ids"] as? [Int] == [456, 789])
+        #expect(object["fileIds"] == nil)
+    }
+
+    @Test("kDrive remove all categories from file request matches the OpenAPI path")
+    func kDriveRemoveCategoriesFromFileRequestMatchesOpenAPIShape() async throws {
+        let client = InfomaniakAPIClient(
+            configuration: APIClientConfiguration(
+                baseURL: URL(string: "https://api.infomaniak.com")!,
+                bearerToken: "test-token"
+            )
+        )
+        let request = KDriveRequests.removeCategoriesFromFile(driveId: 100, fileId: 456)
+
+        let urlRequest = try await client.makeURLRequest(for: request)
+
+        #expect(urlRequest.httpMethod == "DELETE")
+        #expect(urlRequest.value(forHTTPHeaderField: "Authorization") == "Bearer test-token")
+        #expect(urlRequest.url?.path == "/2/drive/100/files/456/categories")
         #expect(urlRequest.httpBody == nil)
     }
 
@@ -195,6 +265,21 @@ struct KDriveCategoryRequestTests {
 
         #expect(response.result == "success")
         #expect(response.data == KDriveFileCategoryFeedback(id: 456, result: true))
+    }
+
+    @Test("kDrive file category feedback array decodes")
+    func kDriveFileCategoryFeedbackArrayDecodes() throws {
+        let json = #"{"result":"success","data":[{"id":456,"result":true},{"id":789,"result":false,"message":"access_denied"}]}"#.data(using: .utf8)!
+        let decoder = JSONDecoder()
+        decoder.keyDecodingStrategy = .convertFromSnakeCase
+
+        let response = try decoder.decode(InfomaniakResponse<[KDriveFileCategoryFeedback]>.self, from: json)
+
+        #expect(response.result == "success")
+        #expect(response.data == [
+            KDriveFileCategoryFeedback(id: 456, result: true),
+            KDriveFileCategoryFeedback(id: 789, result: false, message: "access_denied"),
+        ])
     }
 
     @Test("kDrive boolean category mutation responses decode")

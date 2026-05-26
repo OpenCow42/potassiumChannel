@@ -168,6 +168,21 @@ public struct UpdateKDriveCategoryOptions: Encodable, Equatable, Sendable {
     }
 }
 
+/// Options for applying a kDrive category to multiple files or directories.
+public struct KDriveFileCategoryBulkOptions: Encodable, Equatable, Sendable {
+    /// File or directory identifiers to act upon.
+    public let fileIds: [Int]
+
+    public enum CodingKeys: String, CodingKey {
+        case fileIds = "file_ids"
+    }
+
+    /// Creates options for applying a category to multiple kDrive items.
+    public init(fileIds: [Int]) {
+        self.fileIds = fileIds
+    }
+}
+
 /// Feedback returned after applying a category operation to a kDrive file or directory.
 public struct KDriveFileCategoryFeedback: Codable, Equatable, Sendable {
     /// File or directory identifier affected by the operation.
