@@ -52,6 +52,14 @@ extension KChatRequests {
         )
     }
 
+    /// Creates a request that gets kChat channel moderation information.
+    public static func getChannelModerations(channelId: String) -> APIRequest<[KChatChannelModeration]> {
+        APIRequest(
+            method: .get,
+            path: "/api/v4/channels/\(percentEncodePathSegment(channelId))/moderations"
+        )
+    }
+
     /// Creates a request that lists kChat members for a channel.
     public static func getChannelMembers(
         channelId: String,
@@ -192,6 +200,67 @@ extension KChatRequests {
             method: .get,
             path: "/api/v4/users/\(percentEncodePathSegment(userId))/channel_members",
             queryParameters: queryParameters
+        )
+    }
+
+    /// Creates a request that lists kChat channels for a user across teams.
+    public static func getUserChannels(
+        userId: String,
+        options: KChatUserChannelsOptions = KChatUserChannelsOptions()
+    ) -> APIRequest<[KChatChannel]> {
+        var queryParameters: [QueryParameter] = []
+
+        if let lastDeleteAt = options.lastDeleteAt {
+            queryParameters.append(QueryParameter(name: "last_delete_at", value: .integer(lastDeleteAt)))
+        }
+
+        if let includeDeleted = options.includeDeleted {
+            queryParameters.append(QueryParameter(name: "include_deleted", value: .bool(includeDeleted)))
+        }
+
+        return APIRequest(
+            method: .get,
+            path: "/api/v4/users/\(percentEncodePathSegment(userId))/channels",
+            queryParameters: queryParameters
+        )
+    }
+
+    /// Creates a request that gets kChat unread counters for a user channel.
+    public static func getChannelUnread(userId: String, channelId: String) -> APIRequest<KChatChannelUnread> {
+        APIRequest(
+            method: .get,
+            path: "/api/v4/users/\(percentEncodePathSegment(userId))/channels/\(percentEncodePathSegment(channelId))/unread"
+        )
+    }
+
+    /// Creates a request that gets a user's sidebar categories for a team.
+    public static func getSidebarCategoriesForTeamForUser(
+        userId: String,
+        teamId: String
+    ) -> APIRequest<KChatSidebarCategories> {
+        APIRequest(
+            method: .get,
+            path: "/api/v4/users/\(percentEncodePathSegment(userId))/teams/\(percentEncodePathSegment(teamId))/channels/categories"
+        )
+    }
+
+    /// Creates a request that gets a user's sidebar category order for a team.
+    public static func getSidebarCategoryOrderForTeamForUser(userId: String, teamId: String) -> APIRequest<[String]> {
+        APIRequest(
+            method: .get,
+            path: "/api/v4/users/\(percentEncodePathSegment(userId))/teams/\(percentEncodePathSegment(teamId))/channels/categories/order"
+        )
+    }
+
+    /// Creates a request that gets one user's sidebar category for a team.
+    public static func getSidebarCategoryForTeamForUser(
+        userId: String,
+        teamId: String,
+        categoryId: String
+    ) -> APIRequest<KChatSidebarCategory> {
+        APIRequest(
+            method: .get,
+            path: "/api/v4/users/\(percentEncodePathSegment(userId))/teams/\(percentEncodePathSegment(teamId))/channels/categories/\(percentEncodePathSegment(categoryId))"
         )
     }
 }

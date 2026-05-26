@@ -308,3 +308,26 @@ public struct KChatUserStatus: Codable, Equatable, Sendable {
         dndEndTime = try container.decodeIfPresent(Int64.self, forKey: .dndEndTime)
     }
 }
+
+/// A Mattermost-compatible kChat user preference.
+public struct KChatPreference: Codable, Equatable, Sendable {
+    /// Identifier of the user that owns the preference.
+    public let userId: String?
+
+    /// Preference category.
+    public let category: String?
+
+    /// Preference name inside the category.
+    public let name: String?
+
+    /// Stored preference value.
+    public let value: String?
+
+    /// Creates a kChat user preference.
+    public init(userId: String? = nil, category: String? = nil, name: String? = nil, value: String? = nil) {
+        self.userId = userId
+        self.category = category
+        self.name = name
+        self.value = value
+    }
+}

@@ -49,6 +49,11 @@ public struct KChatService: Sendable {
         try await client.send(KChatRequests.getChannelStats(channelId: channelId))
     }
 
+    /// Gets moderation information for a kChat channel.
+    public func getChannelModerations(channelId: String) async throws -> [KChatChannelModeration] {
+        try await client.send(KChatRequests.getChannelModerations(channelId: channelId))
+    }
+
     /// Gets a team in kChat by id.
     public func getTeam(teamId: String) async throws -> KChatTeam {
         try await client.send(KChatRequests.getTeam(teamId: teamId))
@@ -241,6 +246,21 @@ public struct KChatService: Sendable {
         return try await client.send(KChatRequests.getUserStatusesByIds(body: body))
     }
 
+    /// Gets a kChat user's preferences.
+    public func getPreferences(userId: String) async throws -> [KChatPreference] {
+        try await client.send(KChatRequests.getPreferences(userId: userId))
+    }
+
+    /// Gets a kChat user's preferences by category.
+    public func getPreferencesByCategory(userId: String, category: String) async throws -> [KChatPreference] {
+        try await client.send(KChatRequests.getPreferencesByCategory(userId: userId, category: category))
+    }
+
+    /// Gets one kChat user preference.
+    public func getPreference(userId: String, category: String, preferenceName: String) async throws -> KChatPreference {
+        try await client.send(KChatRequests.getPreference(userId: userId, category: category, preferenceName: preferenceName))
+    }
+
     /// Lists kChat teams for a user.
     public func getUserTeams(userId: String) async throws -> [KChatTeam] {
         try await client.send(KChatRequests.getUserTeams(userId: userId))
@@ -278,6 +298,34 @@ public struct KChatService: Sendable {
         try await client.send(KChatRequests.getUserChannelMembers(userId: userId, options: options))
     }
 
+    /// Lists kChat channels for a user across teams.
+    public func getUserChannels(
+        userId: String,
+        options: KChatUserChannelsOptions = KChatUserChannelsOptions()
+    ) async throws -> [KChatChannel] {
+        try await client.send(KChatRequests.getUserChannels(userId: userId, options: options))
+    }
+
+    /// Gets unread counters for a kChat user channel.
+    public func getChannelUnread(userId: String, channelId: String) async throws -> KChatChannelUnread {
+        try await client.send(KChatRequests.getChannelUnread(userId: userId, channelId: channelId))
+    }
+
+    /// Gets a user's sidebar categories for a kChat team.
+    public func getSidebarCategoriesForTeamForUser(userId: String, teamId: String) async throws -> KChatSidebarCategories {
+        try await client.send(KChatRequests.getSidebarCategoriesForTeamForUser(userId: userId, teamId: teamId))
+    }
+
+    /// Gets a user's sidebar category order for a kChat team.
+    public func getSidebarCategoryOrderForTeamForUser(userId: String, teamId: String) async throws -> [String] {
+        try await client.send(KChatRequests.getSidebarCategoryOrderForTeamForUser(userId: userId, teamId: teamId))
+    }
+
+    /// Gets one user's sidebar category for a kChat team.
+    public func getSidebarCategoryForTeamForUser(userId: String, teamId: String, categoryId: String) async throws -> KChatSidebarCategory {
+        try await client.send(KChatRequests.getSidebarCategoryForTeamForUser(userId: userId, teamId: teamId, categoryId: categoryId))
+    }
+
     /// Lists posts for a kChat channel.
     public func getChannelPosts(
         channelId: String,
@@ -289,6 +337,37 @@ public struct KChatService: Sendable {
     /// Gets pinned posts for a kChat channel.
     public func getPinnedPosts(channelId: String) async throws -> KChatPostList {
         try await client.send(KChatRequests.getPinnedPosts(channelId: channelId))
+    }
+
+    /// Gets posts around the oldest unread kChat channel post.
+    public func getPostsAroundLastUnread(
+        userId: String,
+        channelId: String,
+        options: KChatPostsAroundLastUnreadOptions = KChatPostsAroundLastUnreadOptions()
+    ) async throws -> KChatPostList {
+        try await client.send(KChatRequests.getPostsAroundLastUnread(userId: userId, channelId: channelId, options: options))
+    }
+
+    /// Gets flagged posts for a kChat user.
+    public func getFlaggedPostsForUser(
+        userId: String,
+        options: KChatFlaggedPostsOptions = KChatFlaggedPostsOptions()
+    ) async throws -> KChatFlaggedPosts {
+        try await client.send(KChatRequests.getFlaggedPostsForUser(userId: userId, options: options))
+    }
+
+    /// Gets all followed kChat threads for a user in a team.
+    public func getUserThreads(
+        userId: String,
+        teamId: String,
+        options: KChatUserThreadsOptions = KChatUserThreadsOptions()
+    ) async throws -> KChatUserThreads {
+        try await client.send(KChatRequests.getUserThreads(userId: userId, teamId: teamId, options: options))
+    }
+
+    /// Gets one followed kChat thread for a user in a team.
+    public func getUserThread(userId: String, teamId: String, threadId: String) async throws -> KChatUserThread {
+        try await client.send(KChatRequests.getUserThread(userId: userId, teamId: teamId, threadId: threadId))
     }
 
     /// Creates a kChat post.
@@ -328,6 +407,16 @@ public struct KChatService: Sendable {
     /// Gets metadata for a previously uploaded kChat file.
     public func getFileInfo(fileId: String) async throws -> KChatFileInfo {
         try await client.send(KChatRequests.getFileInfo(fileId: fileId))
+    }
+
+    /// Gets a previously uploaded kChat file preview.
+    public func getFilePreview(fileId: String) async throws -> Data {
+        try await client.sendData(KChatRequests.getFilePreview(fileId: fileId))
+    }
+
+    /// Gets a previously uploaded kChat file thumbnail.
+    public func getFileThumbnail(fileId: String) async throws -> Data {
+        try await client.sendData(KChatRequests.getFileThumbnail(fileId: fileId))
     }
 
     /// Uploads a file to kChat.
