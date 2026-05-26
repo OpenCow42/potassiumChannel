@@ -906,6 +906,55 @@ public enum KDriveRequests {
         )
     }
 
+    /// Creates a request that creates share-link metadata for a kDrive file or directory.
+    public static func createFileShareLink(
+        driveId: Int,
+        fileId: Int,
+        with includedResources: String? = nil,
+        options: CreateKDriveFileShareLinkOptions
+    ) throws -> APIRequest<InfomaniakResponse<KDriveShareLink>> {
+        var queryParameters: [QueryParameter] = []
+
+        if let includedResources {
+            queryParameters.append(QueryParameter(name: "with", value: .string(includedResources)))
+        }
+
+        let body = try JSONEncoder().encode(options)
+
+        return APIRequest(
+            method: .post,
+            path: "/2/drive/\(driveId)/files/\(fileId)/link",
+            queryParameters: queryParameters,
+            body: body
+        )
+    }
+
+    /// Creates a request that updates share-link metadata for a kDrive file or directory.
+    public static func updateFileShareLink(
+        driveId: Int,
+        fileId: Int,
+        options: UpdateKDriveFileShareLinkOptions
+    ) throws -> APIRequest<InfomaniakResponse<Bool>> {
+        let body = try JSONEncoder().encode(options)
+
+        return APIRequest(
+            method: .put,
+            path: "/2/drive/\(driveId)/files/\(fileId)/link",
+            body: body
+        )
+    }
+
+    /// Creates a request that deletes share-link metadata for a kDrive file or directory.
+    public static func deleteFileShareLink(
+        driveId: Int,
+        fileId: Int
+    ) -> APIRequest<InfomaniakResponse<Bool>> {
+        APIRequest(
+            method: .delete,
+            path: "/2/drive/\(driveId)/files/\(fileId)/link"
+        )
+    }
+
     /// Creates a request that lists user access entries for a kDrive file or directory.
     public static func listFileAccessUsers(
         driveId: Int,

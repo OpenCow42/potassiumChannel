@@ -293,6 +293,136 @@ public struct KDriveShareLinkCapabilities: Codable, Equatable, Sendable {
     }
 }
 
+/// JSON body accepted by the kDrive create file share-link endpoint.
+public struct CreateKDriveFileShareLinkOptions: Encodable, Equatable, Sendable {
+    /// Permission of the shared link: `public`, `inherit`, or `password`.
+    public let right: String
+
+    /// Whether share-link users may comment on shared files.
+    public let canComment: Bool?
+
+    /// Whether share-link users may download shared content.
+    public let canDownload: Bool?
+
+    /// Whether share-link users may edit shared content.
+    public let canEdit: Bool?
+
+    /// Whether connected users may request access from the share-link.
+    public let canRequestAccess: Bool?
+
+    /// Whether share-link users may see file information.
+    public let canSeeInfo: Bool?
+
+    /// Whether share-link users may see statistics.
+    public let canSeeStats: Bool?
+
+    /// Password used when `right` is `password`.
+    public let password: String?
+
+    /// Maximum validity timestamp of the share-link.
+    public let validUntil: Int?
+
+    public enum CodingKeys: String, CodingKey {
+        case right
+        case canComment = "can_comment"
+        case canDownload = "can_download"
+        case canEdit = "can_edit"
+        case canRequestAccess = "can_request_access"
+        case canSeeInfo = "can_see_info"
+        case canSeeStats = "can_see_stats"
+        case password
+        case validUntil = "valid_until"
+    }
+
+    /// Creates options for creating a kDrive file share-link.
+    public init(
+        right: String,
+        canComment: Bool? = nil,
+        canDownload: Bool? = nil,
+        canEdit: Bool? = nil,
+        canRequestAccess: Bool? = nil,
+        canSeeInfo: Bool? = nil,
+        canSeeStats: Bool? = nil,
+        password: String? = nil,
+        validUntil: Int? = nil
+    ) {
+        self.right = right
+        self.canComment = canComment
+        self.canDownload = canDownload
+        self.canEdit = canEdit
+        self.canRequestAccess = canRequestAccess
+        self.canSeeInfo = canSeeInfo
+        self.canSeeStats = canSeeStats
+        self.password = password
+        self.validUntil = validUntil
+    }
+}
+
+/// JSON body accepted by the kDrive update file share-link endpoint.
+public struct UpdateKDriveFileShareLinkOptions: Encodable, Equatable, Sendable {
+    /// Whether share-link users may comment on shared files.
+    public let canComment: Bool?
+
+    /// Whether share-link users may download shared content.
+    public let canDownload: Bool?
+
+    /// Whether share-link users may edit shared content.
+    public let canEdit: Bool?
+
+    /// Whether connected users may request access from the share-link.
+    public let canRequestAccess: Bool?
+
+    /// Whether share-link users may see file information.
+    public let canSeeInfo: Bool?
+
+    /// Whether share-link users may see statistics.
+    public let canSeeStats: Bool?
+
+    /// Password used when `right` is `password`.
+    public let password: String?
+
+    /// Permission of the shared link: `public`, `inherit`, or `password`.
+    public let right: String?
+
+    /// Maximum validity timestamp of the share-link.
+    public let validUntil: Int?
+
+    public enum CodingKeys: String, CodingKey {
+        case canComment = "can_comment"
+        case canDownload = "can_download"
+        case canEdit = "can_edit"
+        case canRequestAccess = "can_request_access"
+        case canSeeInfo = "can_see_info"
+        case canSeeStats = "can_see_stats"
+        case password
+        case right
+        case validUntil = "valid_until"
+    }
+
+    /// Creates options for updating a kDrive file share-link.
+    public init(
+        canComment: Bool? = nil,
+        canDownload: Bool? = nil,
+        canEdit: Bool? = nil,
+        canRequestAccess: Bool? = nil,
+        canSeeInfo: Bool? = nil,
+        canSeeStats: Bool? = nil,
+        password: String? = nil,
+        right: String? = nil,
+        validUntil: Int? = nil
+    ) {
+        self.canComment = canComment
+        self.canDownload = canDownload
+        self.canEdit = canEdit
+        self.canRequestAccess = canRequestAccess
+        self.canSeeInfo = canSeeInfo
+        self.canSeeStats = canSeeStats
+        self.password = password
+        self.right = right
+        self.validUntil = validUntil
+    }
+}
+
 /// A user access entry for a kDrive file or directory.
 public struct KDriveFileAccessUser: Codable, Equatable, Sendable {
     /// Raw user access payload returned by the API.
