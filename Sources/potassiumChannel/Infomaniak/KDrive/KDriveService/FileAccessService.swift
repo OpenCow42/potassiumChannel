@@ -42,6 +42,28 @@ extension KDriveService {
         )
     }
 
+    /// Checks a proposed access-right change for a kDrive file or directory.
+    public func checkFileAccessChange(
+        driveId: Int,
+        fileId: Int,
+        options: CheckKDriveFileAccessChangeOptions
+    ) async throws -> InfomaniakResponse<[KDriveFileAccessChangeFeedback]> {
+        try await client.send(
+            KDriveRequests.checkFileAccessChange(driveId: driveId, fileId: fileId, options: options)
+        )
+    }
+
+    /// Checks pending invitations for kDrive file access targets.
+    public func checkFileAccessInvitations(
+        driveId: Int,
+        fileId: Int,
+        options: CheckKDriveFileAccessInvitationsOptions
+    ) async throws -> InfomaniakResponse<[KDriveFileAccessPendingInvitationFeedback]> {
+        try await client.send(
+            KDriveRequests.checkFileAccessInvitations(driveId: driveId, fileId: fileId, options: options)
+        )
+    }
+
     /// Gets share-link metadata for a kDrive file or directory.
     public func getFileShareLink(
         driveId: Int,
