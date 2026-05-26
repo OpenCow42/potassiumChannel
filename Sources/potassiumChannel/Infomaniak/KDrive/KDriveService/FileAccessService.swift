@@ -75,6 +75,44 @@ extension KDriveService {
         )
     }
 
+    /// Creates share-link metadata for a kDrive file or directory.
+    public func createFileShareLink(
+        driveId: Int,
+        fileId: Int,
+        with includedResources: String? = nil,
+        options: CreateKDriveFileShareLinkOptions
+    ) async throws -> InfomaniakResponse<KDriveShareLink> {
+        try await client.send(
+            KDriveRequests.createFileShareLink(
+                driveId: driveId,
+                fileId: fileId,
+                with: includedResources,
+                options: options
+            )
+        )
+    }
+
+    /// Updates share-link metadata for a kDrive file or directory.
+    public func updateFileShareLink(
+        driveId: Int,
+        fileId: Int,
+        options: UpdateKDriveFileShareLinkOptions
+    ) async throws -> InfomaniakResponse<Bool> {
+        try await client.send(
+            KDriveRequests.updateFileShareLink(driveId: driveId, fileId: fileId, options: options)
+        )
+    }
+
+    /// Deletes share-link metadata for a kDrive file or directory.
+    public func deleteFileShareLink(
+        driveId: Int,
+        fileId: Int
+    ) async throws -> InfomaniakResponse<Bool> {
+        try await client.send(
+            KDriveRequests.deleteFileShareLink(driveId: driveId, fileId: fileId)
+        )
+    }
+
     /// Lists user access entries for a kDrive file or directory.
     public func listFileAccessUsers(
         driveId: Int,
