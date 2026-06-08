@@ -2214,6 +2214,29 @@ public enum KDriveRequests {
         )
     }
 
+    /// Creates a request that restores a v2 kDrive file version as a copy in a directory.
+    public static func restoreFileVersionToDirectoryV2(
+        driveId: Int,
+        fileId: Int,
+        versionId: Int,
+        destinationDirectoryId: Int,
+        with includedResources: String? = nil,
+        body: Data
+    ) -> APIRequest<InfomaniakResponse<KDriveFileVersionRestoreResult>> {
+        var queryParameters: [QueryParameter] = []
+
+        if let includedResources {
+            queryParameters.append(QueryParameter(name: "with", value: .string(includedResources)))
+        }
+
+        return APIRequest(
+            method: .post,
+            path: "/2/drive/\(driveId)/files/\(fileId)/versions/\(versionId)/restore/\(destinationDirectoryId)",
+            queryParameters: queryParameters,
+            body: body
+        )
+    }
+
     /// Creates a request that lists versions for a kDrive file.
     public static func listFileVersions(
         driveId: Int,
@@ -2255,6 +2278,29 @@ public enum KDriveRequests {
             method: .get,
             path: "/3/drive/\(driveId)/files/\(fileId)/versions",
             queryParameters: queryParameters
+        )
+    }
+
+    /// Creates a request that restores a kDrive file version as a copy in a directory.
+    public static func restoreFileVersionToDirectory(
+        driveId: Int,
+        fileId: Int,
+        versionId: Int,
+        destinationDirectoryId: Int,
+        with includedResources: String? = nil,
+        body: Data
+    ) -> APIRequest<InfomaniakResponse<KDriveFileVersionRestoreResult>> {
+        var queryParameters: [QueryParameter] = []
+
+        if let includedResources {
+            queryParameters.append(QueryParameter(name: "with", value: .string(includedResources)))
+        }
+
+        return APIRequest(
+            method: .post,
+            path: "/3/drive/\(driveId)/files/\(fileId)/versions/\(versionId)/restore/\(destinationDirectoryId)",
+            queryParameters: queryParameters,
+            body: body
         )
     }
 
