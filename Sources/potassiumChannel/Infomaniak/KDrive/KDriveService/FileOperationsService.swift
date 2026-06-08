@@ -241,7 +241,7 @@ extension KDriveService {
         driveId: Int,
         fileId: Int,
         lastModifiedAt: Int
-    ) async throws -> InfomaniakResponse<Bool> {
+    ) async throws -> InfomaniakResponse<KDriveFileItem> {
         let body = try JSONEncoder().encode(UpdateKDriveFileLastModifiedOptions(lastModifiedAt: lastModifiedAt))
         return try await client.send(
             KDriveRequests.updateFileLastModified(

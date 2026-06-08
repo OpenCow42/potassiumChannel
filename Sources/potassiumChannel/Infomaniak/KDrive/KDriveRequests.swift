@@ -3034,7 +3034,7 @@ public enum KDriveRequests {
         driveId: Int,
         fileId: Int,
         body: Data
-    ) -> APIRequest<InfomaniakResponse<Bool>> {
+    ) -> APIRequest<InfomaniakResponse<KDriveFileItem>> {
         APIRequest(
             method: .post,
             path: "/3/drive/\(driveId)/files/\(fileId)/last-modified",

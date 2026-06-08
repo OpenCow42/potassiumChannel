@@ -31,13 +31,37 @@ struct KDriveUpdateFileLastModifiedRequestTests {
         #expect(object["last_modified_at"] as? Int == 1_710_000_100)
     }
 
-    @Test("kDrive update-file-last-modified response decodes boolean result")
-    func responseDecodesBooleanResult() throws {
-        let data = #"{"result":"success","data":true}"#.data(using: .utf8)!
+    @Test("kDrive update-file-last-modified response decodes updated file")
+    func responseDecodesUpdatedFile() throws {
+        let data = """
+        {
+          "result": "success",
+          "data": {
+            "id": 42,
+            "name": "Document.pdf",
+            "path": "/Documents/Document.pdf",
+            "type": "file",
+            "status": "active",
+            "visibility": "is_private_space",
+            "drive_id": 100,
+            "parent_id": 1,
+            "depth": 2,
+            "created_at": 1710000000,
+            "last_modified_at": 1710000100,
+            "updated_at": 1710000200,
+            "size": 1024,
+            "mime_type": "application/pdf",
+            "is_favorite": false
+          }
+        }
+        """.data(using: .utf8)!
+        let decoder = JSONDecoder()
+        decoder.keyDecodingStrategy = .convertFromSnakeCase
 
-        let response = try JSONDecoder().decode(InfomaniakResponse<Bool>.self, from: data)
+        let response = try decoder.decode(InfomaniakResponse<KDriveFileItem>.self, from: data)
 
         #expect(response.result == "success")
-        #expect(response.data == true)
+        #expect(response.data.id == 42)
+        #expect(response.data.lastModifiedAt == 1710000100)
     }
 }
