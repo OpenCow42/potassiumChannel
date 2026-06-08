@@ -113,6 +113,53 @@ public struct KChatUserChannelsOptions: Equatable, Sendable {
     }
 }
 
+/// Request body for creating a Mattermost-compatible kChat channel.
+public struct KChatChannelCreateRequest: Encodable, Equatable, Sendable {
+    /// The team ID of the team to create the channel on.
+    public let teamId: String
+
+    /// The unique handle for the channel, used in the channel URL.
+    public let name: String
+
+    /// The non-unique UI name for the channel.
+    public let displayName: String
+
+    /// The Mattermost-compatible channel type: `O` for public, `P` for private.
+    public let type: String
+
+    /// A short description of the channel purpose.
+    public let purpose: String?
+
+    /// Markdown-formatted text to display in the channel header.
+    public let header: String?
+
+    public enum CodingKeys: String, CodingKey {
+        case teamId = "team_id"
+        case name
+        case displayName = "display_name"
+        case type
+        case purpose
+        case header
+    }
+
+    /// Creates a kChat channel creation request body.
+    public init(
+        teamId: String,
+        name: String,
+        displayName: String,
+        type: String,
+        purpose: String? = nil,
+        header: String? = nil
+    ) {
+        self.teamId = teamId
+        self.name = name
+        self.displayName = displayName
+        self.type = type
+        self.purpose = purpose
+        self.header = header
+    }
+}
+
 /// A Mattermost-compatible kChat channel statistics response.
 public struct KChatChannelStats: Codable, Equatable, Sendable {
     /// Channel identifier these statistics belong to.

@@ -36,6 +36,15 @@ extension KChatRequests {
         )
     }
 
+    /// Creates a request that creates a kChat channel.
+    public static func createChannel(body: Data) -> APIRequest<KChatChannel> {
+        APIRequest(
+            method: .post,
+            path: "/api/v4/channels",
+            body: body
+        )
+    }
+
     /// Creates a request that gets a kChat channel by id.
     public static func getChannel(channelId: String) -> APIRequest<KChatChannel> {
         APIRequest(
