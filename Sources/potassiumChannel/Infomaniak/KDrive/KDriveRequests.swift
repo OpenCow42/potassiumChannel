@@ -326,6 +326,20 @@ public enum KDriveRequests {
         )
     }
 
+    /// Creates a request that creates a new Dropbox directory on a kDrive.
+    public static func createDropbox(
+        driveId: Int,
+        options: CreateKDriveDropboxOptions
+    ) throws -> APIRequest<InfomaniakResponse<KDriveFileDropbox>> {
+        let body = try JSONEncoder().encode(options)
+
+        return APIRequest(
+            method: .post,
+            path: "/3/drive/\(driveId)/files/dropboxes",
+            body: body
+        )
+    }
+
     /// Creates a request that lists files and directories shared by the user on a kDrive.
     public static func listMySharedFiles(
         driveId: Int,

@@ -103,6 +103,26 @@ public struct KDriveFileDropbox: Codable, Equatable, Sendable {
     }
 }
 
+/// JSON body accepted by the v3 create Dropbox endpoint.
+public struct CreateKDriveDropboxOptions: Encodable, Equatable, Sendable {
+    /// Name of the Dropbox directory to create.
+    public let name: String
+
+    /// Parent directory identifier in which the Dropbox should be created.
+    public let parentDirectoryId: Int?
+
+    public enum CodingKeys: String, CodingKey {
+        case name
+        case parentDirectoryId = "parent_directory_id"
+    }
+
+    /// Creates options for creating a kDrive Dropbox directory.
+    public init(name: String, parentDirectoryId: Int? = nil) {
+        self.name = name
+        self.parentDirectoryId = parentDirectoryId
+    }
+}
+
 /// A category configured on a kDrive.
 public struct KDriveCategory: Codable, Equatable, Sendable {
     /// The unique category identifier.
