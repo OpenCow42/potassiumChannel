@@ -67,6 +67,16 @@ extension KDriveService {
         )
     }
 
+    /// Creates a new Dropbox directory on a kDrive.
+    public func createDropbox(
+        driveId: Int,
+        options: CreateKDriveDropboxOptions
+    ) async throws -> InfomaniakResponse<KDriveFileDropbox> {
+        try await client.send(
+            KDriveRequests.createDropbox(driveId: driveId, options: options)
+        )
+    }
+
     /// Lists files and directories shared by the user on a kDrive.
     public func listMySharedFiles(
         driveId: Int,
