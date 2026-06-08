@@ -219,6 +219,28 @@ extension KDriveService {
         )
     }
 
+    /// Restores a v2 kDrive file version as a copy in the specified directory.
+    public func restoreFileVersionToDirectoryV2(
+        driveId: Int,
+        fileId: Int,
+        versionId: Int,
+        destinationDirectoryId: Int,
+        with includedResources: String? = nil,
+        options: RestoreKDriveFileVersionToDirectoryOptions = RestoreKDriveFileVersionToDirectoryOptions()
+    ) async throws -> InfomaniakResponse<KDriveFileVersionRestoreResult> {
+        let body = try JSONEncoder().encode(options)
+        return try await client.send(
+            KDriveRequests.restoreFileVersionToDirectoryV2(
+                driveId: driveId,
+                fileId: fileId,
+                versionId: versionId,
+                destinationDirectoryId: destinationDirectoryId,
+                with: includedResources,
+                body: body
+            )
+        )
+    }
+
     /// Lists versions for a kDrive file.
     public func listFileVersions(
         driveId: Int,
@@ -240,6 +262,28 @@ extension KDriveService {
                 orderBy: orderBy,
                 order: order,
                 orderFor: orderFor
+            )
+        )
+    }
+
+    /// Restores a kDrive file version as a copy in the specified directory.
+    public func restoreFileVersionToDirectory(
+        driveId: Int,
+        fileId: Int,
+        versionId: Int,
+        destinationDirectoryId: Int,
+        with includedResources: String? = nil,
+        options: RestoreKDriveFileVersionToDirectoryOptions = RestoreKDriveFileVersionToDirectoryOptions()
+    ) async throws -> InfomaniakResponse<KDriveFileVersionRestoreResult> {
+        let body = try JSONEncoder().encode(options)
+        return try await client.send(
+            KDriveRequests.restoreFileVersionToDirectory(
+                driveId: driveId,
+                fileId: fileId,
+                versionId: versionId,
+                destinationDirectoryId: destinationDirectoryId,
+                with: includedResources,
+                body: body
             )
         )
     }

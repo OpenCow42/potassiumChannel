@@ -330,6 +330,100 @@ public struct KDriveFileTemporaryURL: Codable, Equatable, Sendable {
     }
 }
 
+/// JSON body accepted when restoring a kDrive file version as a copy.
+public struct RestoreKDriveFileVersionToDirectoryOptions: Encodable, Equatable, Sendable {
+    /// Optional name for the restored copy.
+    public let name: String?
+
+    /// Creates options for restoring a kDrive file version into a directory.
+    public init(name: String? = nil) {
+        self.name = name
+    }
+}
+
+/// File metadata returned after restoring a kDrive file version.
+public struct KDriveFileVersionRestoreResult: Codable, Equatable, Sendable {
+    /// The restored file identifier.
+    public let id: Int
+
+    /// The restored file name.
+    public let name: String
+
+    /// The item type, when returned.
+    public let type: String?
+
+    /// The item status, when returned.
+    public let status: String?
+
+    /// The item visibility, when returned.
+    public let visibility: String?
+
+    /// The owning drive identifier, when returned.
+    public let driveId: Int?
+
+    /// The parent directory identifier, when returned.
+    public let parentId: Int?
+
+    /// The full item path, when returned.
+    public let path: String?
+
+    /// The item depth in the drive tree, when returned.
+    public let depth: Int?
+
+    /// The creation timestamp, when returned.
+    public let createdAt: Int?
+
+    /// The last modification timestamp, when returned.
+    public let lastModifiedAt: Int?
+
+    /// The update timestamp, when returned.
+    public let updatedAt: Int?
+
+    /// File size in bytes, when returned.
+    public let size: Int?
+
+    /// MIME type, when returned.
+    public let mimeType: String?
+
+    /// Whether the item is marked as favorite, when returned.
+    public let isFavorite: Bool?
+
+    /// Creates restored file version metadata.
+    public init(
+        id: Int,
+        name: String,
+        type: String? = nil,
+        status: String? = nil,
+        visibility: String? = nil,
+        driveId: Int? = nil,
+        parentId: Int? = nil,
+        path: String? = nil,
+        depth: Int? = nil,
+        createdAt: Int? = nil,
+        lastModifiedAt: Int? = nil,
+        updatedAt: Int? = nil,
+        size: Int? = nil,
+        mimeType: String? = nil,
+        isFavorite: Bool? = nil
+    ) {
+        self.id = id
+        self.name = name
+        self.type = type
+        self.status = status
+        self.visibility = visibility
+        self.driveId = driveId
+        self.parentId = parentId
+        self.path = path
+        self.depth = depth
+        self.createdAt = createdAt
+        self.lastModifiedAt = lastModifiedAt
+        self.updatedAt = updatedAt
+        self.size = size
+        self.mimeType = mimeType
+        self.isFavorite = isFavorite
+    }
+}
+
 /// A version of a kDrive file returned by the deprecated v2 versions endpoint.
 public struct KDriveFileVersionV2: Codable, Equatable, Sendable {
     /// The unique file version identifier.
