@@ -402,6 +402,74 @@ struct MailMailboxDiscoveryRequestTests {
         #expect(response.data.values["from"] != nil)
     }
 
+    @Test("Mail message move request uses mailbox path and JSON payload")
+    func mailMoveMessagesRequestMatchesAPIShape() async throws {
+        let client = InfomaniakAPIClient(
+            configuration: APIClientConfiguration(
+                baseURL: APIClientConfiguration.defaultMailBaseURL,
+                bearerToken: "test-token"
+            )
+        )
+        let request = try MailRequests.moveMessages(
+            mailboxUUID: "904443a9-fb09-3b09-b05a-6062dac0cbb6",
+            payload: MailMoveMessagesPayload(
+                uids: ["31@inbox", "32@inbox"],
+                to: "archive"
+            )
+        )
+
+        let urlRequest = try await client.makeURLRequest(for: request)
+        let url = try #require(urlRequest.url)
+        let body = try #require(urlRequest.httpBody)
+        let object = try #require(JSONSerialization.jsonObject(with: body) as? [String: Any])
+        let uids = try #require(object["uids"] as? [String])
+
+        #expect(urlRequest.httpMethod == "POST")
+        #expect(urlRequest.value(forHTTPHeaderField: "Authorization") == "Bearer test-token")
+        #expect(urlRequest.value(forHTTPHeaderField: "Content-Type") == "application/json")
+        #expect(url.host == "mail.infomaniak.com")
+        #expect(url.path == "/api/mail/904443a9-fb09-3b09-b05a-6062dac0cbb6/message/move")
+        #expect(uids == ["31@inbox", "32@inbox"])
+        #expect(object["to"] as? String == "archive")
+    }
+
+    @Test("Mail message move response decodes undo resource")
+    func mailMoveMessagesResponseDecodesUndoResource() throws {
+        let json = """
+        {
+          "result": "success",
+          "data": {
+            "moved": 2,
+            "undo_resource": "/api/mail/mailbox-uuid/undo/move/request-id"
+          }
+        }
+        """.data(using: .utf8)!
+
+        let response = try JSONDecoder().decode(InfomaniakResponse<MailMoveResult>.self, from: json)
+
+        #expect(response.result == "success")
+        #expect(response.data.moved == 2)
+        #expect(response.data.undoResource == "/api/mail/mailbox-uuid/undo/move/request-id")
+    }
+
+    @Test("Mail message move response allows missing undo resource")
+    func mailMoveMessagesResponseAllowsMissingUndoResource() throws {
+        let json = """
+        {
+          "result": "success",
+          "data": {
+            "moved": 1
+          }
+        }
+        """.data(using: .utf8)!
+
+        let response = try JSONDecoder().decode(InfomaniakResponse<MailMoveResult>.self, from: json)
+
+        #expect(response.result == "success")
+        #expect(response.data.moved == 1)
+        #expect(response.data.undoResource == nil)
+    }
+
     @Test("Current my kSuite request includes mailbox details")
     func currentMyKSuiteRequestMatchesAPIShape() async throws {
         let client = InfomaniakAPIClient(configuration: APIClientConfiguration(bearerToken: "test-token"))

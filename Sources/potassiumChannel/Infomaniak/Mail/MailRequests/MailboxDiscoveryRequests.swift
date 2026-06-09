@@ -158,6 +158,19 @@ extension MailRequests {
         )
     }
 
+    /// Creates a request that moves messages between mailbox folders.
+    public static func moveMessages(
+        mailboxUUID: String,
+        payload: MailMoveMessagesPayload
+    ) throws -> APIRequest<InfomaniakResponse<MailMoveResult>> {
+        let body = try JSONEncoder().encode(payload)
+        return APIRequest(
+            method: .post,
+            path: "/api/mail/\(mailboxUUID)/message/move",
+            body: body
+        )
+    }
+
     /// Creates a request that reads the current my kSuite with optional mailbox details.
     public static func currentMyKSuite(includedResources: String? = "mail") -> APIRequest<InfomaniakResponse<CurrentMyKSuite>> {
         var queryParameters: [QueryParameter] = []

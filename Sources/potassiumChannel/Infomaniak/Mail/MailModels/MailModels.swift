@@ -328,6 +328,39 @@ public struct MailMessage: Codable, Equatable, Sendable {
     }
 }
 
+/// Payload accepted by the Mail message move endpoint.
+public struct MailMoveMessagesPayload: Codable, Equatable, Sendable {
+    /// Folder-qualified message UIDs, such as `31@folder-id`.
+    public let uids: [String]
+
+    /// Destination folder identifier.
+    public let to: String
+
+    public init(uids: [String], to: String) {
+        self.uids = uids
+        self.to = to
+    }
+}
+
+/// Payload returned by the Mail message move endpoint.
+public struct MailMoveResult: Codable, Equatable, Sendable {
+    /// Number of messages moved by the API.
+    public let moved: Int
+
+    /// API resource that can undo the move while it is still valid.
+    public let undoResource: String?
+
+    public enum CodingKeys: String, CodingKey {
+        case moved
+        case undoResource = "undo_resource"
+    }
+
+    public init(moved: Int, undoResource: String?) {
+        self.moved = moved
+        self.undoResource = undoResource
+    }
+}
+
 /// Query options accepted when reading a Mail message resource.
 public struct GetMailMessageOptions: Equatable, Sendable {
     /// Preferred body format requested from the API.

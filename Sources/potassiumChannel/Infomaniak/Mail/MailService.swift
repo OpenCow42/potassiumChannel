@@ -153,6 +153,18 @@ public struct MailService: Sendable {
         try await client.send(MailRequests.getMessage(resource: resource, options: options))
     }
 
+    /// Moves messages between mailbox folders.
+    public func moveMessages(
+        mailboxUUID: String,
+        uids: [String],
+        destinationFolderId: String
+    ) async throws -> InfomaniakResponse<MailMoveResult> {
+        try await client.send(MailRequests.moveMessages(
+            mailboxUUID: mailboxUUID,
+            payload: MailMoveMessagesPayload(uids: uids, to: destinationFolderId)
+        ))
+    }
+
     /// Reads the current my kSuite with optional mailbox details.
     public func currentMyKSuite(includedResources: String? = "mail") async throws -> InfomaniakResponse<CurrentMyKSuite> {
         try await client.send(MailRequests.currentMyKSuite(includedResources: includedResources))
