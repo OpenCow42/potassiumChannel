@@ -15,11 +15,12 @@ local copy supplied by the maintainer.
 
 ## Manual coverage snapshot
 
-The May 22, 2026 snapshot below compared literal request shapes implemented in
-`Sources/potassiumChannel/Infomaniak` with the available OpenAPI operation
-shapes at that time. Dynamic Mail application routes such as `/api/mailbox` were
-tracked separately because they were not present in the audited Mail hosting
-spec.
+The May 22, 2026 snapshot below compared literal request shapes now split
+across `Sources/PotassiumKDrive`, `Sources/PotassiumMail`,
+`Sources/PotassiumKChat`, and `Sources/PotassiumURLShortener` with the
+available OpenAPI operation shapes at that time. Dynamic Mail application routes
+such as `/api/mailbox` were tracked separately because they were not present in
+the audited Mail hosting spec.
 
 | Product | Spec operations | Implemented spec operations | Missing spec operations | Notes |
 | --- | ---: | ---: | ---: | --- |
@@ -29,8 +30,8 @@ spec.
 | kChat | 173 | 53 | 120 | Core teams, channels, users, posts, files, and search are implemented. |
 | URL shortener | 7 | 5 | 2 | Two endpoints remained in the manual snapshot. |
 
-At the time of the manual audit, every public request factory implemented in
-`potassiumChannel` was referenced by Swift Testing coverage and the full test
+At the time of the manual audit, every public request factory implemented in the
+local product modules was referenced by Swift Testing coverage and the full test
 suite passed. Exact test and suite counts are intentionally omitted here because
 they go stale quickly; run `swift test` in the repository root for current
 results.
@@ -43,8 +44,8 @@ that with the request families listed below.
 - Keep this audit independent of private or sibling-repository progress notes.
   Cross-repository CLI status can be useful context, but it should not be used
   as evidence for local package coverage unless reproduced in this checkout.
-- Documentation should clearly distinguish local `potassiumChannel` request,
-  DTO, and service coverage from any downstream CLI or live integration coverage
+- Documentation should clearly distinguish local product-module request, DTO,
+  and service coverage from any downstream CLI or live integration coverage
   maintained elsewhere.
 - If exact OpenAPI operation counts are important, add a reproducible coverage
   report script or vendor/submodule the spec inputs instead of relying on manual
@@ -105,7 +106,7 @@ that with the request families listed below.
 
 1. Add a generated spec coverage report script that emits implemented, missing,
    and extra operation shapes per product.
-2. Update `README.md` to describe the current product-service scope.
+2. Keep `README.md` aligned with the current product libraries and import paths.
 3. Keep each new route to the existing standard: request construction,
    required path/body/query encoding, optional omission, response decoding, and
    service method coverage.

@@ -4,9 +4,10 @@ Typed Swift request builders, DTOs, and service helpers for Infomaniak APIs.
 
 ## Overview
 
-`potassiumChannel` is a Swift Package Manager library for building and executing
-Infomaniak API requests. It includes a small HTTP core plus reusable product
-layers for kDrive, Mail, kChat, the URL shortener, and OAuth flows.
+`potassiumChannel` is a Swift Package Manager package for building and executing
+Infomaniak API requests. It ships as focused library products: a small HTTP core
+plus reusable product layers for kDrive, Mail, kChat, the URL shortener, and
+OAuth flows.
 
 The package is designed for Swift clients that want typed request descriptions,
 `Sendable`-friendly response models, and async service wrappers without copying
@@ -14,22 +15,23 @@ transport code or endpoint-specific DTOs into each application.
 
 ## Package Contents
 
-- HTTP primitives: `APIRequest`, `InfomaniakAPIClient`,
+- `PotassiumChannelCore`: HTTP primitives such as `APIRequest`,
+  `InfomaniakAPIClient`,
   `APIClientConfiguration`, `HTTPMethod`, `HTTPHeader`, query parameters, and
-  client errors.
-- Infomaniak response wrappers for standard, paginated, and cursor-paginated
-  payloads.
-- kDrive request builders, models, and service methods for drive discovery,
-  files, trash, comments, access, sharing, search, activity/statistics, imports,
-  transfers, settings, and preferences.
-- Mail request builders, models, and service methods for mailboxes, folders,
-  threads, messages, quota, draft operations, scheduling, and mailbox discovery.
-- kChat request builders, models, and service methods for teams, channels,
-  users, posts, files, search, sidebar metadata, and client configuration.
-- URL shortener request builders, models, and service methods for listing,
-  quota, creation, and updates.
-- OAuth helpers for authorization URLs, authorization-code token requests, and
-  refresh-token requests.
+  client errors, plus Infomaniak response wrappers.
+- `PotassiumKDrive`: kDrive request builders, models, and service methods for
+  drive discovery, files, trash, comments, access, sharing, search,
+  activity/statistics, imports, transfers, settings, and preferences.
+- `PotassiumMail`: Mail request builders, models, and service methods for
+  mailboxes, folders, threads, messages, quota, draft operations, scheduling,
+  and mailbox discovery.
+- `PotassiumKChat`: kChat request builders, models, and service methods for
+  teams, channels, users, posts, files, search, sidebar metadata, and client
+  configuration.
+- `PotassiumURLShortener`: URL shortener request builders, models, and service
+  methods for listing, quota, creation, and updates.
+- `PotassiumOAuth`: OAuth helpers for authorization URLs,
+  authorization-code token requests, and refresh-token requests.
 
 ## Requirements
 
@@ -47,13 +49,14 @@ dependencies: [
 ]
 ```
 
-Then add the library product to a target:
+Then add only the library products a target needs:
 
 ```swift
 .target(
     name: "YourTarget",
     dependencies: [
-        .product(name: "potassiumChannel", package: "potassiumChannel")
+        .product(name: "PotassiumChannelCore", package: "potassiumChannel"),
+        .product(name: "PotassiumKDrive", package: "potassiumChannel")
     ]
 )
 ```
@@ -61,7 +64,8 @@ Then add the library product to a target:
 ## Basic Usage
 
 ```swift
-import potassiumChannel
+import PotassiumChannelCore
+import PotassiumKDrive
 
 let client = InfomaniakAPIClient(
     configuration: APIClientConfiguration(bearerToken: "<access-token>")
@@ -75,6 +79,17 @@ Product services can be created from a shared `InfomaniakAPIClient`, or through
 service-specific convenience initializers where provided. Lower-level
 `*Requests` builders are also public when callers need to create a typed
 `APIRequest` and handle execution themselves.
+
+## Migration From The Old Module
+
+The package no longer exposes a `potassiumChannel` product or module. Replace
+`import potassiumChannel` with the product modules used by each source file,
+for example `import PotassiumMail` or `import PotassiumKChat`. Code that
+constructs `InfomaniakAPIClient`, `APIClientConfiguration`, `APIRequest`, or
+response envelopes should also import `PotassiumChannelCore`.
+
+Mail flexible payloads now use `MailJSONValue`; kDrive flexible payloads keep
+using `KDriveJSONValue`. `PotassiumMail` does not depend on `PotassiumKDrive`.
 
 ## Development
 

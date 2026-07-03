@@ -4,6 +4,12 @@ All notable public changes to this package are summarized here.
 
 ## Unreleased
 
+- Breaking: split the former single `potassiumChannel` product/module into
+  `PotassiumChannelCore`, `PotassiumKDrive`, `PotassiumMail`,
+  `PotassiumKChat`, `PotassiumURLShortener`, and `PotassiumOAuth`.
+- Breaking: Mail flexible payload APIs now use `MailJSONValue`; kDrive flexible
+  payload APIs keep `KDriveJSONValue`, and `PotassiumMail` no longer depends on
+  kDrive types.
 - Added and expanded typed request builders, service methods, and response models for Infomaniak kDrive, Mail, URL shortener, and OAuth workflows.
 - Broadened request-construction and response-decoding coverage across read, create, update, delete, and settings routes.
 - Improved tolerant decoding for documented and observed API response envelopes, pagination shapes, nullable fields, and flexible result payloads.
