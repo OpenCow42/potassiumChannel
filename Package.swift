@@ -13,21 +13,77 @@ let package = Package(
         .visionOS(.v1),
     ],
     products: [
-        // Products define the executables and libraries a package produces, making them visible to other packages.
         .library(
-            name: "potassiumChannel",
-            targets: ["potassiumChannel"]
+            name: "PotassiumChannelCore",
+            targets: ["PotassiumChannelCore"]
+        ),
+        .library(
+            name: "PotassiumKDrive",
+            targets: ["PotassiumKDrive"]
+        ),
+        .library(
+            name: "PotassiumMail",
+            targets: ["PotassiumMail"]
+        ),
+        .library(
+            name: "PotassiumKChat",
+            targets: ["PotassiumKChat"]
+        ),
+        .library(
+            name: "PotassiumURLShortener",
+            targets: ["PotassiumURLShortener"]
+        ),
+        .library(
+            name: "PotassiumOAuth",
+            targets: ["PotassiumOAuth"]
         ),
     ],
     targets: [
-        // Targets are the basic building blocks of a package, defining a module or a test suite.
-        // Targets can depend on other targets in this package and products from dependencies.
         .target(
-            name: "potassiumChannel"
+            name: "PotassiumChannelCore"
+        ),
+        .target(
+            name: "PotassiumKDrive",
+            dependencies: ["PotassiumChannelCore"]
+        ),
+        .target(
+            name: "PotassiumMail",
+            dependencies: ["PotassiumChannelCore"]
+        ),
+        .target(
+            name: "PotassiumKChat",
+            dependencies: ["PotassiumChannelCore"]
+        ),
+        .target(
+            name: "PotassiumURLShortener",
+            dependencies: ["PotassiumChannelCore"]
+        ),
+        .target(
+            name: "PotassiumOAuth"
         ),
         .testTarget(
-            name: "potassiumChannelTests",
-            dependencies: ["potassiumChannel"]
+            name: "PotassiumChannelCoreTests",
+            dependencies: ["PotassiumChannelCore"]
+        ),
+        .testTarget(
+            name: "PotassiumKDriveTests",
+            dependencies: ["PotassiumChannelCore", "PotassiumKDrive"]
+        ),
+        .testTarget(
+            name: "PotassiumMailTests",
+            dependencies: ["PotassiumChannelCore", "PotassiumMail"]
+        ),
+        .testTarget(
+            name: "PotassiumKChatTests",
+            dependencies: ["PotassiumChannelCore", "PotassiumKChat"]
+        ),
+        .testTarget(
+            name: "PotassiumURLShortenerTests",
+            dependencies: ["PotassiumChannelCore", "PotassiumURLShortener"]
+        ),
+        .testTarget(
+            name: "PotassiumOAuthTests",
+            dependencies: ["PotassiumOAuth"]
         ),
     ]
 )

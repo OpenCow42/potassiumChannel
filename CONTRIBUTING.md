@@ -1,21 +1,20 @@
 # Contributing
 
-Thank you for contributing to potassiumChannel. This package is the shared Swift
-networking layer for Infomaniak API clients.
+Thank you for contributing to potassiumChannel. This package provides focused
+Swift libraries for Infomaniak API clients.
 
 ## Scope
 
-Keep this repository focused on reusable transport concerns:
+Keep this repository focused on reusable API client libraries:
 
-- API client configuration
-- API request descriptions
-- HTTP methods, headers, query parameters, and body encoding
-- Infomaniak API client behavior
-- API-client error handling
+- `PotassiumChannelCore` transport concerns such as API client configuration,
+  request descriptions, HTTP methods, headers, query parameters, body encoding,
+  client behavior, and error handling.
+- Product libraries for kDrive, Mail, kChat, URL shortener, and OAuth helpers.
+- Public DTOs and service wrappers that are useful outside a single CLI or app.
 
-Do not add CLI commands, UI, or domain-service workflows here unless they are
-part of the transport layer. Prefer small, stable public APIs that can be reused
-by multiple Swift clients.
+Do not add CLI commands or UI here. Prefer small, stable public APIs that can be
+reused by multiple Swift clients.
 
 ## Development
 
@@ -35,6 +34,12 @@ swift build
 swift test
 ```
 
+For product-specific changes, also build the affected library product:
+
+```sh
+swift build --product PotassiumKDrive
+```
+
 Use of third-party Swift Package Manager dependencies should be limited and
 well justified. Apple-provided SPM libraries are acceptable when they fit the
 package scope.
@@ -43,6 +48,8 @@ package scope.
 
 - Follow the Swift API Design Guidelines summarized in `SWIFT.MD`.
 - Keep software layers in separate folders and files.
+- Keep product modules independent; product code should share transport through
+  `PotassiumChannelCore`, not through another product target.
 - Use `Sendable` and `Codable` where appropriate.
 - Prefer non-optional public data where absence is not meaningful.
 - Design request and response APIs around deterministic behavior.
