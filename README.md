@@ -90,12 +90,6 @@ Run tests:
 swift test
 ```
 
-Generate API documentation locally with Swift-DocC tooling when needed:
-
-```sh
-swift package generate-documentation
-```
-
 ## Secrets And Testing
 
 Do not commit API tokens, refresh tokens, account identifiers, mailbox names,
