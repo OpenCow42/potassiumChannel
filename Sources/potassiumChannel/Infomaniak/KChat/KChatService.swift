@@ -2,6 +2,11 @@ import Foundation
 
 /// A high-level service for kChat API operations.
 public struct KChatService: Sendable {
+    /// Errors raised while building kChat service URLs.
+    public enum BaseURLError: Error, Equatable, Sendable {
+        case invalidTeamName(String)
+    }
+
     private let client: InfomaniakAPIClient
 
     /// Creates a kChat service backed by an API client.
@@ -19,9 +24,64 @@ public struct KChatService: Sendable {
         )
     }
 
+    /// Creates a kChat service for a validated Infomaniak kChat team subdomain.
+    public init(validatingTeamName teamName: String, bearerToken: String) throws {
+        self.client = InfomaniakAPIClient(
+            configuration: APIClientConfiguration(
+                baseURL: try Self.validatedBaseURL(teamName: teamName),
+                bearerToken: bearerToken
+            )
+        )
+    }
+
     /// Builds the Mattermost-compatible kChat base URL for a team name.
     public static func baseURL(teamName: String) -> URL {
-        URL(string: "https://\(teamName).kchat.infomaniak.com")!
+        guard let url = try? validatedBaseURL(teamName: teamName) else {
+            preconditionFailure("Invalid kChat team name: \(teamName)")
+        }
+        return url
+    }
+
+    /// Builds the Mattermost-compatible kChat base URL for a validated team name.
+    public static func validatedBaseURL(teamName: String) throws -> URL {
+        guard isValidTeamNameLabel(teamName) else {
+            throw BaseURLError.invalidTeamName(teamName)
+        }
+
+        let expectedHost = "\(teamName).kchat.infomaniak.com"
+        var components = URLComponents()
+        components.scheme = "https"
+        components.host = expectedHost
+
+        guard
+            let url = components.url,
+            url.scheme == "https",
+            url.host?.lowercased() == expectedHost.lowercased(),
+            url.user == nil,
+            url.password == nil,
+            url.port == nil,
+            url.path.isEmpty
+        else {
+            throw BaseURLError.invalidTeamName(teamName)
+        }
+
+        return url
+    }
+
+    private static func isValidTeamNameLabel(_ teamName: String) -> Bool {
+        guard !teamName.isEmpty, teamName.utf8.count <= 63 else {
+            return false
+        }
+        guard teamName.first != "-", teamName.last != "-" else {
+            return false
+        }
+
+        return teamName.utf8.allSatisfy { character in
+            (48...57).contains(character)
+                || (65...90).contains(character)
+                || (97...122).contains(character)
+                || character == 45
+        }
     }
 
     /// Fetches the client configuration required by kChat clients.

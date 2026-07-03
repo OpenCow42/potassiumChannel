@@ -1,39 +1,80 @@
 # potassiumChannel
 
-Shared networking primitives for Potassium clients.
+Typed Swift request builders, DTOs, and service helpers for Infomaniak APIs.
 
-## Abstract
+## Overview
 
-`potassiumChannel` is the reusable Swift package that carries Potassium's HTTP
-channel layer. It extracts the request, header, method, query parameter, API
-client configuration, and Infomaniak API client error types that are useful
-across Potassium components.
+`potassiumChannel` is a Swift Package Manager library for building and executing
+Infomaniak API requests. It includes a small HTTP core plus reusable product
+layers for kDrive, Mail, kChat, the URL shortener, and OAuth flows.
 
-The package exists so Potassium can keep API-specific services focused on
-Infomaniak domains while sharing a small, testable, Swift 6 networking core.
+The package is designed for Swift clients that want typed request descriptions,
+`Sendable`-friendly response models, and async service wrappers without copying
+transport code or endpoint-specific DTOs into each application.
 
-## Relationship with Potassium
+## Package Contents
 
-- Main project: https://github.com/OpenCow42/potassium
-- Component project: https://github.com/OpenCow42/potassiumChannel
-- Initial extraction reference: https://github.com/OpenCow42/potassium/pull/53
+- HTTP primitives: `APIRequest`, `InfomaniakAPIClient`,
+  `APIClientConfiguration`, `HTTPMethod`, `HTTPHeader`, query parameters, and
+  client errors.
+- Infomaniak response wrappers for standard, paginated, and cursor-paginated
+  payloads.
+- kDrive request builders, models, and service methods for drive discovery,
+  files, trash, comments, access, sharing, search, activity/statistics, imports,
+  transfers, settings, and preferences.
+- Mail request builders, models, and service methods for mailboxes, folders,
+  threads, messages, quota, draft operations, scheduling, and mailbox discovery.
+- kChat request builders, models, and service methods for teams, channels,
+  users, posts, files, search, sidebar metadata, and client configuration.
+- URL shortener request builders, models, and service methods for listing,
+  quota, creation, and updates.
+- OAuth helpers for authorization URLs, authorization-code token requests, and
+  refresh-token requests.
 
-Potassium remains the CLI application that targets Infomaniak APIs. This package
-is a sub-component intended to be consumed by Potassium and, where useful, by
-other Swift clients that need the same Infomaniak-oriented HTTP primitives.
+## Requirements
 
-## Technical stack
+- Swift 6.2 or newer
+- macOS 12+, iOS 15+, tvOS 15+, watchOS 8+, or visionOS 1+
+- Swift Testing for the test suite
 
-- Swift Package Manager library package
-- Swift 6.2 minimum tools version
-- Apple platform minimums aligned with async/await availability:
-  - macOS 12+
-  - iOS 15+
-  - tvOS 15+
-  - watchOS 8+
-  - visionOS 1+
-- Modern Swift concurrency and `Sendable`-friendly model types
-- Swift Testing for tests (`import Testing`), not XCTest
+## Installation
+
+Add the package to a SwiftPM project:
+
+```swift
+dependencies: [
+    .package(url: "https://github.com/OpenCow42/potassiumChannel.git", branch: "main")
+]
+```
+
+Then add the library product to a target:
+
+```swift
+.target(
+    name: "YourTarget",
+    dependencies: [
+        .product(name: "potassiumChannel", package: "potassiumChannel")
+    ]
+)
+```
+
+## Basic Usage
+
+```swift
+import potassiumChannel
+
+let client = InfomaniakAPIClient(
+    configuration: APIClientConfiguration(bearerToken: "<access-token>")
+)
+
+let kDrive = KDriveService(client: client)
+let drives = try await kDrive.listAccessibleKDrives(accountId: 12345)
+```
+
+Product services can be created from a shared `InfomaniakAPIClient`, or through
+service-specific convenience initializers where provided. Lower-level
+`*Requests` builders are also public when callers need to create a typed
+`APIRequest` and handle execution themselves.
 
 ## Development
 
@@ -49,10 +90,19 @@ Run tests:
 swift test
 ```
 
-Use small, reviewable commits and structured commit messages. Keep the package
-focused on networking primitives; API-domain models and CLI behavior should stay
-in Potassium unless they are genuinely reusable transport concerns.
+## Secrets And Testing
 
-## License
+Do not commit API tokens, refresh tokens, account identifiers, mailbox names,
+team names, or other live-account details. Tests should use synthetic fixtures,
+sample IDs, and request-building assertions unless a maintainer explicitly sets
+up an isolated integration environment outside version control.
 
-This project follows the same license as Potassium. See `LICENCE.MD`.
+When adding examples, keep credentials as placeholders such as
+`<access-token>` and avoid references to private machines, local files, or
+personal accounts.
+
+## Documentation
+
+- [Contributing](CONTRIBUTING.md)
+- [Changelog](CHANGELOG.md)
+- [License](LICENCE.MD)

@@ -4,55 +4,51 @@ Date: 2026-05-22
 
 ## Source of truth
 
-The current `potassiumChannel` checkout does not vendor OpenAPI files directly.
-The vendored specs referenced by the project documentation are in the sibling
-Potassium checkout:
+This `potassiumChannel` checkout does not vendor OpenAPI files directly. The
+manual audit compared request shapes in this package against Infomaniak OpenAPI
+specifications that were available outside this repository at audit time.
 
-- `/Users/opencow/Software/potassium/api_specifications/kdrive_infomaniak_api_1777809422.json`
-- `/Users/opencow/Software/potassium/api_specifications/mail_infomaniak_api_1777809438.json`
-- `/Users/opencow/Software/potassium/api_specifications/kchat_infomaniak_api_1777809259.json`
-- `/Users/opencow/Software/potassium/api_specifications/url-shortener_infomaniak_api_1778320020.json`
+Because those specs are not committed here, treat the operation totals below as
+a dated manual snapshot. Before relying on exact counts, regenerate the audit
+against the current OpenAPI files from the upstream API documentation or from a
+local copy supplied by the maintainer.
 
-## Current coverage
+## Manual coverage snapshot
 
-Coverage below compares literal request shapes implemented in
-`Sources/potassiumChannel/Infomaniak` with the vendored OpenAPI operation
-shapes. Dynamic Mail application routes such as `/api/mailbox` are tracked
-separately because they are not present in the vendored Mail hosting spec.
+The May 22, 2026 snapshot below compared literal request shapes implemented in
+`Sources/potassiumChannel/Infomaniak` with the available OpenAPI operation
+shapes at that time. Dynamic Mail application routes such as `/api/mailbox` were
+tracked separately because they were not present in the audited Mail hosting
+spec.
 
 | Product | Spec operations | Implemented spec operations | Missing spec operations | Notes |
 | --- | ---: | ---: | ---: | --- |
 | kDrive | 187 | 105 | 82 | Broad read coverage plus many file, trash, search, activity, settings, import, and mutation routes. |
 | Mail hosting spec | 124 | 9 | 115 | Implemented hosting routes focus on mailbox listing/settings, aliases, forwarding, and accounts. |
-| Mail application routes | n/a | 9 | n/a | Current-user mailbox discovery, folders, messages, quotas, drafts, schedule/cancel are implemented outside the vendored hosting spec. |
+| Mail application routes | n/a | 9 | n/a | Current-user mailbox discovery, folders, messages, quotas, drafts, schedule/cancel are implemented outside the audited hosting spec. |
 | kChat | 173 | 53 | 120 | Core teams, channels, users, posts, files, and search are implemented. |
-| URL shortener | 7 | 5 | 2 | Only v1/v2 quota endpoints remain. |
+| URL shortener | 7 | 5 | 2 | Two endpoints remained in the manual snapshot. |
 
-Every public request factory currently implemented in `potassiumChannel` is
-referenced by Swift Testing coverage, and the current test run passes:
+At the time of the manual audit, every public request factory implemented in
+`potassiumChannel` was referenced by Swift Testing coverage and the full test
+suite passed. Exact test and suite counts are intentionally omitted here because
+they go stale quickly; run `swift test` in the repository root for current
+results.
 
-- `swift test` passed with 470 tests in 161 suites.
-- Test files by product: kDrive 102, kChat 52, Mail 2, URL shortener 5.
+For a quick shape check, count test files by product under `Tests/` and compare
+that with the request families listed below.
 
 ## Documentation correctness
 
-- `PROGRESS_MAIL.MD` is accurate for the current-user Mail strategy: it correctly
-  marks `GET /api/mail/{mailbox_uuid}` as blocked and prioritizes `/api/mailbox`
-  discovery.
-- `PROGRESS_MAIL.MD` is less complete than the sibling
-  `/Users/opencow/Software/potassium/PROGRESS_MAIL.MD`: the sibling plan still
-  lists open Mail hosting work such as mailbox `PATCH` and mailing-list routes.
-- `PROGRESS_MAIL.MD` mentions CLI support in Potassium. That is useful cross-repo
-  context, but it should be clearly labeled as sibling-repo coverage, not local
-  `potassiumChannel` coverage.
-- `README.md` still describes this package as mostly shared networking
-  primitives. The package now contains reusable product request factories, DTOs,
-  and service layers for kDrive, Mail, kChat, and URL shortener, so README scope
-  is stale.
-- The vendored spec location is not documented inside this repo except through
-  an absolute sibling path. A portable note should explain that specs are sourced
-  from Potassium's `api_specifications` directory, or the specs should be
-  vendored/submoduled here.
+- Keep this audit independent of private or sibling-repository progress notes.
+  Cross-repository CLI status can be useful context, but it should not be used
+  as evidence for local package coverage unless reproduced in this checkout.
+- Documentation should clearly distinguish local `potassiumChannel` request,
+  DTO, and service coverage from any downstream CLI or live integration coverage
+  maintained elsewhere.
+- If exact OpenAPI operation counts are important, add a reproducible coverage
+  report script or vendor/submodule the spec inputs instead of relying on manual
+  notes.
 
 ## Finish plan by product
 
@@ -62,15 +58,13 @@ referenced by Swift Testing coverage, and the current test run passes:
    - `GET /1/url-shortener/quota`
    - `GET /2/url-shortener/quota`
 2. Add request-shape and response-decoding tests.
-3. Mirror the CLI support in Potassium if this library is consumed there.
+3. Mirror downstream CLI support if this library is consumed by a CLI package.
 
 ### Mail
 
-1. Reconcile `PROGRESS_MAIL.MD` with the sibling plan:
-   - Add the missing open items from the sibling doc.
-   - Separate local channel coverage from Potassium CLI/live coverage.
-2. Finish prioritized mailbox-hosting routes already identified by the sibling
-   plan:
+1. Separate local package coverage from downstream CLI/live coverage in any
+   status documentation.
+2. Finish prioritized mailbox-hosting routes identified by the manual audit:
    - `PATCH /1/mail_hostings/{mail_hosting_id}/mailboxes/{mailbox_name}`
    - `POST /1/mail_hostings/{mail_hosting_id}/mailing_lists`
    - `PUT /1/mail_hostings/{mail_hosting_id}/mailing_lists/{mailing_list_name}/send`
