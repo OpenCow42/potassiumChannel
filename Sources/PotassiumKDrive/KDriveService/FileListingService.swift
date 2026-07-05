@@ -127,4 +127,56 @@ extension KDriveService {
             )
         )
     }
+
+    /// Lists files and actions inside a kDrive directory.
+    public func listAdvancedDirectoryListing(
+        driveId: Int,
+        fileId: Int,
+        with includedResources: String? = KDriveAdvancedListingIncludedResources.minimalFiles,
+        options: ListKDriveAdvancedDirectoryListingOptions = ListKDriveAdvancedDirectoryListingOptions()
+    ) async throws -> CursorPaginatedInfomaniakResponse<KDriveAdvancedDirectoryListing> {
+        try await client.send(
+            KDriveRequests.listAdvancedDirectoryListing(
+                driveId: driveId,
+                fileId: fileId,
+                with: includedResources,
+                options: options
+            )
+        )
+    }
+
+    /// Continues an advanced kDrive directory listing from a cursor.
+    public func continueAdvancedDirectoryListing(
+        driveId: Int,
+        fileId: Int,
+        cursor: String,
+        with includedResources: String? = KDriveAdvancedListingIncludedResources.minimalFiles,
+        options: ContinueKDriveAdvancedDirectoryListingOptions = ContinueKDriveAdvancedDirectoryListingOptions()
+    ) async throws -> CursorPaginatedInfomaniakResponse<KDriveAdvancedDirectoryListing> {
+        try await client.send(
+            KDriveRequests.continueAdvancedDirectoryListing(
+                driveId: driveId,
+                fileId: fileId,
+                cursor: cursor,
+                with: includedResources,
+                options: options
+            )
+        )
+    }
+
+    /// Lists recent activity for specific files in a kDrive.
+    public func listPartialFileActivities(
+        driveId: Int,
+        with includedResources: String? = KDriveAdvancedListingIncludedResources.file,
+        options: ListKDrivePartialFileActivitiesOptions
+    ) async throws -> InfomaniakResponse<[KDrivePartialFileActivity]> {
+        let body = try JSONEncoder().encode(options)
+        return try await client.send(
+            KDriveRequests.listPartialFileActivities(
+                driveId: driveId,
+                with: includedResources,
+                body: body
+            )
+        )
+    }
 }
