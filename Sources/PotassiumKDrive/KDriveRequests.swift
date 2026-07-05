@@ -1397,6 +1397,101 @@ public enum KDriveRequests {
         )
     }
 
+    /// Creates a request that lists files and actions inside a kDrive directory.
+    public static func listAdvancedDirectoryListing(
+        driveId: Int,
+        fileId: Int,
+        with includedResources: String? = KDriveAdvancedListingIncludedResources.minimalFiles,
+        options: ListKDriveAdvancedDirectoryListingOptions = ListKDriveAdvancedDirectoryListingOptions()
+    ) -> APIRequest<CursorPaginatedInfomaniakResponse<KDriveAdvancedDirectoryListing>> {
+        var queryParameters: [QueryParameter] = []
+
+        if let includedResources {
+            queryParameters.append(QueryParameter(name: "with", value: .string(includedResources)))
+        }
+
+        if let limit = options.limit {
+            queryParameters.append(QueryParameter(name: "limit", value: .integer(limit)))
+        }
+
+        if !options.orderBy.isEmpty {
+            queryParameters.append(QueryParameter(name: "order_by", value: .strings(options.orderBy)))
+        }
+
+        if let order = options.order {
+            queryParameters.append(QueryParameter(name: "order", value: .string(order)))
+        }
+
+        for (field, direction) in options.orderFor.sorted(by: { $0.key < $1.key }) {
+            queryParameters.append(QueryParameter(name: "order_for[\(field)]", value: .string(direction)))
+        }
+
+        return APIRequest(
+            method: .get,
+            path: "/3/drive/\(driveId)/files/\(fileId)/listing",
+            queryParameters: queryParameters
+        )
+    }
+
+    /// Creates a request that continues an advanced kDrive directory listing from a cursor.
+    public static func continueAdvancedDirectoryListing(
+        driveId: Int,
+        fileId: Int,
+        cursor: String,
+        with includedResources: String? = KDriveAdvancedListingIncludedResources.minimalFiles,
+        options: ContinueKDriveAdvancedDirectoryListingOptions = ContinueKDriveAdvancedDirectoryListingOptions()
+    ) -> APIRequest<CursorPaginatedInfomaniakResponse<KDriveAdvancedDirectoryListing>> {
+        var queryParameters: [QueryParameter] = []
+
+        if let includedResources {
+            queryParameters.append(QueryParameter(name: "with", value: .string(includedResources)))
+        }
+
+        queryParameters.append(QueryParameter(name: "cursor", value: .string(cursor)))
+
+        if let limit = options.limit {
+            queryParameters.append(QueryParameter(name: "limit", value: .integer(limit)))
+        }
+
+        if !options.orderBy.isEmpty {
+            queryParameters.append(QueryParameter(name: "order_by", value: .strings(options.orderBy)))
+        }
+
+        if let order = options.order {
+            queryParameters.append(QueryParameter(name: "order", value: .string(order)))
+        }
+
+        for (field, direction) in options.orderFor.sorted(by: { $0.key < $1.key }) {
+            queryParameters.append(QueryParameter(name: "order_for[\(field)]", value: .string(direction)))
+        }
+
+        return APIRequest(
+            method: .get,
+            path: "/3/drive/\(driveId)/files/\(fileId)/listing/continue",
+            queryParameters: queryParameters
+        )
+    }
+
+    /// Creates a request that lists recent activity for specific files in a kDrive.
+    public static func listPartialFileActivities(
+        driveId: Int,
+        with includedResources: String? = KDriveAdvancedListingIncludedResources.file,
+        body: Data
+    ) -> APIRequest<InfomaniakResponse<[KDrivePartialFileActivity]>> {
+        var queryParameters: [QueryParameter] = []
+
+        if let includedResources {
+            queryParameters.append(QueryParameter(name: "with", value: .string(includedResources)))
+        }
+
+        return APIRequest(
+            method: .post,
+            path: "/3/drive/\(driveId)/files/listing/partial",
+            queryParameters: queryParameters,
+            body: body
+        )
+    }
+
     /// Creates a request that gets a single file or directory from kDrive trash.
     public static func getTrashedFile(
         driveId: Int,
