@@ -120,4 +120,4 @@ personal accounts.
 
 - [Contributing](CONTRIBUTING.md)
 - [Changelog](CHANGELOG.md)
-- [License](LICENCE.MD)
+- [License](LICENSE)
