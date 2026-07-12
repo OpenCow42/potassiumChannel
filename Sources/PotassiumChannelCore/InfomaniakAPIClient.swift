@@ -3,28 +3,31 @@ import Foundation
 import FoundationNetworking
 #endif
 
-/// A structured-concurrency API client for Infomaniak services.
-public actor InfomaniakAPIClient {
+/// A Sendable API client for constructing and executing Infomaniak requests.
+public struct InfomaniakAPIClient: Sendable {
     /// The configuration used by this client.
     public let configuration: APIClientConfiguration
 
-    private let decoder: JSONDecoder
+    private let responseDecoder: any APIResponseDecoding
     private let session: URLSession
 
     /// Creates an Infomaniak API client.
     public init(
         configuration: APIClientConfiguration,
-        decoder: JSONDecoder = JSONDecoder(),
+        responseDecoder: any APIResponseDecoding = InfomaniakJSONResponseDecoder(),
         session: URLSession = .shared
     ) {
         self.configuration = configuration
-        self.decoder = decoder
+        self.responseDecoder = responseDecoder
         self.session = session
-        self.decoder.keyDecodingStrategy = .convertFromSnakeCase
     }
 
     /// Builds a URL request without executing it.
-    public func makeURLRequest<Response>(for request: APIRequest<Response>) throws -> URLRequest {
+    public func makeURLRequest<Response>(for request: APIRequest<Response>) async throws -> URLRequest {
+        try buildURLRequest(for: request)
+    }
+
+    private func buildURLRequest<Response>(for request: APIRequest<Response>) throws -> URLRequest {
         let url = try makeURL(for: request)
         var urlRequest = URLRequest(url: url)
         configureHTTPBasics(on: &urlRequest, for: request)
@@ -113,27 +116,65 @@ public actor InfomaniakAPIClient {
         return sanitized.addingPercentEncoding(withAllowedCharacters: allowedCharacters) ?? sanitized
     }
 
+    /// Creates a lazily started request operation that decodes its response.
+    public func operation<Response>(
+        for request: APIRequest<Response>
+    ) throws -> APIRequestOperation<Response> {
+        let decoder = responseDecoder
+        return try makeOperation(for: request) { data in
+            try decoder.decode(Response.self, from: data)
+        }
+    }
+
+    /// Creates a lazily started request operation that returns raw response data.
+    public func dataOperation<Response>(
+        for request: APIRequest<Response>
+    ) throws -> APIRequestOperation<Data> {
+        try makeOperation(for: request) { $0 }
+    }
+
     /// Executes a request and decodes its response body.
     public func send<Response>(_ request: APIRequest<Response>) async throws -> Response {
-        let data = try await sendData(request)
-
-        return try decoder.decode(Response.self, from: data)
+        try await operation(for: request).value
     }
 
     /// Executes a request and returns its raw response body.
     public func sendData<Response>(_ request: APIRequest<Response>) async throws -> Data {
-        let urlRequest = try makeURLRequest(for: request)
-        let (data, response) = try await session.data(for: urlRequest)
+        try await dataOperation(for: request).value
+    }
 
-        guard let httpResponse = response as? HTTPURLResponse else {
-            throw APIClientError.missingHTTPResponse
+    private func makeOperation<Response, Output: Sendable>(
+        for request: APIRequest<Response>,
+        transform: @escaping @Sendable (Data) throws -> Output
+    ) throws -> APIRequestOperation<Output> {
+        let urlRequest = try buildURLRequest(for: request)
+        let state = APIRequestOperationState<Output>()
+        let task = session.dataTask(with: urlRequest) { data, response, error in
+            if let error {
+                if (error as? URLError)?.code == .cancelled {
+                    state.complete(with: .failure(CancellationError()))
+                } else {
+                    state.complete(with: .failure(error))
+                }
+                return
+            }
+
+            let result = Result<Output, Error> {
+                guard let httpResponse = response as? HTTPURLResponse else {
+                    throw APIClientError.missingHTTPResponse
+                }
+
+                let data = data ?? Data()
+                guard (200..<300).contains(httpResponse.statusCode) else {
+                    let body = String(data: data, encoding: .utf8) ?? ""
+                    throw APIClientError.unacceptableStatusCode(httpResponse.statusCode, body: body)
+                }
+
+                return try transform(data)
+            }
+            state.complete(with: result)
         }
-
-        guard (200..<300).contains(httpResponse.statusCode) else {
-            let body = String(data: data, encoding: .utf8) ?? ""
-            throw APIClientError.unacceptableStatusCode(httpResponse.statusCode, body: body)
-        }
-
-        return data
+        state.install(task: task)
+        return APIRequestOperation(task: task, state: state)
     }
 }

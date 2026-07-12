@@ -79,8 +79,17 @@ public struct ContinueKDriveAdvancedDirectoryListingOptions: Equatable, Sendable
 
 /// Files and actions returned by kDrive advanced directory listing endpoints.
 public struct KDriveAdvancedDirectoryListing: Codable, Equatable, Sendable {
-    /// Actions that occurred since the supplied listing cursor.
+    /// Actions that occurred since the supplied listing cursor, oldest first.
     public let actions: [KDriveAdvancedDirectoryListingAction]
+
+    /// The listing actions ordered newest first for latest-state reducers.
+    ///
+    /// kDrive returns `actions` chronologically. Consumers that retain the first
+    /// action for each item or property should use this view so the newest state
+    /// wins.
+    public var actionsNewestFirst: [KDriveAdvancedDirectoryListingAction] {
+        actions.reversed()
+    }
 
     /// Files and directories in the listed directory.
     public let files: [KDriveFileItem]

@@ -7,9 +7,9 @@ extension KDriveService {
         driveId: Int,
         fileId: Int,
         options: DownloadKDriveFileOptions = DownloadKDriveFileOptions()
-    ) async throws -> Data {
-        try await client.sendData(
-            KDriveRequests.downloadFile(driveId: driveId, fileId: fileId, options: options)
+    ) throws -> APIRequestOperation<Data> {
+        try client.dataOperation(
+            for: KDriveRequests.downloadFile(driveId: driveId, fileId: fileId, options: options)
         )
     }
 
@@ -18,9 +18,9 @@ extension KDriveService {
         driveId: Int,
         fileId: Int,
         options: GetKDriveFileThumbnailOptions = GetKDriveFileThumbnailOptions()
-    ) async throws -> Data {
-        try await client.sendData(
-            KDriveRequests.getFileThumbnail(driveId: driveId, fileId: fileId, options: options)
+    ) throws -> APIRequestOperation<Data> {
+        try client.dataOperation(
+            for: KDriveRequests.getFileThumbnail(driveId: driveId, fileId: fileId, options: options)
         )
     }
 
@@ -29,9 +29,9 @@ extension KDriveService {
         driveId: Int,
         fileId: Int,
         options: GetKDriveFilePreviewOptions = GetKDriveFilePreviewOptions()
-    ) async throws -> Data {
-        try await client.sendData(
-            KDriveRequests.getFilePreview(driveId: driveId, fileId: fileId, options: options)
+    ) throws -> APIRequestOperation<Data> {
+        try client.dataOperation(
+            for: KDriveRequests.getFilePreview(driveId: driveId, fileId: fileId, options: options)
         )
     }
 
@@ -39,9 +39,9 @@ extension KDriveService {
     public func downloadArchive(
         driveId: Int,
         archiveUUID: String
-    ) async throws -> Data {
-        try await client.sendData(
-            KDriveRequests.downloadArchive(driveId: driveId, archiveUUID: archiveUUID)
+    ) throws -> APIRequestOperation<Data> {
+        try client.dataOperation(
+            for: KDriveRequests.downloadArchive(driveId: driveId, archiveUUID: archiveUUID)
         )
     }
 
@@ -50,9 +50,9 @@ extension KDriveService {
         driveId: Int,
         fileId: Int,
         versionId: Int
-    ) async throws -> Data {
-        try await client.sendData(
-            KDriveRequests.downloadFileVersionV2(driveId: driveId, fileId: fileId, versionId: versionId)
+    ) throws -> APIRequestOperation<Data> {
+        try client.dataOperation(
+            for: KDriveRequests.downloadFileVersionV2(driveId: driveId, fileId: fileId, versionId: versionId)
         )
     }
 
@@ -61,7 +61,7 @@ extension KDriveService {
         driveId: Int,
         data: Data,
         options: UploadKDriveFileOptions
-    ) async throws -> InfomaniakResponse<KDriveFileItem> {
-        try await client.send(KDriveRequests.uploadFile(driveId: driveId, data: data, options: options))
+    ) throws -> APIRequestOperation<InfomaniakResponse<KDriveFileItem>> {
+        try client.operation(for: KDriveRequests.uploadFile(driveId: driveId, data: data, options: options))
     }
 }
