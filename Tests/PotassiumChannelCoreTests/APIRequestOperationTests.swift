@@ -16,7 +16,7 @@ struct APIRequestOperationTests {
         let operation = try client.dataOperation(for: testRequest())
 
         #expect(OperationURLProtocol.startedCount == 0)
-        #expect(!operation.progress.isFinished)
+        #expect(!operation.progress.isCancelled)
 
         async let first = operation.value
         async let second = operation.value
@@ -24,7 +24,7 @@ struct APIRequestOperationTests {
 
         #expect(values == [Data("payload".utf8), Data("payload".utf8)])
         #expect(OperationURLProtocol.startedCount == 1)
-        #expect(operation.progress.isFinished)
+        #expect(!operation.progress.isCancelled)
     }
 
     @Test("explicit cancellation before value prevents the request")

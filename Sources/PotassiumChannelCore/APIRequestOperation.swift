@@ -39,6 +39,9 @@ public final class APIRequestOperation<Output: Sendable>: @unchecked Sendable {
         get async throws {
             try await withTaskCancellationHandler {
                 try Task.checkCancellation()
+                if progress.isCancelled {
+                    state.cancel()
+                }
 
                 return try await withCheckedThrowingContinuation { continuation in
                     state.addWaiter(continuation)
