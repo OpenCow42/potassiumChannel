@@ -4,6 +4,18 @@ All notable public changes to this package are summarized here.
 
 ## Unreleased
 
+- Breaking: kDrive binary transfer service methods now return lazy
+  `APIRequestOperation` values with live URL session progress and unified
+  cancellation instead of immediately awaiting a `Data` response.
+- Added synchronous request-operation construction to `InfomaniakAPIClient`;
+  typed and raw async conveniences now execute through the same operation
+  lifecycle.
+- Replaced the client's shared mutable JSON decoder with a concurrent-safe
+  response-decoder protocol whose default implementation creates fresh state
+  for every response.
+- Documented chronological advanced-listing actions and added a newest-first
+  view for reducers where the latest server action must win.
+
 - Breaking: split the former single `potassiumChannel` product/module into
   `PotassiumChannelCore`, `PotassiumKDrive`, `PotassiumMail`,
   `PotassiumKChat`, `PotassiumURLShortener`, and `PotassiumOAuth`.

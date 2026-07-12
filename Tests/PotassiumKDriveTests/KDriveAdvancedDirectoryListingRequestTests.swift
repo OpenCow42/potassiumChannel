@@ -107,6 +107,11 @@ struct KDriveAdvancedDirectoryListingRequestTests {
                 "action": "file_update",
                 "file_id": 43,
                 "parent_id": 42
+              },
+              {
+                "action": "file_rename",
+                "file_id": 43,
+                "parent_id": 42
               }
             ],
             "files": [
@@ -163,6 +168,7 @@ struct KDriveAdvancedDirectoryListingRequestTests {
         #expect(response.hasMore)
         #expect(response.data.actions.first?.action == "file_update")
         #expect(response.data.actions.first?.fileId == 43)
+        #expect(response.data.actionsNewestFirst.map(\.action) == ["file_rename", "file_update"])
         #expect(response.data.files.first?.name == "Nested.pdf")
         #expect(response.data.actionsFiles.first?.id == 44)
         #expect(response.data.actionsFiles.first?.isFavorite == true)

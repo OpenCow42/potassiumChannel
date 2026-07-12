@@ -75,6 +75,21 @@ let kDrive = KDriveService(client: client)
 let drives = try await kDrive.listAccessibleKDrives(accountId: 12345)
 ```
 
+File transfers return a lazy operation so callers can observe Foundation's
+live byte progress before starting the request and can cancel the underlying
+URL session task directly:
+
+```swift
+let transfer = try kDrive.downloadFile(driveId: 123, fileId: 456)
+let progress = transfer.progress
+let contents = try await transfer.value
+```
+
+Awaiting `value` starts the request once. Multiple awaiters share its result,
+while cancelling the operation, its progress, or an awaiting task cancels the
+request for every waiter. Transfers continue to use full in-memory `Data` in
+this release; streaming and upload sessions are intentionally deferred.
+
 Product services can be created from a shared `InfomaniakAPIClient`, or through
 service-specific convenience initializers where provided. Lower-level
 `*Requests` builders are also public when callers need to create a typed
