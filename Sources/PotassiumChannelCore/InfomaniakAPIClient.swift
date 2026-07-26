@@ -167,7 +167,13 @@ public struct InfomaniakAPIClient: Sendable {
                 let data = data ?? Data()
                 guard (200..<300).contains(httpResponse.statusCode) else {
                     let body = String(data: data, encoding: .utf8) ?? ""
-                    throw APIClientError.unacceptableStatusCode(httpResponse.statusCode, body: body)
+                    throw APIClientError.unacceptableStatusCode(
+                        httpResponse.statusCode,
+                        body: body,
+                        metadata: APIResponseMetadata(
+                            retryAfter: httpResponse.value(forHTTPHeaderField: "Retry-After")
+                        )
+                    )
                 }
 
                 return try transform(data)

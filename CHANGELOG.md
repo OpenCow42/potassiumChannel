@@ -4,6 +4,9 @@ All notable public changes to this package are summarized here.
 
 ## Unreleased
 
+- Breaking: `APIClientError.unacceptableStatusCode` now includes
+  `APIResponseMetadata`, which safely preserves the server's `Retry-After`
+  field without exposing arbitrary response headers.
 - Breaking: kDrive binary transfer service methods now return lazy
   `APIRequestOperation` values with live URL session progress and unified
   cancellation instead of immediately awaiting a `Data` response.

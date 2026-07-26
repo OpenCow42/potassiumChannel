@@ -104,11 +104,26 @@ struct APIRequestOperationTests {
         #expect(response == Response(responseValue: "decoded"))
 
         OperationURLProtocol.reset(
-            behavior: .response(statusCode: 503, data: Data("unavailable".utf8), delay: 0)
+            behavior: .response(
+                statusCode: 429,
+                data: Data("too many requests".utf8),
+                headers: [
+                    "Retry-After": "42",
+                    "X-Private-Diagnostic": "must-not-be-exposed",
+                ],
+                delay: 0
+            )
         )
         let failure = try makeClient().dataOperation(for: testRequest())
-        await #expect(throws: APIClientError.self) {
-            try await failure.value
+        do {
+            _ = try await failure.value
+            Issue.record("Expected an unacceptable-status error.")
+        } catch let APIClientError.unacceptableStatusCode(statusCode, body, metadata) {
+            #expect(statusCode == 429)
+            #expect(body == "too many requests")
+            #expect(metadata == APIResponseMetadata(retryAfter: "42"))
+        } catch {
+            Issue.record("Unexpected error: \(error)")
         }
     }
 
@@ -147,7 +162,12 @@ private final class OperationURLProtocol: URLProtocol, @unchecked Sendable {
     enum Behavior: Sendable {
         case pending
         case success(Data, delay: TimeInterval)
-        case response(statusCode: Int, data: Data, delay: TimeInterval)
+        case response(
+            statusCode: Int,
+            data: Data,
+            headers: [String: String] = [:],
+            delay: TimeInterval
+        )
     }
 
     private struct State {
@@ -204,8 +224,8 @@ private final class OperationURLProtocol: URLProtocol, @unchecked Sendable {
             break
         case .success(let data, let delay):
             respond(statusCode: 200, data: data, after: delay)
-        case .response(let statusCode, let data, let delay):
-            respond(statusCode: statusCode, data: data, after: delay)
+        case .response(let statusCode, let data, let headers, let delay):
+            respond(statusCode: statusCode, data: data, headers: headers, after: delay)
         }
     }
 
@@ -219,16 +239,23 @@ private final class OperationURLProtocol: URLProtocol, @unchecked Sendable {
         Self.storage.lock.unlock()
     }
 
-    private func respond(statusCode: Int, data: Data, after delay: TimeInterval) {
+    private func respond(
+        statusCode: Int,
+        data: Data,
+        headers: [String: String] = [:],
+        after delay: TimeInterval
+    ) {
         if delay > 0 {
             Thread.sleep(forTimeInterval: delay)
         }
         guard !isStopped else { return }
+        var responseHeaders = headers
+        responseHeaders["Content-Length"] = String(data.count)
         let response = HTTPURLResponse(
             url: request.url!,
             statusCode: statusCode,
             httpVersion: "HTTP/1.1",
-            headerFields: ["Content-Length": String(data.count)]
+            headerFields: responseHeaders
         )!
         client?.urlProtocol(self, didReceive: response, cacheStoragePolicy: .notAllowed)
         client?.urlProtocol(self, didLoad: data)
