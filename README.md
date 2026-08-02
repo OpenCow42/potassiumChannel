@@ -100,6 +100,10 @@ Rejected HTTP responses throw
 `APIResponseMetadata` preserves only the `Retry-After` field needed for bounded
 client recovery; arbitrary response headers are deliberately not exposed.
 
+kDrive file responses expose optional `revisedAt` and `etag` values. Request
+the `etag` included resource and treat the returned value as opaque; it can be
+passed to `UploadKDriveFileOptions.ifMatch` for conditional file replacement.
+
 ## Migration From The Old Module
 
 The package no longer exposes a `potassiumChannel` product or module. Replace

@@ -36,8 +36,21 @@ public struct KDriveFileItem: Codable, Equatable, Sendable {
     /// The last modification timestamp.
     public let lastModifiedAt: Int
 
+    /// The last time the file contents were revised, when returned by kDrive.
+    ///
+    /// Unlike `updatedAt`, this value tracks content revision rather than
+    /// general metadata updates. Older fixtures and API variants may omit it.
+    public let revisedAt: Int?
+
     /// The update timestamp.
     public let updatedAt: Int
+
+    /// The opaque entity tag for the current file version, when requested with
+    /// the `etag` included resource.
+    ///
+    /// Callers must treat this value as opaque and may pass it back through the
+    /// upload endpoint's `If-Match` header for conditional replacement.
+    public let etag: String?
 
     /// File size in bytes, when the item is a file.
     public let size: Int?
@@ -61,7 +74,9 @@ public struct KDriveFileItem: Codable, Equatable, Sendable {
         depth: Int,
         createdAt: Int?,
         lastModifiedAt: Int,
+        revisedAt: Int? = nil,
         updatedAt: Int,
+        etag: String? = nil,
         size: Int? = nil,
         mimeType: String? = nil,
         isFavorite: Bool? = nil
@@ -77,7 +92,9 @@ public struct KDriveFileItem: Codable, Equatable, Sendable {
         self.depth = depth
         self.createdAt = createdAt
         self.lastModifiedAt = lastModifiedAt
+        self.revisedAt = revisedAt
         self.updatedAt = updatedAt
+        self.etag = etag
         self.size = size
         self.mimeType = mimeType
         self.isFavorite = isFavorite

@@ -27,11 +27,17 @@ extension KDriveService {
     /// Lists the last modified files on a kDrive.
     public func listLastModifiedFiles(
         driveId: Int,
+        with includedResources: String? = nil,
         cursor: String? = nil,
         limit: Int? = nil
     ) async throws -> InfomaniakResponse<[KDriveFileItem]> {
         try await client.send(
-            KDriveRequests.listLastModifiedFiles(driveId: driveId, cursor: cursor, limit: limit)
+            KDriveRequests.listLastModifiedFiles(
+                driveId: driveId,
+                with: includedResources,
+                cursor: cursor,
+                limit: limit
+            )
         )
     }
 
@@ -49,11 +55,17 @@ extension KDriveService {
     /// Lists favorite files and directories on a kDrive.
     public func listFavoriteFiles(
         driveId: Int,
+        with includedResources: String? = nil,
         cursor: String? = nil,
         limit: Int? = nil
     ) async throws -> InfomaniakResponse<[KDriveFileItem]> {
         try await client.send(
-            KDriveRequests.listFavoriteFiles(driveId: driveId, cursor: cursor, limit: limit)
+            KDriveRequests.listFavoriteFiles(
+                driveId: driveId,
+                with: includedResources,
+                cursor: cursor,
+                limit: limit
+            )
         )
     }
 
@@ -81,22 +93,34 @@ extension KDriveService {
     /// Lists files and directories shared by the user on a kDrive.
     public func listMySharedFiles(
         driveId: Int,
+        with includedResources: String? = nil,
         cursor: String? = nil,
         limit: Int? = nil
     ) async throws -> InfomaniakResponse<[KDriveFileItem]> {
         try await client.send(
-            KDriveRequests.listMySharedFiles(driveId: driveId, cursor: cursor, limit: limit)
+            KDriveRequests.listMySharedFiles(
+                driveId: driveId,
+                with: includedResources,
+                cursor: cursor,
+                limit: limit
+            )
         )
     }
 
     /// Lists files and directories shared with the user on a kDrive.
     public func listSharedWithMeFiles(
         driveId: Int,
+        with includedResources: String? = nil,
         cursor: String? = nil,
         limit: Int? = nil
     ) async throws -> InfomaniakResponse<[KDriveFileItem]> {
         try await client.send(
-            KDriveRequests.listSharedWithMeFiles(driveId: driveId, cursor: cursor, limit: limit)
+            KDriveRequests.listSharedWithMeFiles(
+                driveId: driveId,
+                with: includedResources,
+                cursor: cursor,
+                limit: limit
+            )
         )
     }
 

@@ -238,10 +238,15 @@ public enum KDriveRequests {
     /// Creates a request that lists the last modified files on a kDrive.
     public static func listLastModifiedFiles(
         driveId: Int,
+        with includedResources: String? = nil,
         cursor: String? = nil,
         limit: Int? = nil
     ) -> APIRequest<InfomaniakResponse<[KDriveFileItem]>> {
         var queryParameters: [QueryParameter] = []
+
+        if let includedResources {
+            queryParameters.append(QueryParameter(name: "with", value: .string(includedResources)))
+        }
 
         if let cursor {
             queryParameters.append(QueryParameter(name: "cursor", value: .string(cursor)))
@@ -284,10 +289,15 @@ public enum KDriveRequests {
     /// Creates a request that lists favorite files and directories on a kDrive.
     public static func listFavoriteFiles(
         driveId: Int,
+        with includedResources: String? = nil,
         cursor: String? = nil,
         limit: Int? = nil
     ) -> APIRequest<InfomaniakResponse<[KDriveFileItem]>> {
         var queryParameters: [QueryParameter] = []
+
+        if let includedResources {
+            queryParameters.append(QueryParameter(name: "with", value: .string(includedResources)))
+        }
 
         if let cursor {
             queryParameters.append(QueryParameter(name: "cursor", value: .string(cursor)))
@@ -344,10 +354,15 @@ public enum KDriveRequests {
     /// Creates a request that lists files and directories shared by the user on a kDrive.
     public static func listMySharedFiles(
         driveId: Int,
+        with includedResources: String? = nil,
         cursor: String? = nil,
         limit: Int? = nil
     ) -> APIRequest<InfomaniakResponse<[KDriveFileItem]>> {
         var queryParameters: [QueryParameter] = []
+
+        if let includedResources {
+            queryParameters.append(QueryParameter(name: "with", value: .string(includedResources)))
+        }
 
         if let cursor {
             queryParameters.append(QueryParameter(name: "cursor", value: .string(cursor)))
@@ -367,10 +382,15 @@ public enum KDriveRequests {
     /// Creates a request that lists files and directories shared with the user on a kDrive.
     public static func listSharedWithMeFiles(
         driveId: Int,
+        with includedResources: String? = nil,
         cursor: String? = nil,
         limit: Int? = nil
     ) -> APIRequest<InfomaniakResponse<[KDriveFileItem]>> {
         var queryParameters: [QueryParameter] = []
+
+        if let includedResources {
+            queryParameters.append(QueryParameter(name: "with", value: .string(includedResources)))
+        }
 
         if let cursor {
             queryParameters.append(QueryParameter(name: "cursor", value: .string(cursor)))

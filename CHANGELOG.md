@@ -4,6 +4,8 @@ All notable public changes to this package are summarized here.
 
 ## Unreleased
 
+- Added optional kDrive file `revisedAt` and `etag` metadata so clients can
+  construct authoritative content versions and conditional replacements.
 - Breaking: `APIClientError.unacceptableStatusCode` now includes
   `APIResponseMetadata`, which safely preserves the server's `Retry-After`
   field without exposing arbitrary response headers.

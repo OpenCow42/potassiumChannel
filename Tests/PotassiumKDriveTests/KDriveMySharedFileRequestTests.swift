@@ -13,7 +13,12 @@ struct KDriveMySharedFileRequestTests {
                 bearerToken: "test-token"
             )
         )
-        let request = KDriveRequests.listMySharedFiles(driveId: 100, cursor: "next", limit: 25)
+        let request = KDriveRequests.listMySharedFiles(
+            driveId: 100,
+            with: "etag",
+            cursor: "next",
+            limit: 25
+        )
 
         let urlRequest = try await client.makeURLRequest(for: request)
         let queryItems = URLComponents(url: try #require(urlRequest.url), resolvingAgainstBaseURL: false)?.queryItems ?? []
@@ -21,6 +26,7 @@ struct KDriveMySharedFileRequestTests {
         #expect(urlRequest.httpMethod == "GET")
         #expect(urlRequest.value(forHTTPHeaderField: "Authorization") == "Bearer test-token")
         #expect(urlRequest.url?.path == "/3/drive/100/files/my_shared")
+        #expect(queryItems.contains(URLQueryItem(name: "with", value: "etag")))
         #expect(queryItems.contains(URLQueryItem(name: "cursor", value: "next")))
         #expect(queryItems.contains(URLQueryItem(name: "limit", value: "25")))
     }
