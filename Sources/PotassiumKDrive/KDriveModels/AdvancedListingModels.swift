@@ -10,6 +10,7 @@ public enum KDriveAdvancedListingIncludedResources {
         "files.conversion_capabilities",
         "files.dropbox",
         "files.dropbox.capabilities",
+        "files.etag",
         "files.external_import",
         "files.is_favorite",
         "files.sharelink",
