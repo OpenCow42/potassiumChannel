@@ -3,6 +3,10 @@ import Foundation
 /// Included-resource presets used by kDrive advanced listing endpoints.
 public enum KDriveAdvancedListingIncludedResources {
     /// Minimal file resources used by the official kDrive advanced listing flow.
+    ///
+    /// The advanced listing endpoints reject both `etag` and `files.etag` with
+    /// HTTP 422. Request file ETags through direct metadata or ordinary
+    /// directory-listing endpoints instead.
     public static let minimalFiles = [
         "files",
         "files.capabilities",
@@ -10,7 +14,6 @@ public enum KDriveAdvancedListingIncludedResources {
         "files.conversion_capabilities",
         "files.dropbox",
         "files.dropbox.capabilities",
-        "files.etag",
         "files.external_import",
         "files.is_favorite",
         "files.sharelink",
