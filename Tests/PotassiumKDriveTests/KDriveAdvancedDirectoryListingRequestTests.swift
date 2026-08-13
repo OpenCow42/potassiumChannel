@@ -5,6 +5,27 @@ import PotassiumChannelCore
 
 @Suite("kDrive advanced directory listing requests")
 struct KDriveAdvancedDirectoryListingRequestTests {
+    private static let compatibleIncludedResources = [
+        "files",
+        "files.capabilities",
+        "files.categories",
+        "files.conversion_capabilities",
+        "files.dropbox",
+        "files.dropbox.capabilities",
+        "files.external_import",
+        "files.is_favorite",
+        "files.sharelink",
+        "files.sorted_name",
+        "files.supported_by",
+    ].joined(separator: ",")
+
+    @Test("kDrive advanced directory listing defaults exclude unsupported ETag resources")
+    func advancedDirectoryListingDefaultsExcludeETagResources() {
+        #expect(KDriveAdvancedListingIncludedResources.minimalFiles == Self.compatibleIncludedResources)
+        #expect(KDriveAdvancedListingIncludedResources.minimalFiles.split(separator: ",").contains("etag") == false)
+        #expect(KDriveAdvancedListingIncludedResources.minimalFiles.split(separator: ",").contains("files.etag") == false)
+    }
+
     @Test("kDrive advanced directory listing request matches the API path and query")
     func advancedDirectoryListingRequestMatchesAPIShape() async throws {
         let client = InfomaniakAPIClient(
@@ -30,7 +51,7 @@ struct KDriveAdvancedDirectoryListingRequestTests {
         #expect(urlRequest.httpMethod == "GET")
         #expect(urlRequest.value(forHTTPHeaderField: "Authorization") == "Bearer test-token")
         #expect(urlRequest.url?.path == "/3/drive/100/files/42/listing")
-        #expect(queryItems.contains(URLQueryItem(name: "with", value: KDriveAdvancedListingIncludedResources.minimalFiles)))
+        #expect(queryItems.contains(URLQueryItem(name: "with", value: Self.compatibleIncludedResources)))
         #expect(queryItems.contains(URLQueryItem(name: "limit", value: "50")))
         #expect(queryItems.contains(URLQueryItem(name: "order_by", value: "type")))
         #expect(queryItems.contains(URLQueryItem(name: "order_by", value: "name")))
@@ -59,7 +80,7 @@ struct KDriveAdvancedDirectoryListingRequestTests {
 
         #expect(urlRequest.httpMethod == "GET")
         #expect(urlRequest.url?.path == "/3/drive/100/files/42/listing/continue")
-        #expect(queryItems.contains(URLQueryItem(name: "with", value: KDriveAdvancedListingIncludedResources.minimalFiles)))
+        #expect(queryItems.contains(URLQueryItem(name: "with", value: Self.compatibleIncludedResources)))
         #expect(queryItems.contains(URLQueryItem(name: "cursor", value: "listing-cursor")))
         #expect(queryItems.contains(URLQueryItem(name: "limit", value: "50")))
     }

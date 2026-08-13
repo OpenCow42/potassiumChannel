@@ -4,6 +4,12 @@ All notable public changes to this package are summarized here.
 
 ## Unreleased
 
+## 0.3.0 — 2026-08-13
+
+- Fixed the default included-resource set for advanced kDrive directory
+  listings: it no longer requests `files.etag`, which those endpoints reject
+  with HTTP 422. ETags remain available through direct metadata and ordinary
+  directory-listing requests.
 - Added optional kDrive file `revisedAt` and `etag` metadata so clients can
   construct authoritative content versions and conditional replacements.
 - Breaking: `APIClientError.unacceptableStatusCode` now includes
